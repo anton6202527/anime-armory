@@ -158,9 +158,9 @@ Comic 的业务收敛只认三件事：`release_contract_<chapter>.json` 是一�
 
 `comic-supervisor` 持有 durable loop，消费 `comic-batch --next-json`。确定性可逆动作直接运行；故事/脚本/视觉/质量语义任务只派给项目注册 adapter。普通执行失败进入事件日志和熔断，不反复向用户询问；权利合规、预算包创建/扩大/过期、不可逆发布/覆盖和具名最终验收才是硬边界。
 
-当前像素代理授权与 name/layout 编辑授权分离。代理必须实际查看 SHA-bound contact sheet，写 `human_signoff=false` 和当前授权 receipt；撤权、重抽、比较输入变化即失效，且永不能替代最终具名签收。
+当前像素代理授权与 name/layout 编辑授权分离。新项目把两类推荐授权分别显式写进 `_设置.md`；旧项目的显式人工策略不覆盖。视觉代理必须实际查看 SHA-bound contact sheet，逐轴写 evidence/notes 与逐主体 locator，收据写 `human_signoff=false` 和当前授权；撤权、重抽、比较输入变化即失效，且永不能替代最终具名签收。
 
-`release_verdict.py` 保持三种状态分离：
+`release_verdict.py` 保持三种状态分离。release contract、completion 候选与不可变 evidence bundle 作为一组事务准备，active pointer 最后切；supervisor/progress 只消费 `verify_stored_completion().current`，不能仅比较缓存 digest/status：
 
 | 状态 | 必须满足 |
 |---|---|
@@ -168,7 +168,7 @@ Comic 的业务收敛只认三件事：`release_contract_<chapter>.json` 是一�
 | `production_complete` | technical complete，且当前 `review` gate receipt 非 block |
 | `publish_ready_*` | production complete，加目标 `medium+usage` 的介质合同、权利条件、平台预览/处置账与当前导出物 SHA 人工签收 |
 
-`medium=web_images|print_pdf|epub_fxl` 与 `usage=internal|public|commercial` 解耦，旧 profile 只作兼容映射。public/commercial 要求权利明确清结、全部 warning 结案；有官方预览能力的平台还要求 actual backend preview 截图。平台收据绑定 manifest SHA、全部产物及有序 page/segment/role，交换页面也会 stale。`print_pdf` 验真实 PDF、trim/bleed/safe/DPI/装订/字体/ICC 合同与 readiness receipt；`epub_fxl` 验真实 ZIP/container/OPF/spine/nav/XHTML、固定版式、包内 metadata/alt 属性及具名 human-attested 合同，但不声称认证。最终 acceptance 精确绑定 review receipt、介质合同/收据、预览、处置账和全部成品 SHA。
+`medium=web_images|print_pdf|epub_fxl` 与 `usage=internal|public|commercial` 解耦，旧 profile 只作兼容映射。public/commercial 要求权利明确清结、全部 warning 结案；有官方预览能力的平台还要求 actual backend preview 截图。平台收据绑定 manifest SHA、全部产物及有序 page/segment/role，交换页面也会 stale。`print_pdf` 验真实 PDF、trim/bleed/safe/DPI/装订/字体/ICC 合同与 readiness receipt；专业 PDF/X-4 还要求 validator 对 staged PDF、合同、项目内 ICC 与有序页面输入 SHA 精确绑定。`epub_fxl` 以 EPUB+合同+manifest 组三文件事务提升，验证 ZIP/container/OPF/spine/nav/XHTML、RTL/LTR page progression、包内 metadata/alt/语义 transcript 及具名 human-attested 合同，但不声称认证。最终 acceptance 精确绑定 review receipt、介质合同/收据、预览、处置账和全部成品 SHA。
 
 `--accept` 只把明确的人审决定绑定到当前证据；发布裁决不上传、不发布、不修改 `_进度.md`，也不替代人的最终责任。
 

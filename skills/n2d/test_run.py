@@ -15,6 +15,10 @@ sys.path.insert(0, os.path.dirname(__file__))
 import run  # noqa: E402
 from skill_snapshot import artifact_fingerprint  # noqa: E402  (run.py 已把 _lib 入 sys.path)
 from signoff_contract import new_manifest, profile_spec, record_approval, write_manifest  # noqa: E402
+SCRIPT_SKILL_DIR = Path(__file__).resolve().parent / "n2d-script" / "scripts"
+if str(SCRIPT_SKILL_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_SKILL_DIR))
+from story_acceptance_packets import record_review_execution  # noqa: E402
 
 
 def _sign_profile(root, profile, ep="第1集"):
@@ -251,6 +255,14 @@ def _write_confirmed_story_acceptance(root, ep="第1集", kind="table_read"):
         json.dump(payload, fh, ensure_ascii=False)
     with open(os.path.join(ep_dir, md_name), "w", encoding="utf-8") as fh:
         fh.write(f"---\nkind: {payload['kind']}\nstatus: confirmed\n---\n# confirmed\n")
+    if kind == "table_read":
+        voiceover = Path(ep_dir) / "voiceover.txt"
+        reviewed_lines = len([line for line in voiceover.read_text(encoding="utf-8").splitlines() if line.strip()])
+        record_review_execution(
+            Path(root), ep, "table_read", reviewer_kind="executor_text_audio",
+            coverage=1.0, reviewed_line_count=reviewed_lines,
+            review_notes=["测试夹具逐句围读并核对角色口吻与时长风险。"],
+        )
     _sign_profile(root, kind, ep)
 
 
@@ -718,6 +730,8 @@ def test_decide_valid_v2_phase_envelope_skips_repeat_payment_prompt():
         "model": "GPT Image 2",
         "channel": "Codex CLI",
         "input_sha256": "sha256:" + "b" * 64,
+        "task_id": "001-image-progress",
+        "current_plan_digest": "sha256:" + "c" * 64,
     }
 
     na = run.decide(
@@ -730,6 +744,8 @@ def test_decide_valid_v2_phase_envelope_skips_repeat_payment_prompt():
     assert na["stop_reason"] == "needs_stage_execution"
     assert na["action_card"]["phase_spend_envelope"]["envelope_id"] == "image-phase"
     assert "n2d-batch/scripts/runner.py" in na["action_card"]["exact_command"]
+    assert "--task-id 001-image-progress" in na["action_card"]["exact_command"]
+    assert "--expected-plan-digest sha256:" in na["action_card"]["exact_command"]
     assert na["action_contract"]["requires_human_approval"] is False
     assert na["action_contract"]["paid_or_irreversible"] is True
 

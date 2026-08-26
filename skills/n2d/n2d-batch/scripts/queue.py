@@ -13,6 +13,7 @@ import contextlib
 import datetime as dt
 import glob
 import hashlib
+import importlib.util
 import json
 import math
 import os
@@ -96,7 +97,7 @@ DEFAULT_COST_ESTIMATES = {
     "review": {"amount": 0.5, "unit": "work_units"},
 }
 
-ACTIVE_STATUSES = {"queued", "running", "retry_queued", "qa_blocked"}
+ACTIVE_STATUSES = {"queued", "running", "provider_pending", "retry_queued", "qa_blocked"}
 AGENT_REQUIRED_STAGES = {"script_stage1"}
 REPLACEABLE_MERGE_STATUSES = {"queued", "blocked_budget", "qa_blocked"}
 BUDGET_FLEXIBLE_STATUSES = {"queued", "blocked_budget"}
@@ -149,6 +150,8 @@ class CoordinationBackend(Protocol):
     def load_queue(self) -> Dict[str, Any]: ...
     def sync_from_queue(self, queue: Dict[str, Any]) -> None: ...
     def claim(self, *, limit: Optional[int], worker: Optional[str], lease_seconds: int) -> List[Dict[str, Any]]: ...
+    def claim_exact(self, *, task_id: str, expected_plan_digest: str, episode: str,
+                    stage_key: str, worker: Optional[str], lease_seconds: int) -> List[Dict[str, Any]]: ...
     def mark(self, task_id_value: str, status: str, note: str = "", **kwargs: Any) -> Dict[str, Any]: ...
     def reclaim(self, *, worker: Optional[str] = None, force_worker: bool = False) -> List[Dict[str, Any]]: ...
     def renew(self, task_ids: Iterable[str], lease_seconds: int, worker: Optional[str] = None) -> int: ...
@@ -194,8 +197,133 @@ def stable_hash(value: Any, *, length: int = 16) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()[:length]
 
 
+TASK_PLAN_FIELDS = (
+    "idempotency_key", "episode", "stage_key", "command", "runner_command",
+    "reason", "estimated_cost", "rerun_scope", "affected_artifacts",
+    "affected_shots", "finding_fingerprints", "producer_manifest", "physical_clips",
+)
+
+
+def task_plan_projection(task: Mapping[str, Any]) -> Dict[str, Any]:
+    """Immutable executable planning fields shared by probe, exact claim and runner."""
+    return {key: task.get(key) for key in TASK_PLAN_FIELDS}
+
+
+def task_plan_digest(task: Mapping[str, Any]) -> str:
+    raw = json.dumps(
+        task_plan_projection(task), ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    )
+    return "sha256:" + hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
 def now_iso() -> str:
     return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+
+
+_CLAIM_STOP_LOSS_MODULE: Any = None
+
+
+def _claim_stop_loss_module() -> Any:
+    """Lazy-load the independent stop-loss evaluator without importing governance.py.
+
+    ``governance.py`` imports this queue module, so importing it here would form a cycle.
+    Stop-loss itself has no queue dependency and is the narrow adapter needed at the
+    claim critical section.
+    """
+    global _CLAIM_STOP_LOSS_MODULE
+    if _CLAIM_STOP_LOSS_MODULE is None:
+        path = Path(SCRIPT_DIR).parent.parent / "scripts" / "stop_loss.py"
+        spec = importlib.util.spec_from_file_location("n2d_stop_loss_for_queue_claim", path)
+        if spec is None or spec.loader is None:
+            raise RuntimeError(f"cannot load stop-loss evaluator: {path}")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _CLAIM_STOP_LOSS_MODULE = module
+    return _CLAIM_STOP_LOSS_MODULE
+
+
+def _claim_max_dead_letters(root: str) -> int:
+    """Read the one critical queue SLO used by governance (default remains zero)."""
+    path = Path(production_dir(root)) / "production_slo.json"
+    if not path.is_file():
+        return 0
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(data, Mapping):
+        raise ValueError(f"{path} must be an object")
+    node = data.get("queue") if isinstance(data.get("queue"), Mapping) else {}
+    return int(node.get("max_dead_letters", 0))
+
+
+def critical_claim_interlock(root: str, queue: Mapping[str, Any]) -> Optional[Dict[str, Any]]:
+    """Evaluate live critical governance against the queue already inside its lock/txn.
+
+    This intentionally mirrors only governance's *critical* sources: dead letters and
+    live stop-loss metrics.  Retry-rate/age/stage-duration rows are warnings and do not
+    halt claims.  Passing the in-memory queue avoids a stale second read and, for SQLite,
+    avoids trying to open another connection while ``BEGIN IMMEDIATE`` is held.
+    """
+    violations: List[Dict[str, Any]] = []
+    try:
+        max_dead = _claim_max_dead_letters(root)
+        dead = [
+            task for task in queue.get("tasks", [])
+            if isinstance(task, Mapping)
+            and (task.get("dead_letter") is True or str(task.get("status") or "") == "failed")
+        ]
+        if len(dead) > max_dead:
+            violations.append({
+                "level": "critical",
+                "kind": "dead_letters",
+                "value": len(dead),
+                "threshold": max_dead,
+            })
+        stop_payload = _claim_stop_loss_module().build_report(Path(root))
+        for row in stop_payload.get("violations", []) or []:
+            if isinstance(row, Mapping) and row.get("level") == "critical":
+                violations.append({
+                    "level": "critical",
+                    "kind": "stop_loss",
+                    "metric": row.get("metric"),
+                    "value": row.get("value"),
+                    "threshold": row.get("threshold"),
+                    "action": row.get("action"),
+                })
+    except Exception as exc:
+        # Governance evaluation is itself part of the paid-work safety boundary.
+        violations.append({
+            "level": "critical",
+            "kind": "governance_evaluation_error",
+            "error": f"{type(exc).__name__}: {exc}",
+        })
+    if not violations:
+        return None
+    return {
+        "kind": "n2d_critical_governance_interlock",
+        "status": "blocked",
+        "violations": violations,
+        "summary": {
+            "tasks": len(queue.get("tasks", []) or []),
+            "dead_letters": sum(
+                1 for task in queue.get("tasks", []) or []
+                if isinstance(task, Mapping)
+                and (task.get("dead_letter") is True or str(task.get("status") or "") == "failed")
+            ),
+        },
+    }
+
+
+def enforce_claim_governance_interlock(root: str, queue: Mapping[str, Any]) -> None:
+    issue = critical_claim_interlock(root, queue)
+    if issue is None:
+        return
+    details = "; ".join(
+        str(row.get("kind") or row.get("metric") or row)
+        for row in issue.get("violations", [])[:4]
+        if isinstance(row, Mapping)
+    )
+    raise RuntimeError(
+        "critical production governance interlock" + (f": {details}" if details else "")
+    )
 
 
 def now_ts() -> float:
@@ -615,6 +743,73 @@ def image_physical_shots(root: str, episode: str) -> List[str]:
     return list(dict.fromkeys(shots))
 
 
+def prepared_video_bindings(root: str, episode: str) -> List[Dict[str, str]]:
+    """Resolve one executable task per physical clip from prepared producer manifests.
+
+    Newer explicit manifests win when a clip appears in more than one historical batch.  The
+    manifest fingerprint is still recomputed by the runner before authorization/submit, so this
+    selection cannot make stale inputs executable.
+    """
+    project = Path(root).expanduser().resolve()
+    ep = normalize_episode(episode)
+    candidates = sorted(
+        (project / PRODUCTION_DIR).glob(f"video_batch_{ep}_*.json"),
+        key=lambda path: (path.stat().st_mtime_ns, path.name),
+        reverse=True,
+    )
+    by_clip: Dict[str, Dict[str, str]] = {}
+    for manifest_path in candidates:
+        try:
+            payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if normalize_episode(str(payload.get("episode") or "")) != ep:
+            continue
+        rel = manifest_path.relative_to(project).as_posix()
+        for item in payload.get("items") or []:
+            if not isinstance(item, Mapping):
+                continue
+            clip = str(item.get("clip") or "").strip()
+            target = str(item.get("target") or "").strip()
+            if not clip or not target or clip in by_clip:
+                continue
+            output = project / "出视频" / ep / "视频" / target
+            submit_id = str(item.get("submit_id") or "").strip()
+            item_status = str(item.get("status") or "").strip().lower()
+            # Keep a submitted request routable after a crash even if download already landed;
+            # it may still need QC/receipt/spend finalization.  Accepted/user-provided outputs do
+            # not create another paid task.
+            if output.is_file() and (not submit_id or item_status == "accepted"):
+                continue
+            by_clip[clip] = {"clip": clip, "producer_manifest": rel}
+    return [by_clip[key] for key in sorted(by_clip)]
+
+
+def bind_video_task(task: Dict[str, Any], root: str, binding: Mapping[str, str]) -> Dict[str, Any]:
+    clip = str(binding.get("clip") or "").strip()
+    manifest = str(binding.get("producer_manifest") or "").strip()
+    if not clip or not manifest:
+        return task
+    # One durable queue identity per physical provider request.  The generic stage task id is
+    # intentionally expanded here; otherwise every clip in the manifest would alias the same
+    # queue row even though their idempotency keys and provider submit ids differ.
+    task["id"] = f"{task.get('id')}-{stable_hash(clip, length=8)}"
+    task["producer_manifest"] = manifest
+    task["physical_clips"] = [clip]
+    task["affected_shots"] = [clip]
+    task["runner_command"] = (
+        "python3 skills/n2d/n2d-video/scripts/video_runner.py execute "
+        f"{shlex_quote(root)} {shlex_quote(str(Path(root) / manifest))} --clip {shlex_quote(clip)}"
+    )
+    return task
+
+
+def shlex_quote(value: str) -> str:
+    """Tiny local quote helper without making queue execution shell-dependent."""
+    import shlex
+    return shlex.quote(str(value))
+
+
 def route_tasks(
     root: str,
     *,
@@ -661,6 +856,22 @@ def route_tasks(
             if not ep1_image_done and episode_num(ep) > 1 and stage_key in ("image_prompt", "image", "video_prompt", "video", "compose"):
                 continue
 
+        if stage_key == "video":
+            bindings = prepared_video_bindings(root, ep)
+            if bindings:
+                for binding in bindings:
+                    task = task_from_spec(
+                        root,
+                        ep,
+                        spec,
+                        reason="progress",
+                        priority=len(tasks) + 1,
+                        cost_estimates=cost_estimates,
+                        max_retries=max_retries,
+                        affected_shots=[binding["clip"]],
+                    )
+                    tasks.append(bind_video_task(task, root, binding))
+                continue
         affected_shots = image_physical_shots(root, ep) if stage_key == "image" else []
         tasks.append(
             task_from_spec(
@@ -875,6 +1086,12 @@ def tasks_from_shooting_schedule(
                 affected_artifacts=artifacts,
                 affected_shots=shots,
             )
+            if stage_key == "video":
+                bindings = {
+                    row["clip"]: row for row in prepared_video_bindings(root, ep)
+                }
+                if len(shots) == 1 and shots[0] in bindings:
+                    bind_video_task(task, root, bindings[shots[0]])
             task["schedule_bucket"] = item.get("schedule_bucket") or ""
             task["risk_tier"] = item.get("risk_tier") or item.get("priority") or ""
             task["source_schedule"] = source
@@ -2030,7 +2247,45 @@ class SQLiteQueueBackend:
         try:
             queue = self._load_from_conn(conn)
             reclaim_expired(queue)
+            enforce_claim_governance_interlock(self.root, queue)
             claimed = claim_tasks(queue, limit, worker=worker, lease_seconds=lease_seconds)
+            self._commit_and_mirror(conn, queue)
+            committed = True
+            return [dict(task) for task in claimed]
+        except Exception:
+            if not committed:
+                conn.execute("ROLLBACK")
+            raise
+        finally:
+            conn.close()
+
+    def claim_exact(self, *, task_id: str, expected_plan_digest: str, episode: str,
+                    stage_key: str, worker: Optional[str], lease_seconds: int) -> List[Dict[str, Any]]:
+        conn = self._transaction()
+        committed = False
+        try:
+            try:
+                queue = self._load_from_conn(conn)
+            except FileNotFoundError:
+                queue = _empty_runtime_queue(self.root)
+            reclaim_expired(queue)
+            enforce_claim_governance_interlock(self.root, queue)
+            planned = current_exact_plan(
+                self.root,
+                task_id_value=task_id,
+                expected_plan_digest=expected_plan_digest,
+                episode=episode,
+                stage_key=stage_key,
+                queue=queue,
+            )
+            materialize_exact_plan(queue, planned, expected_plan_digest)
+            claimed = claim_task_exact(
+                queue,
+                task_id_value=task_id,
+                expected_plan_digest=expected_plan_digest,
+                worker=worker,
+                lease_seconds=lease_seconds,
+            )
             self._commit_and_mirror(conn, queue)
             committed = True
             return [dict(task) for task in claimed]
@@ -2368,9 +2623,208 @@ def claim_tasks(
     return claimed
 
 
+def _empty_runtime_queue(root: str) -> Dict[str, Any]:
+    return make_queue(
+        root,
+        [],
+        max_concurrency=1,
+        max_retries=1,
+        budget=apply_budget([], None, None),
+    )
+
+
+def current_exact_plan(
+    root: str,
+    *,
+    task_id_value: str,
+    expected_plan_digest: str,
+    episode: str,
+    stage_key: str,
+    queue: Mapping[str, Any],
+) -> Dict[str, Any]:
+    planned = route_tasks(
+        root,
+        episodes={normalize_episode(episode)},
+        stage_filters={str(stage_key)},
+        cost_estimates=load_cost_estimates(root),
+        max_retries=int(queue.get("max_retries") or 1),
+    )
+    matches = [
+        task for task in planned
+        if str(task.get("id") or "") == str(task_id_value)
+        and task_plan_digest(task) == str(expected_plan_digest)
+    ]
+    if len(matches) != 1:
+        actual = [
+            {"task_id": str(task.get("id") or ""), "plan_digest": task_plan_digest(task)}
+            for task in planned
+        ]
+        raise ValueError(
+            "exact current plan unavailable or changed: "
+            + json.dumps(actual, ensure_ascii=False, sort_keys=True)
+        )
+    return deepcopy(matches[0])
+
+
+def materialize_exact_plan(
+    queue: Dict[str, Any], planned: Mapping[str, Any], expected_plan_digest: str
+) -> Dict[str, Any]:
+    """Insert/refresh one fresh plan without replacing running or attempted history."""
+    task = deepcopy(dict(planned))
+    if task_plan_digest(task) != str(expected_plan_digest):
+        raise ValueError("materialized task plan digest mismatch")
+    task_id_value = str(task.get("id") or "")
+    tasks = queue.setdefault("tasks", [])
+    existing = next((row for row in tasks if str(row.get("id") or "") == task_id_value), None)
+    if existing is None:
+        task.setdefault("history", []).append({
+            "ts": now_iso(), "action": "plan:materialize_exact",
+            "plan_digest": expected_plan_digest,
+        })
+        tasks.append(task)
+        return task
+    if task_plan_digest(existing) == expected_plan_digest:
+        return existing
+    status = str(existing.get("status") or "")
+    if status not in REPLACEABLE_MERGE_STATUSES or int(existing.get("attempts") or 0) != 0:
+        raise ValueError(
+            f"cannot replace stale exact task {task_id_value}: status={status} "
+            f"attempts={existing.get('attempts')}"
+        )
+    history = list(existing.get("history") or [])
+    history.append({
+        "ts": now_iso(), "action": "plan:refresh_exact",
+        "previous_plan_digest": task_plan_digest(existing),
+        "plan_digest": expected_plan_digest,
+    })
+    task["history"] = history + list(task.get("history") or [])
+    tasks[tasks.index(existing)] = task
+    return task
+
+
+def claim_task_exact(
+    queue: Dict[str, Any],
+    *,
+    task_id_value: str,
+    expected_plan_digest: str,
+    worker: Optional[str],
+    lease_seconds: int,
+) -> List[Dict[str, Any]]:
+    """Claim only the hash-bound task; never fall through to a different priority row."""
+    target = next(
+        (task for task in queue.get("tasks", []) if str(task.get("id") or "") == task_id_value),
+        None,
+    )
+    if target is None or task_plan_digest(target) != expected_plan_digest:
+        raise ValueError("exact task missing or plan digest mismatch at claim")
+    prior_status = str(target.get("status") or "")
+    if prior_status not in {"queued", "retry_queued", "provider_pending"}:
+        return []
+    max_concurrency = int(queue.get("max_concurrency") or 1)
+    running = sum(1 for task in queue.get("tasks", []) if task.get("status") == "running")
+    if running >= max_concurrency:
+        return []
+    recovering_provider = prior_status == "provider_pending"
+    next_attempt = int(target.get("attempts") or 0) if recovering_provider else int(target.get("attempts") or 0) + 1
+    if recovering_provider and next_attempt <= 0:
+        raise ValueError("provider_pending task has no original claim attempt")
+    reservation = target.get("budget_reservation")
+    if recovering_provider and not (
+        isinstance(reservation, Mapping) and reservation.get("status") == "reserved"
+    ):
+        raise ValueError("provider_pending task lost its original budget reservation")
+    budget_issue = None if recovering_provider else reserve_task_budget(
+        queue, target, worker=worker, attempt=next_attempt
+    )
+    if budget_issue:
+        target["status"] = "blocked_budget"
+        target["budget_note"] = budget_issue
+        target["updated_at"] = now_iso()
+        target.setdefault("history", []).append({
+            "ts": now_iso(), "action": "claim_exact:budget_block",
+            "reason": budget_issue, "worker": worker or "",
+        })
+        refresh_runtime_budget(queue)
+        return []
+    target["status"] = "running"
+    target["attempts"] = next_attempt
+    target["updated_at"] = now_iso()
+    target["worker"] = worker or ""
+    target["lease_until"] = now_ts() + max(1, int(lease_seconds))
+    target["lease_until_iso"] = dt.datetime.fromtimestamp(
+        target["lease_until"], dt.timezone.utc
+    ).replace(microsecond=0).isoformat()
+    target.setdefault("history", []).append({
+        "ts": now_iso(),
+        "action": "claim_exact:resume_provider" if recovering_provider else "claim_exact",
+        "attempt": next_attempt,
+        "worker": worker or "", "plan_digest": expected_plan_digest,
+    })
+    refresh_runtime_budget(queue)
+    return [target]
+
+
 def _clear_lease(task: Dict[str, Any]) -> None:
     for key in ("worker", "lease_until", "lease_until_iso"):
         task.pop(key, None)
+
+
+def provider_submission_state(queue: Mapping[str, Any], task: Mapping[str, Any]) -> Dict[str, Any]:
+    """Read the durable video manifest without importing provider code.
+
+    A submit id is sufficient to resume by query only.  ``submitted_at`` without an id is an
+    unknown paid state: it is deliberately distinguished so lease recovery can block replay.
+    """
+    if str(task.get("stage_key") or "") != "video":
+        return {}
+    root = Path(str(queue.get("root") or "")).expanduser().resolve()
+    manifest_value = str(task.get("producer_manifest") or "").strip()
+    clips = [str(value).strip() for value in task.get("physical_clips", []) or [] if str(value).strip()]
+    if not manifest_value or len(clips) != 1:
+        return {}
+    manifest_path = Path(manifest_value).expanduser()
+    manifest_path = manifest_path if manifest_path.is_absolute() else root / manifest_path
+    try:
+        manifest_path = manifest_path.resolve(strict=False)
+        manifest_path.relative_to(root)
+        payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, json.JSONDecodeError):
+        return {}
+    item = next(
+        (
+            row for row in payload.get("items", []) or []
+            if isinstance(row, Mapping) and str(row.get("clip") or "") == clips[0]
+        ),
+        None,
+    )
+    if not isinstance(item, Mapping):
+        return {}
+    submit_id = str(item.get("submit_id") or "").strip()
+    status = str(item.get("status") or "").strip().lower()
+    terminal_failures = {"failed", "rejected", "cancelled", "canceled"}
+    state = (
+        "provider_terminal_failure"
+        if submit_id and status in terminal_failures
+        else "provider_pending" if submit_id else ""
+    )
+    if not submit_id and (
+        item.get("submitted_at") or status in {"submitting", "submitted_unknown_id"}
+    ):
+        state = "unknown_paid_state"
+    if not state:
+        return {}
+    return {
+        "state": state,
+        "provider_submit_id": submit_id,
+        "provider_status": status,
+        "target": str(item.get("target") or ""),
+        "download_submit_id": str(item.get("download_submit_id") or ""),
+        "download_artifact_sha256": str(item.get("download_artifact_sha256") or ""),
+        "producer_manifest": manifest_path.relative_to(root).as_posix(),
+        "physical_clip": clips[0],
+        "last_query": deepcopy(item.get("last_query")) if isinstance(item.get("last_query"), Mapping) else {},
+        "observed_at": now_iso(),
+    }
 
 
 def reclaim_expired(
@@ -2392,6 +2846,22 @@ def reclaim_expired(
         mine = force_worker and worker and task.get("worker") == worker
         if not (expired or mine):
             continue
+        provider_state = provider_submission_state(queue, task)
+        if provider_state.get("state") == "provider_pending":
+            # The paid request has a durable provider id.  Preserve the original attempt and
+            # reservation; the next exact claim may only query/download that id.
+            task["status"] = "provider_pending"
+            task["provider_job"] = provider_state
+            task["updated_at"] = now_iso()
+            reason = "lease_expired" if expired else "worker_resume"
+            task.setdefault("history", []).append({
+                "ts": now_iso(), "action": "reclaim:provider_pending", "reason": reason,
+                "prev_worker": task.get("worker", ""), "attempt": int(task.get("attempts") or 0),
+                "provider_submit_id": provider_state.get("provider_submit_id"),
+            })
+            _clear_lease(task)
+            reclaimed.append(task)
+            continue
         attempts = int(task.get("attempts") or 0)
         max_retries = resolve_max_retries(task, queue)
         reservation = task.get("budget_reservation")
@@ -2405,7 +2875,24 @@ def reclaim_expired(
             settle_task_budget(queue, task, task.get("last_runner") if isinstance(task.get("last_runner"), Mapping) else None)
         else:
             release_task_budget(queue, task, "lease_expired" if expired else "worker_resume")
-        task["status"] = "retry_queued" if attempts <= max_retries else "failed"
+        if provider_state.get("state") == "unknown_paid_state":
+            # A subprocess may have crossed the paid boundary before dying but no submit id was
+            # durably returned.  Never retry this request automatically.
+            task["status"] = "blocked_provider_unknown"
+            task["provider_job"] = provider_state
+            task["last_error_class"] = "provider_paid_state_unknown"
+            task["last_note"] = (
+                "provider paid state is unknown and has no submit_id; automatic resubmission blocked"
+            )
+        elif provider_state.get("state") == "provider_terminal_failure":
+            task["status"] = "blocked_provider_terminal"
+            task["provider_job"] = provider_state
+            task["last_error_class"] = "provider_terminal_failure"
+            task["last_note"] = (
+                "provider returned a terminal failure for the durable submit_id; automatic resubmission blocked"
+            )
+        else:
+            task["status"] = "retry_queued" if attempts <= max_retries else "failed"
         task["updated_at"] = now_iso()
         reason = "lease_expired" if expired else "worker_resume"
         task.setdefault("history", []).append(
@@ -2435,11 +2922,72 @@ def claim(root: str, *, limit: Optional[int] = None, worker: Optional[str] = Non
           lease_seconds: int = DEFAULT_LEASE_SECONDS) -> List[Dict[str, Any]]:
     backend = active_coordination_backend(root)
     if backend is not None:
+        # Built-in SQLite repeats this check inside BEGIN IMMEDIATE below.  A third-party
+        # backend still gets an API-level fail-closed check; its implementation must repeat
+        # the same invariant in its own distributed claim transaction.
+        if not isinstance(backend, SQLiteQueueBackend):
+            enforce_claim_governance_interlock(root, backend.load_queue())
         return backend.claim(limit=limit, worker=worker, lease_seconds=lease_seconds)
     with queue_lock(root):
         queue = load_queue(root)
         reclaim_expired(queue)  # 每次认领前先回收过期租约（自动断点恢复）
+        enforce_claim_governance_interlock(root, queue)
         claimed = claim_tasks(queue, limit, worker=worker, lease_seconds=lease_seconds)
+        save_queue(root, queue)
+        return [dict(task) for task in claimed]
+
+
+def claim_exact(
+    root: str,
+    *,
+    task_id: str,
+    expected_plan_digest: str,
+    episode: str,
+    stage_key: str,
+    worker: Optional[str] = None,
+    lease_seconds: int = DEFAULT_LEASE_SECONDS,
+) -> List[Dict[str, Any]]:
+    """Atomically materialize and claim only the current hash-bound task plan."""
+    backend = active_coordination_backend(root)
+    if backend is not None:
+        exact = getattr(backend, "claim_exact", None)
+        if not callable(exact):
+            raise RuntimeError(
+                f"coordination backend {coordination_backend_name(root)} lacks claim_exact; fail closed"
+            )
+        if not isinstance(backend, SQLiteQueueBackend):
+            enforce_claim_governance_interlock(root, backend.load_queue())
+        return exact(
+            task_id=task_id,
+            expected_plan_digest=expected_plan_digest,
+            episode=episode,
+            stage_key=stage_key,
+            worker=worker,
+            lease_seconds=lease_seconds,
+        )
+    with queue_lock(root):
+        try:
+            queue = load_queue(root)
+        except FileNotFoundError:
+            queue = _empty_runtime_queue(root)
+        reclaim_expired(queue)
+        enforce_claim_governance_interlock(root, queue)
+        planned = current_exact_plan(
+            root,
+            task_id_value=task_id,
+            expected_plan_digest=expected_plan_digest,
+            episode=episode,
+            stage_key=stage_key,
+            queue=queue,
+        )
+        materialize_exact_plan(queue, planned, expected_plan_digest)
+        claimed = claim_task_exact(
+            queue,
+            task_id_value=task_id,
+            expected_plan_digest=expected_plan_digest,
+            worker=worker,
+            lease_seconds=lease_seconds,
+        )
         save_queue(root, queue)
         return [dict(task) for task in claimed]
 
@@ -3235,6 +3783,25 @@ def mark_task(queue: Dict[str, Any], task_id_value: str, status: str, note: str 
         task["last_error_class"] = "preflight_block"
         task.pop("dead_letter", None)
         task.pop("dead_letter_at", None)
+    elif status == "provider_pending":
+        task.pop("completion_commit", None)
+        if task.get("status") != "running" or str(task.get("stage_key") or "") != "video":
+            raise ValueError("provider_pending is only valid for a claimed video task")
+        checkpoint = provider_submission_state(queue, task)
+        if checkpoint.get("state") != "provider_pending" or not checkpoint.get("provider_submit_id"):
+            raise ValueError(
+                "provider_pending requires a durable manifest submit_id; unknown paid state must block"
+            )
+        reservation = task.get("budget_reservation")
+        if not isinstance(reservation, Mapping) or reservation.get("status") != "reserved":
+            raise ValueError("provider_pending video task must retain its original budget reservation")
+        task["status"] = "provider_pending"
+        task["provider_job"] = checkpoint
+        if isinstance(runner, Mapping):
+            task["last_runner"] = deepcopy(dict(runner))
+        task["last_error_class"] = "provider_pending"
+        task.pop("dead_letter", None)
+        task.pop("dead_letter_at", None)
     elif status in {"queued", "blocked_budget", "cancelled"}:
         task.pop("completion_commit", None)
         if (
@@ -3359,12 +3926,28 @@ def cmd_plan(ns: argparse.Namespace) -> int:
 
 
 def cmd_claim(ns: argparse.Namespace) -> int:
-    claimed = claim(
-        ns.root.rstrip("/"),
-        limit=ns.limit,
-        worker=ns.worker or default_worker(),
-        lease_seconds=ns.lease_seconds,
-    )
+    try:
+        claimed = claim(
+            ns.root.rstrip("/"),
+            limit=ns.limit,
+            worker=ns.worker or default_worker(),
+            lease_seconds=ns.lease_seconds,
+        )
+    except (FileNotFoundError, TimeoutError, ValueError, RuntimeError) as exc:
+        payload = {
+            "kind": "n2d_batch_claim_result",
+            "version": 1,
+            "status": "blocked",
+            "fail_closed": True,
+            "claimed": [],
+            "error": {
+                "type": type(exc).__name__,
+                "message": str(exc),
+            },
+        }
+        print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True))
+        print(f"claim blocked ({type(exc).__name__}): {exc}", file=sys.stderr)
+        return 2
     print(json.dumps(claimed, ensure_ascii=False, indent=2))
     return 0 if claimed else 1
 

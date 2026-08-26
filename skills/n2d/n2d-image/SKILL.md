@@ -22,6 +22,8 @@ description: >-
 
 ## 核心原则
 
+低置信几何偏差保持 WARN；人工或执行者目视收据声明存在身份/服装/对齐硬伤时不得落档。
+
 - **图片 prompt 克制铁律（P1·提交口径）**：图片 prompt 不是越多越稳，而是视觉变量必须明确、互相不打架。定妆图负责锁“档案稳定”，分镜图负责锁“这一帧怎么拍”；不要把角色卡全文、世界观、剧情解释、路由理由和无关设定整段塞进单条 prompt。角色/场景/道具等长期信息在 `identity_registry.json` / `asset_registry.json` / 角色圣经 / 共享定妆里承载；单条 prompt 只展开本图真正会影响像素的变量。定妆图按 `角色身份 / 年龄或年龄档 / 固定外貌 / 服装妆造 / 定妆要求 / 画风规格 / 禁止` 收束；分镜图按 `身份保持 / 镜头构图 / 动作瞬间 / 场景光影 / 情绪张力 / 画风规格 / 禁止` 收束。
 - **完整合同 ≠ 实际提交 Prompt（compiler 硬边界）**：完整 Markdown 必须继续保留导演、身份/资产、参考计划、预算、检查清单和 QC 合同；但 Codex、Dreamina 或其它图片后端只能消费 `skills/n2d/_lib/image_prompt_compiler.py` 生成的编译请求。compiler 按角色定妆/场景/道具/风格锚/分镜/接力/多主体任务 profile 与具体后端 profile，输出像素目标、真实附件角色、参数和必要守卫；内部路径、registry 文案、路由理由、预算和自检不得进入模型文本。runner 禁止在 compiler 后追加未入哈希的创作指令。逐块编译预览、冲突优先级、回执和 A/B 口径见 `references/image_prompt_compiler.md`。
 - **编译请求可追溯铁律**：每次实际提交必须保存完整提交文本、独立负向字段、真实参数、附件顺序与附件完整 SHA-256，并记录 source contract / execution context / compiled request / actual submit prompt 的 SHA-256。`image_preflight` 与 `image` gate 会阻断缺编译块、编译块过期、后端不一致、画幅冲突、悬空参考编号、负向策略错误或内部合同泄漏；不能只写说明文档而不改 runner/gate。

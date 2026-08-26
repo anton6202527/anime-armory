@@ -30,6 +30,12 @@ from typing import Any
 
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
 AXES = ("character_identity", "location_identity", "background_continuity", "prop_identity")
+AXIS_SCORE_KEYS = {
+    "character_identity": ("face", "outfit", "build", "form_expression_state"),
+    "location_identity": ("structure", "landmarks", "material_style"),
+    "background_continuity": ("spatial_layout", "lighting", "axis_eyeline"),
+    "prop_identity": ("identity", "position", "contact"),
+}
 # 角色轴纳管的前缀：人物 + 一切「有脸/有身形、需锁身份」的生物。
 # MON_ 妖怪、BEAST_ 走兽异兽、ANIMAL_ 真实动物都按角色级（定妆+相似度+并排）核。
 CHARACTER_AXIS_PREFIXES = ("CHAR_", "MON_", "BEAST_", "ANIMAL_")
@@ -170,12 +176,55 @@ def panel_scene_anchor(panel: dict[str, Any]) -> str:
     return ""
 
 
+def exact_job_references(job: dict[str, Any], ref_id: str) -> list[str]:
+    out: list[str] = []
+    for ref in job.get("references") or []:
+        if not isinstance(ref, dict) or str(ref.get("id") or "") != ref_id:
+            continue
+        raw = str(ref.get("path") or "").strip()
+        if raw and raw not in out:
+            out.append(raw)
+    return out
+
+
+def identity_job_contract(job: dict[str, Any], character_id: str) -> dict[str, Any]:
+    return next(
+        (
+            item for item in job.get("identity_execution_contracts") or []
+            if isinstance(item, dict) and str(item.get("character_id") or "") == character_id
+        ),
+        {},
+    )
+
+
+def add_axis_contract(task: dict[str, Any]) -> None:
+    axis = str(task.get("axis") or "")
+    locator = task.get("subject_locator") if isinstance(task.get("subject_locator"), dict) else {}
+    has_region_locator = any(
+        locator.get(key) not in (None, "", [], {})
+        for key in ("bbox", "mask_path", "occlusion", "review_region")
+    )
+    task["required_score_keys"] = list(AXIS_SCORE_KEYS.get(axis, ()))
+    task["required_evidence"] = {
+        "panel_sha256": str((task.get("panel") or {}).get("sha256") or ""),
+        "reference_sha256s": task.get("references_sha256") or {},
+        "notes_required": True,
+        "region_required": axis == "character_identity" and (bool(task.get("multi_subject")) or has_region_locator),
+    }
+
+
 def build_tasks(root: Path, chapter: str) -> dict[str, Any]:
     root = root.resolve()
     script = load_json(root / "脚本" / chapter / "panel_script.json", {})
     registry = load_json(root / "出图" / "共享" / "identity_registry.json", {})
     registry = registry if isinstance(registry, dict) else {}
     panels = [p for p in (script.get("panels") or []) if isinstance(p, dict) and p.get("panel_id")]
+    jobs_payload = load_json(root / "出图" / chapter / "prompt" / "panel_jobs.json", {})
+    jobs_by_panel = {
+        str(item.get("panel_id") or ""): item
+        for item in (jobs_payload.get("jobs") or [])
+        if isinstance(item, dict) and item.get("panel_id")
+    }
     tasks: list[dict[str, Any]] = []
     sha_cache: dict[str, str] = {}
 
@@ -194,10 +243,16 @@ def build_tasks(root: Path, chapter: str) -> dict[str, Any]:
         entry = panel_entry(pid)
         if not entry:
             continue
-        for char_id in panel_ref_ids(panel, CHARACTER_AXIS_PREFIXES):
-            refs = asset_reference_paths(root, registry, char_id)
+        panel_subjects = panel_ref_ids(panel, CHARACTER_AXIS_PREFIXES)
+        for char_id in panel_subjects:
+            job = jobs_by_panel.get(pid) or {}
+            contract = identity_job_contract(job, char_id)
+            refs = exact_job_references(job, char_id)
             if not refs:
                 continue
+            locator = contract.get("subject_locator") if isinstance(contract.get("subject_locator"), dict) else {}
+            if not locator and len(panel_subjects) == 1:
+                locator = {"scope": "full_panel_single_subject"}
             tasks.append(
                 {
                     "task_id": f"{pid}__{char_id}__character",
@@ -205,6 +260,13 @@ def build_tasks(root: Path, chapter: str) -> dict[str, Any]:
                     "panel": entry,
                     "subject": char_id,
                     "references": refs,
+                    "identity_contract_sha256": str(contract.get("contract_sha256") or ""),
+                    "binding": {
+                        key: contract.get(key)
+                        for key in ("character_id", "form_id", "outfit_id", "expression_id", "state_id")
+                    },
+                    "subject_locator": locator,
+                    "multi_subject": len(panel_subjects) > 1,
                     "question": (
                         f"并排对比 panel 图与 {char_id} 的定妆参考：这是同一个角色/生物吗？"
                         "分三个子项打分：face（脸型/眼型/发际线/发型轮廓，生物则看头部/五官/花纹）、"
@@ -221,7 +283,7 @@ def build_tasks(root: Path, chapter: str) -> dict[str, Any]:
         anchor = panel_scene_anchor(panel)
         if not anchor.startswith("LOC_"):
             continue
-        refs = asset_reference_paths(root, registry, anchor, limit=2)
+        refs = exact_job_references(jobs_by_panel.get(pid) or {}, anchor)
         if not refs:
             continue
         entry = panel_entry(pid)
@@ -278,7 +340,7 @@ def build_tasks(root: Path, chapter: str) -> dict[str, Any]:
         if not entry:
             continue
         for prop_id in panel_ref_ids(panel, PROP_AXIS_PREFIXES):
-            refs = asset_reference_paths(root, registry, prop_id, limit=2)
+            refs = exact_job_references(jobs_by_panel.get(pid) or {}, prop_id)
             if not refs:
                 continue
             tasks.append(
@@ -299,6 +361,7 @@ def build_tasks(root: Path, chapter: str) -> dict[str, Any]:
     for task in tasks:
         refs = [str(item) for item in task.get("references") or []]
         task["references_sha256"] = reference_sha256s(root, refs)
+        add_axis_contract(task)
         task["task_sha256"] = task_sha256(task)
 
     payload = {
@@ -323,9 +386,10 @@ def build_tasks(root: Path, chapter: str) -> dict[str, Any]:
                     "task_sha256": "<复制任务里的 task_sha256>",
                     "references_sha256": {"<reference path>": "<复制任务里的 sha256>"},
                     "evaluator": {"model": "<具体模型名>", "version": "<版本或日期>", "reviewed_at": "<ISO-8601>"},
-                    "scores": {"face": "1-5（按轴要求的子项）"},
+                    "scores": {"<task.required_score_keys 中每一项>": "1-5"},
                     "verdict": "pass | suspect",
                     "notes": "一句话证据",
+                    "evidence": [{"path": "<panel/reference path>", "sha256": "<当前 SHA>", "region": "bbox/mask/occlusion（任务要求时）"}],
                 }
             ]
         },
@@ -354,6 +418,10 @@ def load_verdicts(root: Path, chapter: str) -> dict[str, dict[str, Any]]:
             "panel_sha256": str((task.get("panel") or {}).get("sha256") or ""),
             "task_sha256": str(task.get("task_sha256") or ""),
             "references_sha256": task.get("references_sha256") if isinstance(task.get("references_sha256"), dict) else {},
+            "required_score_keys": list(task.get("required_score_keys") or []),
+            "axis": str(task.get("axis") or ""),
+            "panel_path": str((task.get("panel") or {}).get("path") or ""),
+            "region_required": bool((task.get("required_evidence") or {}).get("region_required")),
         }
         for task in (tasks.get("tasks") or [])
         if isinstance(task, dict)
@@ -379,6 +447,25 @@ def load_verdicts(root: Path, chapter: str) -> dict[str, dict[str, Any]]:
         if recorded_refs is None or recorded_refs != contract["references_sha256"]:
             continue
         if not str(evaluator.get("model") or "").strip() or not str(evaluator.get("version") or "").strip():
+            continue
+        if not str(evaluator.get("reviewed_at") or "").strip() or not str(record.get("notes") or "").strip():
+            continue
+        scores = record.get("scores") if isinstance(record.get("scores"), dict) else {}
+        if set(scores) != set(contract["required_score_keys"]):
+            continue
+        evidence = record.get("evidence") if isinstance(record.get("evidence"), list) else []
+        if not evidence:
+            continue
+        allowed = {contract["panel_path"]: contract["panel_sha256"], **contract["references_sha256"]}
+        if any(
+            not isinstance(item, dict)
+            or allowed.get(str(item.get("path") or "")) != str(item.get("sha256") or "")
+            for item in evidence
+        ):
+            continue
+        if contract["region_required"] and not any(
+            isinstance(item, dict) and item.get("region") not in (None, "", {}, []) for item in evidence
+        ):
             continue
         out[task_id] = record
     return out

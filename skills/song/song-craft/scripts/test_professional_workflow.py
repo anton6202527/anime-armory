@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import array
 import hashlib
+import importlib.util
 import json
 import math
 import os
@@ -11,6 +12,7 @@ import sys
 import tempfile
 import wave
 from datetime import date, timedelta
+from pathlib import Path
 
 import lyric_prosody_check
 import master_delivery
@@ -21,6 +23,13 @@ import release_metadata
 import rights_metadata
 import song_brief
 import song_workflow
+
+
+_VERDICT_PATH = Path(__file__).resolve().parents[2] / "scripts" / "release_verdict.py"
+_VERDICT_SPEC = importlib.util.spec_from_file_location("song_release_verdict_test", _VERDICT_PATH)
+assert _VERDICT_SPEC is not None and _VERDICT_SPEC.loader is not None
+song_release_verdict = importlib.util.module_from_spec(_VERDICT_SPEC)
+_VERDICT_SPEC.loader.exec_module(song_release_verdict)
 
 
 def write_json(path, payload):
@@ -157,7 +166,7 @@ def test_rights_release_and_workflow():
 
         pre_master = os.path.join(root, "混音", "pre_master.wav")
         write_json(os.path.join(root, "混音", "mix_signoff.json"), {
-            "kind": "song_mix_performance_signoff", "passed": True,
+            "kind": "song_mix_performance_signoff", "passed": True, "reviewer": "母带工程师甲",
             "audio": {"path": "混音/pre_master.wav", "sha256": hashlib.sha256(open(pre_master, "rb").read()).hexdigest()},
         })
         release_args = type("Args", (), {
@@ -186,3 +195,30 @@ def test_rights_release_and_workflow():
         workflow = song_workflow.build_workflow(root)
         assert workflow["kind"] == "song_workflow"
         assert any(step["key"] == "release_pack" for step in workflow["steps"])
+        assert workflow["release_verdict"]["status"] == "ready_for_acceptance"
+
+        accepted = song_release_verdict.accept(Path(root))
+        assert accepted["complete"] is True
+        assert accepted["inputs"]["cover_art"]["sha256"]
+        accepted_digest = accepted["release_digest"]
+        workflow = song_workflow.build_workflow(root)
+        assert workflow["release_verdict"]["complete"] is True
+
+        # Rewriting only volatile diagnostics must not manufacture a new
+        # business state/hash.  The logical release-pack SHA is authoritative.
+        pack_path = os.path.join(root, "导出", "release_pack.json")
+        rewritten_pack = json.load(open(pack_path, encoding="utf-8"))
+        rewritten_pack["generated_at"] = "2099-01-01T00:00:00+00:00"
+        rewritten_pack["project_root"] = "/different/checkout/same-project"
+        write_json(pack_path, rewritten_pack)
+        clock_only = song_release_verdict.build_verdict(Path(root))
+        assert clock_only["complete"] is True
+        assert clock_only["release_digest"] == accepted_digest
+        assert clock_only["inputs"]["release_pack"]["logical_sha256"]
+
+        with open(os.path.join(root, "导出", "master.wav"), "ab") as f:
+            f.write(b"changed-current-master")
+        stale = song_release_verdict.build_verdict(Path(root))
+        assert stale["complete"] is False
+        assert stale["release_digest"] != accepted_digest
+        assert stale["acceptance"]["current"] is False

@@ -13,10 +13,15 @@
 
 set -euo pipefail
 
-ROOT="${1:?work root required}"
-EP="${2:?episode required}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
+if [[ "${N2D_WRAPPER_SELF_CHECK:-}" == "1" ]]; then
+  [[ -f "$REPO_DIR/skills/n2d/run.py" ]] || { echo "invalid repository root: $REPO_DIR" >&2; exit 2; }
+  printf '%s\n' "$REPO_DIR"
+  exit 0
+fi
+ROOT="${1:?work root required}"
+EP="${2:?episode required}"
 
 set +e
 python3 "$REPO_DIR/skills/n2d/n2d-dashboard/scripts/dashboard.py" gate "$ROOT" "$EP" --stage image_preflight

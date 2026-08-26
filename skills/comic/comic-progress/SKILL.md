@@ -69,7 +69,7 @@ python3 skills/comic/comic-progress/scripts/scan.py "创作区/画漫画/作品�
 
 如果下一步是出图、覆盖导出或正式发布前审查，先检查项目是否已有当前有效的模型/渠道、费用、覆盖范围和权利授权；同范围授权沉默沿用，缺失或实质扩张时才提醒用户确认。
 
-进度表全勾只表示制作阶段前沿走完，不再输出“最终完成”。扫描器读取 `生产数据/completion_verdict_第N话.json`：只有 `status=accepted` 才令 `front.complete=true`；缺失、blocked 或 machine_ready 都路由 `comic-supervisor` 刷新 active release/最终裁决。`_进度.md`、provider 成功和 dashboard 不能成为第二完成状态。
+进度表全勾只表示制作阶段前沿走完，不再输出“最终完成”。扫描器不直接相信旧 `completion_verdict`：它会沿 `release_contract` 读取当前 digest 的不可变 bundle，重算 release digest，并复核 settings、全部产物及 receipt 当前 SHA；只有指纹仍 current 且唯一 verdict 为 `accepted` 才令 `front.complete=true`。缺失、stale、blocked 或 machine_ready 都路由 `comic-supervisor` 刷新 active release/最终裁决。`_进度.md`、provider 成功和 dashboard 不能成为第二完成状态。
 
 ## 不做什么
 

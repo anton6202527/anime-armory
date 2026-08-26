@@ -409,7 +409,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     plan = build_foley_plan(clips)
     dur = total_duration(clips)
 
-    work = os.path.join(root, "合成", ep, "_work")
+    # Compose uses a unique RenderTransaction staging directory.  Honour its
+    # explicit work path so concurrent/stale transactions cannot share files.
+    work = os.environ.get("N2D_COMPOSE_WORK_DIR") or os.path.join(root, "合成", ep, "_work")
     os.makedirs(work, exist_ok=True)
     plan_path = os.path.join(work, "foley_plan.json")
     with open(plan_path, "w", encoding="utf-8") as f:

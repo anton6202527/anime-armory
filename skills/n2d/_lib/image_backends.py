@@ -12,7 +12,7 @@ gate 据此在 image_preflight 出 BLOCK/WARN。
 - 探针不确定的后端一律 `none` → unknown(WARN)，绝不用没核实的 argv 误判 down 造成假 BLOCK。
 - 区分 down（探针真跑过且失败=可 BLOCK）vs unknown（探针跑不起来/无规格=只 WARN）。
 
-采集日期：2026-06-13  来源：n2d-image/SKILL.md 现行叙述 + 各后端官方文档（探针待逐条复核）
+采集日期：2026-08-26  来源：n2d-image 执行合同 + OpenAI/Gemini 官方模型档案 + 各后端已登记凭据约定
 """
 from __future__ import annotations
 
@@ -26,23 +26,27 @@ except Exception:  # pragma: no cover - 仅在异常打包布局下走相对兜�
     from .n2d_contract import classify_image_backend  # type: ignore
 
 
-CATALOG_VERIFIED = {"date": "2026-06-13", "source": "n2d-image/SKILL.md + 各后端官方文档(探针待复核)"}
+CATALOG_VERIFIED = {
+    "date": "2026-08-26",
+    "source": "n2d-image execution contract + current OpenAI/Gemini official model docs + registered provider credential contracts",
+}
 
 # canonical 后端 → 探针规格。kind:
 #   "cli"  argv 探 CLI 可达/已登录（returncode 0=ok，非0/超时=down，binary 缺=unknown）；
 #          可选 health_url_env：若该环境变量给了 base url，则改走 HTTP 健康探活（更能抓内网 502）。
-#   "env"  云 API：env 缺=down（必失败），有=ok（best-effort，不实际花钱验）。
+#   "env_any"  云 API：任一凭据 env 缺=down，有=ok（best-effort，不实际花钱验）。
+#   "env_all"  云 API：所有凭据 env 均需存在。
 #   "none" 暂无核实过的探针 → unknown，由 gate 出 WARN 提示人工确认（不硬拦）。
 IMAGE_BACKEND_PROBES: Dict[str, Dict[str, object]] = {
     # 默认路线：codex CLI；若导出 CODEX_IMAGE_BASE_URL（如内网 http://192.168.x.x）则改 HTTP 健康探活。
     "codex":    {"kind": "cli", "argv": ("codex", "features", "list"), "timeout": 8,
                  "health_url_env": "CODEX_IMAGE_BASE_URL"},
-    "openai":   {"kind": "env", "env": "OPENAI_API_KEY"},
-    # 以下官方后端的 CLI/API 探针口径仍在复核，先不臆造 argv（错的 argv 会假 BLOCK）：
-    "dreamina": {"kind": "none", "manual": "确认即梦官方 CLI 已登录·会员态有效（dreamina 控制台或一次 dry-run）"},
-    "gemini":   {"kind": "none", "manual": "确认 Gemini/Nano Banana 凭据可用"},
-    "seedream": {"kind": "none", "manual": "确认 Seedream 官方 API key/额度可用"},
-    "kling":    {"kind": "none", "manual": "确认可灵 Kling 账号/主体库可用"},
+    "openai":   {"kind": "env_any", "envs": ("OPENAI_API_KEY",)},
+    # Dreamina 用无花费额度查询同时验证 CLI + 登录态；失败时不进付费工位。
+    "dreamina": {"kind": "cli", "argv": ("dreamina", "user_credit"), "timeout": 15},
+    "nano_banana": {"kind": "env_any", "envs": ("GEMINI_API_KEY", "GOOGLE_API_KEY")},
+    "seedream": {"kind": "env_any", "envs": ("SEEDREAM_API_KEY", "ARK_API_KEY")},
+    "kling":    {"kind": "env_all", "envs": ("KLING_ACCESS_KEY", "KLING_SECRET_KEY")},
     "sora":     {"kind": "none", "manual": "确认 Sora Cameo 账号可用"},
 }
 
@@ -107,11 +111,16 @@ def probe_backend(
     cli_runner = cli_runner or _default_cli_runner
     http_runner = http_runner or _default_http_runner
     kind = str(spec.get("kind"))
-    if kind == "env":
-        var = str(spec.get("env") or "")
-        if var and env.get(var):
+    if kind in {"env_any", "env_all"}:
+        vars_ = tuple(str(v) for v in (spec.get("envs") or ()) if str(v))
+        present = [v for v in vars_ if env.get(v)]
+        if kind == "env_any" and present:
             return ("ok", "")
-        return ("down", f"缺环境变量 {var}（云 API 凭据未配置，必然落不了 PNG）")
+        if kind == "env_all" and len(present) == len(vars_):
+            return ("ok", "")
+        missing = [v for v in vars_ if not env.get(v)]
+        mode = "任一" if kind == "env_any" else "全部"
+        return ("down", f"缺环境变量（{mode}凭据合同）: {', '.join(missing or vars_)}")
     if kind == "cli":
         health_env = str(spec.get("health_url_env") or "")
         url = env.get(health_env) if health_env else None
@@ -155,10 +164,10 @@ def scan_backends(
             argv = spec.get("argv") or ()
             if argv:
                 item["cli"] = list(argv)[0]
-        elif spec.get("kind") == "env":
-            var = str(spec.get("env") or "")
-            item["env"] = var
-            item["env_present"] = bool(var and env.get(var))
+        elif spec.get("kind") in {"env_any", "env_all"}:
+            vars_ = [str(v) for v in (spec.get("envs") or ()) if str(v)]
+            item["envs"] = vars_
+            item["env_present"] = {var: bool(env.get(var)) for var in vars_}
         results.append(item)
 
     usable = [r for r in results if r["auto_usable"]]

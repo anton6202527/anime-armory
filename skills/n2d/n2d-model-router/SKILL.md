@@ -43,6 +43,7 @@ description: 横切模型与音画制作适配层：在 n2d 出视频前，先�
 - **高动作身份优先级必须明写**：打斗、追逐、飞行、御兽/坐骑、马车/载具、飞舟/御物、现代车辆、尾随潜入、拥抱拉扯、多人接触、大场面等镜头若 `identity_requirement != none`，route 必须写 `identity_preservation_plan`。它要列明必须保留的身份锚（脸型/发型/服饰/主体绑定）、允许为运动可读性让步的范围（如改远景、减少近景变形检查窗口）、以及失败 fallback（身份近景 + 动作远景/反打拆镜）。`motion_control.required=true` 且缺该计划时，video gate 会 BLOCK，避免“为了物理运动把人拍成另一个人”。
 - **执行配方不是说明文字**：每条 route 必须输出 `execution_recipe`，把 `primary_backend` 归一成调用层可消费的 `frame_inputs`、`reference_inputs`、`control_inputs`、`audio_inputs`、`fallback` 和 `capability_match`。video gate 会阻断缺 `execution_recipe` 或 Motion Control 需要但缺 `manifest_path` 的 route，避免后端能力只停留在路由文案里。
 - **probe 结果可回灌，但不覆盖高优先级锁定**：`n2d-script/scripts/spectacle_probe_pack.py` 会产出小样矩阵和 `生产数据/spectacle_backend_benchmark.json` 填写 schema。自动路由模式下，router 读取该文件：若某类镜头的 probe 推荐了更稳 primary（如 fight_exchange 从 Kling 改 Seedance），会把推荐后端升为 primary、原 primary 保留为 fallback，并在 `spectacle_benchmark` 留痕；但它不得覆盖固定模式、角色后端锁或跨集基线。确需覆盖基线/身份锁，benchmark 记录必须显式写 `override_baseline=true` / `override_identity_lock=true`，并在 QC 签收后执行。
+- **后端结论必须来自同镜型、同约束的真实样本**：先用 `scripts/shot_class_benchmark.py plan` 为同一 shot class、时长、身份/控制条件和接受阈值建立不可变计划，再用 `summarize` 汇总真实产物 SHA、机器 QC 与实际像素审阅收据。默认每个候选至少 2 个 replicate；只有两个以上合格后端样本充分时才输出 recommendation，并同时比较一次通过率、返修后接受率、每个有效成品秒成本与 p50 延迟。单条 demo、provider `succeeded`、缺产物或缺审阅收据一律得到 `insufficient_evidence`，不得改路由基线。
 - **冷启动后端先验（benchmark 缺失兜底）**：没跑过 probe 的项目，对「关键词识别为打斗/追逐/腾云/大场景、但 shot_type 通用、路由落到 default」那批镜，自动按动作类型默认排序兜底（打斗→Kling、连续追逐→Seedance、飞行/大场景→Veo；单一真值源 `n2d_platform_profiles.SPECTACLE_BACKEND_PRIOR`），原 default 保留为 fallback，留痕 `spectacle_prior` + `risk_flag=spectacle_prior_routed`。仅自动路由生效；benchmark 一旦填写即覆盖先验，`固定生视频模型`/baseline 锚定不动。
 - **控制资产脚手架（补"只 gate 不生成"的摩擦）**：路由只声明、gate 只校验，中间用 `scripts/motion_control.py` 把骨架和清单补上，别让操作者照 schema 手搓 JSON：
   - `python3 scripts/motion_control.py <作品根> 第N集 scaffold [--clip Clip_03]` —— 读 `video_model_routes.json`，为每个 `level=required` 的 Clip 生成/合并一份**非 ready 骨架** manifest（`status=planned`、逐 input `status=missing`+规范路径，已填字段不回退），并打印"该 Clip 还要产出哪几个控制文件 + 接触语义字段"的精确清单。骨架仍被 gate 阻断（这是对的：还没就位）。
@@ -101,6 +102,15 @@ python3 skills/n2d/n2d-model-router/scripts/router.py <作品根> 第N集 --writ
 - 其顶层 `production_sound_plan` 与逐 route 声音字段；需要独立人读报告时运行 `python3 skills/n2d/scripts/production_mode_router.py <作品根> 第N集 --write`。
 
 `video_model_routes.json` 是机器真值，`video_model_routes.md` 供人审。字段约定见 `references/schema.md`。
+
+需要把某类镜头的后端先验升级为项目证据时，先跑小样基准；命令只规划和汇总，不调用付费后端，也不自动改当前路由：
+
+```bash
+python3 skills/n2d/n2d-model-router/scripts/shot_class_benchmark.py plan <作品根> 第N集 --write
+python3 skills/n2d/n2d-model-router/scripts/shot_class_benchmark.py summarize <作品根> <plan.json> <results.json> --write
+```
+
+只有汇总文件给出有充分真实证据的 recommendation，且通过当前预算包、身份锁和跨集基线约束后，才把结论写入 `生产数据/spectacle_backend_benchmark.json`；`insufficient_evidence` 保持现状并继续采样。
 
 ### 3. 路由基线
 

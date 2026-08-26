@@ -2,7 +2,7 @@
 name: mv
 description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视频；外层 agent 在已有最终音频时应显式传入并持久化先传音乐路线（按真实 beatgrid 卡点），只有企划/歌词草稿时应显式传入后配歌曲路线（先做 rough 视觉蓝图，补入定稿歌后重跑卡点与正式 timeline）。底层 init CLI 不自行推断该选择，未传时仍采用兼容默认“先传音乐”。产物落 创作区/制MV/曲名/(成片_MV.mp4)。**mv 视觉/剪辑阶段自包含**。读 _进度.md 路由到 mv-progress(只读进度) / mv-update(更新影响计划) / mv-craft(共享契约/AI披露) / mv-script(视觉蓝图) / mv-beat(卡点) / mv-plan(clip/timeline规划) / mv-image(出图) / mv-video(出视频+挑版) / mv-lyric-sync(卡拉OK字幕) / mv-compose(合成)。Use when given a finished song/audio, a song concept that needs MV planning before final audio, or an existing 创作区/制MV/曲名/ folder, or asked 做MV / 给这首歌做视频 / 先做MV后配歌 / 先传音乐做MV / 卡点 / 卡拉OK / MV出图出视频 / 合成成片. Triggers MV, 音乐视频, 做MV, 给歌做视频, 先传音乐, 后配歌曲, 卡点, 卡拉OK, 歌词字幕, MV出图, MV出视频, MV合成, mv.
 ---
-> 规模统计：Skill 数 14 | SKILL.md 总行数 1306 | 目录文本总行数 47088
+> 规模统计：Skill 数 14 | SKILL.md 总行数 1310 | 目录文本总行数 47384
 
 # mv — 制MV 生产线 · 总调度
 
@@ -14,6 +14,8 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 
 **生产数据分层**：beatgrid、timeline、选择记录、正式画面与母版仍是 mv 自己的业务真值；`生产数据/artifact_catalog.json` 只是可删除、可重建的只读索引，缺失不得阻断 MV。机器真值优先 JSON/JSONL，人读 Markdown/HTML 放 `生产数据/views/`，可重建缓存单独标识。只持久化作品根相对路径；外部歌曲先复制进 `歌/song.*`，在 `_meta.json` 记录导入副本相对路径、原文件名和 SHA，不保存源机绝对路径。mv 不 import 仓库维护工具或其它系列实现，不回读其它系列状态/缓存。
 
+**一个状态、一个哈希、一个完成定义**：`_进度.md` 和逐阶段 health 只是生产前沿/证据，不能宣布整支 MV 完成。最终只认 `python3 skills/mv/mv-craft/scripts/completion.py verdict <作品根> --write --json`：它把当前设置、final/master、delivery QC、AI disclosure、provenance、具名总审和 release decision 实际字节归一为一个 canonical SHA-256，并只返回 `blocked | ready_for_acceptance | complete`。只有具名真人 handoff receipt 绑定同一 digest 时才 `complete`；任一当前字节变化，旧 handoff 自动失效。
+
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
 本 skill 的可选项**不写死在源码里**。按 `skills/mv/mv-craft/references/选择点与偏好.md` 读项目值、全局默认；仍缺失的普通、可逆项采用本线推荐值写回并继续。版权/肖像/品牌合规、当前像素或当前 take、picture lock、最终成品验收、不可逆发布/覆盖，以及阶段预算包创建、扩大、过期或合同变化才停。
@@ -22,9 +24,9 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 
 > 作为生产线入口：外层 agent 开新曲（`创作区/制MV/<曲名>/`）时，若已有最终音频，调用 init 时显式传 `--song <文件> --song-timing 先传音乐`；只有歌名/歌词/视觉想法时显式传 `--song-timing 后配歌曲`。直接调用 CLI 而不传该参数会沿用兼容默认 `先传音乐`，不能把它描述为自动识别。`MV视觉风格` 等普通缺项采用推荐值并写回。视频后端不在立项时强问：`生视频模型` / `生视频渠道` 由可用 adapter/渠道偏好解析；只有探测不到可执行入口或输入证据冲突、会改变作品合同时才问一个最小问题。旧 `生视频AI` 只作兼容 fallback。
 
-> **当前 setup 导航限制**：`mv/run.py next --json` 只可作为**已初始化项目**的前沿导航。缺 `_进度.md` 时它当前返回的 setup `exact_command` 是 legacy 占位，既缺 `--title`，也把作品根误放成位置参数，不能直接执行。新项目必须由外层 agent 先运行 `python3 skills/mv/scripts/init_project.py --title "<曲名>" --out "<作品根>" [--song "<音频>"] --song-timing 先传音乐|后配歌曲`；初始化成功后才交回 `run.py next`。在 runtime 修正前，文档不得把 missing-project setup card 描述成可自动 chain。
+> **setup 结构化导航**：缺 `_进度.md` 时，`mv/run.py next --json` 返回 `stop_reason=needs_project_bootstrap`，其 `action_card.argv` 显式包含 `init_project.py --title <由作品根推导的曲名> --out <作品根>`，可不重新解析展示文本而直接执行。若外层已掌握成品歌、歌词或明确的歌曲输入时序，应在执行前将 `--song` / `--lyrics` / `--song-timing` 合并进 argv；否则按本线可逆默认初始化，再由下一张 NextAction 补输入。
 
-**连续执行边界**：本线没有完整 `mv-batch` / supervisor。项目初始化后，调度 agent 可消费 `mv/run.py next --json`，在同一任务自动串联免费确定性脚本和现有 `mv-*` 阶段；缺项目时先按上方完整 init 命令初始化，不消费 legacy setup card。不得把 next-action 导航冒充会自动提交 provider、替人审当前像素/视频、签 picture lock 或发布。若实际调用层已有与当前 input/model/channel/scope/cost 精确绑定且有效的阶段预算授权，余量内不逐图、逐 clip 重复确认；缺失、扩大、过期或合同变化才结构化停止。
+**连续执行边界**：本线没有完整 `mv-batch` / supervisor。调度 agent 可先消费 `needs_project_bootstrap` 的结构化 argv 立项，再持续消费 `mv/run.py next --json`，在同一任务自动串联免费确定性脚本和现有 `mv-*` 阶段。不得把 next-action 导航冒充会自动提交 provider、替人审当前像素/视频、签 picture lock 或发布。若实际调用层已有与当前 input/model/channel/scope/cost 精确绑定且有效的阶段预算授权，余量内不逐图、逐 clip 重复确认；缺失、扩大、过期或合同变化才结构化停止。
 
 ## 作品根约定
 ```
@@ -40,7 +42,7 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 ├── 出图/                mv-image：共享定妆 + 分段分镜 PNG
 ├── 出视频/              jobs_manifest.json + takes/ + 视频/（mv-video 产）
 ├── 制片/                shot list + picture lock + finishing checklist
-├── 生产数据/            image_acceptance/animatic/otio/color/image_qc/video_qc/delivery_qc/review
+├── 生产数据/            image_acceptance/animatic/otio/color/image_qc/video_qc/delivery_qc/review + completion_verdict.json
 ├── 合规/                ai_usage/provenance/C2PA/release_decision/handoff_receipt
 └── 成片_MV_master.mov + 成片_MV.mp4
 ```
@@ -62,7 +64,7 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 | 出视频 | **`mv-video`** | `出视频/jobs_manifest.json` + `sequence_units` + `takes/` + `视频/`（按段落+卡点挑版） | ✅ 已建（生视频 CLI/登记脚本） |
 | 合成/交付 | **`mv-compose`** | ProRes/PCM 母版 + 逐输入色彩解释/变换 + BT.709 MP4 + PCM 音轨同一性 delivery QC | ✅ 已建（自包含 ffmpeg） |
 | 披露/来源链 | **`mv-craft`** | `ai_usage.json` → `provenance.json` / C2PA 2.4（可选生产签名） | ✅ 严格按顺序、SHA 绑定 |
-| 质检/发布 | **`mv-review`** + **`mv-craft`** | 具名 review receipt → 版本化 release decision + 上传证据 → handoff receipt | ✅ 平台动作不伪装自动上传 |
+| 质检/发布 | **`mv-review`** + **`mv-craft`** | 具名 review receipt → 版本化 release decision + 上传证据 → digest-bound handoff → 唯一 completion verdict | ✅ 平台动作不伪装自动上传 |
 
 | 用户输入 | 路由到 |
 |---|---|
@@ -75,7 +77,7 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 | 要卡拉OK字幕 | `mv-lyric-sync` |
 | 素材齐了要合成成片 | `mv-compose` |
 | 审 MV / 卡点对账 / 字幕检查 / 成片体检 / 流程自审 | `mv-review`（成品后审，出定位报告） |
-| 给了已初始化的 `创作区/制MV/<曲名>/` 没说动作 / 问进度或下一步 | `mv-progress`（只读扫描 `_进度.md`，报进度 + 建议下一步）；要机器可消费的下一步卡（前沿+gate+停因+收据健康度）跑 `python3 skills/mv/run.py next <作品根> --json`。缺 `_进度.md` 时不用其 legacy setup command，先按上方完整 init 命令初始化 |
+| 给了 `创作区/制MV/<曲名>/` 没说动作 / 问进度或下一步 | 已初始化项目用 `mv-progress`（只读扫描 `_进度.md`）；要机器可消费的下一步卡跑 `python3 skills/mv/run.py next <作品根> --json`。缺 `_进度.md` 时直接消费 `needs_project_bootstrap` 卡的 `action_card.argv` |
 | 改了某个 clip 的图/prompt/剪辑决定，问下游要重做什么 | `python3 skills/mv/run.py impact <作品根> --clip Clip_00N --change image\|prompt\|edit`（确定性返工级联清单，只读） |
 | 问 skill 更新是否影响本 MV / 要返工计划 / 重审重评前先看范围 | `mv-update`（只写更新影响计划和基线，不改素材/视频/进度） |
 
@@ -85,7 +87,7 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 
 > 每阶段“凭什么通过、谁签、失败回哪一级”的单一说明见 `mv-craft/references/production-standards.md`。导演视角负责创意与镜头，但剪辑、音乐时间、连续性和交付 QC 是独立责任维度，不能合并成一句“专业导演已看过”。
 
-> **编排入口**：已初始化项目优先消费 `python3 skills/mv/run.py next <作品根> --json` 的结构化 NextAction（frontier + 登记制 stop_reason + gate 结果 + 已 done 付费阶段的收据健康度巡检），而不是仅凭 `_进度.md` 文本自觉选下一步；`_进度.md` 标 done 但 hash 链已失效的“假 done”会被 `stale_receipts` 主动揪出。run.py 只读不写、不代跑付费阶段；缺项目时的 setup card 当前不是可执行真值，必须先显式调用 `init_project.py --title ... --out ... --song-timing ...`。
+> **编排入口**：优先消费 `python3 skills/mv/run.py next <作品根> --json` 的结构化 NextAction（frontier + 登记制 stop_reason + gate 结果 + 已 done 付费阶段的收据健康度巡检），而不是仅凭 `_进度.md` 文本自觉选下一步；缺项目时先执行 `needs_project_bootstrap` 的 argv，`_进度.md` 标 done 但 hash 链已失效的“假 done”则由 `stale_receipts` 主动揪出。run.py 只读不写、不代跑付费阶段。
 
 > **mv-image/mv-video 是 mv 自己的视觉 skill**。两层定妆、尾帧接力、出图前一致性包和视频动作模板化都在 mv 家族内自持。
 

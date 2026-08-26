@@ -6,9 +6,11 @@
 按 ad-craft 阶段表把中文阶段标签映射回 stage key，找第一个未 ✅ 的阶段作为前沿。
 """
 import argparse
+import importlib.util
 import json
 import os
 import sys
+from pathlib import Path
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 if _HERE not in sys.path:
@@ -22,6 +24,16 @@ if _COMMON_DIR not in sys.path:
 import progress_md  # noqa: E402
 
 DONE = "✅"
+
+
+def release_verdict(root):
+    path = Path(__file__).resolve().parents[2] / "scripts" / "release_verdict.py"
+    spec = importlib.util.spec_from_file_location("ad_release_verdict_for_progress", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot load release verdict: {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.build_verdict(Path(root))
 
 
 def acceptance_note(root, key):
@@ -97,8 +109,16 @@ def main():
 
     print()
     brief_hint(root)
+    verdict = release_verdict(root)
+    print(f"[release] status={verdict['status']} complete={str(verdict['complete']).lower()} "
+          f"digest={verdict['release_digest']}")
+    for item in (verdict.get("blockers") or [])[:3]:
+        print(f"  - BLOCK [{item.get('code')}] {item.get('message')}")
     if frontier is None:
-        print("[done] 生产阶段已完成 ✅ —— 下一步：分别闭合 AI 标识与商业披露收据、campaign_readiness + compliance_manifest 发布证据 → ad-review M0；投放后用 ad-feedback 回灌。")
+        if verdict["complete"]:
+            print("[done] 唯一发布裁决 complete；投放后可用 ad-feedback 回灌。")
+        else:
+            print("[frontier] 生产阶段表已闭合，但最终完成只认上述 release verdict；先修复其 blocker。")
         return
     label, meta = frontier
     owner = meta["owner"] if meta else "?"

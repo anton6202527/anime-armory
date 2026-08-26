@@ -2,11 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
-import subprocess
 from pathlib import Path
-
-import pytest
-
 
 SCRIPT = Path(__file__).with_name("artifact_lineage.py")
 spec = importlib.util.spec_from_file_location("artifact_lineage", SCRIPT)
@@ -14,23 +10,17 @@ artifact_lineage = importlib.util.module_from_spec(spec)
 assert spec.loader is not None
 spec.loader.exec_module(artifact_lineage)
 
+from test_completion_evidence import write_test_master, write_valid_completion_receipts  # noqa: E402
+
 
 def _write_test_mp4(path: Path) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    try:
-        proc = subprocess.run(
-            [
-                "ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i",
-                "color=c=black:s=16x16:d=0.2", "-an", "-c:v", "mpeg4", str(path),
-            ],
-            check=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            timeout=30,
-        )
-    except FileNotFoundError:
-        pytest.skip("ffmpeg unavailable")
-    assert proc.returncode == 0, proc.stderr.decode("utf-8", errors="replace")
+    write_test_master(path)
+
+
+def _write_completion_receipts(root: Path, episode: str, master: Path, contract) -> None:
+    write_valid_completion_receipts(
+        root, episode, master, contract, transaction_id="artifact-lineage-test"
+    )
 
 
 def _evidence(root: Path, episode: str) -> Path:
@@ -64,6 +54,7 @@ def _evidence(root: Path, episode: str) -> Path:
     (prod / f"review_ui_{episode}.json").write_text('{"kind":"n2d_review_ui","version":1,"status":"pass"}', encoding="utf-8")
     (prod / f"review_ui_findings_{episode}.json").write_text('{"kind":"n2d_consistency_findings","findings":[]}', encoding="utf-8")
     contract = artifact_lineage.acceptance_contract
+    _write_completion_receipts(root, episode, asset, contract)
     (prod / "production_events.jsonl").touch(exist_ok=True)
     contract._event_ledger_module().audit(str(root), write=True, strict_trace=True)
     validation = contract.n2d_schema_registry.scan_artifacts(

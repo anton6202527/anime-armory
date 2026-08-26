@@ -54,6 +54,9 @@ def test_build_name_board_records_page_flow_and_finishing_preview(tmp_path: Path
     assert len(board["upstream_receipt"]["panel_script_sha256"]) == 64
     assert board["manuscript"]["bleed"] > 0
     assert board["pages"][0]["page_side"] == "right"
+    assert board["pages"][0]["spread_id"] == "SPREAD_001"
+    assert board["pages"][0]["spread_mode"] == "paired_pages"
+    assert board["pages"][0]["cross_page_art"] is False
     assert board["pages"][0]["eye_flow_path"] == ["P001", "P002"]
     assert board["pages"][0]["panels"][0]["layout_weight"] == "heavy"
     assert board["pages"][0]["panels"][0]["camera_hint"] == "主角推门。"
@@ -64,6 +67,41 @@ def test_build_name_board_records_page_flow_and_finishing_preview(tmp_path: Path
     assert board["pages"][0]["panels"][0]["avoid_regions"]
     assert board["pages"][0]["page_turn"]["setup"]["panel_id"] == "P002"
     assert "screentone" in board["finishing_preview"]["tone_plan"]
+
+
+def test_spread_grouping_is_not_cross_page_art_without_explicit_source_intent(tmp_path: Path) -> None:
+    root = tmp_path / "comic"
+    chapter = "第1话"
+    root.mkdir()
+    (root / "_设置.md").write_text("- 漫画形态：页漫\n- 阅读方向：从左到右\n", encoding="utf-8")
+    write_json(root / "脚本" / chapter / "panel_script.json", {
+        "panels": [
+            {"panel_id": "P001", "page_hint": 1},
+            {"panel_id": "P002", "page_hint": 2, "cross_page_art": True},
+        ]
+    })
+
+    board = build_name_board.build_name_board(root, chapter)
+
+    assert board["pages"][0]["spread_id"] == board["pages"][1]["spread_id"] == "SPREAD_001"
+    assert board["pages"][0]["spread_mode"] == "paired_pages"
+    assert board["pages"][0]["cross_page_art"] is False
+    assert board["pages"][1]["spread_mode"] == "cross_page_art"
+    assert board["pages"][1]["cross_page_art"] is True
+
+
+def test_scroll_name_board_has_no_physical_spread(tmp_path: Path) -> None:
+    root = tmp_path / "comic"
+    chapter = "第1话"
+    root.mkdir()
+    (root / "_设置.md").write_text("- 漫画形态：条漫\n- 阅读方向：从上到下\n", encoding="utf-8")
+    write_json(root / "脚本" / chapter / "panel_script.json", {"panels": [{"panel_id": "P001"}]})
+
+    page = build_name_board.build_name_board(root, chapter)["pages"][0]
+
+    assert page["spread_id"] == ""
+    assert page["spread_mode"] == "scroll_sequence"
+    assert page["cross_page_art"] is False
 
 
 def test_explicit_page_hints_override_fixed_page_capacity(tmp_path: Path) -> None:

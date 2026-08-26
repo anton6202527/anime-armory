@@ -55,6 +55,20 @@ def make_project(root: Path) -> None:
     (root / "出图" / "共享" / "图片" / "PROP_SWORD__anchor.png").write_bytes(PNG_1X1)
     registry = {"assets": {"MON_TIGER": {"id": "MON_TIGER", "type": "monster"}, "PROP_SWORD": {"id": "PROP_SWORD", "type": "prop"}}}
     (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps(registry, ensure_ascii=False), encoding="utf-8")
+    prompt_dir = root / "出图" / chapter / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "panel_jobs.json").write_text(json.dumps({"jobs": [{
+        "panel_id": "P001",
+        "references": [
+            {"id": "MON_TIGER", "path": "出图/共享/图片/MON_TIGER__anchor.png"},
+            {"id": "PROP_SWORD", "path": "出图/共享/图片/PROP_SWORD__anchor.png"},
+        ],
+        "identity_execution_contracts": [{
+            "character_id": "MON_TIGER", "form_id": "FORM_BASE", "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL", "state_id": "STATE_BASE",
+            "contract_sha256": "a" * 64, "subject_locator": {"bbox": [0, 0, 1, 1]},
+        }],
+    }, {"panel_id": "P002", "references": [], "identity_execution_contracts": []}]}, ensure_ascii=False), encoding="utf-8")
 
 
 def test_vlm_tasks_cover_three_axes_and_stale_verdicts_drop(tmp_path: Path) -> None:
@@ -74,13 +88,16 @@ def test_vlm_tasks_cover_three_axes_and_stale_verdicts_drop(tmp_path: Path) -> N
     evidence = {
         "task_sha256": char_task["task_sha256"],
         "references_sha256": char_task["references_sha256"],
-        "evaluator": {"model": "Test VLM", "version": "2026-07-14"},
+        "evaluator": {"model": "Test VLM", "version": "2026-07-14", "reviewed_at": "2026-07-14T10:00:00+08:00"},
     }
     (root / "生产数据" / f"comic_vlm_judge_verdicts_{chapter}.json").write_text(
         json.dumps(
             {
                 "verdicts": [
-                    {"task_id": char_task["task_id"], "panel_sha256": good_sha, "scores": {"face": 2}, "verdict": "suspect", **evidence},
+                    {"task_id": char_task["task_id"], "panel_sha256": good_sha,
+                     "scores": {key: (2 if key == "face" else 4) for key in char_task["required_score_keys"]},
+                     "verdict": "suspect", "notes": "face drift",
+                     "evidence": [{"path": char_task["panel"]["path"], "sha256": good_sha, "region": {"bbox": [0, 0, 1, 1]}}], **evidence},
                     {"task_id": char_task["task_id"] + "_stale", "panel_sha256": "0" * 64, "scores": {"face": 1}},
                 ]
             },

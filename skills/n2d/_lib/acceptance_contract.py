@@ -34,6 +34,8 @@ ALLOWED_DECISIONS = {"approved", "accepted"}
 ACCEPTABLE_VERDICT_STATUSES = {"pass", "demo-only", "internal-only"}
 REQUIRED_EVIDENCE_ROLES = (
     "master_asset",
+    "media_artifact_receipt",
+    "creative_watchdown",
     "score",
     "consistency_ledger",
     "review_ui",
@@ -42,13 +44,18 @@ REQUIRED_EVIDENCE_ROLES = (
     "artifact_validation",
 )
 PLACEHOLDERS = {"", "todo", "pending", "unknown", "n/a", "na", "待补", "未定"}
+AUTOMATED_REVIEWER_RE = re.compile(
+    r"(?:^|[^a-z0-9])(agent|ai|assistant|automation|bot|chatgpt|claude|codex|delegate|listener|"
+    r"machine|model|producer|supervisor|system)(?:[^a-z0-9]|$)|"
+    r"^(?:代理|制作代理|自动化|机器人|模型|系统|系统代理|执行器)(?:$|[:：/#@])", re.I
+)
 REQUIRED_VERDICT_COMPONENTS = {
     "progress_dag", "production_handoff", "script_supervisor_log", "production_locks",
     "pilot_release_gate", "mini_pilot", "contract_trace", "compliance", "release_profile",
     "gate", "identity_drift", "score", "ledger", "review_ui", "image_qc",
     "generation_recipe", "audience_experience", "stop_loss", "final_master",
     "release_evidence_freshness", "failure_taxonomy", "event_ledger_audit",
-    "artifact_validation",
+    "artifact_validation", "creative_watchdown",
 }
 _RELEASE_FINGERPRINT_EXCLUDED_PREFIXES = (
     "release_verdict_", "acceptance_receipt_", "artifact_lineage_",
@@ -129,7 +136,12 @@ def probe_master_duration(path: Path) -> Optional[float]:
 
 def _real_identity(value: Any) -> bool:
     text = str(value or "").strip()
-    return bool(text) and text.lower() not in PLACEHOLDERS and not text.lower().startswith("todo")
+    return (
+        bool(text)
+        and text.lower() not in PLACEHOLDERS
+        and not text.lower().startswith("todo")
+        and not AUTOMATED_REVIEWER_RE.search(text)
+    )
 
 
 def normalize_decision(value: Any) -> str:
@@ -169,6 +181,8 @@ def _same_path(left: Any, right: Path) -> bool:
 
 
 _EVENT_LEDGER_MODULE: Any = None
+_MEDIA_ARTIFACT_MODULE: Any = None
+_CREATIVE_WATCHDOWN_MODULE: Any = None
 
 
 def _event_ledger_module() -> Any:
@@ -182,6 +196,41 @@ def _event_ledger_module() -> Any:
         spec.loader.exec_module(module)
         _EVENT_LEDGER_MODULE = module
     return _EVENT_LEDGER_MODULE
+
+
+def _local_completion_module(cache_name: str, relative_path: Path, module_name: str) -> Any:
+    global _MEDIA_ARTIFACT_MODULE, _CREATIVE_WATCHDOWN_MODULE
+    cached = (
+        _MEDIA_ARTIFACT_MODULE
+        if cache_name == "media_artifact"
+        else _CREATIVE_WATCHDOWN_MODULE
+    )
+    if cached is None:
+        path = Path(__file__).resolve().parents[1] / relative_path
+        spec = importlib.util.spec_from_file_location(module_name, path)
+        if spec is None or spec.loader is None:  # pragma: no cover - repository corruption
+            raise RuntimeError(f"cannot load completion validator: {path}")
+        cached = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cached)
+        if cache_name == "media_artifact":
+            _MEDIA_ARTIFACT_MODULE = cached
+        else:
+            _CREATIVE_WATCHDOWN_MODULE = cached
+    return cached
+
+
+def _media_artifact_module() -> Any:
+    return _local_completion_module(
+        "media_artifact", Path("n2d-compose/media_artifact.py"),
+        "n2d_media_artifact_for_acceptance",
+    )
+
+
+def _creative_watchdown_module() -> Any:
+    return _local_completion_module(
+        "creative_watchdown", Path("n2d-review/scripts/creative_watchdown.py"),
+        "n2d_creative_watchdown_for_acceptance",
+    )
 
 
 def _event_ledger_evidence(
@@ -473,6 +522,14 @@ def current_evidence_bindings(
             master_path if master_path is not None else root / "合成" / episode / f"成片_{episode}_MISSING.mp4",
             role="master_asset",
         ),
+        "media_artifact_receipt": file_binding(
+            root, prod / f"media_artifact_receipt_{episode}.json",
+            role="media_artifact_receipt",
+        ),
+        "creative_watchdown": file_binding(
+            root, prod / f"creative_watchdown_{episode}.json",
+            role="creative_watchdown",
+        ),
         "score": file_binding(root, prod / f"score_{episode}.json", role="score"),
         "consistency_ledger": file_binding(
             root, prod / f"consistency_ledger_{episode}.json", role="consistency_ledger"
@@ -510,6 +567,8 @@ def release_content_fingerprint(root: Path, episode: str, profile: str) -> Dict[
         f"生产数据/consistency_ledger_{episode}.json",
         f"生产数据/review_ui_{episode}.json",
         f"生产数据/review_ui_findings_{episode}.json",
+        f"生产数据/media_artifact_receipt_{episode}.json",
+        f"生产数据/creative_watchdown_{episode}.json",
     }
     discovered: set[str] = set()
     for pattern in (
@@ -530,6 +589,8 @@ def release_content_fingerprint(root: Path, episode: str, profile: str) -> Dict[
         f"生产数据/stop_loss*_{episode}.json",
         f"生产数据/audience_experience*_{episode}.json",
         f"生产数据/final_timeline_probe_{episode}.json",
+        f"生产数据/media_artifact_receipt_{episode}.json",
+        f"生产数据/creative_watchdown_{episode}.json",
         f"生产数据/image_qc/{episode}/**/*",
         f"生产数据/video_batches/{episode}/**/*",
     ):
@@ -811,6 +872,49 @@ def verdict_contract_issues(root: Path, episode: str, verdict: Mapping[str, Any]
         current_duration = probe_master_duration(current_master) if current_master is not None else None
         if current_duration is None:
             issues.append("canonical final master is not currently ffprobe-decodable")
+    # Component rows are only summaries of checks run when the verdict was
+    # written. Re-run canonical completion validators now so hand-editing the
+    # summary cannot preserve completion after a receipt is deleted, changed,
+    # or rebound to a different master.
+    media_component = next(
+        (row for row in components if isinstance(row, Mapping) and row.get("name") == "final_master"),
+        None,
+    )
+    watchdown_component = next(
+        (row for row in components if isinstance(row, Mapping) and row.get("name") == "creative_watchdown"),
+        None,
+    )
+    if current_master is None:
+        issues.append("canonical final master is missing")
+    else:
+        try:
+            media_current = _media_artifact_module().current_receipt(
+                root, episode, canonical=current_master
+            )
+        except Exception as exc:
+            media_current = {
+                "status": "block",
+                "issues": [f"validator error: {type(exc).__name__}: {exc}"],
+            }
+        if media_current.get("status") != "pass":
+            detail = "; ".join(str(item) for item in media_current.get("issues") or [])
+            issues.append(f"current media_artifact_receipt invalid: {detail or 'validation failed'}")
+        if not isinstance(media_component, Mapping) or str(media_component.get("status") or "").lower() != "pass":
+            issues.append("release verdict final_master component is not pass")
+        try:
+            watchdown_current = _creative_watchdown_module().validate_watchdown(
+                root, episode, master=current_master
+            )
+        except Exception as exc:
+            watchdown_current = {
+                "status": "block",
+                "issues": [f"validator error: {type(exc).__name__}: {exc}"],
+            }
+        if watchdown_current.get("status") != "pass":
+            detail = "; ".join(str(item) for item in watchdown_current.get("issues") or [])
+            issues.append(f"current creative_watchdown invalid: {detail or 'validation failed'}")
+        if not isinstance(watchdown_component, Mapping) or str(watchdown_component.get("status") or "").lower() != "pass":
+            issues.append("release verdict creative_watchdown component is not pass")
     for role, rel in (
         ("event_ledger_audit", "生产数据/production_events_audit.json"),
         ("artifact_validation", "生产数据/artifact_validation.json"),

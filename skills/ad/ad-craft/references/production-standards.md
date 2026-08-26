@@ -160,6 +160,8 @@
 - W3C WCAG captions：<https://www.w3.org/WAI/WCAG22/Understanding/captions-prerecorded>
 - W3C WCAG flashes：<https://www.w3.org/WAI/WCAG22/Understanding/three-flashes-or-below-threshold>
 - W3C WCAG 2.2：<https://www.w3.org/TR/WCAG22/>
+- W3C IMSC Text Profile 1.3（2026-05 Recommendation）：<https://www.w3.org/TR/ttml-imsc1.3/>（专业字幕交换母版；平台 SRT/WebVTT/TTML 仍由 placement adapter 派生并逐件绑定当前媒体 SHA）
+- IAB Tech Lab VAST 4.3：<https://iabtechlab.com/standards/vast/>（仅在 VAST/CTV 交付合同启用时要求 UniversalAdId、mezzanine/ready-to-serve 媒体映射；普通社媒文件交付不强加）
 - 中国《人工智能生成合成内容标识办法》：<https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm>
-- C2PA Technical Specification 2.3：<https://spec.c2pa.org/specifications/specifications/2.3/specs/_attachments/C2PA_Specification.pdf>
+- C2PA Technical Specification 2.4：<https://spec.c2pa.org/specifications/specifications/2.4/specs/C2PA_Specification.html>（当前签名/manifest 验证基线；普通容器元数据只能证明来源标识存在，不能冒充可信签名链）
 - Google Ads AI content labels：<https://support.google.com/google-ads/editor/answer/17231795?hl=en>

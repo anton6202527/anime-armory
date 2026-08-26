@@ -1,5 +1,6 @@
 """Golden-project integration: every required ad stage earns a hash receipt."""
 import hashlib
+import importlib.util
 import json
 import os
 import sys
@@ -17,6 +18,13 @@ import campaign_readiness
 import placement_adaptation
 import render_profile
 import stage_acceptance
+
+_RELEASE_VERDICT_PATH = Path(__file__).resolve().parents[2] / "scripts" / "release_verdict.py"
+_RELEASE_VERDICT_SPEC = importlib.util.spec_from_file_location(
+    "ad_release_verdict_test", _RELEASE_VERDICT_PATH)
+assert _RELEASE_VERDICT_SPEC is not None and _RELEASE_VERDICT_SPEC.loader is not None
+ad_release_verdict = importlib.util.module_from_spec(_RELEASE_VERDICT_SPEC)
+_RELEASE_VERDICT_SPEC.loader.exec_module(ad_release_verdict)
 
 _REVIEW = Path(__file__).resolve().parents[2] / "ad-review" / "scripts"
 sys.path.insert(0, str(_REVIEW))
@@ -414,6 +422,22 @@ def test_golden_project_runs_every_required_stage_and_records_current_hashes(tmp
         assert status["current"] > 0
         assert status["stale"] == status["unaccepted"] == status["missing"] == 0
     assert all(progress_set.get_stage_status(progress, stage) == "✅" for stage in required)
+
+
+def test_single_release_verdict_invalidates_on_current_media_mutation(tmp_path):
+    root = _golden(tmp_path)
+    verdict = ad_release_verdict.build_verdict(root)
+    assert verdict["complete"] is True, verdict["blockers"]
+    accepted_digest = verdict["release_digest"]
+
+    with (root / "合成" / "成片_主片.mp4").open("ab") as fh:
+        fh.write(b"changed-current-master")
+    stale = ad_release_verdict.build_verdict(root)
+    assert stale["complete"] is False
+    assert stale["release_digest"] != accepted_digest
+    codes = {row["code"] for row in stale["blockers"]}
+    assert "release_variant_media_stale" in codes
+    assert "human_signoff_media_stale" in codes
 
 
 def test_golden_commercial_evidence_mutation_invalidates_handoff_and_review(tmp_path):

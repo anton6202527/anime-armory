@@ -1,6 +1,6 @@
 # Song 制作标准与阶段闸门
 
-采集日期：2026-07-11。平台策略会变化；涉及交付规格时先核对官方来源。
+采集日期：2026-08-26。平台策略会变化；涉及交付规格时先核对官方来源。
 
 ## 标准分层
 
@@ -32,6 +32,7 @@
 - Spotify 的 -14 LUFS 是播放器归一化参考。它不是要求所有母版统一压到 -14 LUFS；脚本只对异常响度和编码 headroom 给 warning。
 - Apple Digital Masters 需要 24-bit 源文件，并要求用当前 Apple AAC 编码链试听。`apple_digital_masters` profile 会把低于 24-bit 作为 blocker，但编码试听仍需制作人完成。
 - EBU R 128 的 -23 LUFS 面向广播节目归一化，不作为音乐流媒体母版的默认艺术目标。
+- DDEX RIN 适合把录音、混音、母带等制作元数据交给工作室系统做机器交换；仅在客户/发行合同要求时导出。它不能取代本线的当前母版 SHA、权利收据或唯一完成裁决，也不应成为纯内部 demo 的强制门槛。
 
 ## 官方依据
 
@@ -42,6 +43,7 @@
 - IFPI, *ISRC Handbook*: https://isrc.ifpi.org/images/downloads/ISRC_Handbook.pdf
 - ACE-Step official inference documentation: https://github.com/ace-step/ACE-Step-1.5/blob/main/docs/en/INFERENCE.md
 - DDEX, *Communicating titles in ERN and MEAD*: https://kb.ddex.net/implementing-each-standard/best-practices-for-all-ddex-standards/guidance-on-releaseresourcework-metadata/communicating-titles-in-ern-and-mead/
+- DDEX, *Recording Information Notification*: https://rin.ddex.net/recording-information-notification/1-introduction/
 - Spotify for Artists, *Music metadata guidelines*: https://support.spotify.com/artists/article/metadata-formatting-guidelines/
 - U.S. Copyright Office, *Copyright and Artificial Intelligence, Part 2*: https://www.copyright.gov/ai/Copyright-and-Artificial-Intelligence-Part-2-Copyrightability-Report.pdf
 - NIST/SEMATECH, *Confidence intervals for proportions*: https://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm

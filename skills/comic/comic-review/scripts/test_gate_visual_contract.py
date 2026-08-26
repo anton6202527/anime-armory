@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -14,6 +15,34 @@ import gate
 
 def codes(findings: list[dict]) -> set[str]:
     return {str(item.get("code")) for item in findings}
+
+
+def structured_review(job: dict, reviewer: str, *, summary: str = "fixture review") -> str:
+    packet = job["post_qc"]["visual_review_packet"]
+    evidence = [
+        {"path": item["path"], "sha256": item["sha256"]}
+        for item in packet["comparison_inputs"]
+    ]
+    return json.dumps(
+        {
+            "kind": "comic_panel_visual_review",
+            "artifact_sha256": job["artifact_sha256"],
+            "comparison_inputs_sha256": packet["comparison_inputs_sha256"],
+            "contact_sheet_sha256": packet["contact_sheet_sha256"],
+            "reviewed_at": "2026-08-26T10:00:00+08:00",
+            "evaluator": {"name": reviewer, "kind": "human"},
+            "axes": {
+                axis: {
+                    "verdict": "pass",
+                    "notes": f"{axis} current pixels checked",
+                    "evidence": evidence,
+                }
+                for axis in packet["required_axes"]
+            },
+            "summary": summary,
+        },
+        ensure_ascii=False,
+    )
 
 
 def accepted_panel_job(root: Path, chapter: str, *, warning: bool = False, with_reference: bool = False) -> tuple[dict, Path, Path | None]:
@@ -94,7 +123,13 @@ def accepted_panel_job(root: Path, chapter: str, *, warning: bool = False, with_
     jobs_path = root / "出图" / chapter / "prompt" / "panel_jobs.json"
     gate.panel_acceptance.write_json(jobs_path, jobs)
     gate.panel_acceptance.accept_panel_review(
-        root, chapter, jobs, jobs_path, "P001", "visual-qc", "current comparison packet reviewed"
+        root,
+        chapter,
+        jobs,
+        jobs_path,
+        "P001",
+        "visual-qc",
+        structured_review(job, "visual-qc", summary="current comparison packet reviewed"),
     )
     return job, panel, reference
 

@@ -63,6 +63,14 @@ CHARTER: Dict[str, Dict[str, Any]] = {
         "rationale": "无理由看镜头/多人缺 staging 是确定性合同缺失，出图前拦",
         "decided": "2026-07-20",
     },
+    "check_identity_execution_contracts": {
+        "dim": "逐主体DNA/形态/服装/表情/状态/变体与精确参考执行合同",
+        "required_severity": "block",
+        "may_be_setting_gated": False,
+        "review_status": "stable",
+        "rationale": "付费出图前必须把每个主体的当前身份状态、定位证据与精确参考SHA固化进 execution_input；缺项或陈旧不得继续",
+        "decided": "2026-08-26",
+    },
     "run_continuity_contract_audit": {
         "dim": "跨话状态链(exit→entry)", "required_severity": "block",
         "may_be_setting_gated": False, "review_status": "stable",

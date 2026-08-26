@@ -14,14 +14,19 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
+if [[ "${N2D_WRAPPER_SELF_CHECK:-}" == "1" ]]; then
+  [[ -f "$REPO_DIR/skills/n2d/run.py" ]] || { echo "invalid repository root: $REPO_DIR" >&2; exit 2; }
+  printf '%s\n' "$REPO_DIR"
+  exit 0
+fi
 ROOT="${1:?work root required}"
 EP="${2:?episode required}"
 RANGE="${N2D_VIDEO_RANGE:-}"
 BACKEND="${N2D_VIDEO_BACKEND:-dreamina}"
 RESOLUTION="${N2D_VIDEO_RESOLUTION:-720p}"
 MODEL_VERSION="${N2D_VIDEO_MODEL_VERSION:-3.0}"
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 
 if [[ -z "$RANGE" ]]; then
   echo "N2D_VIDEO_RANGE is required, e.g. 06-10. Refusing to guess a paid video batch." >&2

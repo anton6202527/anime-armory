@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -45,8 +46,33 @@ def test_review_raw_bubble_acceptance_reads_current_double_gate(tmp_path: Path, 
     jobs = {"jobs": [job]}
     jobs_path = tmp_path / "出图" / chapter / "prompt" / "panel_jobs.json"
     review.panel_acceptance.write_json(jobs_path, jobs)
+    packet = post_qc["visual_review_packet"]
+    evidence = [
+        {"path": item["path"], "sha256": item["sha256"]}
+        for item in packet["comparison_inputs"]
+    ]
+    structured = json.dumps(
+        {
+            "kind": "comic_panel_visual_review",
+            "artifact_sha256": job["artifact_sha256"],
+            "comparison_inputs_sha256": packet["comparison_inputs_sha256"],
+            "contact_sheet_sha256": packet["contact_sheet_sha256"],
+            "reviewed_at": "2026-08-26T10:00:00+08:00",
+            "evaluator": {"name": "visual_qc", "kind": "human"},
+            "axes": {
+                axis: {
+                    "verdict": "pass",
+                    "notes": "current pixels checked",
+                    "evidence": evidence,
+                }
+                for axis in packet["required_axes"]
+            },
+            "summary": "亮部是计划内雾光，不是空白气泡。",
+        },
+        ensure_ascii=False,
+    )
     review.panel_acceptance.accept_panel_review(
-        tmp_path, chapter, jobs, jobs_path, "P001", "visual_qc", "亮部是计划内雾光，不是空白气泡。"
+        tmp_path, chapter, jobs, jobs_path, "P001", "visual_qc", structured
     )
 
     accepted = review.load_raw_bubble_acceptance(tmp_path, chapter)

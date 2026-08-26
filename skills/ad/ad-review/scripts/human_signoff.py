@@ -35,6 +35,16 @@ CHECKS = {
     "ai_label_provenance": "逐交付件显式/隐式 AI 标识、C2PA/元数据与平台回执一致",
 }
 EVIDENCE_REQUIRED = set(CHECKS)
+AUTOMATED_REVIEWER_RE = re.compile(
+    r"(?:^|[^a-z0-9])(agent|ai|assistant|automation|bot|chatgpt|claude|codex|delegate|listener|"
+    r"machine|model|producer|supervisor|system)(?:[^a-z0-9]|$)|"
+    r"^(?:代理|制作代理|自动化|机器人|模型|系统|系统代理|执行器)(?:$|[:：/#@])", re.I
+)
+
+
+def is_human_reviewer(value) -> bool:
+    name = str(value or "").strip()
+    return bool(name) and not AUTOMATED_REVIEWER_RE.search(name)
 
 
 def sha(path: Path):
@@ -62,6 +72,12 @@ def build(root: Path, reviewer: str, approved, note="", evidence=None, evidence_
     findings = []
     if not reviewer.strip():
         findings.append({"severity": "block", "code": "reviewer_missing", "msg": "缺具名 reviewer"})
+    elif not is_human_reviewer(reviewer):
+        findings.append({
+            "severity": "block",
+            "code": "reviewer_automated",
+            "msg": "最终签收 reviewer 必须是真实具名人，不能是 AI / agent / automation / system / delegate 身份",
+        })
     if machine_blocks:
         findings.append({"severity": "block", "code": "machine_review_block",
                          "msg": f"M0 机器报告仍有 block={machine_blocks}，不能签收"})

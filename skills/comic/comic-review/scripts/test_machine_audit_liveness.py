@@ -14,16 +14,44 @@ if str(SCRIPT_DIR) not in sys.path:
 import gate
 
 
+def task_record(task_id: str, axis: str = "character_identity") -> dict:
+    return {
+        "task_id": task_id,
+        "axis": axis,
+        "panel": {"path": f"出图/第1话/panels/{task_id}.png", "sha256": "x"},
+        "task_sha256": f"ts{task_id.removeprefix('T')}",
+        "references_sha256": {},
+        "required_score_keys": list(gate.vlm_judge.AXIS_SCORE_KEYS[axis]),
+        "required_evidence": {"region_required": False},
+    }
+
+
+def verdict_record(task_id: str, axis: str = "character_identity") -> dict:
+    panel_path = f"出图/第1话/panels/{task_id}.png"
+    return {
+        "task_id": task_id,
+        "panel_sha256": "x",
+        "task_sha256": f"ts{task_id.removeprefix('T')}",
+        "references_sha256": {},
+        "scores": {key: 5 for key in gate.vlm_judge.AXIS_SCORE_KEYS[axis]},
+        "verdict": "pass",
+        "notes": "current panel and exact references checked",
+        "evidence": [{"path": panel_path, "sha256": "x"}],
+        "evaluator": {
+            "model": "fixture-vlm",
+            "version": "2026-08-26",
+            "reviewed_at": "2026-08-26T10:00:00+08:00",
+        },
+    }
+
+
 def write_tasks_file(root: Path, chapter: str, count: int) -> None:
     path = root / "生产数据" / f"comic_vlm_judge_tasks_{chapter}.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
         json.dumps(
             {
-                "tasks": [
-                    {"task_id": f"T{i}", "panel": {"sha256": "x"}, "task_sha256": f"ts{i}", "references_sha256": {}}
-                    for i in range(count)
-                ]
+                "tasks": [task_record(f"T{i}") for i in range(count)]
             },
             ensure_ascii=False,
         ),
@@ -49,17 +77,7 @@ def test_unadjudicated_vlm_tasks_and_missing_ccip_warn(tmp_path: Path) -> None:
 def test_full_vlm_coverage_with_ccip_is_quiet(tmp_path: Path) -> None:
     write_tasks_file(tmp_path, "第1话", 2)
     verdicts = {
-        "verdicts": [
-            {
-                "task_id": f"T{i}",
-                "panel_sha256": "x",
-                "task_sha256": f"ts{i}",
-                "references_sha256": {},
-                "verdict": "pass",
-                "evaluator": {"model": "claude-fable-5", "version": "2026-07-17"},
-            }
-            for i in range(2)
-        ]
+        "verdicts": [verdict_record(f"T{i}") for i in range(2)]
     }
     (tmp_path / "生产数据" / "comic_vlm_judge_verdicts_第1话.json").write_text(json.dumps(verdicts), encoding="utf-8")
     findings: list = []
@@ -72,14 +90,7 @@ def test_full_vlm_coverage_with_ccip_is_quiet(tmp_path: Path) -> None:
 def test_full_vlm_coverage_downgrades_missing_ccip_to_info(tmp_path: Path) -> None:
     write_tasks_file(tmp_path, "第1话", 2)
     verdicts = {
-        "verdicts": [
-            {
-                "task_id": f"T{i}", "panel_sha256": "x", "task_sha256": f"ts{i}",
-                "references_sha256": {}, "verdict": "pass",
-                "evaluator": {"model": "multimodal-reviewer", "version": "2026-07-18"},
-            }
-            for i in range(2)
-        ]
+        "verdicts": [verdict_record(f"T{i}") for i in range(2)]
     }
     (tmp_path / "生产数据" / "comic_vlm_judge_verdicts_第1话.json").write_text(
         json.dumps(verdicts), encoding="utf-8"
@@ -122,8 +133,7 @@ def write_axis_tasks_file(root: Path, chapter: str, axis_counts: dict[str, int])
     i = 0
     for axis, count in axis_counts.items():
         for _ in range(count):
-            tasks.append({"task_id": f"T{i}", "axis": axis, "panel": {"sha256": "x"},
-                          "task_sha256": f"ts{i}", "references_sha256": {}})
+            tasks.append(task_record(f"T{i}", axis))
             i += 1
     path.write_text(json.dumps({"tasks": tasks}, ensure_ascii=False), encoding="utf-8")
 
@@ -144,12 +154,7 @@ def test_hard_gate_partial_coverage_but_prop_axis_blind_blocks(tmp_path: Path) -
     """角色轴全裁决、但道具轴一条没裁决：整体覆盖过半看着没事，实则道具轴空转，硬闸下 block。"""
     write_axis_tasks_file(tmp_path, "第1话", {"character_identity": 2, "prop_identity": 3})
     (tmp_path / "_设置.md").write_text("- 角色一致性硬闸: 开启\n", encoding="utf-8")
-    verdicts = {"verdicts": [
-        {"task_id": "T0", "panel_sha256": "x", "task_sha256": "ts0", "references_sha256": {},
-         "verdict": "pass", "evaluator": {"model": "m", "version": "v"}},
-        {"task_id": "T1", "panel_sha256": "x", "task_sha256": "ts1", "references_sha256": {},
-         "verdict": "pass", "evaluator": {"model": "m", "version": "v"}},
-    ]}
+    verdicts = {"verdicts": [verdict_record("T0"), verdict_record("T1")]}
     (tmp_path / "生产数据" / "comic_vlm_judge_verdicts_第1话.json").write_text(json.dumps(verdicts), encoding="utf-8")
     findings: list = []
     gate.check_machine_audit_liveness(tmp_path, "第1话", {"capabilities": {"pillow": True, "ccip": True}}, findings, [])

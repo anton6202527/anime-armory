@@ -921,11 +921,11 @@ MOTION_CONTROL_RISK_FLAGS = (
 )
 
 # ── 生图后端治理 ─────────────────────────────────────────────────────────────
-# 采集日期：2026-06-14  来源：n2d-image/SKILL.md 放行清单 + 各后端官方文档
+# 采集日期：2026-08-26  来源：n2d-image 放行清单 + OpenAI/Gemini 当前官方模型档案 + 其它后端现有证据
 APPROVED_IMAGE_BACKENDS: Dict[str, Dict[str, Any]] = {
     "codex": {
-        "name": "Codex",
-        "label": "Codex",
+        "name": "GPT Image 2 via Codex CLI",
+        "label": "GPT Image 2（渠道 Codex CLI）",
         "canonical": "codex",
         "multi_reference": True,
         "native_subject": False,
@@ -934,8 +934,8 @@ APPROVED_IMAGE_BACKENDS: Dict[str, Dict[str, Any]] = {
     "openai": {
         # 官方 OpenAI Images（gpt-image / DALL·E）入口，与 codex 同属 OpenAI 官方路线、
         # 同走 reference_group（见 IDENTITY_IMAGE_ADAPTERS["openai"] 与 n2d-image references）。
-        "name": "OpenAI gpt-image / DALL·E",
-        "label": "官方 OpenAI gpt-image / DALL·E",
+        "name": "GPT Image 2 via OpenAI Images API",
+        "label": "GPT Image 2（渠道 OpenAI Images API）",
         "canonical": "openai",
         "multi_reference": True,
         "native_subject": False,
@@ -966,8 +966,8 @@ APPROVED_IMAGE_BACKENDS: Dict[str, Dict[str, Any]] = {
         "tier": "tier-2",
     },
     "nano_banana": {
-        "name": "Nano Banana",
-        "label": "Nano Banana",
+        "name": "Nano Banana 2 / Pro",
+        "label": "Nano Banana 2 / Pro（Gemini API）",
         "canonical": "nano_banana",
         "multi_reference": True,
         "native_subject": False,
@@ -1000,6 +1000,10 @@ IMAGE_BACKEND_ALIASES = {
     "可灵": "kling_subject",
     "kling": "kling_subject",
     "nano banana": "nano_banana",
+    "nano banana 2": "nano_banana",
+    "nano banana pro": "nano_banana",
+    "gemini-3.1-flash-image": "nano_banana",
+    "gemini-3-pro-image": "nano_banana",
     "nano_banana": "nano_banana",
     "nanobanana": "nano_banana",
     "gemini": "nano_banana",
@@ -1013,7 +1017,7 @@ FORBIDDEN_IMAGE_BACKEND_KEYWORDS = ("同视频ai", "同视频AI", "第三方", "
 # `APPROVED_IMAGE_BACKENDS` 只回答「这个生图渠道是否可用/官方」；
 # 本表回答「它能把角色身份锁到哪一级」。`face_drift_risk.py`、gate 和后续路由建议应读这里，
 # 避免把 Dreamina 这类“多参考但无持久主体 ID”的后端误当成 Seedream/可灵主体库。
-# 采集日期同 APPROVED_IMAGE_BACKENDS：2026-06-14；易变事实需走 freshness/refresh 流程刷新。
+# 采集日期同 APPROVED_IMAGE_BACKENDS：2026-08-26；易变事实需走 freshness/refresh 流程刷新。
 IMAGE_IDENTITY_PROFILES: Dict[str, Dict[str, Any]] = {
     # C5 铁律（贯通到执行真值表）：每条 profile 必须指认到具体**模型名**（model）；
     # 渠道/访问入口单列（channel），label 以模型主导、渠道附注，禁止用纯渠道壳名（Codex/即梦）。

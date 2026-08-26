@@ -91,7 +91,12 @@ def dead_letters(queue: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def evaluate(root: str) -> Dict[str, Any]:
-    q = queue_mod.load_queue(root)
+    try:
+        q = queue_mod.load_queue(root)
+    except FileNotFoundError:
+        # A fresh action card may probe before the queue has ever been materialized.  Stop-loss
+        # evaluation must still run; absence of a queue is not itself a pass or an exception.
+        q = {"root": root, "tasks": [], "budget": {}}
     slo = load_slo(root)
     tasks = q.get("tasks", [])
     total = len(tasks)
@@ -170,6 +175,23 @@ def evaluate(root: str) -> Dict[str, Any]:
         ],
     }
     return payload
+
+
+def critical_interlock(root: str) -> Optional[Dict[str, Any]]:
+    """Return machine-readable critical governance evidence or ``None``."""
+    payload = evaluate(root)
+    if payload.get("status") != "critical":
+        return None
+    rows = [
+        dict(row) for row in payload.get("violations", []) or []
+        if isinstance(row, dict) and row.get("level") == "critical"
+    ]
+    return {
+        "kind": "n2d_critical_governance_interlock",
+        "status": "blocked",
+        "violations": rows,
+        "summary": dict(payload.get("summary") or {}),
+    }
 
 
 def render_markdown(payload: Dict[str, Any]) -> str:

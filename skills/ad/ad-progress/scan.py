@@ -8,10 +8,12 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import os
 import re
 import sys
+from pathlib import Path
 
 CREATION_ROOT_DIR = "创作区"
 LINE_DIR = "拍广告"
@@ -19,6 +21,17 @@ DONE = "done"
 BLOCK = "block"
 PARTIAL = "partial"
 TODO = "todo"
+
+
+def release_verdict(root: str) -> dict:
+    """Read the ad line's canonical completion verdict without writing it."""
+    path = Path(__file__).resolve().parents[1] / "scripts" / "release_verdict.py"
+    spec = importlib.util.spec_from_file_location("ad_release_verdict_for_scan", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot load release verdict: {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.build_verdict(Path(root))
 
 
 def find_repo_root(start: str) -> str:
@@ -311,10 +324,21 @@ def report(contract, progress_md, root: str, rel: str, limit: int) -> str:
     if hint:
         out.append(hint)
     out.extend(production_control_hints(root))
+    verdict = release_verdict(root)
+    out.append(
+        "唯一发布裁决: "
+        f"status={verdict.get('status')} complete={str(bool(verdict.get('complete'))).lower()} "
+        f"digest={verdict.get('release_digest')}"
+    )
+    for item in (verdict.get("blockers") or [])[:3]:
+        out.append(f"  - BLOCK [{item.get('code')}] {item.get('message')}")
 
     frontier_index = next((i for i, (_, state) in enumerate(states) if state != DONE), None)
     if frontier_index is None:
-        out.append("✅ 阶段进度看起来都已完成。下一步：ad-review M0 质检 + ad-craft AI/授权披露确认。")
+        if verdict.get("complete"):
+            out.append("✅ 唯一发布裁决 complete；投放后可用 ad-feedback 回灌。")
+        else:
+            out.append("阶段表已闭合，但最终完成只认上述 release verdict；先修复其 blocker。")
         return "\n".join(out)
 
     row, state = states[frontier_index]

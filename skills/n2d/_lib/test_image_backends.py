@@ -31,6 +31,18 @@ def test_env_backend_present_key_is_ok():
     assert status == "ok"
 
 
+def test_current_gemini_alias_uses_canonical_probe_and_any_supported_key():
+    assert ib.probe_backend("Nano Banana Pro", env={"GEMINI_API_KEY": "x"})[0] == "ok"
+    assert ib.probe_backend("gemini-3.1-flash-image", env={"GOOGLE_API_KEY": "x"})[0] == "ok"
+
+
+def test_kling_requires_complete_credential_pair():
+    assert ib.probe_backend("Kling", env={"KLING_ACCESS_KEY": "x"})[0] == "down"
+    assert ib.probe_backend(
+        "Kling", env={"KLING_ACCESS_KEY": "x", "KLING_SECRET_KEY": "y"}
+    )[0] == "ok"
+
+
 def test_cli_ok():
     status, _ = ib.probe_backend(
         "codex", env={}, cli_runner=lambda argv, timeout: ("ok", ""))
@@ -67,9 +79,11 @@ def test_health_url_override_uses_http_and_catches_502():
     assert captured["url"].startswith("http://192.168.112.83")
 
 
-def test_none_probe_backend_is_unknown():
-    status, _ = ib.probe_backend("dreamina", env={})
-    assert status == "unknown"
+def test_dreamina_login_probe_is_actionable():
+    status, _ = ib.probe_backend(
+        "dreamina", env={}, cli_runner=lambda argv, timeout: ("ok", "")
+    )
+    assert status == "ok"
 
 
 def test_skip_flag_short_circuits_to_unknown():
@@ -84,9 +98,11 @@ def test_unrecognized_backend_is_unknown():
 
 
 def test_alias_normalizes_before_probe():
-    # 「即梦」→ dreamina（none 探针）→ unknown
-    status, _ = ib.probe_backend("即梦", env={})
-    assert status == "unknown"
+    # 「即梦」→ dreamina 后执行同一登录探针。
+    status, _ = ib.probe_backend(
+        "即梦", env={}, cli_runner=lambda argv, timeout: ("ok", "")
+    )
+    assert status == "ok"
 
 
 def test_scan_backends_summarizes_multiple_usable_choices():
@@ -97,7 +113,7 @@ def test_scan_backends_summarizes_multiple_usable_choices():
     assert payload["summary"]["usable_count"] >= 2
     assert "codex" in payload["usable_backends"]
     assert "openai" in payload["usable_backends"]
-    assert "dreamina" in payload["needs_confirmation_backends"]
+    assert "dreamina" in payload["usable_backends"]
 
 
 def test_scan_backends_reports_zero_usable():

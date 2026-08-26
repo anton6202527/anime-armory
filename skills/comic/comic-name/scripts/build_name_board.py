@@ -214,6 +214,35 @@ def page_side(index: int, comic_format: str, reading_direction: str) -> str:
     return "left" if index % 2 == 1 else "right"
 
 
+def explicit_cross_page_art(page_panels: list[dict[str, Any]]) -> bool:
+    """Return only an authored cross-page-art decision.
+
+    ``spread_id`` groups facing pages; it is not evidence that artwork crosses
+    the binding.  Treating every paired page as protected made ordinary paged
+    layouts impossible to auto-select.  This helper deliberately accepts only
+    explicit source fields, so a heuristic never becomes a hard editorial gate.
+    """
+    truthy = {"1", "true", "yes", "on", "cross_page_art", "cross-page-art", "跨页", "跨页画面"}
+    for panel in page_panels:
+        raw = panel.get("cross_page_art")
+        if raw is True or str(raw or "").strip().lower() in truthy:
+            return True
+        mode = str(panel.get("spread_mode") or "").strip().lower()
+        if mode in truthy:
+            return True
+    return False
+
+
+def authored_anchor_contract(panel: dict[str, Any]) -> dict[str, Any]:
+    """Preserve optional authored speaker/character geometry without guessing."""
+    contract: dict[str, Any] = {}
+    for key in ("speaker_anchors", "character_regions"):
+        value = panel.get(key)
+        if isinstance(value, (dict, list)):
+            contract[key] = copy.deepcopy(value)
+    return contract
+
+
 def bubble_first(panel: dict[str, Any], reading_direction: str) -> str:
     if text_load(panel) == 0:
         return "none"
@@ -501,13 +530,21 @@ def build_name_board(root: Path, chapter: str) -> dict[str, Any]:
                     "eye_flow_entry": "right_top" if reading_direction == "从右到左" else "left_top" if reading_direction == "从左到右" else "top",
                     "eye_flow_exit": "left_bottom" if reading_direction == "从右到左" else "right_bottom" if reading_direction == "从左到右" else "bottom",
                     "effects_hint": effect_hint(panel, weight),
+                    **authored_anchor_contract(panel),
                 }
             )
+        cross_page_art = explicit_cross_page_art(group)
+        is_scroll = "条漫" in comic_format
         pages.append(
             {
                 "page_id": page_id,
                 "page_side": page_side(page_index, comic_format, reading_direction),
-                "spread_id": f"SPREAD_{(page_index + 1) // 2:03d}",
+                # Facing-page grouping and cross-binding artwork are separate
+                # semantics.  Scroll groups have neither a physical spread nor
+                # a binding, while ordinary paged pairs remain auto-layoutable.
+                "spread_id": "" if is_scroll else f"SPREAD_{(page_index + 1) // 2:03d}",
+                "spread_mode": "scroll_sequence" if is_scroll else "cross_page_art" if cross_page_art else "paired_pages",
+                "cross_page_art": cross_page_art,
                 "page_turn_hook": page_turn_hook(group),
                 "eye_flow_path": [str(panel.get("panel_id")) for panel in group],
                 "eye_flow": {

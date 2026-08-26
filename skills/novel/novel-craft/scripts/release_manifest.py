@@ -20,13 +20,42 @@ if NOVEL_LIB not in sys.path:
 
 from qa_gate import collect_gate_status  # noqa: E402
 from authenticity_contract import evaluate_authenticity_read  # noqa: E402
-from completion_contract import canonical_release_digest, write_completion_verdict  # noqa: E402
 from report_snapshot import snapshot_chapters, validate_snapshot  # noqa: E402
 from waivers import has_waiver, load_waivers  # noqa: E402
-try:
-    from provenance import append_event  # noqa: E402
-except Exception:  # pragma: no cover - provenance is additive
-    append_event = None
+
+
+def _load_completion_contract():
+    """Load the Novel module by path so another line's same basename cannot win."""
+    path = os.path.join(NOVEL_LIB, "completion_contract.py")
+    spec = importlib.util.spec_from_file_location("novel_completion_contract_for_release", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot load Novel completion contract: {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+_COMPLETION_CONTRACT = _load_completion_contract()
+READINESS_CONTRACT_VERSION = _COMPLETION_CONTRACT.READINESS_CONTRACT_VERSION
+canonical_release_digest = _COMPLETION_CONTRACT.canonical_release_digest
+write_completion_verdict = _COMPLETION_CONTRACT.write_completion_verdict
+
+
+def _load_provenance_append():
+    """Load the Novel provenance module without accepting another line's module."""
+    path = os.path.join(HERE, "provenance.py")
+    spec = importlib.util.spec_from_file_location("novel_provenance_for_release", path)
+    if spec is None or spec.loader is None:
+        return None
+    try:
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+    except Exception:  # pragma: no cover - provenance remains additive
+        return None
+    return getattr(module, "append_event", None)
+
+
+append_event = _load_provenance_append()
 
 
 def _load_compliance_lib():
@@ -736,6 +765,7 @@ def build_manifest(root: str, *, release_name: str = "", release_profile: str = 
         "missing_evidence": missing_evidence,
         "release_ready": readiness["passed"],
         "release_readiness": readiness,
+        "readiness_contract_version": READINESS_CONTRACT_VERSION,
         "chapter_source_snapshot": chapter_snapshot,
         "chapter_aggregate_hash": chapter_snapshot.get("aggregate_hash") or aggregate_hash(chapters),
         "export_aggregate_hash": aggregate_hash(exports),

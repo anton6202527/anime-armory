@@ -23,6 +23,8 @@ description: Default final-delivery stage of n2d — maintain an OpenTimelineIO 
 
 **首次安全本地合成自动继续**：`BGM来源=无`、compose gate 已过且 canonical master 尚不存在时，本地 ffmpeg 合成不产生 provider 花费，也不消费 spend envelope，`run.py` 可直接返回 `needs_stage_execution`。这不是覆盖授权：只要 working/未验收/已验收 canonical master 已存在、acceptance receipt 损坏，或 canonical resolver 无法证明目标，均 fail-closed 停在人审；不能仅因“尚未最终验收”就覆盖已有母版。新母版产出后仍必须走 compose/review gate、canonical release verdict 与最终具名签收。
 
+> **RenderTransaction + current MediaArtifactReceipt**：正式母版先渲染到每次唯一的 staging 路径，再在 canonical-scoped 锁内按“预期旧 SHA”做 compare-and-swap；候选必须通过完整 EOF 解码、H.264/AAC、yuv420p、Rec.709 limited、48 kHz stereo、faststart、响度与锁版时长校验，才可原子晋级。晋级同时写一份绑定当前母版 SHA/大小、规格 SHA、render recipe 文件与内容 SHA、picture-lock 时长和验证器版本的收据；失败恢复旧母版，旧版本归档到 `_versions/`。`_进度.md` 只能在母版与收据都 durable 后推进；review/release 每次都重新验证当前字节，不能信任手改的 `status=pass`。
+
 本 skill涉及的选择点：`合成阶段`、`合成缓存保留`、`BGM来源`、`画幅`、`制作模式`、`视频原生音轨`、`后期拟音策略`、`目标平台`、`发行地区`、`合规用途`。混合模式还必须消费逐镜 `audio_strategy/final_voice_stage/post_lipsync_required`，不能只凭项目级模式决定音轨。平台与合规仍以 `合规/compliance_manifest.json` 为准。
 
 > **AI 标识非阻断铁律**：compose `[6/6]` 后可自动跑 `ai_label.py` 做 best-effort 后处理。默认 `AI显式角标=仅元数据`：只写机器可读 AI 元数据，不把「AI生成」角标烤进内部预览画面；正式投放若平台/地区要求显式标识，改为 `AI显式角标=开启` 再叠角标并回写 `合规/compliance_manifest.json` 的 `ai_labeling` 状态。AI 标识/披露/水印不得阻断合成、进度回写、dashboard 记账或后续集推进；失败只形成发布前待办。数字水印、平台侧 AIGC 披露与严格 GB 45438 字节级封装均可在工具外补齐。
@@ -52,6 +54,7 @@ description: Default final-delivery stage of n2d — maintain an OpenTimelineIO 
 - **生产数据记账铁律（P0）**：合成完成或失败后必须调用 `n2d-dashboard` 记录 `stage=compose` 事件，至少包含输出文件、耗时、原生音轨策略；若 gate 阻断或合成失败，用 QA/manual 事件记录原因。否则无法统计每集成片耗时、音轨策略风险和最终通过率。
 - **付费/续看闭环字段**：成片进入投放、解锁或追更平台时，发布侧的 `platform_metrics.*` 不只写留存和收入；必须带 `paywall_position_sec`、`paywall_after_promise_id`、`unlock_friction`、`continue_path`。这些字段由 `n2d-feedback` 分析“卡点是否落在已打开承诺之后、哪条续看路径追更最高”，下一批再回灌到分镜和交付策略；compose 不直接改平台数据，但交付说明必须提醒运营/发布工序落这些列。
 - **字幕烧录**：本机 Homebrew ffmpeg **无 libass**（无 subtitles/drawtext 滤镜）→ 用 Pillow 把 SRT 渲染成透明 PNG 再 overlay 烧录（render_subs.py）。
+- **字幕母版与平台适配分层**：项目内 SRT 继续作为轻量创作/剪辑事实源；需要专业交换或无障碍交付时，可额外导出并校验 W3C IMSC Text Profile 1.3（2026-05 Recommendation）母版，再由平台 adapter 映射到该平台接受的 SRT/WebVTT/TTML。三者不是互相替代的“完成状态”，每个派生字幕必须绑定同一 cue 时间轴、语言、源文本 SHA 与目标视频 SHA。
 - **原生音画字幕闭环**：`制作模式=原生音画` 时，compose 可在缺 `字幕_中文.srt` 的情况下先出 draft（脚本会跳过字幕并给 warning），但这不是可交付成片。进入 review/付费投放前必须用 whisperx 或等效词级对齐从原生音轨生成中文字幕，落 `脚本/第N集/字幕_中文.srt`，并写 `生产数据/native_av_subtitle_alignment_第N集.json`（`kind=n2d_native_av_subtitle_alignment`、`status=pass|aligned`、`alignment_tool/source`、`word_level=true`、`subtitle_path`、可选逐 Clip 状态）。`n2d-review` 的 review gate 与 `paid_distribution` compose gate 会 BLOCK 缺 sidecar 或 sidecar 不完整。
 - **BGM 是机器合同，不是隐式占位**：正式/直调 compose 都先校验 `合成/第N集/bgm_contract.json`。`licensed_file/generated` 必须有真实文件和版权/模型+渠道来源；`none` 产生静音底；程序化 `placeholder` 只有明确 `approved_by` 且 `scope=internal_rough_only` 才可生成，并在 review/发布边界硬阻断。`BGMFILE` 不得与合同 source.file 静默换轨。
 - **生成式 BGM 有统一适配入口**：`gen_bgm.py` 不写死厂商，读取合同生成 `bgm_generation_job.json`；配置 `N2D_BGM_CMD` 后用 `--run` 执行，已有 Suno/ACE-Step/其它合成音乐文件可用 `--register-existing` 登记。两条路径都写带合同 SHA 与音频 SHA 的 `bgm_generation_receipt.json`；文件或合同变化后 gate 判过期。

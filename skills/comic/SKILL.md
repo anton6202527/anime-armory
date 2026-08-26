@@ -2,7 +2,7 @@
 name: comic
 description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, comic name board, page layout, traditional ink/tone/effects finishing, comic art prompts, character consistency, shared references, lettering, export, one-click production, batch panel generation, rerolling panels, update/rebuild planning, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-name, comic-layout, comic-finishing, comic-identity, comic-image, comic-batch, comic-supervisor, comic-compose, comic-review, comic-update, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, 缩略分镜, name board, 原稿收尾, 网点, 效果线, panel, storyboard, 定妆, 脸漂, 角色一致性, 嵌字, 气泡, 长图, 漫画出图, 漫画批跑, 一键漫画, 重抽漫画格, 漫画更新, comic-update, comic.
 ---
-> 规模统计：Skill 数 14 | SKILL.md 总行数 1711 | 目录文本总行数 60673
+> 规模统计：Skill 数 14 | SKILL.md 总行数 1765 | 目录文本总行数 69118
 
 # comic — 画漫画生产线总调度
 
@@ -12,7 +12,7 @@ comic 负责定位作品根、先读 `_进度.md` / `_设置.md`、解释当前�
 
 详细依赖和失效传播见 `references/architecture.md`；选择点见 `references/选择点与偏好.md`。
 
-> **一键推进默认**：新项目默认 `审阅策略=用户授权制作代理`。普通、可逆的分话/分格取舍、原稿收尾、参考处方和内部技术检查由当前制作代理采用有证据优势的推荐方案并留痕。实际当前像素权限单列为 `视觉审阅策略`，默认仍是 `逐图具名人工`；只有项目显式改成 `用户授权制作代理实际查看当前像素` 或提供当前授权 envelope 后，真正看过 contact sheet 的视觉代理才可写 `human_signoff=false` 收据并继续可逆内部生产。权利/敏感合规、预算包创建或扩大、不可逆发布/覆盖和最终成品验收始终是硬边界。
+> **一键推进默认**：新项目同时显式写入 `审阅策略=用户授权制作代理` 与 `视觉审阅策略=用户授权制作代理实际查看当前像素`。普通、可逆的分话/分格取舍、原稿收尾、参考处方和内部技术检查由当前制作代理采用有证据优势的推荐方案并留痕；视觉代理必须实际查看当前 SHA-bound contact sheet，逐轴写证据，并用 `human_signoff=false` 收据继续可逆内部生产，不能靠模型分数或自动布尔值冒充目检。旧项目显式选择 `逐阶段用户确认` / `逐图具名人工` 时继续尊重其设置。权利/敏感合规、预算包创建或扩大、不可逆发布/覆盖和最终成品具名验收始终是硬边界。
 
 一键总控入口：
 
@@ -128,6 +128,8 @@ python3 skills/comic/comic-layout/scripts/build_layout.py "创作区/画漫画/�
 
 首次进入编辑阶段先生成 draft。显式逐阶段人审项目由人工审阅页流、翻页钩子、格子轻重、阅读方向、气泡占位、关键动作和安全框后签收；delegated 项目允许 batch 先做机器结构签收以继续可逆内部流程，但收据必须标记 `delegated_policy_auto_review`，不得声称已经完成视觉/语义人审。代理授权必须由项目 `_设置.md` **显式**写入 `审阅策略=用户授权制作代理`，或持有当前有效、摘要匹配的 `生产数据/authorizations/editorial_review.json`；缺文件/缺 key 不得继承 permissive 默认。授权有效时 `comic-batch` 在同一次 run 内完成 submit/approve/check 并继续，后续真实 review/最终验收仍检查视觉与成品质量。任何主体、上游或授权变化都会使批准失效，必须重建或重新签收。
 
+自动选版不再把普通左右页误判成跨页：`spread_id` 只表达成组页面，只有显式 `cross_page_art/spread_mode=cross_page_art` 才进入保护模式。普通条漫/页漫用实际手机 screen-beat 或左右页/page-turn SVG 的屏占比、拥挤、空屏、内侧气泡和翻页钩子信号排序并可 `--apply-best`；真实跨中缝画面仍保留编辑保护，避免自动裁断。
+
 ### 6. 原稿收尾、逐格参考处方和出图 job
 
 ```bash
@@ -141,7 +143,10 @@ python3 skills/comic/comic-image/scripts/build_panel_jobs.py "创作区/画漫�
 - `finishing_plan.json` 必须消费已签收 name/layout，并同序覆盖全部 panel/page；传统原稿流程开启时，空计划或上游 SHA 过期会阻断。
 - reference plan 先公平保留每个具名角色身份锚，再保留 LOC 和常驻 PROP；缺绑定、未知状态、关键真实参考缺失或超过后端附件上限时必须返工或拆格，不能静默删约束。
 - `panel_jobs.json` 必须记录 reference plan、选中图片 SHA、`execution_input_sha256` 和 `consumed_contracts`；`--check` 证明落盘 job 与当前合同一致。
+- 每个具名主体的 DNA、form/outfit/expression/state/variant、exact reference 像素 SHA、bbox/mask/occlusion locator 与真实 subject binding 必须进入 `identity_execution_contracts[]` 和 execution SHA；`image_preflight` 在付费前复算，不能等出图后才发现拿错形态或服装。
 - 漫画出图默认执行 `_设置.md` 的 `生图分辨率策略=后端最高可达`：每格独立请求当前后端最高质量正式模型及最高原生档并保留 master，排版只可向下采样。整页/整话低宽图裁格后放大、丢失原始 master、或用放大后的像素尺寸冒充高清，均不得通过 image QC。
+- 正式像素按 immutable provider raw → atomic active master → layout derivative 保存，并记录 color space/bit depth/ICC/alpha/derivative chain。关键格默认在同一阶段预算 envelope 内顺序生成少量候选；每张独立走当前像素 B14，达到目标数后按结构化逐轴 warning 最少的规则自动采用并写 manifest/adoption receipt。
+- 局部修手、表情、道具或服装走 `comic-finishing/scripts/local_repair_transaction.py`：事务绑定 source master/mask/bbox/prompt/execution SHA，只允许 mask 内像素变化；失败回滚，成功后旧 B14 自动失效并重新目检，不整格无痕覆盖。
 
 ### 7. 阶段 gate、出图、合成和审查
 
@@ -161,7 +166,7 @@ python3 skills/comic/comic-review/scripts/gate.py "创作区/画漫画/作品名
 
 每次 gate 都会写 `生产数据/gate_receipts/<stage>_第N话.json`，其中有 `inputs_fingerprint_sha256`、verdict、报告 SHA 和当前 `panel_jobs` SHA。receipt 只能证明“这次判定对应这些输入”；上游或产物变化后必须重跑，不能复制旧 receipt。
 
-逐格 runner 是严格顺序闸：一次只生成当前格，机器 pass/warn 都先停在待审；只有绑定当前像素、post-QC、contact sheet、比较包及每个输入 SHA 的具名人审，或当前授权的视觉代理实际目检收据，才允许下一格。代理收据必须写 `human_signoff=false + authorization`；授权撤销、像素或比较输入变化后自动失效，确定性 block 永不可签。
+逐格 runner 是严格顺序闸：一次只生成当前格，机器 pass/warn 都先进入当前像素审阅；只有绑定当前像素、post-QC、contact sheet、比较包及每个输入 SHA 的具名人审，或当前授权的视觉代理实际目检收据，才允许下一格。结构化结果逐轴含 verdict/evidence/notes，身份轴还要逐主体定位；普通 review note 不再自动把所有轴填 true。代理收据必须写 `human_signoff=false + authorization`；授权撤销、像素或比较输入变化后自动失效，确定性 block 永不可签。
 
 `comic-batch` 可编排可复算步骤；若项目为 `逐阶段用户确认`，会在 name/layout draft 或 review 状态等待人工；默认 `用户授权制作代理` 下，当前 agent 必须接管实际审阅、证据化签收并在同一任务继续，不能把这个内部代理节点升级成用户停点。两种模式都不能绕过 stale 合同、image preflight 与逐格当前像素验收。
 
@@ -178,10 +183,11 @@ python3 skills/comic/scripts/release_verdict.py "创作区/画漫画/作品名" 
 ```
 
 - `生产数据/release_contract_第N话.json` 是唯一 active delivery contract；其它轴报告归档到 `release_verdicts/`，只是历史证据。
-- 当前有序导出物、review receipt、warning dispositions、平台 preview、介质合同、权利与 provenance 聚合成唯一 `release_digest`。任一字节/合同变化使旧最终签收失效。
+- 当前有序导出物、review receipt、warning dispositions、平台 preview、介质合同、权利与 provenance 聚合成唯一 `release_digest`。不可变 release bundle 同时冻结这些证据，active pointer 最后切换；任一字节/合同变化使旧最终签收失效。
 - `生产数据/completion_verdict_第N话.json` 只有 `blocked | machine_ready | accepted`；只有 `accepted` 是最终完成。`_进度.md`、dashboard、provider succeeded、旧 `delivery_states` 都是派生视图。
-- `medium=web_images|print_pdf|epub_fxl` 与 `usage=internal|public|commercial` 解耦。`build_epub_fxl.py` 可生成真实 EPUB 3 FXL、OPF/spine/nav/XHTML/alt 并登记 manifest；替代文本质量和无障碍体验仍需具名复核，不能冒充认证。
+- `medium=web_images|print_pdf|epub_fxl` 与 `usage=internal|public|commercial` 解耦。Pillow PDF 只到 raster readiness；PDF/X-4 必须由注册专业 adapter 生成并让 validator receipt 精确绑定 staged PDF、合同、ICC 和有序页面输入 SHA。`build_epub_fxl.py` 以组三文件事务原子提升 EPUB+合同+manifest，写正确 RTL/LTR spine，并可嵌入有序 panel/dialogue/narration/SFX 语义稿；人工语义复核不冒充无障碍认证。
 - 公开/商用还要求 `_meta.json.rights` 明确清权、目标平台实际缩略图/后台预览（profile 有一手证据时）、当前 warning disposition ledger 全结案且哈希链完整。`release_acceptance_第N话.json` 精确绑定全部导出物、review receipt、有序平台 preview、处置账，以及当前印刷/EPUB 介质合同和收据；任一项变化均需重签。
+- provenance hash chain/JSON sidecar 只代表披露，不代表签名。只有 `comic_c2pa_sign_v1` adapter 嵌入 manifest、验证器精确绑定 source/signed asset SHA 后，ledger 才写 `c2pa_status=signed`；见 `references/provenance_and_credentials.md`。
 - `--accept` 记录公开/商用发布签收；`--accept-final` 记录内部交付的具名最终验收。二者都不能由 `delegate:` 执行，也不自动发布。
 
 ## 失效传播与返工边界

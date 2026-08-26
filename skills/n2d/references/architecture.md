@@ -22,7 +22,7 @@
 | ③分镜设计 | `n2d-script`(阶段2) | 按逐镜 timing basis 定稿分镜/故事板/素材/SRT；默认读 no-audio timing，final voice 到位后刷新实测时长；出图前补 executable animatic、P-3 制片拆解和 batch seed | 出图细节 |
 | ④出图 | `n2d-image` | 两层出图 prompt（定妆库+本集分镜）+ 扫 CLI + 生图 | 视频 prompt |
 | ⑤视频 | `n2d-video` | 视频 prompt + 扫 CLI + 生视频 / 指导；默认 `clip_delivery_complete` 边界 | 物料模板 |
-| ⑥合成（可选） | `n2d-compose` | 用户启用 `合成阶段` 后，FFmpeg 脚本化剪辑 + BGM + 烧字幕 → 成片 | prompt 设计 |
+| ⑥合成（默认；可显式跳过） | `n2d-compose` | FFmpeg 脚本化剪辑 + BGM + 烧字幕，事务式晋级技术母版 | prompt 设计 |
 
 > **两个非显然的顺序决定**：① 默认前移的是“声音选角 + 时间基准”，不是整集最终配音。逐镜 route 决定表演音轨先行、基础视频后置口型、旁白后配、画面先行或原生音画。② 出图分两层（先共享定妆库锁脸/场景/画风，再本集分镜，保跨镜一致）。
 
@@ -70,6 +70,8 @@
 │   ├── cache_manifests/                  _work / _clipcache 可清理性与保留策略
 │   ├── video_qc/第N集/_frames/           按源媒体版本去重的 QC 抽帧
 │   ├── animatic_第N集.json / animatic_第N集.html
+│   ├── media_artifact_receipt_第N集.json  current canonical 母版技术收据
+│   ├── creative_watchdown_第N集.json      绑定当前母版 SHA 的完整创作听看预检
 │   ├── ai_shooting_schedule_batch_seed_第N集.json / .md
 │   ├── final_timeline_probe_第N集.json
 │   ├── script_supervisor_log_第N集.jsonl / script_supervisor_log_第N集_summary.json
@@ -80,6 +82,7 @@
 │       ├── raw.txt                       拆集出来的原文片段
 │       ├── voiceover.txt / bgm.txt / 封面.md   ①剧本改编产物
 │       ├── table_read_packet.json / table_read_packet.md  ①后围读验收包
+│       ├── table_read_execution.json                    全台词逐行 SHA + 实际围读观察收据
 │       ├── 分镜剧本.md / 故事板.md / 素材清单.md  ③分镜设计产物（配音后回跑）
 │       ├── animatic_packet.json / animatic_packet.md       ③后粗剪签收包（timed 预览落 生产数据/）
 │       ├── production_breakdown.json / continuity_breakdown.json / continuity_bible.json
@@ -202,10 +205,16 @@
 | 出图prompt | n2d-image | 本集出图 prompt **全套**写完（共享定妆库 + 本集分镜） |
 | 出图 | n2d-image | `已完成 PNG / 本集需要的总数`（分子含共享复用 + 本集分镜） |
 | 视频prompt / 视频 | n2d-video | prompt 写完 ✅；`视频` = `已完成 MP4 / 本集 Clip 总数`；默认到这里是 `clip_delivery_complete`，不是可发布母版 |
-| 成片 | n2d-compose | 默认交付尾段：剪辑合成 + BGM + 烧字幕 → 成片完成；只有显式跳过才停在 clip |
-| 验收 | n2d-review | 默认最终尾段：review gate + score + consistency ledger + review-ui + release/readiness + production locks + creative governance 全部通过，并经人工显式签收 |
+| 成片 | n2d-compose | 默认交付尾段；RenderTransaction 以 CAS 晋级 canonical 母版并生成 current MediaArtifactReceipt 后才回写 |
+| 验收 | n2d-review | release verdict 聚合 current 媒体收据、完整创作听看、gate/score/ledger/review-ui/readiness/locks，并经最终人工显式签收 |
 
 **调度规则**：任一必经列为 ⬜ 时，对应 skill 可以接手该集；列已 ✅ 时，下游 skill 才能继续。`成片/验收` 只有在 `_设置.md` 写 `合成阶段: 启用`，或本集已经开始这两个列时才参与路由。完整逐列路由判断见调度器 `SKILL.md`。
+
+### 一个状态、一个哈希、一个完成定义
+
+- **状态**：生产能否执行只认 `run.py next --json` 的 current frontier；queue 只保存租约/重试视图，worker 用 `task_id + plan_digest + episode + stage` exact claim。
+- **哈希**：正式生成与复用只认覆盖直接输入、route、模型/渠道、能力档和参考素材的 canonical content fingerprint；母版另由 MediaArtifactReceipt 绑定 artifact/spec/render-recipe 三个当前 SHA。
+- **完成**：provider succeeded、queue done、单格 `✅`、watchdown 或 receipt 都只是证据。`master_delivery_complete` 只由当前 release verdict 与绑定同一 canonical 母版的新鲜 acceptance receipt 定义。
 
 ---
 
@@ -257,7 +266,7 @@ n2d-script（阶段1·剧本改编）→
   3. 在 _进度.md 写入 N 集骨架（raw 列 ✅，其他全 ⬜）
   4. 精修 设定库/global_style.md + 设定库/characters/ + 设定库/locations/
   5. 精修第1集 阶段1剧本(台词+bgm+封面) → 剧本改编/bgm/封面列 ✅（**此阶段不做分镜**）
-  6. 报告：第1集剧本齐；默认先跑 n2d-voice preflight，生成选角表与无 WAV 时间基准，再回阶段2分镜
+  6. 对全台词实际围读并记录 `table_read_execution.json`；packet/signoff 通过后，默认跑 n2d-voice preflight
 
 用户：跑 n2d-voice 创作区/制漫剧/我的小说 第1集
 
@@ -272,7 +281,7 @@ n2d-script（阶段2）→
   1. 跑 finalize_storyboard.py → 用实测时长定 分镜剧本 + 故事板(Clip时长) + 镜头时长.json
   2. 产 素材清单 + 字幕_中文.srt（默认中文-only；海外才加 字幕_英文.srt）
   3. 分镜设计/素材清单/字幕中 列 ✅
-  4. 确认 animatic_packet + timed animatic + P-3 交接包 → 可导入 batch seed 或直接调 n2d-image
+  4. 用真实 guide voice + SRT 完整听看 timed animatic，记录 execution receipt；packet/signoff + P-3 交接包通过后进入 n2d-image
 
 用户：跑 n2d-image 创作区/制漫剧/我的小说 第1集
 
@@ -283,7 +292,7 @@ n2d-image →
   4. 出 PNG → 逐张机器 QC + 当前像素 hash-bound 验收 → 落档 出图/{共享,第N集}/ → 出图列填 K/N；同一有效预算包内不重复询问付款
   5. 全部生成 → 出图列 K/K → 报告可调 n2d-video
 
-用户：跑 n2d-video ... → 默认到 clip_delivery_complete；如需母带/BGM/字幕/发布包，再启用 n2d-compose（成片落 合成/第1集/）并走 review/readiness
+用户：跑 n2d-video ... → 每个 physical Clip 以 durable task 执行；首次 submit 后只凭原 submit_id 恢复 query/download/QC，未知付费状态不重提。齐片后默认继续 n2d-compose，以事务式晋级生成母版，再走 review/readiness；仅显式 `合成阶段=跳过` 才停在 clip_delivery_complete。
 ```
 
 ---

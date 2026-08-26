@@ -2,7 +2,7 @@
 
 > **机器真值源**：视频后端别名、`max_clip_seconds`、原生音画后端集合等可执行字段集中在 `skills/n2d/_lib/n2d_platform_profiles.py`。本文件负责人读解释；若两者不一致，以 `_lib` 模块为准，并同步修本文。
 
-> **2026-07-11 官方能力复核**：Seedance 2.0 官方确认多镜音画生成及图/视频/音频多参考；Kling VIDEO 3.0 官方指南确认 multi-shot/custom multi-shot 与视频作为 Elements 参考；PixVerse C1 官方确认多面板 storyboard-to-video、reference-guided consistency、最长 15s/1080p/音频。机器档案因此新增 PixVerse C1 的 `reference_to_video + multishot_native` 能力，但在没有 n2d adapter smoke 前 `auto_routing=false`，只产人工/job package，不宣称自动化成功。来源：`https://seed.bytedance.com/blog/seedance-2-0-official-launch`、`https://app.klingai.com/cn/quickstart/klingai-video-3-model-user-guide`、`https://pixverse.ai/en/blog/pixverse-introduces-c1-ai-video-model-for-film-production`。
+> **2026-08-26 官方能力复核**：Google 当前 video overview 建议默认用 Gemini Omni Flash（model id `gemini-omni-flash`），Veo 3.1 保留延展/尾帧/旧管线专项优势；Seedance 2.5 官方发布确认 30s 一次音视频、多轮延展、30 图+10 视频+10 音频参考与时间戳级编辑，但同页明确 BytePlus ModelArk API 仍 coming soon。因此机器档案分开“官方宣布能力”与“当前渠道可执行能力”；后者没有 per-run smoke/receipt 不进付费自动路由。
 
 本 skill 的核心产物——分镜剧本、角色/场景卡、爽剧节拍、双语字幕——**平台无关**。
 各 AI 生成平台的差异，由下面的「平台档案」描述。
@@ -154,18 +154,25 @@ Sora 降级依据：OpenAI Help Center `https://help.openai.com/en/articles/2000
 - **提示词语言**：中/英皆可，镜头语言强
 - **画幅**：9:16 / 16:9
 - **分辨率**：**默认 720p**（也支持 1080p；开跑前把选择给用户）
-- **单 Clip 时长**：**单镜可达 ~15s（Seedance 2.0）**——长单镜 = 更少拼接缝、跨镜漂移更少，本可一镜到底的段落别切碎
-- **多镜单次生成（multishot_native·2026-07 自动执行）**：两类后端登记此能力——① **Seedance 2.0** 一次出多镜头叙事，跨镜人物一致、转场无缝（单次最多吃 9 图 + 3 视频 + 3 音频参考）；② **可灵 Kling 3.0** 单次最多 **6 个连续镜头 + 共享音轨时间线**、字符一致性增强。`n2d-model-router` 只负责按能力字段产 `multishot_groups` 候选；`multishot_plan.py` 在 `原生多镜生成=自动|开启` 时激活，只有 adapter v2 同时暴露 `multishot_submit/query` 才 `execution_ready`。runner 一次生成组母片，再按每镜 `edit_target_sec` 确定性拆回原 Clip，因此保留逐 Clip QC、返修、进度和 hash 收据；显式 `关闭` 或能力/adapter 不满足时自动降级逐镜。注意：**即梦渠道执行后端是 Dreamina `multiframe2video`（原生多关键帧，非多镜叙事）**，不得混称；直连 Seedance / 可灵 API 才可走原生多镜，付费批量前仍按当前 profile 与 adapter smoke 复核。
+- **单 Clip 时长**：Seedance 2.5 官方宣布上限 30s，但当前自动执行档保守为 15s。只有渠道 receipt 证明精确 model id 与 30s 参数后，本次 plan 才可把 cap 提到 30；不为少切镜而冒充 API ready。
+- **多镜单次生成**：Seedance 2.5 官方参考上限为 30 图 + 10 视频 + 10 音频，且支持多轮延展和时间戳级编辑；这些是能力上限，不是任何渠道的自动放行依据。`n2d-model-router` 只产 `multishot_groups`；当 adapter 的 submit/query/edit 实际 probe 通过时才 `execution_ready`。runner 生成组母片后按 `edit_target_sec` 拆回物理 Clip，保留逐 Clip QC/实看/hash 收据；否则自动降级逐镜。Dreamina `multiframe2video` 是多关键帧而非多镜叙事，不混称。
 - **局部视频返修（adapter v2 correction operations·2026-08）**：机器合同统一支持 `edit / extend / replace_range / remix`，但只有项目 wrapper 当前 `probe` 真正暴露该 operation 才可执行。`video_runner repair-plan` 绑定源 MP4 SHA、修复区间、mask、preserve regions 和指令，先产 correction variant；新片重新 QC/逐像素验收后才能晋升到时间线。无 edit 能力时才退回最小范围 regen，不能靠模型宣传页把未接通渠道写成 ready。
 - **视频运动参考（reference_video_motion·2026-06-19）**：单次可收**视频片段作运动/风格参考**——长连续运动镜（追逐/飞行/御兽/马车/飞舟/现代车辆/尾随潜入/打斗）把同段前一条已通过 clip 喂进去当 motion/style ref，锁运镜节奏与运动风格（与图身份 Face Lock 正交的跨镜运动连续性轴）。`n2d-model-router` 对这类镜出 `motion_reference.applicable=true`。
 - **质量档（fast/pro·2026-06-19）**：Seedance 家族有 fast/pro 档（fast≈量产默认，pro/VIP 留吃重镜）。Dreamina/即梦当前落档映射：普通镜默认 `seedance2.0fast`；`出视频规格=预算充足` 或 `n2d-model-router`/prompt 标出 `quality_tier=high|release|pro`、英雄镜/高光镜时用 `seedance2.0_vip`。具体版本字串仍以 `cli_snapshots` 为准（防过期，不写死到调用外壳之外）。
-- **角色一致性**：首帧图 → 图生视频；多镜头连续叙事能力较强；原生音视频联合生成；**Seedance 2.0 Face Lock**——单主参考 + 几何约束锁五官比例/位置（正脸、3⁄4 侧最稳；比多图嵌入更死守正脸）
+- **角色一致性**：首帧/角色/场景参考与当前渠道支持的 identity mechanism 并用；Seedance 2.5 官方展示多主体长叙事一致，但项目仍以逐 Clip 当前像素 QC 和跨镜收据判定，不用宣传页替代验收。
 - **身份注册层字段**：`identity_adapters.video.seedance`（`mode=face_lock`；`registered/ready` 必填 `reference` 或 `id`）
 - **原生音画策略**：原生音视频联合是强项；`配音先行` 默认禁原生人声，只允许环境声/法术声/破空声低风险 opt-in，compose 默认低音量混入。`制作模式=原生音画` 且 route 写 `native_audio_policy=native_speech` 时，保留原生台词/音轨，并走 native AV 字幕/声纹/合规 gate
 - **运镜/动态**：支持较复杂的连续运镜/多机位描述（可在一个 prompt 写"分镜A→分镜B"）
 - **图像风格锚定句**：**同即梦**（字节自家，训练分布相同）
 - **负面词**：prompt 内
-- **注意**：适合一条 prompt 承载稍长的连续动作；即梦 CLI 的 `text2video` 后端就是 Seedance 2.0
+- **注意**：产品端可用 ≠ 当前 API/CLI 已暴露同能力；每次付费前都以 exact-model + channel smoke 为准。
+
+## 档案：Gemini Omni Flash（Google）
+
+- **当前模型 ID**：`gemini-omni-flash`（preview 产品期，以本次官方 model list 为准）
+- **适合**：通用叙事、多输入参考、对话式局部编辑；Google 建议它作 Gemini API 视频默认模型。
+- **不替代 Veo 3.1 的边界**：场景延展、最后帧精确控制或旧管线集成仍路由 Veo 3.1。
+- **n2d 执行边界**：当前档案对时长与首/尾帧合同保守处理；项目 wrapper 没有完成 submit/query/download smoke 前不进付费自动路由。
 
 ## 档案：Veo / 海外（Google Veo 等）
 
@@ -199,11 +206,10 @@ Sora 降级依据：OpenAI Help Center `https://help.openai.com/en/articles/2000
 - **弱项**：东方面孔需要显式描述（默认会偏西方），**所以生视频模型/渠道偏国风系（Seedance via 即梦、Kling/可灵）时锚定句必加**
 - **CLI**：`gemini-cli`（订阅制）
 
-### DALL-E 3 / gpt-image-1（OpenAI）
-- **提示词语言**：英文为主
-- **强项**：构图想象力强、艺术感
-- **弱项**：写实人脸不如 Imagen / Flux；亚洲脸特征容易卡通化
-- **API**：OpenAI Images API
+### GPT Image 2（OpenAI）
+- **当前 ID**：`gpt-image-2`；需锁版复现可用 `gpt-image-2-2026-04-21`
+- **能力**：生成+编辑、灵活尺寸、高保真图像输入；仍无可注册持久主体 ID 的官方证据
+- **访问面**：OpenAI Images API 或已验证的 Codex 图像入口；后者必须从当次 receipt 记精确模型
 
 ### Flux Pro（Black Forest Labs / Replicate）
 - **提示词语言**：英文为主

@@ -3,13 +3,15 @@
 
 为什么不能只靠 dynaudnorm/alimiter：
   compose.sh 末段混音用 `dynaudnorm`（动态归一）+ `alimiter`（限峰），这俩只防「忽大忽小」
-  和「削顶爆音」，**不保证整段集成响度落在平台目标**。各投放平台对 integrated LUFS 有事实标准
-  （流媒体 -14、广电 -23…），偏离会被平台二次响度归一（压扁动态/拉低音量）或显得「比别家小声」。
+  和「削顶爆音」，**不保证整段集成响度落在交付目标**。平台是否公开响度口径并不一致；
+  因此内部数字发行目标、平台书面规格与广播标准必须分层记录，不能把一个 house target
+  冒充所有平台官方标准。明显偏离可能触发平台播放增益或产生主观音量落差。
   本门在成片产出后量一次集成响度 + 真峰，落 ok/warn/block，让响度问题在交付前被抓到。
 
-平台目标（**dated 候选 snapshot · 2026-06**，choice-point 风格——不写死单一值，按 _设置.md 平台选）：
-  youtube/bilibili/tiktok 走流媒体事实标准 -14 LUFS；broadcast 走 EBU R128 / ATSC A/85 的 -23；
-  default -16（偏保守的通用短视频值）。新平台标准变了就更新此表 + 注记日期，勿散落改各处。
+交付目标（**dated profile snapshot · 2026-08-26**，按 _设置.md / 客户规格选择）：
+  youtube/bilibili/tiktok 的 -14 LUFS 是本线数字发行 house profile，不宣称是三平台统一官方值；
+  `broadcast` 是 EBU R128 的 -23 LUFS，北美 ATSC A/85 另用 `broadcast_atsc=-24`；default -16
+  是内部短视频母版。客户/播出机构书面规格优先，且必须在项目收据记录来源和日期。
 
 机制：
   measure() 调 `ffmpeg -i <成片> -af loudnorm=print_format=json -f null -`，从 stderr 末尾的
@@ -39,13 +41,23 @@ if _LIB not in sys.path:
     sys.path.insert(0, _LIB)
 import series_consistency  # noqa: E402
 
-# 平台 → 集成 LUFS 目标（dated 候选 snapshot · 2026-06）。改这里，勿散落。
+# 交付 profile → 集成 LUFS 目标（dated snapshot · 2026-08-26）。
+# 数字平台键均为 house profile；只有明确标注的广播键对应公开节目标准。
 PLATFORM_TARGETS = {
     "youtube": -14.0,
     "bilibili": -14.0,
     "tiktok": -14.0,
     "broadcast": -23.0,
+    "broadcast_atsc": -24.0,
     "default": -16.0,
+}
+PLATFORM_TARGET_AUTHORITIES = {
+    "youtube": "house_profile; verify current client/platform specification",
+    "bilibili": "house_profile; verify current client/platform specification",
+    "tiktok": "house_profile; verify current client/platform specification",
+    "broadcast": "EBU R 128 v5 programme loudness",
+    "broadcast_atsc": "ATSC A/85 recommended practice",
+    "default": "house_profile",
 }
 DEFAULT_TOL = 1.0          # 集成响度容差（dB）：≤tol ok，≤2*tol warn，否则 block
 DEFAULT_TP_CEILING = -1.0  # 真峰上限（dBTP）：超过判 block（削波/平台转码爆音风险）
@@ -147,6 +159,89 @@ def measure(path: str, ffmpeg: str = "ffmpeg") -> Optional[dict]:
         return None
 
 
+def two_pass_conform(
+    input_path: str,
+    output_path: str,
+    *,
+    target_lufs: float,
+    true_peak: float = DEFAULT_TP_CEILING,
+    lra: float = 11.0,
+    ffmpeg: str = "ffmpeg",
+) -> dict:
+    """Program-level deterministic EBU R128 two-pass normalization.
+
+    Video is stream-copied; the complete mixed programme is measured first and
+    only then encoded once to 48 kHz AAC.  This must run after dialogue/BGM/
+    ambience/foley have been mixed, never on individual dialogue lines.
+    """
+    report = {
+        "status": "block", "input": input_path, "output": output_path,
+        "target_lufs": float(target_lufs), "true_peak_dbtp": float(true_peak),
+        "lra": float(lra), "sample_rate": 48000,
+    }
+    if not os.path.isfile(input_path):
+        report["error"] = "input programme is missing"
+        return report
+    first_filter = (
+        f"loudnorm=I={target_lufs}:TP={true_peak}:LRA={lra}:"
+        "print_format=json"
+    )
+    try:
+        first = subprocess.run(
+            [ffmpeg, "-nostdin", "-hide_banner", "-nostats", "-i", input_path,
+             "-map", "0:a:0", "-af", first_filter, "-f", "null", "-"],
+            capture_output=True, text=True, timeout=900, check=False,
+        )
+    except Exception as exc:
+        report["error"] = f"loudnorm analysis failed: {exc}"
+        return report
+    measured = _parse_loudnorm_json(first.stderr)
+    required = ("input_i", "input_tp", "input_lra", "input_thresh", "target_offset")
+    if first.returncode != 0 or not measured or any(key not in measured for key in required):
+        report["error"] = first.stderr[-1000:] or "loudnorm analysis did not return complete measurements"
+        return report
+    second_filter = (
+        f"loudnorm=I={target_lufs}:TP={true_peak}:LRA={lra}:"
+        f"measured_I={measured['input_i']}:measured_TP={measured['input_tp']}:"
+        f"measured_LRA={measured['input_lra']}:measured_thresh={measured['input_thresh']}:"
+        f"offset={measured['target_offset']}:linear=true:print_format=json"
+    )
+    os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+    tmp = f"{output_path}.tmp.{os.getpid()}.mp4"
+    try:
+        second = subprocess.run(
+            [ffmpeg, "-nostdin", "-y", "-hide_banner", "-loglevel", "error", "-i", input_path,
+             "-map", "0:v:0", "-map", "0:a:0", "-c:v", "copy", "-af", second_filter,
+             "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2",
+             "-movflags", "+faststart", tmp],
+            capture_output=True, text=True, timeout=900, check=False,
+        )
+    except Exception as exc:
+        report["error"] = f"loudnorm render failed: {exc}"
+        return report
+    if second.returncode != 0:
+        report["error"] = second.stderr[-1000:] or "loudnorm render failed"
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        return report
+    os.replace(tmp, output_path)
+    final = measure(output_path, ffmpeg=ffmpeg)
+    if not final:
+        report["error"] = "post-conform loudness measurement unavailable"
+        return report
+    report["first_pass"] = {key: measured.get(key) for key in required}
+    report["measured_lufs"] = round(final["integrated"], 2)
+    report["measured_true_peak_dbtp"] = round(final["true_peak"], 2)
+    report["lufs_verdict"] = lufs_band(final["integrated"], target_lufs)
+    report["tp_verdict"] = true_peak_band(final["true_peak"], true_peak)
+    report["status"] = "pass" if report["lufs_verdict"] == "ok" and report["tp_verdict"] == "ok" else "block"
+    if report["status"] != "pass":
+        report["error"] = "post-conform programme is outside the delivery loudness contract"
+    return report
+
+
 def _is_backup_or_work_cut(path: str) -> bool:
     """True for backup/temp derivatives that must not be treated as master."""
     name = os.path.basename(str(path or "")).lower()
@@ -181,7 +276,8 @@ def analyze(root: str, ep: str, platform: str = "default",
             tol: float = DEFAULT_TOL, tp_ceiling: float = DEFAULT_TP_CEILING,
             ffmpeg: str = "ffmpeg") -> dict:
     target = resolve_target(platform)
-    baseline_source = "platform_snapshot"
+    baseline_source = "dated_delivery_profile"
+    target_authority = PLATFORM_TARGET_AUTHORITIES.get(platform, PLATFORM_TARGET_AUTHORITIES["default"])
     series = series_consistency.load(root)
     baseline = series.get("audio_baseline") if isinstance(series, dict) and isinstance(series.get("audio_baseline"), dict) else {}
     if platform == "default" and str(series.get("status") or "").lower() in {"confirmed", "approved", "ready"}:
@@ -190,10 +286,12 @@ def analyze(root: str, ep: str, platform: str = "default",
             tol = float(baseline.get("tolerance_lu"))
             tp_ceiling = float(baseline.get("true_peak_dbtp"))
             baseline_source = "series_consistency"
+            target_authority = str(baseline.get("authority") or "project_approved_series_baseline")
         except (TypeError, ValueError):
             pass
     res: dict = {
         "available": False, "platform": platform, "target": target, "baseline_source": baseline_source,
+        "target_authority": target_authority,
         "measured_lufs": None, "true_peak": None, "verdict": "ok", "notes": [],
     }
     out = _find_final_cut(root, ep)
@@ -217,7 +315,7 @@ def analyze(root: str, ep: str, platform: str = "default",
         res["notes"].append(
             f"集成响度 {res['measured_lufs']} LUFS 偏离 {platform} 目标 {target} "
             f"（差 {abs(m['integrated'] - target):.1f} dB，容差 {tol}）"
-            f"{'——平台会二次响度归一' if lv == 'block' else '——轻偏'}。")
+            f"{'——可能触发播放增益或转码风险' if lv == 'block' else '——轻偏'}。")
     if tv != "ok":
         res["notes"].append(
             f"真峰 {res['true_peak']} dBTP 超上限 {tp_ceiling} ——削波/转码爆音风险，回 compose 收限幅。")
@@ -229,14 +327,31 @@ def main(argv: List[str]) -> int:
     ap.add_argument("root")
     ap.add_argument("episode")
     ap.add_argument("--platform", default=None,
-                    help="youtube/bilibili/tiktok/broadcast/default（dated 候选 snapshot）；"
+                    help="youtube/bilibili/tiktok/broadcast/broadcast_atsc/default（dated delivery profile）；"
                          "缺省时自动读 _设置.md「目标平台」映射")
     ap.add_argument("--tol", type=float, default=DEFAULT_TOL)
     ap.add_argument("--tp-ceiling", type=float, default=DEFAULT_TP_CEILING)
     ap.add_argument("--ffmpeg", default="ffmpeg")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--conform-input", default=None,
+                    help="two-pass conform this complete mixed programme")
+    ap.add_argument("--conform-output", default=None,
+                    help="output MP4 for --conform-input (video copied, audio AAC 48 kHz)")
     ns = ap.parse_args(argv)
     platform, platform_source = resolve_platform_key(ns.root.rstrip("/"), ns.platform)
+    if ns.conform_input:
+        if not ns.conform_output:
+            ap.error("--conform-output is required with --conform-input")
+        target = resolve_target(platform)
+        res = two_pass_conform(
+            ns.conform_input, ns.conform_output, target_lufs=target,
+            true_peak=ns.tp_ceiling, ffmpeg=ns.ffmpeg,
+        )
+        res["platform"] = platform
+        res["platform_source"] = platform_source
+        res["target_authority"] = PLATFORM_TARGET_AUTHORITIES.get(platform, PLATFORM_TARGET_AUTHORITIES["default"])
+        print(json.dumps(res, ensure_ascii=False, indent=2, sort_keys=True))
+        return 0 if res.get("status") == "pass" else 2
     res = analyze(ns.root.rstrip("/"), ns.episode, platform, ns.tol, ns.tp_ceiling, ns.ffmpeg)
     res["platform_source"] = platform_source
     if ns.json:

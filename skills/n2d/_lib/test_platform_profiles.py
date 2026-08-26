@@ -214,3 +214,17 @@ def test_single_take_merge_ceiling_follows_capability_lift(monkeypatch):
     import n2d_platform_profiles as P
     monkeypatch.setitem(P.VIDEO_BACKEND_MAX_SECONDS, "seedance", 30)
     assert P.single_take_merge_ceiling_seconds("Seedance 2.5") == 30.0
+
+
+def test_current_catalog_separates_seedance_advertised_capability_from_runnable_cap():
+    seedance = profiles.video_backend_profile("Seedance 2.5")
+    assert seedance["advertised_max_clip_seconds"] == 30
+    assert seedance["max_clip_seconds"] == 15
+    assert seedance["official_reference_limits"] == {"images": 30, "videos": 10, "audios": 10}
+    assert seedance["availability"]["status"] == "product_rollout_api_pending"
+
+
+def test_current_gemini_omni_model_id_is_not_stale_preview_alias():
+    omni = profiles.video_backend_profile("Gemini Omni Flash")
+    assert omni["default_model_version"] == "gemini-omni-flash"
+    assert profiles.normalize_video_backend("gemini-omni-flash", default="") == "gemini_omni"

@@ -43,6 +43,21 @@ python3 skills/comic/comic-finishing/scripts/build_finishing_plan.py "创作区/
 5. 黑白/页漫优先显式 `tone_plan`；彩色条漫也要有 `value_plan`，避免只靠色相堆信息。
 6. 拟声词只在需要时作为画面节奏元素处理；正文对白仍后期嵌字。
 7. validator 确认 plan 唯一、同序覆盖所有 panel/page 后写产物和 `✅`；`comic-image` 再把计划注入逐格 job。
+8. 优先保存真实可编辑母版（ORA/PSD/KRA 或后端等价容器）。只有扁平输出时才走 flat fallback，并让 `comic-image` 保存不可变 raw、原子 active master、色彩/位深/ICC/alpha 和 derivative chain。
+
+局部修手、改表情、修道具或服装时，不整格覆盖也不手改 master。先准备 SHA-bound 修复事务，把外部编辑器/任意 provider 的全尺寸候选写到脚本给出的 staging 路径，再提交：
+
+```bash
+python3 skills/comic/comic-finishing/scripts/local_repair_transaction.py "$ROOT" prepare \
+  --chapter 第1话 --panel P003 --mask repair_mask.png --bbox 420,180,360,420 \
+  --edit-prompt "只修复右手握刀关系，保持脸、服装、背景与光位不变"
+
+python3 skills/comic/comic-finishing/scripts/local_repair_transaction.py "$ROOT" commit \
+  生产数据/repair_staging/第1话/P003/<transaction_id>/repair_transaction.json
+```
+
+commit 只允许 mask 内像素改变；当前 master/panel、mask、执行合同任一 SHA 变化都会失效。成功后仍回到当前像素 post-QC 与结构化逐轴 B14 签收，不能沿用旧验收。
+命令行里的 `--mask`、repair receipt 与 `--candidate`：绝对路径原样使用，非绝对路径统一相对作品根 `$ROOT` 解析，不受启动脚本时的 shell cwd 影响。
 
 ## 原则
 

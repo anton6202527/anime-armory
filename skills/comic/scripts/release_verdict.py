@@ -9,13 +9,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import posixpath
 import re
 import sys
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Callable, Mapping
 from urllib.parse import unquote, urlsplit
 import xml.etree.ElementTree as ET
 
@@ -26,12 +27,17 @@ if str(COMIC_LIB) not in sys.path:
 from contracts import sha256_file, stable_sha256, stage_inputs_fingerprint  # noqa: E402
 from completion_contract import (  # noqa: E402
     accept_final,
+    atomic_json,
     build_completion_verdict,
     canonical_release_digest,
-    write_completion_verdict,
+    prepare_completion_candidate,
+    verify_stored_completion,
 )
 from platform_profiles import profile_for_platform, validate_manifest  # noqa: E402
-from provenance import binding as provenance_binding_for_artifacts  # noqa: E402
+from provenance import (  # noqa: E402
+    binding as provenance_binding_for_artifacts,
+    verify_c2pa_receipt,
+)
 from settings import get_setting  # noqa: E402
 
 REVIEW_SCRIPTS = Path(__file__).resolve().parents[1] / "comic-review" / "scripts"
@@ -53,6 +59,19 @@ LEGACY_PROFILE_AXES = {
     "print": ("print_pdf", "public"),
     "commercial": ("web_images", "commercial"),
 }
+
+
+def _fsync_dir(path: Path) -> None:
+    try:
+        directory_fd = os.open(path, os.O_RDONLY)
+        try:
+            os.fsync(directory_fd)
+        finally:
+            os.close(directory_fd)
+    except OSError:  # pragma: no cover - unsupported on some filesystems/OSes
+        pass
+
+
 RIGHTS_CLEARED_VALUES = {
     "authorized",
     "cleared",
@@ -519,7 +538,8 @@ def rendered_artifacts(root: Path, manifest: Mapping[str, Any]) -> tuple[list[di
         if not path.is_file():
             issues.append(issue("rendered_document_missing", relative, domain="technical"))
             continue
-        fmt = str(item.get("format") or path.suffix.lstrip(".")).strip().lower()
+        declared_document_format = str(item.get("format") or path.suffix.lstrip(".")).strip().lower()
+        fmt = "pdf" if declared_document_format == "pdf_x4" else declared_document_format
         if fmt not in {"pdf", "epub"}:
             issues.append(issue("export_document_format_unsupported", f"{relative} format={fmt or 'missing'}；不能冒充 PDF/EPUB 交付。", domain="technical"))
             continue
@@ -528,6 +548,7 @@ def rendered_artifacts(root: Path, manifest: Mapping[str, Any]) -> tuple[list[di
             "sha256": sha256_file(path),
             "size": path.stat().st_size,
             "format": fmt,
+            "declared_document_format": declared_document_format,
             "artifact_type": "document",
             "manifest_sections": ["documents"],
         }
@@ -935,6 +956,110 @@ def _print_issue(code: str, reason: str) -> dict[str, Any]:
     )
 
 
+def professional_print_checks(
+    root: Path,
+    chapter: str,
+    manifest: Mapping[str, Any],
+    artifacts: list[dict[str, Any]],
+    contract_path: Path,
+    contract: Mapping[str, Any],
+) -> list[dict[str, Any]]:
+    """Validate a real adapter/validator PDF/X-4 receipt, never a label."""
+    issues: list[dict[str, Any]] = []
+    if contract.get("pdf_standard") != "PDF/X-4":
+        return [_print_issue("professional_print_standard_invalid", "professional_external 合同必须显式声明 PDF/X-4。")]
+    geometry = contract.get("geometry_mm") if isinstance(contract.get("geometry_mm"), Mapping) else {}
+    try:
+        trim = geometry["trim"]
+        bleed = geometry["bleed"]
+        safe = geometry["safe_area"]
+        geometry_ok = (
+            float(trim["width"]) > 0 and float(trim["height"]) > 0
+            and all(float(bleed[key]) >= 0 for key in ("top", "bottom", "inside", "outside"))
+            and all(float(safe[key]) >= 0 for key in ("top", "bottom", "inside", "outside"))
+            and int(contract.get("dpi") or 0) >= 300
+        )
+    except (KeyError, TypeError, ValueError):
+        geometry_ok = False
+    if not geometry_ok:
+        issues.append(_print_issue("professional_print_geometry_invalid", "PDF/X-4 合同缺有效 trim/bleed/safe 与至少 300dpi。"))
+    binding_policy = contract.get("binding") if isinstance(contract.get("binding"), Mapping) else {}
+    if (binding_policy.get("reading_direction"), binding_policy.get("edge")) not in {("rtl", "right"), ("ltr", "left")}:
+        issues.append(_print_issue("professional_print_binding_invalid", "PDF/X-4 装订边与阅读方向不一致。"))
+    font = contract.get("font_handling") if isinstance(contract.get("font_handling"), Mapping) else {}
+    if font.get("mode") not in {"embedded", "outlined"}:
+        issues.append(_print_issue("professional_print_font_policy_invalid", "PDF/X-4 专业合同字体必须 embedded 或 outlined。"))
+    color = contract.get("color") if isinstance(contract.get("color"), Mapping) else {}
+    profile_raw = Path(str(color.get("icc_profile_path") or "")).expanduser()
+    profile = profile_raw.resolve() if profile_raw.is_absolute() else (root / profile_raw).resolve()
+    if (
+        profile is None or not profile.is_file()
+        or sha256_file(profile) != str(color.get("icc_profile_sha256") or "")
+    ):
+        issues.append(_print_issue("professional_print_icc_profile_stale", "PDF/X-4 合同绑定的 ICC profile 缺失或 SHA 已变化。"))
+
+    receipt_path = root / "生产数据" / f"professional_print_receipt_{chapter}.json"
+    receipt = load_json(receipt_path, {})
+    if not isinstance(receipt, Mapping) or receipt.get("kind") != "comic_professional_print_receipt":
+        return issues + [_print_issue("professional_print_receipt_missing", "专业 PDF/X-4 缺 adapter+validator 当前收据。")]
+    pdf = receipt.get("pdf") if isinstance(receipt.get("pdf"), Mapping) else {}
+    pdf_path = _project_file(root, str(pdf.get("path") or ""))
+    pdf_artifact = next(
+        (
+            row for row in artifacts
+            if row.get("format") == "pdf"
+            and row.get("declared_document_format") == "pdf_x4"
+            and row.get("path") == pdf.get("path")
+        ),
+        None,
+    )
+    internal = receipt.get("internal_validation") if isinstance(receipt.get("internal_validation"), Mapping) else {}
+    internal_checks = internal.get("checks") if isinstance(internal.get("checks"), Mapping) else {}
+    external = receipt.get("external_validator_receipt") if isinstance(receipt.get("external_validator_receipt"), Mapping) else {}
+    external_checks = external.get("checks") if isinstance(external.get("checks"), Mapping) else {}
+    if (
+        receipt.get("status") != "pass" or receipt.get("chapter") != chapter
+        or (receipt.get("contract") or {}).get("sha256") != sha256_file(contract_path)
+        or pdf.get("standard") != "PDF/X-4"
+        or pdf_path is None or not pdf_path.is_file() or pdf.get("sha256") != sha256_file(pdf_path)
+        or pdf_artifact is None
+        or internal.get("status") != "pass" or not internal_checks or not all(internal_checks.values())
+        or external.get("status") != "pass" or external.get("pdf_standard") != "PDF/X-4"
+        or not str(external.get("validator") or "").strip()
+        or not external_checks or not all(external_checks.values())
+        or receipt.get("external_validator_receipt_sha256") != stable_sha256(external)
+    ):
+        issues.append(_print_issue("professional_print_receipt_invalid_or_stale", "专业收据未同时绑定当前合同、PDF/X-4 bytes、内部 marker 与外部 validator 全通过证据。"))
+    current_pages = []
+    for row in manifest.get("pages") or []:
+        if not isinstance(row, Mapping):
+            continue
+        path = _project_file(root, str(row.get("path") or ""))
+        current_pages.append({
+            "path": str(row.get("path") or ""),
+            "sha256": sha256_file(path) if path is not None and path.is_file() else "",
+        })
+    recorded_pages = [
+        {"path": str(row.get("path") or ""), "sha256": str(row.get("sha256") or "")}
+        for row in receipt.get("inputs") or [] if isinstance(row, Mapping)
+    ]
+    if not current_pages or recorded_pages != current_pages:
+        issues.append(_print_issue("professional_print_inputs_stale", "专业 PDF/X-4 收据未绑定当前有序页面输入 SHA。"))
+    readiness_path = root / "生产数据" / f"print_readiness_receipt_{chapter}.json"
+    readiness = load_json(readiness_path, {})
+    professional_binding = readiness.get("professional_print_receipt") if isinstance(readiness, Mapping) and isinstance(readiness.get("professional_print_receipt"), Mapping) else {}
+    checks = readiness.get("checks") if isinstance(readiness, Mapping) and isinstance(readiness.get("checks"), Mapping) else {}
+    if (
+        readiness.get("kind") != "comic_print_readiness_receipt"
+        or readiness.get("status") not in {"approved", "accepted", "pass"}
+        or not str(readiness.get("reviewer") or "").strip()
+        or professional_binding.get("sha256") != sha256_file(receipt_path)
+        or not checks or not all(checks.values())
+    ):
+        issues.append(_print_issue("professional_print_readiness_missing_or_stale", "PDF/X-4 仍缺绑定专业收据的具名安全区/页序/色彩/字体复核。"))
+    return issues
+
+
 def print_delivery_checks(
     root: Path,
     chapter: str,
@@ -942,6 +1067,10 @@ def print_delivery_checks(
     artifacts: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
     issues: list[dict[str, Any]] = []
+    contract_path = root / "排版" / chapter / "print_delivery_contract.json"
+    contract = load_json(contract_path, {})
+    if isinstance(contract, Mapping) and (contract.get("renderer") or {}).get("mode") == "professional_external":
+        return professional_print_checks(root, chapter, manifest, artifacts, contract_path, contract)
     documents = [item for item in manifest.get("documents") or [] if isinstance(item, Mapping) and str(item.get("format") or "").lower() == "pdf"]
     pdf_artifacts = {item["path"]: item for item in artifacts if item.get("format") == "pdf"}
     if not documents:
@@ -951,8 +1080,6 @@ def print_delivery_checks(
     if not pdf_artifact:
         return [_print_issue("print_pdf_unverified", "当前 PDF 未通过文件存在性与结构预检。")]
 
-    contract_path = root / "排版" / chapter / "print_delivery_contract.json"
-    contract = load_json(contract_path, {})
     if not isinstance(contract, Mapping) or contract.get("kind") != "comic_print_delivery_contract" or contract.get("chapter") != chapter:
         return [_print_issue("print_delivery_contract_missing", "缺当前话有效 print_delivery_contract.json（trim/bleed/safe/DPI/binding/color/font）。")]
     geometry = contract.get("geometry_mm") if isinstance(contract.get("geometry_mm"), Mapping) else {}
@@ -1059,6 +1186,7 @@ def accessible_digital_checks(
     root: Path,
     chapter: str,
     artifacts: list[dict[str, Any]],
+    manifest: Mapping[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     def problem(code: str, reason: str) -> dict[str, Any]:
         return issue(code, reason, domain="accessibility", blocking_mediums=("epub_fxl",))
@@ -1068,6 +1196,8 @@ def accessible_digital_checks(
     if not isinstance(contract, Mapping) or contract.get("kind") != "comic_accessible_digital_contract" or contract.get("chapter") != chapter:
         return [problem("accessible_contract_missing", "epub_fxl 缺 accessible_digital_contract.json；普通图片包不能冒充 accessible digital。")]
     issues: list[dict[str, Any]] = []
+    if int(contract.get("schema_version") or 0) < 2:
+        issues.append(problem("accessible_contract_schema_stale", "当前 comic accessible contract 必须为 schema v2，并绑定语义阅读稿。"))
     epub = next((item for item in artifacts if item.get("format") == "epub"), None)
     artifact = contract.get("artifact") if isinstance(contract.get("artifact"), Mapping) else {}
     if not epub or artifact.get("path") != epub.get("path") or artifact.get("sha256") != epub.get("sha256"):
@@ -1092,6 +1222,36 @@ def accessible_digital_checks(
         issues.append(problem("accessible_text_alternatives_incomplete", "页面/格/非文字视觉的 alt description 覆盖未达到 100%。"))
     if any(not str(alternatives.get(key) or "").strip() for key in ("reviewer", "reviewed_at", "reason")):
         issues.append(problem("accessible_text_alternatives_attestation_missing", "human-attested alt 复核必须具名 reviewer、reviewed_at 与 reason；空声明不能冒充人工审阅。"))
+    semantic = contract.get("semantic_transcript") if isinstance(contract.get("semantic_transcript"), Mapping) else {}
+    epub_document = next(
+        (
+            row for row in (manifest or {}).get("documents") or []
+            if isinstance(row, Mapping) and str(row.get("format") or "").lower() == "epub"
+        ),
+        {},
+    )
+    try:
+        panels = int(semantic.get("panels") or 0)
+        dialogue_lines = int(semantic.get("dialogue_lines") or 0)
+        descriptions = int(semantic.get("extended_descriptions") or 0)
+        speaker_coverage = float(semantic.get("speaker_attribution_coverage") or 0)
+    except (TypeError, ValueError):
+        panels, dialogue_lines, descriptions, speaker_coverage = 0, 0, 0, 0
+    programmatic_order = [str(item) for item in semantic.get("programmatic_order") or []]
+    semantic_sha = str(semantic.get("sha256") or "")
+    document_coverage = epub_document.get("semantic_coverage") if isinstance(epub_document.get("semantic_coverage"), Mapping) else {}
+    if (
+        not semantic_sha
+        or semantic_sha != str(epub_document.get("semantic_transcript_sha256") or "")
+        or panels <= 0 or panels != int(document_coverage.get("panels") or 0)
+        or dialogue_lines != int(document_coverage.get("dialogue") or 0)
+        or descriptions != int(document_coverage.get("descriptions") or 0) + int(document_coverage.get("long_descriptions") or 0)
+        or (dialogue_lines > 0 and int(document_coverage.get("speaker") or 0) != dialogue_lines)
+        or len(programmatic_order) != panels or len(set(programmatic_order)) != panels
+        or descriptions <= 0
+        or (dialogue_lines > 0 and speaker_coverage < 1.0)
+    ):
+        issues.append(problem("accessible_semantic_transcript_missing_or_stale", "语义阅读稿必须绑定当前 EPUB manifest 的 transcript SHA、完整分格顺序、画面描述与逐句 speaker 归属。"))
     navigation = contract.get("navigation") if isinstance(contract.get("navigation"), Mapping) else {}
     if navigation.get("toc") is not True or not navigation.get("landmarks") or not structural.get("nav_document_valid"):
         issues.append(problem("accessible_navigation_incomplete", "缺合同 TOC/landmarks，或实际 EPUB nav document 无法解析。"))
@@ -1116,8 +1276,15 @@ def accessible_digital_checks(
     if not structural.get("all_content_images_have_alt_attribute"):
         issues.append(problem("accessible_xhtml_alt_markup_incomplete", "实际 spine XHTML 存在缺 alt 属性的 img，或内容文档不可解析。alt 文案质量仍须人工复核。"))
     provenance = contract.get("provenance") if isinstance(contract.get("provenance"), Mapping) else {}
-    if provenance.get("standard") != "EPUB Accessibility 1.1" or provenance.get("url") != "https://www.w3.org/TR/epub-a11y-11/":
-        issues.append(problem("accessible_standard_provenance_missing", "合同缺 W3C EPUB Accessibility 1.1 官方 URL/版本 provenance。"))
+    formal = provenance.get("formal_baseline") if isinstance(provenance.get("formal_baseline"), Mapping) else {}
+    candidate = provenance.get("candidate_tracking") if isinstance(provenance.get("candidate_tracking"), Mapping) else {}
+    if (
+        formal.get("standard") != "EPUB Accessibility 1.1"
+        or formal.get("url") != "https://www.w3.org/TR/epub-a11y-11/"
+        or candidate.get("standard") != "EPUB Accessibility 1.2 Candidate Recommendation"
+        or candidate.get("not_claimed_as_formal_baseline") is not True
+    ):
+        issues.append(problem("accessible_standard_provenance_missing", "合同必须以 EPUB Accessibility 1.1 为正式基线，并把 1.2 明确记录为非正式候选跟踪。"))
     assurance = contract.get("assurance") if isinstance(contract.get("assurance"), Mapping) else {}
     if assurance.get("level") != "workflow_readiness_human_attested" or assurance.get("not_conformance_certification") is not True:
         issues.append(problem("accessible_assurance_overclaim", "本线只机检结构、metadata 存在性与 img alt 属性；不会判断替代文本语义质量或辅助技术体验，也无自动 EPUB renderer。只能声明 workflow readiness / human-attested，不能冒充 EPUB Accessibility/WCAG 认证。"))
@@ -1366,6 +1533,44 @@ def medium_specific_binding(
             ),
         }
 
+    print_contract = load_json(root / "排版" / chapter / "print_delivery_contract.json", {})
+    color = print_contract.get("color") if isinstance(print_contract, Mapping) and isinstance(print_contract.get("color"), Mapping) else {}
+    icc_binding: dict[str, Any] = {}
+    raw_icc = str(color.get("icc_profile_path") or "").strip()
+    if raw_icc:
+        source = Path(raw_icc).expanduser()
+        source = source.resolve() if source.is_absolute() else (root / source).resolve()
+        if source.is_file():
+            current_sha = sha256_file(source)
+            try:
+                relative = source.relative_to(root.resolve())
+                source_kind = "project_file"
+            except ValueError:
+                suffix = source.suffix if source.suffix and len(source.suffix) <= 12 else ".icc"
+                snapshot = root / "生产数据" / "release_inputs" / chapter / "icc" / f"{current_sha}{suffix}"
+                snapshot.parent.mkdir(parents=True, exist_ok=True)
+                if snapshot.is_file() and sha256_file(snapshot) != current_sha:
+                    raise ValueError("content-addressed ICC snapshot was modified")
+                if not snapshot.is_file():
+                    temp = snapshot.with_name(f".{snapshot.name}.tmp.{os.getpid()}")
+                    with source.open("rb") as reader, temp.open("wb") as writer:
+                        for chunk in iter(lambda: reader.read(1024 * 1024), b""):
+                            writer.write(chunk)
+                        writer.flush()
+                        os.fsync(writer.fileno())
+                    os.replace(temp, snapshot)
+                    _fsync_dir(snapshot.parent)
+                    _fsync_dir(snapshot.parent.parent)
+                relative = snapshot.relative_to(root)
+                source_kind = "content_addressed_project_snapshot"
+            icc_binding = {
+                "path": str(relative),
+                "sha256": current_sha,
+                "declared_sha256": str(color.get("icc_profile_sha256") or ""),
+                "profile_name": str(color.get("icc_profile_name") or source.name),
+                "source_kind": source_kind,
+            }
+
     pdf_documents = [
         dict(item) for item in manifest.get("documents") or []
         if isinstance(item, Mapping) and str(item.get("format") or "").lower() == "pdf"
@@ -1374,12 +1579,44 @@ def medium_specific_binding(
         "medium": "print_pdf",
         "print_delivery_contract": file_binding(f"排版/{chapter}/print_delivery_contract.json"),
         "print_readiness_receipt": file_binding(f"生产数据/print_readiness_receipt_{chapter}.json"),
+        "professional_print_receipt": file_binding(f"生产数据/professional_print_receipt_{chapter}.json"),
+        "icc_profile": icc_binding,
         "pdf_artifacts": sorted(
             ({"path": item["path"], "sha256": item["sha256"]} for item in artifacts if item.get("format") == "pdf"),
             key=lambda item: item["path"],
         ),
         "pdf_document_records": [stable_sha256(item) for item in pdf_documents],
     }
+
+
+def check_c2pa_truth(root: Path, provenance: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """A sidecar is disclosure only; validate every event that claims signed."""
+    issues: list[dict[str, Any]] = []
+    for row in provenance.get("artifact_credentials") or []:
+        if not isinstance(row, Mapping) or row.get("c2pa_status") != "signed":
+            continue
+        binding = row.get("c2pa_receipt") if isinstance(row.get("c2pa_receipt"), Mapping) else {}
+        receipt_path = _project_file(root, str(binding.get("path") or ""))
+        receipt = load_json(receipt_path, {}) if receipt_path is not None else {}
+        signed = receipt.get("signed_asset") if isinstance(receipt, Mapping) and isinstance(receipt.get("signed_asset"), Mapping) else {}
+        verified = verify_c2pa_receipt(root, receipt_path) if receipt_path is not None else {"status": "fail"}
+        valid = (
+            receipt_path is not None and receipt_path.is_file()
+            and binding.get("sha256") == sha256_file(receipt_path)
+            and receipt.get("kind") == "comic_c2pa_signature_receipt"
+            and receipt.get("status") == "pass"
+            and receipt.get("specification") == "C2PA 2.4"
+            and signed.get("path") == row.get("path")
+            and signed.get("sha256") == row.get("sha256")
+            and verified.get("status") == "pass"
+        )
+        if not valid:
+            issues.append(issue(
+                "c2pa_signed_claim_invalid",
+                f"{row.get('path') or '<unknown>'} 声明 signed，但缺当前嵌入式 C2PA 2.4 validator 收据；普通 sidecar 不能冒充签名。",
+                domain="provenance", blocking_usages=("public", "commercial"),
+            ))
+    return issues
 
 
 def check_acceptance(
@@ -1550,7 +1787,9 @@ def build(
     # These contracts are always reported so delivery_states can expose every
     # medium, but their issues only block their own medium.
     issues.extend(print_delivery_checks(root, chapter, manifest if isinstance(manifest, Mapping) else {}, artifacts))
-    issues.extend(accessible_digital_checks(root, chapter, artifacts))
+    issues.extend(accessible_digital_checks(
+        root, chapter, artifacts, manifest if isinstance(manifest, Mapping) else {}
+    ))
 
     issues.extend(check_review_receipt(root, chapter))
     adjudication = vlm_adjudication_summary(root, chapter)
@@ -1596,6 +1835,7 @@ def build(
             )
 
     provenance = provenance_binding_for_artifacts(root, artifacts)
+    issues.extend(check_c2pa_truth(root, provenance))
     production_method = str(meta.get("production_method") or meta.get("制作方式") or "").lower() if isinstance(meta, Mapping) else ""
     ai_generated = bool(isinstance(meta, Mapping) and (meta.get("ai_generated") is True or "ai" in production_method or "生成式" in production_method))
     if ai_generated and (not provenance.get("chain_valid") or provenance.get("artifacts_without_current_event")):
@@ -1638,6 +1878,15 @@ def build(
         "meta_sha256": sha256_file(root / "_meta.json"),
         "rights": dict(rights),
     }
+    settings_binding = {
+        "path": "_设置.md",
+        "sha256": sha256_file(root / "_设置.md"),
+        "delivery": {
+            "medium": resolved_medium,
+            "usage": resolved_usage,
+            "target_platform": target_platform,
+        },
+    }
     report = {
         "schema_version": 2,
         "kind": "comic_release_verdict",
@@ -1649,6 +1898,7 @@ def build(
         "usage": resolved_usage,
         "delivery_axis": axis_id,
         "target_platform": target_platform,
+        "settings_binding": settings_binding,
         "platform_profile": platform_profile,
         "verdict": "pass" if not profile_blocks else "blocked",
         "review_gate_summary": review_gate_summary(root, chapter),
@@ -1669,30 +1919,18 @@ def build(
     return report
 
 
-def write_outputs(root: Path, chapter: str, report: Mapping[str, Any]) -> tuple[Path, Path]:
+def write_outputs(
+    root: Path,
+    chapter: str,
+    report: Mapping[str, Any],
+    *,
+    _fault_hook: Callable[[str], None] | None = None,
+) -> tuple[Path, Path]:
     json_path = root / "生产数据" / f"release_verdict_{chapter}.json"
     md_path = root / "生产数据" / f"release_verdict_{chapter}.md"
-    json_path.parent.mkdir(parents=True, exist_ok=True)
-    json_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     axis = str(report.get("delivery_axis") or "unknown").replace("+", "__")
     archive_path = root / "生产数据" / "release_verdicts" / chapter / f"{axis}.json"
-    archive_path.parent.mkdir(parents=True, exist_ok=True)
-    archive_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     contract_path = root / "生产数据" / f"release_contract_{chapter}.json"
-    contract = {
-        "schema_version": 1,
-        "kind": "comic_active_release_contract",
-        "chapter": chapter,
-        "medium": report.get("medium"),
-        "usage": report.get("usage"),
-        "target_platform": report.get("target_platform"),
-        "release_digest": report.get("release_digest"),
-        "verdict_path": str(json_path.relative_to(root)),
-        "axis_archive_path": str(archive_path.relative_to(root)),
-        "definition": "this is the single active delivery contract; other axis reports are historical evidence",
-    }
-    contract_path.write_text(json.dumps(contract, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    write_completion_verdict(root, report)
     gate_summary = report.get("review_gate_summary") or {}
     counts = gate_summary.get("counts") or {}
     lines = [
@@ -1734,8 +1972,75 @@ def write_outputs(root: Path, chapter: str, report: Mapping[str, Any]) -> tuple[
     lines.extend(f"- {item.get('code')}: {item.get('reason')}" for item in report.get("issues") or [])
     if not report.get("issues"):
         lines.append("- 无。")
-    md_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    markdown = "\n".join(lines) + "\n"
+    release_digest = str(report.get("release_digest") or canonical_release_digest(report))
+    bundle_dir = root / "生产数据" / "releases" / chapter / release_digest
+    bundle_path = bundle_dir / "release_verdict.json"
+    bundle_md_path = bundle_dir / "release_verdict.md"
+    bundle_dir.mkdir(parents=True, exist_ok=True)
+    if bundle_path.is_file():
+        existing = load_json(bundle_path, {})
+        if canonical_release_digest(existing) != release_digest:
+            raise ValueError("immutable release bundle conflicts with its digest path")
+        bundle_report = existing
+        if not bundle_md_path.is_file():
+            _atomic_text(bundle_md_path, markdown)
+    else:
+        atomic_json(bundle_path, report)
+        _atomic_text(bundle_md_path, markdown)
+        bundle_report = dict(report)
+
+    # The completion verdict is an immutable candidate in the same revision.
+    # It is prepared before any active pointer change, so a crash can never
+    # select a release bundle whose completion evidence was not committed.
+    completion, completion_candidate = prepare_completion_candidate(root, bundle_report)
+    if _fault_hook is not None:
+        _fault_hook("after_completion_candidate")
+
+    # Compatibility views are written before the authoritative pointer switch.
+    # Readers that need truth follow release_contract.bundle_path.
+    atomic_json(json_path, report)
+    atomic_json(archive_path, report)
+    _atomic_text(md_path, markdown)
+    atomic_json(root / "生产数据" / f"completion_verdict_{chapter}.json", completion)
+    settings_binding = dict(report.get("settings_binding") or {})
+    contract = {
+        "schema_version": 3,
+        "kind": "comic_active_release_contract",
+        "chapter": chapter,
+        "medium": report.get("medium"),
+        "usage": report.get("usage"),
+        "target_platform": report.get("target_platform"),
+        "settings_binding": settings_binding,
+        "release_digest": release_digest,
+        "bundle_path": str(bundle_path.relative_to(root)),
+        "bundle_sha256": sha256_file(bundle_path),
+        "completion_path": str(completion_candidate.relative_to(root)),
+        "completion_sha256": sha256_file(completion_candidate),
+        "verdict_path": str(json_path.relative_to(root)),
+        "axis_archive_path": str(archive_path.relative_to(root)),
+        "activated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+        "definition": "single active release revision pointer; immutable bundle and completion candidate become active together",
+    }
+    if _fault_hook is not None:
+        _fault_hook("before_pointer")
+    atomic_json(contract_path, contract)
+    # Authoritative pointer is intentionally the final persistent mutation.
+    if _fault_hook is not None:
+        _fault_hook("after_pointer")
     return json_path, md_path
+
+
+def _atomic_text(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(f".{path.name}.tmp.{os.getpid()}")
+    with tmp.open("w", encoding="utf-8") as handle:
+        handle.write(text)
+        handle.flush()
+        os.fsync(handle.fileno())
+    os.replace(tmp, path)
+    _fsync_dir(path.parent)
+    _fsync_dir(path.parent.parent)
 
 
 def main(argv: list[str] | None = None) -> int:

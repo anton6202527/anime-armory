@@ -22,6 +22,16 @@ VERDICT_KIND = "novel_completion_verdict"
 ACCEPTANCE_KIND = "novel_final_acceptance_receipt"
 VERDICT_REL = Path("导出") / "completion_verdict.json"
 ACCEPTANCE_REL = Path("导出") / "final_acceptance.json"
+READINESS_CONTRACT_VERSION = 1
+
+
+_AUTOMATED_ACCEPTOR_TOKENS = {
+    "agent", "ai", "assistant", "automation", "bot", "chatgpt", "claude",
+    "codex", "delegate", "machine", "model", "producer", "supervisor", "system",
+}
+_AUTOMATED_ACCEPTOR_LABELS = {
+    "代理", "制作代理", "自动化", "机器人", "模型", "系统", "系统代理", "执行器",
+}
 
 
 def now_iso() -> str:
@@ -62,12 +72,111 @@ def _canonical_records(records: Iterable[Mapping[str, Any]]) -> list[dict[str, s
     return sorted(out, key=lambda row: row["path"])
 
 
+def _canonical_value(value: Any) -> Any:
+    """Return a deterministic JSON value without dropping gate evidence."""
+    if isinstance(value, Mapping):
+        return {str(key): _canonical_value(item) for key, item in sorted(value.items(), key=lambda row: str(row[0]))}
+    if isinstance(value, (list, tuple)):
+        return [_canonical_value(item) for item in value]
+    if value is None or isinstance(value, (str, int, float, bool)):
+        return value
+    return str(value)
+
+
+def _automated_acceptor(actor: str) -> bool:
+    normalized = " ".join(str(actor or "").strip().casefold().split())
+    if not normalized:
+        return False
+    latin_tokens: set[str] = set()
+    token = []
+    for char in normalized:
+        if "a" <= char <= "z" or "0" <= char <= "9":
+            token.append(char)
+        elif token:
+            latin_tokens.add("".join(token))
+            token = []
+    if token:
+        latin_tokens.add("".join(token))
+    if latin_tokens & _AUTOMATED_ACCEPTOR_TOKENS:
+        return True
+    for label in _AUTOMATED_ACCEPTOR_LABELS:
+        if normalized == label or any(normalized.startswith(label + separator) for separator in (":", "：", "/", "#", "@")):
+            return True
+    return False
+
+
+def readiness_contract_issues(manifest: Mapping[str, Any]) -> list[str]:
+    """Recompute whether the manifest's bound readiness structure is coherent.
+
+    This does not repeat every release gate implementation.  It prevents a
+    mutable summary boolean from overriding the detailed gate result and makes
+    old, unbound readiness manifests fail closed until rebuilt.
+    """
+    issues: list[str] = []
+    version = manifest.get("readiness_contract_version")
+    if version != READINESS_CONTRACT_VERSION:
+        issues.append("release readiness contract is missing or stale; rebuild release_manifest.json")
+    readiness = manifest.get("release_readiness")
+    if not isinstance(readiness, Mapping):
+        issues.append("release readiness details are missing; rebuild release_manifest.json")
+        return issues
+
+    if str(readiness.get("release_profile") or "") != str(manifest.get("release_profile") or ""):
+        issues.append("release readiness profile does not match release_profile")
+    passed = readiness.get("passed")
+    if not isinstance(passed, bool):
+        issues.append("release readiness passed must be a boolean")
+    if not isinstance(manifest.get("release_ready"), bool):
+        issues.append("release_ready must be a boolean")
+    elif isinstance(passed, bool) and manifest.get("release_ready") != passed:
+        issues.append("release_ready disagrees with detailed release readiness")
+
+    blockers = readiness.get("blockers")
+    warnings = readiness.get("warnings")
+    checks = readiness.get("checks")
+    if not isinstance(blockers, list):
+        issues.append("release readiness blockers must be a list")
+        blockers = []
+    if not isinstance(warnings, list):
+        issues.append("release readiness warnings must be a list")
+        warnings = []
+    if not isinstance(checks, list):
+        issues.append("release readiness checks must be a list")
+    blocker_count = readiness.get("blocker_count")
+    warning_count = readiness.get("warning_count")
+    if not isinstance(blocker_count, int) or isinstance(blocker_count, bool):
+        issues.append("release readiness blocker_count must be an integer")
+    elif blocker_count != len(blockers):
+        issues.append("release readiness blocker_count does not match blockers")
+    if not isinstance(warning_count, int) or isinstance(warning_count, bool):
+        issues.append("release readiness warning_count must be an integer")
+    elif warning_count != len(warnings):
+        issues.append("release readiness warning_count does not match warnings")
+    if passed is True and blockers:
+        issues.append("release readiness cannot pass with blockers")
+    if passed is not True:
+        issues.append("detailed release readiness did not pass")
+
+    qa_gate = readiness.get("qa_gate")
+    if not isinstance(qa_gate, Mapping):
+        issues.append("release readiness qa_gate details are missing")
+    elif qa_gate.get("profile_skipped") is False:
+        qa_blocker_count = qa_gate.get("blocker_count")
+        if not isinstance(qa_gate.get("blocking"), bool):
+            issues.append("release readiness QA blocking must be a boolean")
+        if not isinstance(qa_blocker_count, int) or isinstance(qa_blocker_count, bool):
+            issues.append("release readiness QA blocker_count must be an integer")
+        elif qa_gate.get("blocking") is True or qa_blocker_count > 0:
+            issues.append("release readiness QA gate is blocking")
+    return issues
+
+
 def release_digest_payload(manifest: Mapping[str, Any]) -> dict[str, Any]:
     """Return the stable payload whose SHA-256 identifies one release.
 
-    Generated timestamps, absolute roots and readiness messages are excluded.
-    Any manuscript, export, contract or release-evidence byte change produces a
-    new digest and therefore invalidates an old final-acceptance receipt.
+    Generated timestamps and absolute roots are excluded.  Readiness/gate
+    details are deliberately included: a summary boolean can never change
+    without changing this digest and invalidating final acceptance.
     """
     evidence = manifest.get("evidence") if isinstance(manifest.get("evidence"), Mapping) else {}
     evidence_records = []
@@ -75,7 +184,7 @@ def release_digest_payload(manifest: Mapping[str, Any]) -> dict[str, Any]:
         if isinstance(item, Mapping) and item.get("exists") and item.get("sha256"):
             evidence_records.append({"key": str(key), "path": str(item.get("path") or ""), "sha256": str(item["sha256"])})
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "release_profile": str(manifest.get("release_profile") or ""),
         "release_name": str(manifest.get("release_name") or ""),
         "meta": _canonical_records([manifest.get("meta") or {}]),
@@ -83,6 +192,11 @@ def release_digest_payload(manifest: Mapping[str, Any]) -> dict[str, Any]:
         "chapters": _canonical_records(manifest.get("chapters") or []),
         "exports": _canonical_records(manifest.get("exports") or []),
         "evidence": evidence_records,
+        "readiness_contract": {
+            "version": manifest.get("readiness_contract_version"),
+            "release_ready": manifest.get("release_ready"),
+            "release_readiness": _canonical_value(manifest.get("release_readiness")),
+        },
     }
 
 
@@ -103,6 +217,8 @@ def acceptance_status(root: str | Path, release_digest: str) -> dict[str, Any]:
         issues.append("final acceptance decision is not accepted")
     elif not str(receipt.get("accepted_by") or "").strip():
         issues.append("final acceptance lacks accepted_by")
+    elif _automated_acceptor(str(receipt.get("accepted_by") or "")):
+        issues.append("final acceptance must be signed by a named human, not an automated identity")
     elif str(receipt.get("release_digest") or "") != release_digest:
         issues.append("final acceptance is stale against current release_digest")
     return {
@@ -153,9 +269,8 @@ def build_completion_verdict(root: str | Path, manifest: Mapping[str, Any] | Non
     current_digest = canonical_release_digest(release) if release else ""
     if not release:
         blockers.append("release manifest is missing")
-    elif release.get("release_ready") is not True:
-        blockers.append("release manifest is not machine-ready")
     if release:
+        blockers.extend(readiness_contract_issues(release))
         blockers.extend(manifest_integrity_issues(root_path, release))
     if release and (not stored_digest or stored_digest != current_digest):
         blockers.append("release manifest digest is missing or stale")
@@ -181,6 +296,11 @@ def build_completion_verdict(root: str | Path, manifest: Mapping[str, Any] | Non
         "release_digest": current_digest,
         "machine_ready": not blockers,
         "blockers": blockers,
+        "readiness_contract": {
+            "required_version": READINESS_CONTRACT_VERSION,
+            "manifest_version": release.get("readiness_contract_version") if release else None,
+            "current": bool(release) and not readiness_contract_issues(release),
+        },
         "acceptance": acceptance,
         "definition": "accepted iff the current release is machine-ready and a named final acceptance receipt binds the current release_digest",
     }
@@ -200,12 +320,16 @@ def accept_release(root: str | Path, *, accepted_by: str, note: str = "") -> dic
     actor = str(accepted_by or "").strip()
     if not actor:
         raise ValueError("accepted_by is required")
+    if _automated_acceptor(actor):
+        raise ValueError("accepted_by must identify a named human, not an agent/delegate/system identity")
     receipt = {
         "schema_version": 1,
         "kind": ACCEPTANCE_KIND,
         "decision": "accepted",
         "accepted_at": now_iso(),
         "accepted_by": actor,
+        "review_kind": "named_human_final_acceptance",
+        "human_signoff": True,
         "note": str(note or "").strip(),
         "release_digest": verdict["release_digest"],
         "release_manifest": "导出/release_manifest.json",

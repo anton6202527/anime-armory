@@ -21,10 +21,13 @@ COMIC_LIB = Path(__file__).resolve().parents[2] / "_lib"
 if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
 try:
-    from image_backend_adapter import ImageBackendCapabilities, resolve_capabilities
+    from image_backend_adapter import ImageBackendCapabilities, intersect_with_execution, resolve_capabilities
+    from image_execution_adapter import resolve_execution_adapter
 except Exception:  # pragma: no cover - keep job building usable in partially-copied skill folders
     ImageBackendCapabilities = Any  # type: ignore
     resolve_capabilities = None  # type: ignore
+    intersect_with_execution = None  # type: ignore
+    resolve_execution_adapter = None  # type: ignore
 from comic_image_prompt_compiler import compile_prompt
 from progress import update_stage
 
@@ -80,6 +83,12 @@ PRODUCTION_NEGATIVE_CONTRACT = (
 
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def canonical_sha256(value: Any) -> str:
+    return hashlib.sha256(
+        json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
 
 
 def read_setting(root: Path, key: str, default: str) -> str:
@@ -442,6 +451,9 @@ def binding_records(panel_plan: dict[str, Any], registry: dict[str, Any]) -> lis
         asset = assets.get(cid) if isinstance(assets.get(cid), dict) else {}
         record: dict[str, Any] = {key: str(binding.get(key) or "") for key in ("character_id", "form_id", "outfit_id", "expression_id", "state_id")}
         record["display_name"] = str(asset.get("display_name") or asset.get("name") or "角色")
+        record["character_dna"] = asset.get("character_dna") or asset.get("dna_contract") or {}
+        record["variant_policy"] = asset.get("variant_policy") or asset.get("age_variants") or {}
+        record["forbidden_inheritance"] = asset.get("forbidden_inheritance") or []
         resolved: dict[str, Any] = {}
         for key, collection_name in (("form_id", "forms"), ("outfit_id", "outfits"), ("expression_id", "expressions"), ("state_id", "states")):
             collection = asset.get(collection_name) if isinstance(asset.get(collection_name), dict) else {}
@@ -455,6 +467,92 @@ def binding_records(panel_plan: dict[str, Any], registry: dict[str, Any]) -> lis
         record["resolved_contracts"] = resolved
         records.append(record)
     return records
+
+
+def binding_execution_contracts(
+    root: Path,
+    panel: dict[str, Any],
+    records: list[dict[str, Any]],
+    registry: dict[str, Any],
+    references: list[dict[str, str]],
+    *,
+    execution_adapter: dict[str, Any],
+    persistent_subject: bool,
+) -> list[dict[str, Any]]:
+    """Freeze the exact identity/state contract consumed by one paid call.
+
+    The registry-wide SHA remains useful provenance, but it is too coarse for
+    explaining *which* DNA/form/outfit/expression/state and exact pixels drove
+    one panel.  These per-subject records are canonical-hashed and become part
+    of ``execution_input_sha256``.
+    """
+    assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
+    raw_bindings = {
+        str(item.get("character_id") or item.get("id") or ""): item
+        for item in panel.get("character_bindings") or []
+        if isinstance(item, dict)
+    }
+    adapter_id = str(execution_adapter.get("adapter_id") or "")
+    out: list[dict[str, Any]] = []
+    for record in records:
+        cid = str(record.get("character_id") or "")
+        asset = assets.get(cid) if isinstance(assets.get(cid), dict) else {}
+        raw_binding = raw_bindings.get(cid) if isinstance(raw_bindings.get(cid), dict) else {}
+        locator = {
+            key: raw_binding.get(key)
+            for key in ("bbox", "mask_path", "occlusion", "visibility", "position", "review_region")
+            if raw_binding.get(key) not in (None, "", [], {})
+        }
+        if locator.get("mask_path"):
+            mask_path = Path(str(locator["mask_path"]))
+            mask_path = mask_path if mask_path.is_absolute() else root / mask_path
+            locator["mask_path"] = path_relative_to_root(root, mask_path)
+            locator["mask_sha256"] = reference_planner.file_sha256(mask_path) if mask_path.is_file() else ""
+        binding_ref_ids = {
+            str(record.get(key) or "")
+            for key in ("character_id", "form_id", "outfit_id", "expression_id", "state_id")
+            if str(record.get(key) or "")
+        }
+        exact_refs = [
+            {
+                "path": str(ref.get("path") or ""),
+                "sha256": str(ref.get("sha256") or ""),
+                "role": str(ref.get("role") or ref.get("view") or "reference"),
+                "contract_id": str(ref.get("contract_id") or ""),
+            }
+            for ref in references
+            if (
+                str(ref.get("id") or "") in binding_ref_ids
+                or str(ref.get("contract_id") or "").startswith(f"{cid}:")
+            )
+        ]
+        subject_binding: dict[str, Any] = {}
+        subject_bindings = asset.get("subject_bindings") if isinstance(asset.get("subject_bindings"), dict) else {}
+        candidate = subject_bindings.get(adapter_id) if isinstance(subject_bindings.get(adapter_id), dict) else {}
+        if persistent_subject and candidate:
+            subject_binding = {
+                "adapter_id": adapter_id,
+                "subject_id": str(candidate.get("subject_id") or ""),
+                "verified_at": str(candidate.get("verified_at") or ""),
+                "evidence": str(candidate.get("evidence") or candidate.get("source") or ""),
+            }
+        contract = {
+            "character_id": cid,
+            "form_id": str(record.get("form_id") or ""),
+            "outfit_id": str(record.get("outfit_id") or ""),
+            "expression_id": str(record.get("expression_id") or ""),
+            "state_id": str(record.get("state_id") or ""),
+            "character_dna": record.get("character_dna") or {},
+            "variant_policy": record.get("variant_policy") or {},
+            "forbidden_inheritance": record.get("forbidden_inheritance") or [],
+            "resolved_contracts": record.get("resolved_contracts") or {},
+            "subject_locator": locator,
+            "exact_references": exact_refs,
+            "subject_binding": subject_binding,
+        }
+        contract["contract_sha256"] = canonical_sha256(contract)
+        out.append(contract)
+    return out
 
 
 def binding_contract_text(records: list[dict[str, Any]], *, include_ids: bool = True) -> str:
@@ -728,11 +826,26 @@ def build_jobs(root: Path, chapter: str, reference_plan: dict[str, Any] | None =
     rects = panel_rects(layout)
     model = read_setting(root, "生图模型", "自定义")
     channel = read_setting(root, "生图渠道", "manual")
-    caps = resolve_capabilities(model, channel) if resolve_capabilities else None
+    planned_caps = resolve_capabilities(model, channel) if resolve_capabilities else None
+    repo_root = Path(__file__).resolve().parents[4]
+    execution_adapter = (
+        resolve_execution_adapter(root, model, channel, repo_root=repo_root)
+        if resolve_execution_adapter
+        else {"adapter_id": "unavailable", "status": "planning_only", "features": {}}
+    )
+    caps = (
+        intersect_with_execution(planned_caps, execution_adapter)
+        if planned_caps is not None and intersect_with_execution
+        else planned_caps
+    )
     style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
     text_language = read_setting(root, "文字语言", "中文")
     render_stage = read_setting(root, "出图稿层", "完成稿")
     resolution_policy = read_setting(root, "生图分辨率策略", "后端最高可达")
+    try:
+        key_panel_candidate_count = max(1, int(read_setting(root, "关键格候选数", "2")))
+    except ValueError:
+        key_panel_candidate_count = 2
     registry = load_reference_registry(root)
     plan = reference_plan_for_build(root, chapter, reference_plan)
     plan_by_panel = {
@@ -752,6 +865,16 @@ def build_jobs(root: Path, chapter: str, reference_plan: dict[str, Any] | None =
         continuity = panel_continuity_contract(panel, panel_script)
         references = references_from_panel_plan(root, panel_plan) if panel_plan else []
         bindings = binding_records(panel_plan, registry) if panel_plan else []
+        identity_contracts = binding_execution_contracts(
+            root,
+            panel,
+            bindings,
+            registry,
+            references,
+            execution_adapter=execution_adapter,
+            persistent_subject=bool(caps and caps.persistent_subject),
+        )
+        identity_contracts_sha = canonical_sha256(identity_contracts)
         binding_full = binding_contract_text(bindings, include_ids=True)
         binding_visible = binding_contract_text(bindings, include_ids=False)
         production_prompt = build_prompt(panel, style, registry, panel_script, finish, render_stage)
@@ -786,6 +909,13 @@ def build_jobs(root: Path, chapter: str, reference_plan: dict[str, Any] | None =
                 "sha256": registry_sha,
                 "schema_version": registry.get("schema_version"),
             },
+            "identity_bindings": {
+                "sha256": identity_contracts_sha,
+                "contracts": [
+                    {"character_id": item.get("character_id"), "contract_sha256": item.get("contract_sha256")}
+                    for item in identity_contracts
+                ],
+            },
             "panel_script": {"path": str(panel_script_path.relative_to(root)), "sha256": reference_planner.file_sha256(panel_script_path)},
             "layout": {"path": str(layout_path.relative_to(root)), "sha256": reference_planner.file_sha256(layout_path)},
         }
@@ -795,11 +925,24 @@ def build_jobs(root: Path, chapter: str, reference_plan: dict[str, Any] | None =
             "resolution_policy": resolution_policy,
             "references": [{"id": ref.get("id"), "path": ref.get("path"), "sha256": ref.get("sha256")} for ref in references],
             "character_bindings": [{key: row.get(key) for key in ("character_id", "form_id", "outfit_id", "expression_id", "state_id")} for row in bindings],
+            "identity_contracts_sha256": identity_contracts_sha,
+            "identity_contracts": identity_contracts,
+            "execution_adapter": {
+                "adapter_id": execution_adapter.get("adapter_id"),
+                "status": execution_adapter.get("status"),
+                "features": execution_adapter.get("features") or {},
+                "feature_evidence": execution_adapter.get("feature_evidence") or {},
+            },
             "panel_plan_sha256": str(panel_plan.get("panel_plan_sha256") or ""),
         }
         execution_input_sha = hashlib.sha256(
             json.dumps(execution_input, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
         ).hexdigest()
+        story_function = str(panel.get("story_function") or "").lower()
+        key_panel = bool(panel.get("key_panel")) or any(
+            token in story_function
+            for token in ("hook", "cliff", "reveal", "turning_point", "climax", "payoff", "高潮", "揭示", "转折")
+        ) or str(finish.get("layout_weight") or "") == "heavy"
         jobs.append(
             {
                 "panel_id": pid,
@@ -819,6 +962,7 @@ def build_jobs(root: Path, chapter: str, reference_plan: dict[str, Any] | None =
                 "source_contract_sha256": compiled["source_contract_sha256"],
                 "submit_prompt_sha256": hashlib.sha256(submit_prompt.encode("utf-8")).hexdigest(),
                 "submit_prompt_chars": len(submit_prompt),
+                "execution_input": execution_input,
                 "execution_input_sha256": execution_input_sha,
                 "consumed_contracts": consumed_contracts,
                 "continuity_contract": continuity,
@@ -829,6 +973,22 @@ def build_jobs(root: Path, chapter: str, reference_plan: dict[str, Any] | None =
                     else {}
                 ),
                 "character_bindings": bindings,
+                "identity_execution_contracts": identity_contracts,
+                "identity_execution_contracts_sha256": identity_contracts_sha,
+                "execution_adapter": {
+                    "adapter_id": execution_adapter.get("adapter_id"),
+                    "status": execution_adapter.get("status"),
+                    "source": execution_adapter.get("source"),
+                    "features": execution_adapter.get("features") or {},
+                    "feature_evidence": execution_adapter.get("feature_evidence") or {},
+                },
+                "candidate_policy": {
+                    "enabled": bool(key_panel and key_panel_candidate_count > 1),
+                    "target_count": key_panel_candidate_count if key_panel else 1,
+                    "generation_order": "sequential_same_stage_budget_envelope",
+                    "selection": "fewest_structured_axis_warnings_then_earliest",
+                    "each_candidate_requires_b14": True,
+                },
                 "references": references,
                 "reference_budget": caps.to_dict() if caps else {},
                 "result_path": "",
@@ -842,6 +1002,14 @@ def build_jobs(root: Path, chapter: str, reference_plan: dict[str, Any] | None =
         "model": model,
         "channel": channel,
         "backend_capabilities": caps.to_dict() if caps else {},
+        "planned_backend_capabilities": planned_caps.to_dict() if planned_caps else {},
+        "execution_adapter": {
+            "adapter_id": execution_adapter.get("adapter_id"),
+            "status": execution_adapter.get("status"),
+            "source": execution_adapter.get("source"),
+            "features": execution_adapter.get("features") or {},
+            "feature_evidence": execution_adapter.get("feature_evidence") or {},
+        },
         "text_language": text_language,
         "render_stage": render_stage,
         "resolution_policy": resolution_policy,
@@ -863,6 +1031,8 @@ def job_is_stale(old: dict, new: dict) -> bool:
     comic-identity report 的 sha 比对负责触发重抽。
     """
     if str(old.get("submit_prompt_sha256") or "") != str(new.get("submit_prompt_sha256") or ""):
+        return True
+    if str(old.get("execution_input_sha256") or "") != str(new.get("execution_input_sha256") or ""):
         return True
     return (
         (old.get("size") or {}) != (new.get("size") or {})

@@ -146,6 +146,28 @@ def test_dialogue_slot_height_uses_text_target_length() -> None:
     assert build_layout.panel_height(long_panel) > build_layout.panel_height(short_panel)
 
 
+def test_panel_metadata_maps_normalized_speaker_anchor_to_final_geometry() -> None:
+    item = build_layout.panel_metadata(
+        {"panel_id": "P001", "dialogue": [{"speaker": "CHAR_A", "text": "走。"}]},
+        {"page_id": "PAGE_001", "spread_id": "SPREAD_001", "spread_mode": "paired_pages", "cross_page_art": False},
+        {
+            "panel_id": "P001",
+            "thumbnail_rect": {"x": 100, "y": 100, "w": 600, "h": 800},
+            "balloons": [{
+                "type": "dialogue", "content_ref": "panel:P001.dialogue:1", "speaker": "CHAR_A", "order": 1,
+                "tail": {"mode": "toward_speaker", "target": "CHAR_A"},
+            }],
+            "speaker_anchors": {"CHAR_A": {"bbox": {"x": 0.6, "y": 0.4, "w": 0.2, "h": 0.4}}},
+        },
+        {"x": 20, "y": 40, "w": 300, "h": 400},
+        1,
+    )
+
+    assert item["speaker_anchors"]["CHAR_A"]["bbox"] == {"x": 200, "y": 200, "w": 60, "h": 160}
+    assert item["spread_mode"] == "paired_pages"
+    assert item["cross_page_art"] is False
+
+
 def test_build_layout_inherits_name_board_manuscript_and_panel_metadata(tmp_path: Path) -> None:
     root = tmp_path / "comic"
     chapter = "第1话"

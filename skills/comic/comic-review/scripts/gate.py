@@ -57,9 +57,12 @@ try:
 except Exception:  # pragma: no cover - missing validator must fail closed in check_panel_jobs_ready
     panel_acceptance = None
 try:
-    from image_backend_adapter import resolve_capabilities
+    from image_backend_adapter import intersect_with_execution, resolve_capabilities
+    from image_execution_adapter import resolve_execution_adapter
 except Exception:  # pragma: no cover
     resolve_capabilities = None
+    intersect_with_execution = None
+    resolve_execution_adapter = None
 try:
     from comic_image_prompt_compiler import (
         KIND as IMAGE_PROMPT_COMPILER_KIND,
@@ -125,6 +128,14 @@ def load_json(path: Path, default: Any = None) -> Any:
         return json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return default
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def read_text(path: Path) -> str:
@@ -1033,8 +1044,66 @@ def check_backend(root: Path, jobs: dict[str, Any], findings: list[dict[str, Any
     model = str(jobs.get("model") or read_setting(root, "生图模型", "自定义"))
     channel = str(jobs.get("channel") or read_setting(root, "生图渠道", "manual"))
     if resolve_capabilities:
-        caps = resolve_capabilities(model, channel)
+        planned = resolve_capabilities(model, channel)
+        execution = (
+            resolve_execution_adapter(root, model, channel, repo_root=Path(__file__).resolve().parents[4])
+            if resolve_execution_adapter
+            else {"status": "planning_only", "features": {}}
+        )
+        caps = intersect_with_execution(planned, execution) if intersect_with_execution else planned
         notes.append(f"backend adapter: {caps.adapter_id}; reference_image_limit={caps.reference_image_limit}; persistent_subject={caps.persistent_subject}")
+        recorded_execution = jobs.get("execution_adapter") if isinstance(jobs.get("execution_adapter"), dict) else {}
+        for key in ("adapter_id", "status", "features", "feature_evidence"):
+            if recorded_execution.get(key) != execution.get(key):
+                add(
+                    findings,
+                    "block",
+                    "image_execution_capability_stale",
+                    f"出图/{jobs.get('chapter', '')}/prompt/panel_jobs.json",
+                    f"执行适配器 {key} 已变化，落盘 job 不能继续宣称旧能力。",
+                    "image",
+                    "重新构建 panel_jobs；persistent_subject 只能来自当前 runner/registry 的已验证 feature。",
+                )
+                break
+        recorded_caps = jobs.get("backend_capabilities") if isinstance(jobs.get("backend_capabilities"), dict) else {}
+        effective_caps = caps.to_dict()
+        capability_keys = (
+            "adapter_id",
+            "supports_image_inputs",
+            "persistent_subject",
+            "persistent_subject_evidence",
+            "reference_image_limit",
+            "executable_attachment_limit",
+        )
+        mismatched_caps = [
+            key for key in capability_keys
+            if recorded_caps.get(key) != effective_caps.get(key)
+        ]
+        if mismatched_caps:
+            add(
+                findings,
+                "block",
+                "image_backend_capability_intersection_stale",
+                f"出图/{jobs.get('chapter', '')}/prompt/panel_jobs.json",
+                "落盘 backend_capabilities 不是当前 model∩channel∩runner/registry 的交集："
+                + ",".join(mismatched_caps),
+                "image",
+                "重新构建 panel_jobs；persistent_subject 还必须登记真实 subject-id 参数与 dated evidence。",
+            )
+        for job in jobs.get("jobs") or []:
+            if not isinstance(job, dict):
+                continue
+            budget = job.get("reference_budget") if isinstance(job.get("reference_budget"), dict) else {}
+            if any(budget.get(key) != effective_caps.get(key) for key in capability_keys):
+                add(
+                    findings,
+                    "block",
+                    "panel_reference_capability_stale",
+                    f"出图/{jobs.get('chapter', '')}/prompt/panel_jobs.json",
+                    f"{job.get('panel_id')} reference_budget 未绑定当前真实执行能力交集。",
+                    "image",
+                    "重新构建 panel_jobs 后再提交付费出图。",
+                )
     pairs = {
         (str(job.get("model") or model), str(job.get("source") or channel))
         for job in jobs.get("jobs") or []
@@ -1050,6 +1119,84 @@ def check_backend(root: Path, jobs: dict[str, Any], findings: list[dict[str, Any
             "image",
             "统一模型和渠道后重建 job 包并重抽受影响格。",
         )
+
+
+def check_identity_execution_contracts(
+    root: Path,
+    chapter: str,
+    jobs: dict[str, Any],
+    findings: list[dict[str, Any]],
+) -> None:
+    """Hard-gate exact DNA/state/reference payloads before paid pixels."""
+    artifact = f"出图/{chapter}/prompt/panel_jobs.json"
+    persistent = bool((jobs.get("backend_capabilities") or {}).get("persistent_subject"))
+    for job in jobs.get("jobs") or []:
+        if not isinstance(job, dict):
+            continue
+        pid = str(job.get("panel_id") or "?")
+        bindings = [item for item in job.get("character_bindings") or [] if isinstance(item, dict)]
+        contracts = [item for item in job.get("identity_execution_contracts") or [] if isinstance(item, dict)]
+        if len(contracts) != len(bindings):
+            add(findings, "block", "identity_execution_contract_coverage", artifact,
+                f"{pid} identity_execution_contracts 未逐角色覆盖当前 bindings。", "image",
+                "重建 panel_jobs，把 DNA/form/outfit/expression/state/variant policy 与 exact refs 固化进执行输入。")
+            continue
+        encoded_sha = hashlib.sha256(
+            json.dumps(contracts, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
+        if encoded_sha != str(job.get("identity_execution_contracts_sha256") or ""):
+            add(findings, "block", "identity_execution_contract_hash", artifact,
+                f"{pid} identity execution contract SHA 不匹配。", "image", "重建 panel_jobs，禁止手改合同。")
+            continue
+        if str((job.get("execution_input") or {}).get("identity_contracts_sha256") or "") != encoded_sha:
+            add(findings, "block", "identity_contract_not_in_execution_input", artifact,
+                f"{pid} DNA/variant/state 合同未进入 execution_input。", "image", "重建 panel_jobs 后再执行。")
+        multi = len(contracts) > 1
+        for contract in contracts:
+            cid = str(contract.get("character_id") or "?")
+            subject = dict(contract)
+            declared_sha = str(subject.pop("contract_sha256", ""))
+            actual_sha = hashlib.sha256(
+                json.dumps(subject, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+            ).hexdigest()
+            if declared_sha != actual_sha:
+                add(findings, "block", "identity_subject_contract_hash", artifact,
+                    f"{pid}·{cid} subject contract SHA 不匹配。", "image", "重建 panel_jobs。")
+            missing = [key for key in ("form_id", "outfit_id", "expression_id", "state_id") if not str(contract.get(key) or "")]
+            if not contract.get("character_dna"):
+                missing.append("character_dna")
+            if not contract.get("variant_policy"):
+                missing.append("variant_policy")
+            if not contract.get("exact_references"):
+                missing.append("exact_references")
+            if missing:
+                add(findings, "block", "identity_subject_contract_incomplete", artifact,
+                    f"{pid}·{cid} 执行身份合同缺 {','.join(missing)}。", "identity",
+                    "回 identity registry 补齐并重建 reference plan/panel jobs。")
+            for ref in contract.get("exact_references") or []:
+                if not isinstance(ref, dict):
+                    continue
+                path = root / str(ref.get("path") or "")
+                expected = str(ref.get("sha256") or "")
+                if not path.is_file() or not expected or sha256_file(path) != expected:
+                    add(findings, "block", "identity_exact_reference_stale", str(ref.get("path") or artifact),
+                        f"{pid}·{cid} exact reference 缺失或 SHA 已变。", "identity", "重建 reference plan/panel jobs。")
+            locator = contract.get("subject_locator") if isinstance(contract.get("subject_locator"), dict) else {}
+            if multi and not any(locator.get(key) not in (None, "", [], {}) for key in ("bbox", "mask_path", "occlusion", "review_region")):
+                add(findings, "block", "multi_subject_review_locator_missing", artifact,
+                    f"{pid}·{cid} 多主体格缺 binding-resolved bbox/mask/occlusion review locator。", "script",
+                    "在 character_bindings 为每个主体登记 bbox/mask_path/occlusion/review_region 后重建。")
+            if locator.get("mask_path"):
+                mask = root / str(locator.get("mask_path"))
+                if not mask.is_file() or sha256_file(mask) != str(locator.get("mask_sha256") or ""):
+                    add(findings, "block", "subject_review_mask_stale", str(locator.get("mask_path")),
+                        f"{pid}·{cid} review mask 缺失或 SHA 已变。", "identity", "重建 mask 与 panel_jobs。")
+            if persistent:
+                binding = contract.get("subject_binding") if isinstance(contract.get("subject_binding"), dict) else {}
+                if not all(str(binding.get(key) or "").strip() for key in ("adapter_id", "subject_id", "verified_at", "evidence")):
+                    add(findings, "block", "persistent_subject_id_unbound", artifact,
+                        f"{pid}·{cid} runner 宣称 persistent_subject，但未消费有证据的 subject_id。", "identity",
+                        "在 registry.subject_bindings[adapter_id] 登记 subject_id/verified_at/evidence 后重建。")
 
 
 def check_prompt_compiler(jobs: dict[str, Any], findings: list[dict[str, Any]]) -> None:
@@ -1222,6 +1369,88 @@ def check_panel_jobs_ready(root: Path, chapter: str, jobs: dict[str, Any], findi
             )
             continue
         if status == "ready":
+            policy = job.get("candidate_policy") if isinstance(job.get("candidate_policy"), dict) else {}
+            if policy.get("enabled") and int(policy.get("target_count") or 1) > 1:
+                adoption = job.get("candidate_adoption") if isinstance(job.get("candidate_adoption"), dict) else {}
+                adoption_path = root / str(adoption.get("path") or "")
+                stored = load_json(adoption_path, {}) if adoption_path.is_file() else {}
+                if not stored or stored.get("kind") != "comic_panel_candidate_adoption":
+                    add(findings, "block", "candidate_adoption_missing", str(adoption.get("path") or f"生产数据/panel_candidates/{chapter}/{pid}_adoption.json"),
+                        f"{pid} 是关键格多候选策略，但缺 adoption receipt。", "image",
+                        "让每个候选逐张 B14 后按结构化轴警告数自动采用最佳候选。")
+                    continue
+                material = dict(stored)
+                declared_adoption_sha = str(material.pop("adoption_sha256", ""))
+                actual_adoption_sha = hashlib.sha256(
+                    json.dumps(material, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+                ).hexdigest()
+                manifest_path = root / str(
+                    stored.get("candidate_manifest_path")
+                    or f"生产数据/panel_candidates/{chapter}/{pid}.json"
+                )
+                manifest = load_json(manifest_path, {}) if manifest_path.is_file() else {}
+                manifest_sha = hashlib.sha256(
+                    json.dumps(manifest, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+                ).hexdigest() if manifest else ""
+                candidates = [item for item in manifest.get("candidates") or [] if isinstance(item, dict)] if isinstance(manifest, dict) else []
+                selected = next(
+                    (item for item in candidates if str(item.get("candidate_id") or "") == str(stored.get("candidate_id") or "")),
+                    {},
+                )
+                candidate_receipts_valid = bool(candidates)
+                for candidate in candidates:
+                    receipt = candidate.get("spend_receipt") if isinstance(candidate.get("spend_receipt"), dict) else {}
+                    post_qc = candidate.get("post_qc") if isinstance(candidate.get("post_qc"), dict) else {}
+                    manual = post_qc.get("manual_review") if isinstance(post_qc.get("manual_review"), dict) else {}
+                    structured = manual.get("structured_review") if isinstance(manual.get("structured_review"), dict) else {}
+                    structured_sha = hashlib.sha256(
+                        json.dumps(structured, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+                    ).hexdigest() if structured else ""
+                    post_qc_sha = hashlib.sha256(
+                        json.dumps(post_qc, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+                    ).hexdigest() if post_qc else ""
+                    panel_copy = root / str(candidate.get("panel_path") or "")
+                    master_copy = root / str(candidate.get("master_path") or "")
+                    contact_copy = root / str(candidate.get("contact_sheet_path") or "")
+                    if (
+                        receipt.get("envelope_id") != manifest.get("spend_envelope_id")
+                        or receipt.get("authorization_sha256") != manifest.get("spend_authorization_sha256")
+                        or receipt.get("status") != "settled"
+                        or not panel_copy.is_file()
+                        or not master_copy.is_file()
+                        or not contact_copy.is_file()
+                        or sha256_file(panel_copy) != candidate.get("artifact_sha256")
+                        or sha256_file(master_copy) != candidate.get("master_sha256")
+                        or sha256_file(contact_copy) != candidate.get("contact_sheet_sha256")
+                        or post_qc.get("artifact_sha256") != candidate.get("artifact_sha256")
+                        or post_qc_sha != candidate.get("post_qc_sha256")
+                        or not structured
+                        or manual.get("structured_review_sha256") != structured_sha
+                    ):
+                        candidate_receipts_valid = False
+                        break
+                if (
+                    declared_adoption_sha != actual_adoption_sha
+                    or stored.get("artifact_sha256") != job.get("artifact_sha256")
+                    or stored.get("execution_input_sha256") != job.get("execution_input_sha256")
+                    or adoption.get("adoption_sha256") != declared_adoption_sha
+                    or not manifest
+                    or manifest.get("kind") != "comic_panel_candidate_manifest"
+                    or manifest.get("execution_input_sha256") != job.get("execution_input_sha256")
+                    or int(manifest.get("target_count") or 0) != int(policy.get("target_count") or 0)
+                    or len(candidates) < int(policy.get("target_count") or 0)
+                    or stored.get("candidate_manifest_sha256") != manifest_sha
+                    or stored.get("spend_envelope_id") != manifest.get("spend_envelope_id")
+                    or stored.get("spend_authorization_sha256") != manifest.get("spend_authorization_sha256")
+                    or not selected
+                    or selected.get("artifact_sha256") != stored.get("artifact_sha256")
+                    or selected.get("master_sha256") != stored.get("master_sha256")
+                    or not candidate_receipts_valid
+                ):
+                    add(findings, "block", "candidate_adoption_stale", str(adoption_path),
+                        f"{pid} adoption receipt 未绑定完整候选/B14/预算包/当前执行输入。", "image",
+                        "重新完成同一预算 envelope 内的逐候选 B14 与采用事务，禁止手改 active panel。")
+                    continue
             acceptance_status = (
                 panel_acceptance.panel_acceptance_status(root, job)
                 if panel_acceptance is not None
@@ -1541,6 +1770,7 @@ def run_image_preflight(root: Path, chapter: str, findings: list[dict[str, Any]]
     if isinstance(jobs, dict):
         check_backend(root, jobs, findings, notes)
         check_prompt_compiler(jobs, findings)
+        check_identity_execution_contracts(root, chapter, jobs, findings)
     if paths["panel_script"].is_file() and paths["layout"].is_file():
         check_panel_jobs_stale(root, chapter, findings, notes)
     if isinstance(panel_script, dict) and isinstance(layout, dict) and isinstance(jobs, dict):

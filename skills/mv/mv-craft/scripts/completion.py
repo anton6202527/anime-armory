@@ -42,6 +42,23 @@ OUTPUT_HEALTH_STAGES = (
     "disclosure", "provenance", "review", "handoff",
 )
 CONTROLLED_COMPLETION_STAGES = frozenset(OUTPUT_HEALTH_STAGES)
+FINAL_VERDICT_REL = "生产数据/completion_verdict.json"
+FINAL_RELEASE_INPUTS = (
+    "_设置.md",
+    "成片_MV.mp4",
+    "成片_MV_master.mov",
+    "生产数据/delivery_qc/delivery_qc.json",
+    "合规/ai_usage.json",
+    "合规/provenance.json",
+    "生产数据/review/review_receipt.json",
+    "合规/release_decision.json",
+)
+_AUTOMATED_REVIEWER = re.compile(
+    r"(?:^|[^a-z0-9])(agent|ai|assistant|automation|bot|chatgpt|claude|codex|delegate|listener|"
+    r"machine|model|producer|supervisor|system)(?:[^a-z0-9]|$)|"
+    r"^(?:代理|制作代理|自动化|机器人|模型|系统|系统代理|执行器)(?:$|[:：/#@])",
+    re.IGNORECASE,
+)
 
 
 _SETTINGS_BY_STAGE = {
@@ -2050,10 +2067,7 @@ def _health_review(root):
 def _health_handoff(root):
     rel = "合规/handoff_receipt.json"
     payload = _payload(root, rel)
-    required = (
-        "成片_MV.mp4", "合规/ai_usage.json", "合规/provenance.json",
-        "生产数据/review/review_receipt.json", "合规/release_decision.json",
-    )
+    required = FINAL_RELEASE_INPUTS
     errors = []
     if not isinstance(payload, dict) or payload.get("kind") != "mv_handoff_receipt":
         return _result("handoff", [f"缺或损坏 {rel}"])
@@ -2063,6 +2077,9 @@ def _health_handoff(root):
     errors.extend(_current_binding_errors(
         root, payload.get("inputs_sha256") or {}, label="handoff_receipt.inputs_sha256", required=required,
     ))
+    current_digest = canonical_final_release_digest(root)
+    if payload.get("release_digest") != current_digest:
+        errors.append("handoff receipt 未绑定当前 canonical release digest")
     errors.extend(_release_decision_errors(root))
     runtime = contract.runtime_state_from_settings(mv_utils.parse_settings(root))
     if runtime["publish_target"] in ("", "未定"):
@@ -2133,14 +2150,82 @@ def _valid_reviewer(value):
     lowered = raw.lower()
     if len(raw) < 2 or lowered in {"<name>", "待填", "待定", "unknown", "ai", "匿名"}:
         return False
-    return not any(token in lowered for token in (
-        "codex", "chatgpt", "claude", "agent", "bot", "机器人", "自动化",
-    ))
+    return not _AUTOMATED_REVIEWER.search(raw)
 
 
 def _valid_notes(value):
     raw = str(value or "").strip()
     return bool(raw and raw not in {"<notes>", "待填", "待定", "unknown", "n/a"})
+
+
+def final_release_inputs(root):
+    """Return the sole exact-byte input set for final MV completion."""
+    return {
+        rel: mv_utils.content_hash(os.path.join(root, rel))
+        for rel in FINAL_RELEASE_INPUTS
+    }
+
+
+def canonical_final_release_digest(root):
+    return mv_utils.json_hash({
+        "schema_version": 1,
+        "kind": "mv_final_release_digest",
+        "inputs_sha256": final_release_inputs(root),
+    })
+
+
+def final_completion_verdict(root):
+    """Compute the only MV-level completion answer.
+
+    Stage health, progress markers and provider success remain evidence.  A
+    project is complete only when all current release inputs pass and the
+    named handoff receipt accepts this exact canonical digest.
+    """
+    root = os.path.abspath(root)
+    rows = [stage_health(root, stage) for stage in (
+        "compose", "disclosure", "provenance", "review",
+    )]
+    blockers = [
+        {"stage": row["stage"], "message": message}
+        for row in rows for message in row.get("errors") or []
+    ]
+    blockers.extend(
+        {"stage": "release_decision", "message": message}
+        for message in _release_decision_errors(root)
+    )
+    inputs = final_release_inputs(root)
+    missing = [rel for rel, digest in inputs.items() if not digest]
+    blockers.extend(
+        {"stage": "release_inputs", "message": f"缺最终完成输入：{rel}"}
+        for rel in missing
+    )
+    release_digest = canonical_final_release_digest(root)
+    handoff = _payload(root, "合规/handoff_receipt.json") or {}
+    handoff_health = _health_handoff(root) if isinstance(handoff, dict) and handoff else None
+    acceptance_current = bool(
+        not blockers
+        and handoff_health
+        and handoff_health.get("ok") is True
+        and handoff.get("release_digest") == release_digest
+    )
+    status = "blocked" if blockers else ("complete" if acceptance_current else "ready_for_acceptance")
+    return {
+        "schema_version": 1,
+        "kind": "mv_completion_verdict",
+        "generated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "project_root": root,
+        "release_digest": release_digest,
+        "status": status,
+        "complete": status == "complete",
+        "inputs_sha256": inputs,
+        "acceptance": {
+            "path": "合规/handoff_receipt.json",
+            "current": acceptance_current,
+            "reviewer": handoff.get("reviewer") or "",
+            "issues": (handoff_health or {}).get("errors") or [],
+        },
+        "blockers": blockers,
+    }
 
 
 def _write_handoff_receipt(root, reviewer, notes=""):
@@ -2155,10 +2240,7 @@ def _write_handoff_receipt(root, reviewer, notes=""):
     prereq_errors.extend(f"release: {message}" for message in _release_decision_errors(root))
     if prereq_errors:
         raise ValueError("handoff 前置未通过：\n- " + "\n- ".join(prereq_errors))
-    inputs = (
-        "成片_MV.mp4", "合规/ai_usage.json", "合规/provenance.json",
-        "生产数据/review/review_receipt.json", "合规/release_decision.json",
-    )
+    inputs = FINAL_RELEASE_INPUTS
     runtime = contract.runtime_state_from_settings(mv_utils.parse_settings(root))
     if runtime["publish_target"] in ("", "未定"):
         raise ValueError("handoff 前必须在 _设置.md 明确发行目标平台")
@@ -2170,6 +2252,7 @@ def _write_handoff_receipt(root, reviewer, notes=""):
         "reviewed_at": datetime.now().astimezone().isoformat(timespec="seconds"),
         "publish_target": runtime["publish_target"],
         "notes": str(notes or "").strip(),
+        "release_digest": canonical_final_release_digest(root),
         "confirmation": {
             "kind": "explicit_current_delivery_acceptance",
             "accepted_current_delivery": True,
@@ -2261,6 +2344,10 @@ def mark_stage_complete(root, stage, *, reviewer="", notes=""):
     root = os.path.abspath(root)
     if stage not in CONTROLLED_COMPLETION_STAGES:
         raise ValueError(f"stage={stage} 未登记 completion controller")
+    # Normalize derived import flags before recomputing any receipt chain.
+    # Doing this after acceptance used to mutate _meta.json immediately after
+    # the handoff was signed, making a just-completed release stale.
+    mv_utils.update_meta_flags(root)
     predecessor_errors = _predecessor_completion_errors(root, stage)
     if predecessor_errors:
         raise ValueError(
@@ -2276,7 +2363,6 @@ def mark_stage_complete(root, stage, *, reviewer="", notes=""):
     changed = mv_utils.update_progress_stage(root, stage, "[x]")
     if not changed:
         raise ValueError(f"_进度.md 未找到 stage={stage}；先同步完整阶段表")
-    mv_utils.update_meta_flags(root)
     return health
 
 
@@ -2292,11 +2378,29 @@ def main(argv=None):
     p_complete.add_argument("stage", choices=OUTPUT_HEALTH_STAGES)
     p_complete.add_argument("--reviewer", default="")
     p_complete.add_argument("--notes", default="")
+    p_verdict = sub.add_parser("verdict")
+    p_verdict.add_argument("project_root")
+    p_verdict.add_argument("--write", action="store_true")
+    p_verdict.add_argument("--json", action="store_true")
     args = ap.parse_args(argv)
     root = os.path.abspath(args.project_root)
     if not os.path.isdir(root):
         print(f"[err] 找不到作品根：{root}", file=sys.stderr)
         return 2
+    if args.command == "verdict":
+        verdict = final_completion_verdict(root)
+        if args.write:
+            mv_utils.write_json(os.path.join(root, FINAL_VERDICT_REL), verdict)
+        if args.json:
+            print(json.dumps(verdict, ensure_ascii=False, indent=2))
+        else:
+            print(
+                f"# mv completion status={verdict['status']} complete={verdict['complete']} "
+                f"digest={verdict['release_digest']}"
+            )
+            for row in verdict["blockers"]:
+                print(f"- BLOCK [{row['stage']}] {row['message']}")
+        return 0 if verdict["status"] != "blocked" else 1
     if args.command == "health":
         rows = [stage_health(root, args.stage)] if args.stage else receipt_health(root)
         if args.json:

@@ -4,6 +4,8 @@ import os
 import sys
 from pathlib import Path
 
+import pytest
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 if HERE not in sys.path:
     sys.path.insert(0, HERE)
@@ -35,6 +37,29 @@ def _write_inputs(root: Path, ep: str = "第1集") -> None:
         ]
     }, ensure_ascii=False), encoding="utf-8")
     (ep_dir / "镜头时长.json").write_text(json.dumps({"Clip_01": 4, "Clip_02": 5}, ensure_ascii=False), encoding="utf-8")
+    (ep_dir / "字幕_中文.srt").write_text(
+        "1\n00:00:00,000 --> 00:00:04,000\n你终于来了。\n\n"
+        "2\n00:00:04,000 --> 00:00:09,000\n令牌是真的。\n",
+        encoding="utf-8",
+    )
+    audio = root / "合成" / ep / "配音" / "voice_zh.wav"
+    audio.parent.mkdir(parents=True)
+    audio.write_bytes(b"RIFF-guide-voice-test")
+
+
+def _record_reviews(root: Path, ep: str = "第1集", *, table: bool = True, animatic: bool = True) -> None:
+    if animatic:
+        sap._ensure_animatic_preview(root, ep)
+    if table:
+        sap.record_review_execution(
+            root, ep, "table_read", reviewer_kind="executor_text_audio", coverage=1.0,
+            reviewed_line_count=2, review_notes=["逐句围读，人物口吻可区分。"],
+        )
+    if animatic:
+        sap.record_review_execution(
+            root, ep, "animatic", reviewer_kind="executor_visual_audio", coverage=1.0,
+            watched_duration_sec=9, review_notes=["完整听看音画与字幕，节奏可读。"],
+        )
 
 
 def test_scaffold_and_check_blocks_draft(tmp_path: Path) -> None:
@@ -44,11 +69,19 @@ def test_scaffold_and_check_blocks_draft(tmp_path: Path) -> None:
     report = sap.check(tmp_path, "第1集", kind="both")
 
     assert report["status"] == "block"
-    assert report["summary"]["block"] == 7
+    assert report["summary"]["block"] == 9
+
+
+def test_confirm_flag_cannot_self_attest_without_execution_receipt(tmp_path: Path) -> None:
+    _write_inputs(tmp_path)
+
+    with pytest.raises(ValueError, match="不能自行证明"):
+        sap.scaffold(tmp_path, "第1集", kind="table_read", confirmed=True)
 
 
 def test_confirmed_packets_pass(tmp_path: Path) -> None:
     _write_inputs(tmp_path)
+    _record_reviews(tmp_path)
 
     sap.scaffold(tmp_path, "第1集", kind="both", confirmed=True)
     unsigned = sap.check(tmp_path, "第1集", kind="both", write_missing=True)
@@ -65,6 +98,7 @@ def test_confirmed_packets_pass(tmp_path: Path) -> None:
 
 def test_confirmed_packet_blocks_after_storyboard_changes(tmp_path: Path) -> None:
     _write_inputs(tmp_path)
+    _record_reviews(tmp_path, table=False)
     sap.scaffold(tmp_path, "第1集", kind="animatic", confirmed=True)
 
     sb = tmp_path / "脚本" / "第1集" / "storyboard.json"
@@ -81,7 +115,7 @@ def test_confirmed_packet_blocks_after_storyboard_changes(tmp_path: Path) -> Non
 def test_table_read_reports_estimate_only_when_final_timing_is_absent(tmp_path: Path) -> None:
     _write_inputs(tmp_path)
     timing = tmp_path / "合成" / "第1集" / "配音" / "timing_estimate.json"
-    timing.parent.mkdir(parents=True)
+    timing.parent.mkdir(parents=True, exist_ok=True)
     timing.write_text(json.dumps({
         "kind": "n2d_timing_estimate",
         "audio_generated": False,
@@ -110,6 +144,7 @@ def test_table_read_ignores_premature_story_economy_block(tmp_path: Path) -> Non
 
 def test_stage2_quality_report_does_not_invalidate_approved_table_read(tmp_path: Path) -> None:
     _write_inputs(tmp_path)
+    _record_reviews(tmp_path, animatic=False)
     sap.scaffold(tmp_path, "第1集", kind="table_read", confirmed=True)
     _sign(tmp_path, "table_read")
 

@@ -14,6 +14,7 @@ import json
 import os
 import re
 import sys
+import tempfile
 from typing import Any, Iterable
 
 SCRIPT_DIR = os.path.dirname(__file__)
@@ -94,10 +95,18 @@ FILE_STAGE_HINTS: dict[str, tuple[tuple[str, tuple[str, ...]], ...]] = {
         ("script", ("write_script.py", "导演视角", "视觉蓝图")),
     ),
     "mv-video": (
-        ("video", ("select", "register", "accept")),
+        ("video", ("select", "register", "accept", "video_qc.py")),
         ("video_jobs", ("video_jobs.py", "jobs_manifest")),
     ),
 }
+
+SAFE_REPLAY_HARD_STOPS = (
+    "phase_budget_missing_or_expired",
+    "phase_budget_scope_or_input_drift",
+    "rights_or_compliance_boundary",
+    "irreversible_overwrite_or_publish",
+    "final_human_acceptance",
+)
 
 
 def now_iso() -> str:
@@ -120,13 +129,41 @@ def plan_paths(root: str) -> tuple[str, str]:
     return os.path.join(production_dir(root), PLAN_JSON), os.path.join(production_dir(root), PLAN_MD)
 
 
+def _fsync_dir(path: str) -> None:
+    try:
+        fd = os.open(path, os.O_RDONLY)
+        try:
+            os.fsync(fd)
+        finally:
+            os.close(fd)
+    except OSError:  # pragma: no cover - unsupported filesystems
+        pass
+
+
+def _atomic_write_text(path: str, text: str) -> None:
+    directory = os.path.dirname(path)
+    os.makedirs(directory, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(prefix=f".{os.path.basename(path)}.tmp.", dir=directory)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            fh.write(text)
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(tmp, path)
+        _fsync_dir(directory)
+    except BaseException:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
+
+
 def write_json(path: str, payload: dict[str, Any]) -> None:
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    tmp = f"{path}.tmp"
-    with open(tmp, "w", encoding="utf-8") as fh:
-        json.dump(payload, fh, ensure_ascii=False, indent=2, sort_keys=True)
-        fh.write("\n")
-    os.replace(tmp, path)
+    _atomic_write_text(
+        path,
+        json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+    )
 
 
 def read_json(path: str) -> dict[str, Any] | None:
@@ -143,8 +180,12 @@ def load_meta(root: str) -> dict[str, Any]:
 
 def skill_name_for_relpath(path: str) -> str | None:
     parts = path.split("/")
-    if len(parts) >= 2 and parts[0] == "skills":
-        return parts[1]
+    if len(parts) >= 2 and parts[0] == "skills" and parts[1] == LINE:
+        # 系列总入口位于 skills/mv/*；子 skill 位于
+        # skills/mv/mv-<name>/*。取 parts[1] 会把所有子 skill 误判为 mv/setup。
+        if len(parts) >= 3 and parts[2].startswith(f"{LINE}-"):
+            return parts[2]
+        return LINE
     return None
 
 
@@ -399,17 +440,25 @@ def build_execution_steps(root: str, plan: dict[str, Any]) -> list[dict[str, Any
                 "run_when": "用户确认无需返工",
             })
         return steps
-    steps.append({
-        "type": "agent_step",
-        "purpose": "确认返工范围",
-        "instruction": f"向用户确认从 {stage_label(plan.get('rerun_from'))} 回放到 {stage_label(plan.get('rerun_until'))}，再进入对应 mv skill。",
-    })
     if stage_index(plan.get("rerun_from")) <= stage_index("video"):
         steps.append({
-            "type": "agent_step",
+            "type": "machine_action",
+            "action": "snapshot_current_outputs",
             "purpose": "保留当前 MV 产物",
-            "instruction": "返工可能触及蓝图、分镜、出图或视频；执行前先保留当前关键 JSON、PNG、MP4 和成片。",
+            "requires_user_confirmation": False,
+            "strategy": "versioned_copy_before_replace",
+            "scope": ["JSON", "PNG", "video", "master", "delivery"],
         })
+    steps.append({
+        "type": "machine_action",
+        "action": "replay_reversible_stage_range",
+        "purpose": "按当前合同执行最小安全回放",
+        "from_stage": plan.get("rerun_from"),
+        "through_stage": plan.get("rerun_until"),
+        "requires_user_confirmation": False,
+        "authorization_scope": "current_contract_and_existing_phase_budget_only",
+        "stop_before": list(SAFE_REPLAY_HARD_STOPS),
+    })
     steps.append({"type": "command", "purpose": "查看生产前沿", "command": 'python3 skills/mv/mv-progress/scan.py "<作品根>"', "run_when": "返工前后"})
     steps.append({
         "type": "command",
@@ -504,6 +553,9 @@ def build_plan(root: str, *, bootstrap: bool = True) -> dict[str, Any]:
         plan["notes"].append("本次变化只影响控制面，不要求 MV 返工。")
     plan["execution_steps"] = build_execution_steps(root, plan)
     plan["commands"] = [step["command"] for step in plan["execution_steps"] if step.get("type") == "command"]
+    plan["machine_actions"] = [
+        step for step in plan["execution_steps"] if step.get("type") == "machine_action"
+    ]
     return plan
 
 
@@ -550,10 +602,16 @@ def write_plan(root: str, plan: dict[str, Any]) -> tuple[str, str]:
         if step.get("type") == "command":
             suffix = f"（{step.get('run_when')}）" if step.get("run_when") else ""
             lines.append(f"- 可执行命令{suffix}：`{step.get('command')}`")
+        elif step.get("type") == "machine_action":
+            stops = ", ".join(step.get("stop_before") or [])
+            suffix = f"；硬边界={stops}" if stops else ""
+            lines.append(
+                f"- 机器动作：`{step.get('action')}`"
+                f"（无需逐次确认={not step.get('requires_user_confirmation', True)}{suffix}）"
+            )
         else:
             lines.append(f"- 人工/AI判断：{step.get('instruction')}")
-    with open(md_path, "w", encoding="utf-8") as fh:
-        fh.write("\n".join(lines).rstrip() + "\n")
+    _atomic_write_text(md_path, "\n".join(lines).rstrip() + "\n")
     return json_path, md_path
 
 

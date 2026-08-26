@@ -4,22 +4,27 @@
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
+import fcntl
 import hashlib
 import json
 import math
 import os
 import re
+import shutil
 import sys
+import uuid
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator
 
 
 COMIC_LIB = Path(__file__).resolve().parents[2] / "_lib"
 if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
-from platform_profiles import profile_for_platform, validate_manifest
+from platform_profiles import is_publish_like_usage, profile_for_platform, validate_manifest
 from progress import update_checklist, update_stage
-from text_metadata import normalize_text_language, unsupported_lettering_items
+from text_metadata import infer_language_metadata, normalize_text_language, text_from_item, unsupported_lettering_items
+import text_renderer_adapter
 import lettering_contract
 
 
@@ -467,14 +472,129 @@ def irregular_points(x: int, y: int, w: int, h: int, seed: str, tail: bool) -> t
     return points, tail_h
 
 
-def draw_irregular_bubble(draw, rect: tuple[int, int, int, int], item_type: str, seed: str) -> tuple[int, int, int, int]:
+def _anchor_point_from_geometry(panel: dict[str, Any], image: Any, value: Any) -> tuple[int, int] | None:
+    """Map an authored point/bbox in layout or normalized coordinates to panel pixels."""
+    if not isinstance(value, dict):
+        return None
+    geometry = value.get("bbox") if isinstance(value.get("bbox"), dict) else value.get("rect") if isinstance(value.get("rect"), dict) else value
+    if not isinstance(geometry, dict) or "x" not in geometry or "y" not in geometry:
+        return None
+    raw_x, raw_y = float(geometry.get("x") or 0), float(geometry.get("y") or 0)
+    gw, gh = float(geometry.get("w") or 0), float(geometry.get("h") or 0)
+    normalized = all(0.0 <= value <= 1.0 for value in (raw_x, raw_y, gw, gh)) and (raw_x or raw_y or gw or gh)
+    gx, gy = raw_x, raw_y
+    gx += gw / 2
+    gy += gh / 2
+    px, py = float(panel.get("x") or 0), float(panel.get("y") or 0)
+    pw, ph = max(1.0, float(panel.get("w") or image.width)), max(1.0, float(panel.get("h") or image.height))
+    if normalized:
+        mapped_x, mapped_y = gx * image.width, gy * image.height
+    else:
+        mapped_x = (gx - px) / pw * image.width
+        mapped_y = (gy - py) / ph * image.height
+    return (
+        max(0, min(image.width - 1, int(round(mapped_x)))),
+        max(0, min(image.height - 1, int(round(mapped_y)))),
+    )
+
+
+def resolve_tail_target(panel: dict[str, Any], slot: dict[str, Any], image: Any) -> dict[str, Any]:
+    """Resolve a dialogue tail against an explicit speaker target/anchor only."""
+    tail = slot.get("tail") if isinstance(slot.get("tail"), dict) else {}
+    speaker = str(slot.get("speaker") or "").strip()
+    raw_target = tail.get("target")
+    target = str(raw_target or speaker).strip()
+
+    for key in ("target_point", "target_bbox", "anchor", "bbox", "rect"):
+        if isinstance(tail.get(key), dict):
+            point = _anchor_point_from_geometry(panel, image, tail[key])
+            if point is not None:
+                return {"point": point, "resolution": f"tail.{key}", "target": target, "speaker": speaker}
+    if isinstance(raw_target, dict):
+        point = _anchor_point_from_geometry(panel, image, raw_target)
+        if point is not None:
+            return {"point": point, "resolution": "tail.target_geometry", "target": target, "speaker": speaker}
+
+    anchors = panel.get("speaker_anchors")
+    candidates: list[tuple[str, Any]] = []
+    if isinstance(anchors, dict):
+        for key, value in anchors.items():
+            candidates.append((str(key), value))
+    elif isinstance(anchors, list):
+        for value in anchors:
+            if isinstance(value, dict):
+                key = next((str(value.get(field) or "") for field in ("speaker", "character_id", "subject_id", "id", "name") if value.get(field)), "")
+                candidates.append((key, value))
+    for key, value in candidates:
+        if target and key not in {target, speaker}:
+            continue
+        point = _anchor_point_from_geometry(panel, image, value)
+        if point is not None:
+            return {"point": point, "resolution": "panel.speaker_anchors", "target": target or key, "speaker": speaker}
+
+    for collection in ("character_regions", "subject_regions"):
+        for value in panel.get(collection) or []:
+            if not isinstance(value, dict):
+                continue
+            labels = {str(value.get(field) or "") for field in ("speaker", "character_id", "subject_id", "region_id", "id", "name") if value.get(field)}
+            if target and target not in labels and speaker not in labels:
+                continue
+            point = _anchor_point_from_geometry(panel, image, value)
+            if point is not None:
+                return {"point": point, "resolution": f"panel.{collection}", "target": target, "speaker": speaker}
+    return {"point": None, "resolution": "deterministic_legacy_fallback", "target": target, "speaker": speaker}
+
+
+def _tail_triangle(rect: tuple[int, int, int, int], target: tuple[int, int]) -> list[tuple[int, int]]:
+    x, y, w, h = rect
+    cx, cy = x + w / 2, y + h / 2
+    tx, ty = target
+    dx, dy = tx - cx, ty - cy
+    base_half = max(12, min(34, min(w, h) // 8))
+    if abs(dx) / max(1, w) >= abs(dy) / max(1, h):
+        edge_x = x + w if dx >= 0 else x
+        edge_y = max(y + base_half, min(y + h - base_half, int(ty)))
+        base = [(edge_x, edge_y - base_half), (edge_x, edge_y + base_half)]
+    else:
+        edge_y = y + h if dy >= 0 else y
+        edge_x = max(x + base_half, min(x + w - base_half, int(tx)))
+        base = [(edge_x - base_half, edge_y), (edge_x + base_half, edge_y)]
+    return [base[0], (int(tx), int(ty)), base[1]]
+
+
+def draw_irregular_bubble(
+    draw,
+    rect: tuple[int, int, int, int],
+    item_type: str,
+    seed: str,
+    *,
+    target_point: tuple[int, int] | None = None,
+) -> tuple[tuple[int, int, int, int], dict[str, Any]]:
     x, y, w, h = rect
     fill = (252, 248, 238) if item_type == "dialogue" else (244, 238, 220)
     tail = item_type == "dialogue"
-    points, tail_h = irregular_points(x, y, w, h, seed, tail)
+    # A resolved speaker target gets a real directional tail outside the body.
+    # Legacy layouts retain the deterministic in-slot tail for compatibility,
+    # but the receipt truthfully marks that fallback.
+    points, tail_h = irregular_points(x, y, w, h, seed, tail and target_point is None)
+    tail_points: list[tuple[int, int]] = []
+    legacy_tip: tuple[int, int] | None = None
+    if tail_h and target_point is None:
+        body_h = max(24, h - tail_h)
+        tail_base = x + int(w * (0.56 + (stable_unit(seed, 40) - 0.5) * 0.18))
+        legacy_tip = (tail_base, y + body_h + tail_h)
+    if tail and target_point is not None:
+        tail_points = _tail_triangle((x, y, w, h), target_point)
+        draw.polygon(tail_points, fill=fill)
+        draw.line(tail_points + [tail_points[0]], fill=(20, 20, 20), width=3, joint="curve")
     draw.polygon(points, fill=fill)
     draw.line(points + [points[0]], fill=(20, 20, 20), width=3, joint="curve")
-    return x, y, w, max(24, h - tail_h)
+    receipt = {
+        "rendered": bool(tail),
+        "tail_tip": list(target_point) if target_point is not None else list(legacy_tip) if legacy_tip is not None else [],
+        "target_resolved": target_point is not None,
+    }
+    return (x, y, w, max(24, h - tail_h)), receipt
 
 
 def draw_centered_lines(draw, x: int, y: int, w: int, lines: list[str], font, line_h: int, fill: tuple[int, int, int], spacing: int) -> int:
@@ -496,7 +616,11 @@ def draw_text_block(
     style: dict,
     font_path: str,
     seed: str,
-) -> None:
+    *,
+    panel: dict[str, Any] | None = None,
+    slot: dict[str, Any] | None = None,
+    renderer_context: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     x, y, w, h = rect
     pad = max(14, int(min(w, h) * 0.12))
     size = int(style.get("size") or (72 if item_type == "sfx" else 44))
@@ -511,13 +635,78 @@ def draw_text_block(
             tw, _ = text_size(draw, line, font)
             draw.text((x + max(0, (w - tw) // 2), yy), line, font=font, fill=(245, 239, 220), stroke_width=4, stroke_fill=(25, 20, 18))
             yy += line_h + 4
-        return
+        return {"rendered": False, "reason": "sfx_has_no_dialogue_tail"}
 
-    body_x, body_y, body_w, body_h = draw_irregular_bubble(draw, rect, item_type, seed)
+    target_receipt = resolve_tail_target(panel or {}, slot or {}, image) if item_type == "dialogue" else {
+        "point": None, "resolution": "not_dialogue", "target": "", "speaker": ""
+    }
+    (body_x, body_y, body_w, body_h), tail_receipt = draw_irregular_bubble(
+        draw,
+        rect,
+        item_type,
+        seed,
+        target_point=target_receipt.get("point"),
+    )
     text_x = body_x + pad
     text_y = body_y + pad
     text_w = max(40, body_w - pad * 2)
     text_h = max(30, body_h - pad * 2)
+    renderer_context = renderer_context or {}
+    professional_receipt: dict[str, Any] = {}
+    glyph_receipt: dict[str, Any] = {}
+    if renderer_context:
+        full_text = "\n".join(part for part in (str(text_zh or "").strip(), str(text_en or "").strip()) if part)
+        metadata = infer_language_metadata(full_text, str(renderer_context.get("text_language") or ""))
+        raw_direction = str(style.get("direction") or "horizontal").strip().lower()
+        writing_mode = "vertical-rl" if raw_direction in {"vertical", "竖排", "縦書き", "縦書"} else "horizontal-tb"
+        selection = text_renderer_adapter.select_renderer(
+            language_mode=str(renderer_context.get("text_language") or metadata.get("lang") or "中文"),
+            direction=str(metadata.get("dir") or "ltr"),
+            writing_mode=writing_mode,
+            root=renderer_context.get("root"),
+        )
+        glyph_receipt = text_renderer_adapter.validate_glyph_coverage(full_text, font_path=font_path)
+        needs_professional = bool(renderer_context.get("publication_required")) or writing_mode.startswith("vertical") or metadata.get("dir") == "rtl" or metadata.get("line_break") in {"dictionary_required", "bidi_required"}
+        if selection.get("publication_claim_allowed"):
+            overlay_dir = Path(renderer_context["overlay_dir"])
+            overlay_path = overlay_dir / f"{re.sub(r'[^0-9A-Za-z_.-]+', '_', seed)}.png"
+            professional_receipt = text_renderer_adapter.render_text_rgba(
+                {
+                    "text": full_text,
+                    "language_mode": str(renderer_context.get("text_language") or metadata.get("lang") or ""),
+                    "direction": str(metadata.get("dir") or "ltr"),
+                    "writing_mode": writing_mode,
+                    "font_path": font_path,
+                    "font_size": size,
+                    "width": text_w,
+                    "height": text_h,
+                    "fill": "#141414",
+                },
+                overlay_path,
+                root=renderer_context.get("root"),
+                adapter=selection,
+            )
+            if professional_receipt.get("status") == "rendered":
+                from PIL import Image
+
+                with Image.open(overlay_path) as rendered_text:
+                    overlay = rendered_text.convert("RGBA")
+                    overlay.thumbnail((text_w, text_h), getattr(Image, "Resampling", Image).LANCZOS)
+                    pos = (text_x + max(0, (text_w - overlay.width) // 2), text_y + max(0, (text_h - overlay.height) // 2))
+                    image.paste(overlay, pos, overlay)
+                professional_receipt["output_path"] = str(overlay_path.relative_to(renderer_context["root"]))
+                return {
+                    **tail_receipt,
+                    "speaker": target_receipt.get("speaker", ""),
+                    "target": target_receipt.get("target", ""),
+                    "target_resolution": target_receipt.get("resolution", ""),
+                    "target_point": list(target_receipt["point"]) if target_receipt.get("point") is not None else [],
+                    "text_renderer_receipt": professional_receipt,
+                    "glyph_coverage_receipt": glyph_receipt,
+                }
+        if needs_professional:
+            reason = professional_receipt.get("reason") or selection.get("reason") or "professional text renderer did not produce current pixels"
+            raise RuntimeError(f"文字 {seed} 需要专业 shaping/竖排或发布级 renderer：{reason}")
     zh_font, zh_lines, zh_h, en_font, en_lines, en_h, gap = fit_bilingual_lines(
         draw, text_zh, text_en, font_path, size, text_w, text_h
     )
@@ -529,6 +718,20 @@ def draw_text_block(
     if en_lines and en_font:
         yy += gap
         draw_centered_lines(draw, text_x, yy, text_w, en_lines, en_font, en_h, (58, 58, 58), 3)
+    return {
+        **tail_receipt,
+        "speaker": target_receipt.get("speaker", ""),
+        "target": target_receipt.get("target", ""),
+        "target_resolution": target_receipt.get("resolution", ""),
+        "target_point": list(target_receipt["point"]) if target_receipt.get("point") is not None else [],
+        "text_renderer_receipt": {
+            "kind": "comic_text_render_receipt",
+            "status": "draft_fallback",
+            "renderer": "pillow_draft",
+            "publication_claim_allowed": False,
+        },
+        "glyph_coverage_receipt": glyph_receipt,
+    }
 
 
 def collect_group_text(group: list[dict], fields: tuple[str, ...], *, sfx: bool) -> str:
@@ -562,7 +765,15 @@ def display_text_pair(group: list[dict], item_type: str, text_language: str) -> 
     return zh, ""
 
 
-def apply_lettering(image, panel_id: str, slot_info: dict[str, Any], items: list[dict], font_path: str, text_language: str):
+def apply_lettering(
+    image,
+    panel_id: str,
+    slot_info: dict[str, Any],
+    items: list[dict],
+    font_path: str,
+    text_language: str,
+    renderer_context: dict[str, Any] | None = None,
+):
     from PIL import ImageDraw
 
     panel = slot_info.get("panel") or {"w": image.width, "h": image.height}
@@ -573,7 +784,14 @@ def apply_lettering(image, panel_id: str, slot_info: dict[str, Any], items: list
         sid = item.get("slot_id") or item.get("item_id")
         groups.setdefault(str(sid), []).append(item)
     fallback_y = 32
-    stats = {"drawn_items": 0, "skipped_empty_items": [], "empty_slots_removed": []}
+    stats = {
+        "drawn_items": 0,
+        "skipped_empty_items": [],
+        "empty_slots_removed": [],
+        "tail_receipts": [],
+        "text_renderer_receipts": [],
+        "glyph_coverage_receipts": [],
+    }
     used_slots: set[str] = set()
     for sid, group in groups.items():
         first = group[0]
@@ -590,7 +808,27 @@ def apply_lettering(image, panel_id: str, slot_info: dict[str, Any], items: list
         else:
             rect = (32, fallback_y, min(560, image.width - 64), 140)
             fallback_y += 160
-        draw_text_block(image, draw, rect, primary_text, secondary_text, item_type, style, font_path, f"{panel_id}:{sid}")
+            slot = {"slot_id": sid, "type": item_type, "speaker": first.get("speaker", ""), "tail": first.get("tail") or {}}
+        tail_receipt = draw_text_block(
+            image,
+            draw,
+            rect,
+            primary_text,
+            secondary_text,
+            item_type,
+            style,
+            font_path,
+            f"{panel_id}:{sid}",
+            panel=panel,
+            slot=slot,
+            renderer_context=renderer_context,
+        )
+        if item_type == "dialogue":
+            stats["tail_receipts"].append({"panel_id": panel_id, "slot_id": sid, **tail_receipt})
+        if tail_receipt.get("text_renderer_receipt"):
+            stats["text_renderer_receipts"].append({"panel_id": panel_id, "slot_id": sid, **tail_receipt["text_renderer_receipt"]})
+        if tail_receipt.get("glyph_coverage_receipt"):
+            stats["glyph_coverage_receipts"].append({"panel_id": panel_id, "slot_id": sid, **tail_receipt["glyph_coverage_receipt"]})
         stats["drawn_items"] += len(group)
     for sid in slots:
         if sid not in used_slots:
@@ -617,7 +855,7 @@ def build_manifest(
     for pid in panel_ids:
         img = find_panel_image(panel_dir, pid)
         if img:
-            panels.append({"panel_id": pid, "path": str(img.relative_to(root))})
+            panels.append({"panel_id": pid, "path": str(img.relative_to(root)), "sha256": sha256_file(img), "size_bytes": img.stat().st_size})
         else:
             missing.append(pid)
     return {
@@ -651,6 +889,61 @@ def build_manifest(
     }
 
 
+def text_renderer_preflight(
+    root: Path,
+    lettering: dict | None,
+    text_language: str,
+    font_path: str,
+    usage: str,
+) -> dict[str, Any]:
+    """Select real renderers and glyph proof for the current lettering bytes."""
+    publication_required = is_publish_like_usage(usage)
+    selections: dict[str, dict[str, Any]] = {}
+    glyph_receipts: list[dict[str, Any]] = []
+    blockers: list[dict[str, str]] = []
+    item_count = 0
+    for item in (lettering or {}).get("items") or []:
+        if not isinstance(item, dict):
+            continue
+        text = text_from_item(item, text_language)
+        if not text:
+            continue
+        item_count += 1
+        metadata = infer_language_metadata(text, text_language)
+        style = item.get("style") if isinstance(item.get("style"), dict) else {}
+        raw_direction = str(style.get("direction") or "horizontal").strip().lower()
+        writing_mode = "vertical-rl" if raw_direction in {"vertical", "竖排", "縦書き", "縦書"} else "horizontal-tb"
+        selection = text_renderer_adapter.select_renderer(
+            language_mode=text_language,
+            direction=str(metadata.get("dir") or "ltr"),
+            writing_mode=writing_mode,
+            root=root,
+        )
+        selections[str(selection.get("selection_sha256") or selection.get("adapter_id") or len(selections))] = selection
+        glyph = text_renderer_adapter.validate_glyph_coverage(text, font_path=font_path)
+        glyph_receipts.append({"item_id": str(item.get("item_id") or ""), **glyph})
+        advanced = writing_mode.startswith("vertical") or metadata.get("dir") == "rtl" or metadata.get("line_break") in {"dictionary_required", "bidi_required"}
+        if (publication_required or advanced) and not selection.get("publication_claim_allowed"):
+            blockers.append({
+                "item_id": str(item.get("item_id") or ""),
+                "reason": "current text requires a real publication/complex-shaping renderer receipt",
+            })
+        if publication_required and glyph.get("status") != "pass":
+            blockers.append({
+                "item_id": str(item.get("item_id") or ""),
+                "reason": f"glyph coverage is {glyph.get('status') or 'unknown'}; publication cannot claim complete font coverage",
+            })
+    return {
+        "kind": "comic_text_renderer_preflight",
+        "publication_required": publication_required,
+        "item_count": item_count,
+        "selections": list(selections.values()),
+        "glyph_coverage_receipts": glyph_receipts,
+        "blockers": blockers,
+        "verdict": "block" if blockers else "pass",
+    }
+
+
 def panel_slot_info(panel: dict) -> dict[str, Any]:
     slots = {}
     for slot in panel.get("bubble_slots", []):
@@ -669,6 +962,756 @@ def cleanup_outputs(out_dir: Path, page_dir: Path) -> None:
     for pattern in ("page_*.webp", "page_*.png", "page_*.jpg"):
         for stale in page_dir.glob(pattern):
             stale.unlink()
+
+
+def _canonical_json_sha(value: Any) -> str:
+    raw = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def render_input_digest(
+    manifest: dict[str, Any],
+    layout_path: Path,
+    *,
+    gap: int,
+    background: str,
+) -> str:
+    preflight = (manifest.get("text_layout_qc") or {}).get("renderer_preflight") or {}
+    stable_preflight = {
+        "publication_required": preflight.get("publication_required"),
+        "selections": [
+            {
+                key: item.get(key)
+                for key in ("adapter_id", "status", "supports", "required_capabilities", "publication_claim_allowed", "selection_sha256")
+            }
+            for item in preflight.get("selections") or []
+            if isinstance(item, dict)
+        ],
+        "glyph_coverage": [
+            {
+                key: item.get(key)
+                for key in ("item_id", "status", "text_sha256", "font_sha256", "missing_glyphs")
+            }
+            for item in preflight.get("glyph_coverage_receipts") or []
+            if isinstance(item, dict)
+        ],
+    }
+    subject = {
+        "layout_sha256": sha256_file(layout_path),
+        "lettering_sha256": manifest.get("lettering_sha256", ""),
+        "panels": [
+            {key: item.get(key) for key in ("panel_id", "path", "sha256", "size_bytes")}
+            for item in manifest.get("panels") or []
+        ],
+        "missing_panels": manifest.get("missing_panels") or [],
+        "formats": manifest.get("export_formats") or [],
+        "max_segment_height": manifest.get("max_segment_height"),
+        "gap": int(gap),
+        "background": str(background),
+        "font": manifest.get("font", ""),
+        "font_sha256": sha256_file(Path(str(manifest.get("font") or ""))) if manifest.get("font") else "",
+        "text_language": manifest.get("text_language", ""),
+        "target_platform": manifest.get("target_platform", ""),
+        "platform_profile": manifest.get("platform_profile") or {},
+        "platform_assets": manifest.get("platform_assets") or {},
+        "text_renderer_preflight": stable_preflight,
+    }
+    return _canonical_json_sha(subject)
+
+
+def _remove_exact(path: Path) -> None:
+    if path.is_symlink() or path.is_file():
+        path.unlink()
+    elif path.is_dir():
+        shutil.rmtree(path)
+
+
+def _atomic_write_json(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    pending = path.with_name(f".{path.name}.{os.getpid()}.pending")
+    pending.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    try:
+        os.replace(pending, path)
+    finally:
+        if pending.exists():
+            pending.unlink()
+
+
+def begin_render_staging(chapter_dir: Path, digest: str) -> Path:
+    # A digest identifies the render inputs, not a mutable scratch directory.
+    # The attempt id prevents two equal-input renderers from deleting or
+    # writing into each other's staging tree before the chapter promotion lock.
+    attempt_id = uuid.uuid4().hex
+    staging = chapter_dir / ".render_staging" / f"{digest}.{attempt_id}"
+    (staging / "pages").mkdir(parents=True, exist_ok=True)
+    (staging / "longstrip").mkdir(parents=True, exist_ok=True)
+    (staging / "print").mkdir(parents=True, exist_ok=True)
+    return staging
+
+
+def stamp_and_validate_rendered_artifacts(manifest: dict[str, Any], root: Path) -> list[str]:
+    """Decode every staged byte and bind its SHA/size before promotion."""
+    errors: list[str] = []
+    try:
+        from PIL import Image
+    except ImportError:
+        Image = None  # type: ignore[assignment]
+    for collection in ("pages", "rendered"):
+        for item in manifest.get(collection) or []:
+            if not isinstance(item, dict) or not item.get("path"):
+                errors.append(f"{collection}: artifact path missing")
+                continue
+            path = root / str(item["path"])
+            if not path.is_file():
+                errors.append(f"{collection}: missing {item['path']}")
+                continue
+            try:
+                if Image is None:
+                    raise OSError("Pillow unavailable")
+                with Image.open(path) as image:
+                    image.load()
+                    actual_size = {"width": int(image.width), "height": int(image.height)}
+                if item.get("size") and item.get("size") != actual_size:
+                    errors.append(f"{collection}: size mismatch {item['path']}")
+                item["size"] = actual_size
+                item["sha256"] = sha256_file(path)
+                item["size_bytes"] = path.stat().st_size
+            except (OSError, ValueError) as exc:
+                errors.append(f"{collection}: undecodable {item['path']}: {exc}")
+    for item in manifest.get("documents") or []:
+        if not isinstance(item, dict) or not item.get("path"):
+            errors.append("documents: artifact path missing")
+            continue
+        path = root / str(item["path"])
+        if not path.is_file():
+            errors.append(f"documents: missing {item['path']}")
+            continue
+        structural = pdf_structural_evidence(path) if str(item.get("format") or "").lower() == "pdf" else {}
+        if structural and (not structural.get("header_valid") or not structural.get("eof_marker_present")):
+            errors.append(f"documents: structurally invalid {item['path']}")
+        item["sha256"] = sha256_file(path)
+        item["size_bytes"] = path.stat().st_size
+    for receipt in (manifest.get("lettering_stats") or {}).get("text_renderer_receipts") or []:
+        if not isinstance(receipt, dict) or receipt.get("status") != "rendered":
+            continue
+        path = root / str(receipt.get("output_path") or "")
+        if not path.is_file():
+            errors.append(f"text overlay missing: {receipt.get('output_path') or '<empty>'}")
+            continue
+        if receipt.get("output_sha256") != sha256_file(path):
+            errors.append(f"text overlay SHA mismatch: {receipt.get('output_path')}")
+        try:
+            if Image is None:
+                raise OSError("Pillow unavailable")
+            with Image.open(path) as image:
+                image.verify()
+        except (OSError, ValueError) as exc:
+            errors.append(f"text overlay undecodable {receipt.get('output_path')}: {exc}")
+    expected = [str(item.get("panel_id") or "") for item in manifest.get("panels") or []]
+    actual = [str(pid) for page in manifest.get("pages") or [] for pid in page.get("panel_ids") or []]
+    if not manifest.get("missing_panels") and expected != actual:
+        errors.append("page panel order/coverage does not match the bound panel sequence")
+    return errors
+
+
+def _remap_strings(value: Any, replacements: list[tuple[str, str]]) -> Any:
+    if isinstance(value, str):
+        for source, target in replacements:
+            if value == source or value.startswith(source + "/"):
+                return target + value[len(source):]
+        return value
+    if isinstance(value, list):
+        return [_remap_strings(item, replacements) for item in value]
+    if isinstance(value, dict):
+        return {key: _remap_strings(item, replacements) for key, item in value.items()}
+    return value
+
+
+def remap_staged_manifest(
+    manifest: dict[str, Any],
+    root: Path,
+    mappings: list[tuple[Path, Path]],
+) -> dict[str, Any]:
+    replacements = [
+        (str(source.relative_to(root)), str(target.relative_to(root)))
+        for source, target in mappings
+    ]
+    return _remap_strings(manifest, replacements)
+
+
+def _safe_journal_path(root: Path, raw: str) -> Path:
+    if not str(raw or "").strip() or str(raw).strip() in {".", "/"}:
+        raise RuntimeError("render promotion journal contains an empty/broad path")
+    path = (root / raw).resolve()
+    try:
+        path.relative_to(root.resolve())
+    except ValueError as exc:
+        raise RuntimeError(f"render promotion journal escaped project root: {raw}") from exc
+    if path == root.resolve():
+        raise RuntimeError("render promotion journal may not target the project root")
+    return path
+
+
+@contextmanager
+def chapter_render_lock(chapter_dir: Path) -> Iterator[None]:
+    """Serialize chapter mirror/pointer mutations across OS processes."""
+    chapter_dir.mkdir(parents=True, exist_ok=True)
+    lock_path = chapter_dir / ".render_promotion.lock"
+    with lock_path.open("a+b") as handle:
+        fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
+
+def _path_snapshot(path: Path) -> dict[str, Any]:
+    """Content identity used by journal CAS; timestamps never count."""
+    if path.is_symlink():
+        raise RuntimeError(f"render transaction refuses symlink target: {path}")
+    if not path.exists():
+        return {"kind": "absent"}
+    if path.is_file():
+        return {
+            "kind": "file",
+            "sha256": sha256_file(path),
+            "size_bytes": path.stat().st_size,
+        }
+    if not path.is_dir():
+        raise RuntimeError(f"unsupported render transaction path: {path}")
+    entries: list[dict[str, Any]] = []
+    total_size = 0
+    for child in sorted(path.rglob("*"), key=lambda value: value.as_posix()):
+        if child.is_symlink():
+            raise RuntimeError(f"render transaction refuses symlink member: {child}")
+        if not child.is_file():
+            continue
+        size_bytes = child.stat().st_size
+        total_size += size_bytes
+        entries.append({
+            "path": child.relative_to(path).as_posix(),
+            "sha256": sha256_file(child),
+            "size_bytes": size_bytes,
+        })
+    return {
+        "kind": "directory",
+        "sha256": _canonical_json_sha(entries),
+        "file_count": len(entries),
+        "size_bytes": total_size,
+    }
+
+
+def _snapshot_matches(path: Path, expected: dict[str, Any]) -> bool:
+    return _path_snapshot(path) == expected
+
+
+def _asset_format(value: Any) -> str:
+    return str(value or "").strip().lower().replace("jpeg", "jpg")
+
+
+def _validate_bound_artifact(path: Path, item: dict[str, Any], collection: str) -> list[str]:
+    errors: list[str] = []
+    label = str(item.get("path") or path)
+    if path.is_symlink() or not path.is_file():
+        return [f"{collection}: missing/non-regular bound asset {label}"]
+    expected_sha = str(item.get("sha256") or "")
+    expected_size = item.get("size_bytes")
+    if len(expected_sha) != 64:
+        errors.append(f"{collection}: manifest SHA missing/invalid {label}")
+    elif sha256_file(path) != expected_sha:
+        errors.append(f"{collection}: SHA mismatch {label}")
+    if not isinstance(expected_size, int):
+        errors.append(f"{collection}: manifest byte size missing/invalid {label}")
+    elif path.stat().st_size != expected_size:
+        errors.append(f"{collection}: byte size mismatch {label}")
+
+    expected_format = _asset_format(item.get("format"))
+    if collection in {"pages", "rendered"}:
+        try:
+            from PIL import Image
+
+            with Image.open(path) as image:
+                image.load()
+                actual_format = _asset_format(image.format or path.suffix.lstrip("."))
+                actual_size = {"width": int(image.width), "height": int(image.height)}
+            if not expected_format:
+                errors.append(f"{collection}: manifest format missing {label}")
+            elif actual_format != expected_format:
+                errors.append(f"{collection}: decoded format mismatch {label}: {actual_format} != {expected_format}")
+            if item.get("size") != actual_size:
+                errors.append(f"{collection}: decoded geometry mismatch {label}")
+        except (ImportError, OSError, ValueError) as exc:
+            errors.append(f"{collection}: undecodable bound asset {label}: {exc}")
+    elif collection == "documents":
+        if expected_format == "pdf":
+            structural = pdf_structural_evidence(path)
+            if not structural.get("header_valid") or not structural.get("eof_marker_present"):
+                errors.append(f"documents: structurally invalid PDF {label}")
+        elif not expected_format:
+            errors.append(f"documents: manifest format missing {label}")
+    return errors
+
+
+def _path_from_mapping(
+    root: Path,
+    raw_path: str,
+    mappings: list[dict[str, str]],
+    *,
+    destination_key: str,
+) -> Path:
+    canonical = _safe_journal_path(root, raw_path)
+    for mapping in mappings:
+        source = _safe_journal_path(root, str(mapping.get("canonical") or ""))
+        destination = _safe_journal_path(root, str(mapping.get(destination_key) or ""))
+        kind = str(mapping.get("kind") or "directory")
+        if kind == "file":
+            if canonical == source:
+                return destination
+            continue
+        try:
+            relative = canonical.relative_to(source)
+        except ValueError:
+            continue
+        return destination / relative
+    raise RuntimeError(f"manifest asset is outside the render mapping contract: {raw_path}")
+
+
+def validate_bound_manifest_assets(
+    root: Path,
+    manifest: dict[str, Any],
+    *,
+    mappings: list[dict[str, str]] | None = None,
+    destination_key: str = "bundle",
+) -> list[str]:
+    """Validate every canonical page/rendered/document record without restamping it."""
+    errors: list[str] = []
+    for collection in ("pages", "rendered", "documents"):
+        for item in manifest.get(collection) or []:
+            if not isinstance(item, dict) or not item.get("path"):
+                errors.append(f"{collection}: artifact path missing")
+                continue
+            try:
+                path = (
+                    _path_from_mapping(root, str(item["path"]), mappings, destination_key=destination_key)
+                    if mappings is not None
+                    else _safe_journal_path(root, str(item["path"]))
+                )
+            except RuntimeError as exc:
+                errors.append(f"{collection}: {exc}")
+                continue
+            errors.extend(_validate_bound_artifact(path, item, collection))
+    return errors
+
+
+def _artifact_contract(manifest: dict[str, Any]) -> dict[str, Any]:
+    keys = ("path", "format", "size", "sha256", "size_bytes", "panel_ids")
+    return {
+        collection: [
+            {key: item.get(key) for key in keys if key in item}
+            for item in manifest.get(collection) or []
+            if isinstance(item, dict)
+        ]
+        for collection in ("pages", "rendered", "documents")
+    }
+
+
+def _load_bundle_manifest(bundle: Path) -> dict[str, Any]:
+    manifest_path = bundle / "export_manifest.json"
+    if manifest_path.is_symlink() or not manifest_path.is_file():
+        raise RuntimeError(f"immutable render bundle manifest is missing/non-regular: {manifest_path}")
+    return load_json(manifest_path)
+
+
+def validate_active_render_state(root: Path, pointer: dict[str, Any]) -> list[str]:
+    """Prove bundle, canonical manifest and canonical pixels are one transaction."""
+    errors: list[str] = []
+    try:
+        bundle = _safe_journal_path(root, str(pointer.get("bundle") or ""))
+        canonical_manifest_path = _safe_journal_path(root, str(pointer.get("manifest") or ""))
+        bundle_manifest = _load_bundle_manifest(bundle)
+    except (OSError, RuntimeError, ValueError, json.JSONDecodeError) as exc:
+        return [str(exc)]
+    if bundle_manifest.get("render_digest") != pointer.get("render_digest"):
+        errors.append("active pointer digest does not match immutable bundle manifest")
+    bundle_manifest_path = bundle / "export_manifest.json"
+    expected_manifest_sha = str(pointer.get("manifest_sha256") or "")
+    if len(expected_manifest_sha) != 64 or sha256_file(bundle_manifest_path) != expected_manifest_sha:
+        errors.append("active pointer bundle manifest SHA mismatch")
+    if canonical_manifest_path.is_symlink() or not canonical_manifest_path.is_file():
+        errors.append("canonical export manifest missing/non-regular")
+    elif sha256_file(canonical_manifest_path) != expected_manifest_sha:
+        errors.append("canonical export manifest differs from active bundle manifest")
+    else:
+        try:
+            canonical_manifest = load_json(canonical_manifest_path)
+            if canonical_manifest.get("render_digest") != pointer.get("render_digest"):
+                errors.append("canonical export manifest digest differs from active pointer")
+            if _artifact_contract(canonical_manifest) != _artifact_contract(bundle_manifest):
+                errors.append("canonical export manifest artifact contract differs from active bundle")
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            errors.append(f"canonical export manifest unreadable: {exc}")
+    mappings = pointer.get("asset_mappings") if isinstance(pointer.get("asset_mappings"), list) else []
+    if not mappings:
+        errors.append("active pointer lacks canonical-to-bundle asset mappings")
+    else:
+        errors.extend(validate_bound_manifest_assets(root, bundle_manifest, mappings=mappings, destination_key="bundle"))
+    errors.extend(validate_bound_manifest_assets(root, bundle_manifest))
+    return errors
+
+
+def _journal_entries(root: Path, journal: dict[str, Any]) -> list[dict[str, Any]]:
+    entries = [item for item in journal.get("entries") or [] if isinstance(item, dict)]
+    if not entries:
+        raise RuntimeError("render promotion journal has no entries")
+    targets: set[Path] = set()
+    for item in entries:
+        target = _safe_journal_path(root, str(item.get("target") or ""))
+        _safe_journal_path(root, str(item.get("backup") or ""))
+        _safe_journal_path(root, str(item.get("pending") or ""))
+        if target in targets:
+            raise RuntimeError(f"duplicate render promotion target: {target}")
+        targets.add(target)
+        if not isinstance(item.get("old_snapshot"), dict) or not isinstance(item.get("new_snapshot"), dict):
+            raise RuntimeError("render promotion journal lacks content snapshots")
+    return entries
+
+
+def _cleanup_journal_entries(root: Path, entries: list[dict[str, Any]]) -> None:
+    for item in entries:
+        for key in ("backup", "pending"):
+            path = _safe_journal_path(root, str(item.get(key) or ""))
+            if path.exists() or path.is_symlink():
+                _remove_exact(path)
+
+
+def _rollback_journal_entries(root: Path, entries: list[dict[str, Any]]) -> None:
+    for item in reversed(entries):
+        target = _safe_journal_path(root, str(item.get("target") or ""))
+        backup = _safe_journal_path(root, str(item.get("backup") or ""))
+        pending = _safe_journal_path(root, str(item.get("pending") or ""))
+        old_snapshot = item["old_snapshot"]
+        new_snapshot = item["new_snapshot"]
+        target_snapshot = _path_snapshot(target)
+        backup_snapshot = _path_snapshot(backup)
+        if old_snapshot.get("kind") != "absent":
+            if backup_snapshot.get("kind") != "absent":
+                if backup_snapshot != old_snapshot:
+                    raise RuntimeError(f"rollback backup content mismatch: {backup}")
+                if target_snapshot not in ({"kind": "absent"}, new_snapshot):
+                    raise RuntimeError(f"rollback target contains an unknown concurrent value: {target}")
+                if target_snapshot.get("kind") != "absent":
+                    _remove_exact(target)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                os.replace(backup, target)
+            elif target_snapshot != old_snapshot:
+                raise RuntimeError(f"rollback lost the expected old target: {target}")
+        else:
+            if backup_snapshot.get("kind") != "absent":
+                raise RuntimeError(f"rollback found an unexpected backup: {backup}")
+            if target_snapshot == new_snapshot and target_snapshot.get("kind") != "absent":
+                _remove_exact(target)
+            elif target_snapshot.get("kind") != "absent":
+                raise RuntimeError(f"rollback target contains an unknown concurrent value: {target}")
+        if pending.exists() or pending.is_symlink():
+            if not _snapshot_matches(pending, new_snapshot):
+                raise RuntimeError(f"rollback pending content mismatch: {pending}")
+            _remove_exact(pending)
+        if not _snapshot_matches(target, old_snapshot):
+            raise RuntimeError(f"rollback could not restore target identity: {target}")
+
+
+def _recover_interrupted_promotion_locked(root: Path, chapter_dir: Path) -> bool:
+    journal_path = chapter_dir / ".render_promotion.json"
+    if not journal_path.is_file():
+        return False
+    journal = load_json(journal_path)
+    if int(journal.get("schema_version") or 0) < 2 or not journal.get("transaction_id"):
+        raise RuntimeError("legacy digest-only promotion journal cannot be recovered safely; manual inspection required")
+    pointer = _safe_journal_path(root, str(journal.get("active_pointer") or ""))
+    entries = _journal_entries(root, journal)
+    current_snapshot = _path_snapshot(pointer)
+    expected_old = journal.get("expected_old_pointer") or {}
+    expected_new = journal.get("new_pointer_snapshot") or {}
+    active: dict[str, Any] = {}
+    if pointer.is_file():
+        try:
+            active = load_json(pointer)
+        except (OSError, ValueError, json.JSONDecodeError):
+            active = {}
+    committed = (
+        current_snapshot == expected_new
+        and active.get("transaction_id") == journal.get("transaction_id")
+        and active.get("render_digest") == journal.get("render_digest")
+    )
+    pointer_entry = next(
+        (
+            item
+            for item in entries
+            if _safe_journal_path(root, str(item.get("target") or "")) == pointer
+        ),
+        None,
+    )
+    pointer_between_renames = False
+    if pointer_entry is not None and current_snapshot.get("kind") == "absent":
+        pointer_backup = _safe_journal_path(root, str(pointer_entry.get("backup") or ""))
+        pointer_between_renames = _path_snapshot(pointer_backup) == expected_old
+    if committed:
+        snapshot_errors = []
+        for item in entries:
+            target = _safe_journal_path(root, str(item.get("target") or ""))
+            if not _snapshot_matches(target, item["new_snapshot"]):
+                snapshot_errors.append(f"promoted target identity mismatch: {target}")
+        state_errors = validate_active_render_state(root, active)
+        if snapshot_errors or state_errors:
+            _rollback_journal_entries(root, entries)
+        else:
+            _cleanup_journal_entries(root, entries)
+    elif current_snapshot == expected_old or pointer_between_renames:
+        _rollback_journal_entries(root, entries)
+    else:
+        raise RuntimeError(
+            "active pointer CAS conflict: it matches neither the journal's expected old pointer nor this transaction"
+        )
+    journal_path.unlink()
+    return True
+
+
+def recover_interrupted_promotion(root: Path, chapter_dir: Path) -> bool:
+    """Recover under the chapter flock; transaction id prevents digest ABA."""
+    with chapter_render_lock(chapter_dir):
+        return _recover_interrupted_promotion_locked(root, chapter_dir)
+
+
+def _prepare_copy(source: Path | None, target: Path, digest: str, transaction_id: str) -> Path:
+    target.parent.mkdir(parents=True, exist_ok=True)
+    pending = target.with_name(f".{target.name}.{digest}.{transaction_id}.pending")
+    if pending.exists() or pending.is_symlink():
+        _remove_exact(pending)
+    if source is not None:
+        if source.is_dir():
+            shutil.copytree(source, pending)
+        else:
+            shutil.copy2(source, pending)
+    return pending
+
+
+def _atomic_promote_bundle_mirrors_locked(
+    root: Path,
+    chapter_dir: Path,
+    digest: str,
+    prepared: list[tuple[Path, Path]],
+    active_pointer: Path,
+    *,
+    transaction_id: str,
+    expected_old_pointer: dict[str, Any],
+    pointer_payload: dict[str, Any],
+) -> None:
+    """Promote verified mirrors with byte-level pointer CAS; lock is held."""
+    if not prepared or prepared[-1][1].resolve() != active_pointer.resolve():
+        raise RuntimeError("active pointer must be the final promotion entry")
+    if not _snapshot_matches(active_pointer, expected_old_pointer):
+        raise RuntimeError("active pointer changed before promotion (CAS failed)")
+    entries: list[dict[str, Any]] = []
+    for pending, target in prepared:
+        backup = target.with_name(f".{target.name}.{digest}.{transaction_id}.backup")
+        if backup.exists() or backup.is_symlink():
+            _remove_exact(backup)
+        new_snapshot = _path_snapshot(pending)
+        entries.append({
+            "pending": str(pending.relative_to(root)),
+            "target": str(target.relative_to(root)),
+            "backup": str(backup.relative_to(root)),
+            "old_snapshot": _path_snapshot(target),
+            "new_snapshot": new_snapshot,
+        })
+    pointer_new_snapshot = entries[-1]["new_snapshot"]
+    journal = {
+        "schema_version": 2,
+        "kind": "comic_render_promotion_journal",
+        "transaction_id": transaction_id,
+        "render_digest": digest,
+        "active_pointer": str(active_pointer.relative_to(root)),
+        "expected_old_pointer": expected_old_pointer,
+        "new_pointer_snapshot": pointer_new_snapshot,
+        "bundle": pointer_payload.get("bundle", ""),
+        "bundle_manifest_sha256": pointer_payload.get("manifest_sha256", ""),
+        "entries": entries,
+    }
+    journal_path = chapter_dir / ".render_promotion.json"
+    _atomic_write_json(journal_path, journal)
+    try:
+        for item in entries:
+            target = _safe_journal_path(root, item["target"])
+            backup = _safe_journal_path(root, item["backup"])
+            pending = _safe_journal_path(root, item["pending"])
+            if not _snapshot_matches(target, item["old_snapshot"]):
+                raise RuntimeError(f"promotion target changed after journal creation: {target}")
+            if not _snapshot_matches(pending, item["new_snapshot"]):
+                raise RuntimeError(f"promotion pending bytes changed after journal creation: {pending}")
+            if item["old_snapshot"].get("kind") != "absent":
+                os.replace(target, backup)
+            if item["new_snapshot"].get("kind") != "absent":
+                os.replace(pending, target)
+            if not _snapshot_matches(target, item["new_snapshot"]):
+                raise RuntimeError(f"promotion target verification failed: {target}")
+            if target.resolve() == active_pointer.resolve():
+                active = load_json(active_pointer)
+                if active.get("transaction_id") != transaction_id:
+                    raise RuntimeError("active pointer transaction id mismatch after CAS")
+        state_errors = validate_active_render_state(root, pointer_payload)
+        if state_errors:
+            raise RuntimeError("promoted render state failed validation: " + "; ".join(state_errors))
+        _cleanup_journal_entries(root, entries)
+        journal_path.unlink()
+    except BaseException:
+        _recover_interrupted_promotion_locked(root, chapter_dir)
+        raise
+
+
+def atomic_promote_bundle_mirrors(
+    root: Path,
+    chapter_dir: Path,
+    digest: str,
+    prepared: list[tuple[Path, Path]],
+    active_pointer: Path,
+    *,
+    transaction_id: str,
+    expected_old_pointer: dict[str, Any],
+    pointer_payload: dict[str, Any],
+) -> None:
+    """Public locked wrapper for direct callers and fault-injection tests."""
+    with chapter_render_lock(chapter_dir):
+        _recover_interrupted_promotion_locked(root, chapter_dir)
+        _atomic_promote_bundle_mirrors_locked(
+            root,
+            chapter_dir,
+            digest,
+            prepared,
+            active_pointer,
+            transaction_id=transaction_id,
+            expected_old_pointer=expected_old_pointer,
+            pointer_payload=pointer_payload,
+        )
+
+
+def finalize_render_bundle(
+    root: Path,
+    chapter_dir: Path,
+    staging: Path,
+    digest: str,
+    manifest: dict[str, Any],
+    *,
+    page_dir: Path,
+    out_dir: Path,
+    pdf_path: Path,
+    manifest_path: Path,
+    qc_target: Path | None,
+    activate: bool,
+) -> Path:
+    bundle = chapter_dir / ".render_bundles" / digest
+    bundle.parent.mkdir(parents=True, exist_ok=True)
+    (staging / "export_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    asset_mappings = [
+        {
+            "kind": "directory",
+            "canonical": str(page_dir.relative_to(root)),
+            "bundle": str((bundle / "pages").relative_to(root)),
+            "staging": str((staging / "pages").relative_to(root)),
+        },
+        {
+            "kind": "directory",
+            "canonical": str(out_dir.relative_to(root)),
+            "bundle": str((bundle / "longstrip").relative_to(root)),
+            "staging": str((staging / "longstrip").relative_to(root)),
+        },
+        {
+            "kind": "file",
+            "canonical": str(pdf_path.relative_to(root)),
+            "bundle": str((bundle / "print" / pdf_path.name).relative_to(root)),
+            "staging": str((staging / "print" / pdf_path.name).relative_to(root)),
+        },
+    ]
+    staging_errors = validate_bound_manifest_assets(root, manifest, mappings=asset_mappings, destination_key="staging")
+    if staging_errors:
+        raise RuntimeError("staged render bundle failed immutable validation: " + "; ".join(staging_errors))
+
+    with chapter_render_lock(chapter_dir):
+        _recover_interrupted_promotion_locked(root, chapter_dir)
+        if bundle.exists():
+            existing = _load_bundle_manifest(bundle)
+            bundle_errors = validate_bound_manifest_assets(root, existing, mappings=asset_mappings, destination_key="bundle")
+            if existing.get("render_digest") != digest:
+                bundle_errors.append("render digest collision with an incompatible immutable bundle")
+            active_pointer_path = chapter_dir / "active_render_bundle.json"
+            if active_pointer_path.is_file():
+                try:
+                    current_pointer = load_json(active_pointer_path)
+                except (OSError, ValueError, json.JSONDecodeError) as exc:
+                    bundle_errors.append(f"active pointer unreadable while reusing bundle: {exc}")
+                else:
+                    if str(current_pointer.get("bundle") or "") == str(bundle.relative_to(root)):
+                        if current_pointer.get("manifest_sha256") != sha256_file(bundle / "export_manifest.json"):
+                            bundle_errors.append("active pointer proves the same-digest bundle manifest was mutated")
+            if _artifact_contract(existing) != _artifact_contract(manifest):
+                bundle_errors.append("same-digest immutable bundle artifact contract differs from current validated staging")
+            if bundle_errors:
+                # Preserve both the suspect immutable directory and the newly
+                # validated attempt for diagnosis; never silently discard the
+                # only safe reconstruction candidate.
+                raise RuntimeError("existing immutable render bundle is untrusted: " + "; ".join(bundle_errors))
+            _remove_exact(staging)
+        else:
+            os.replace(staging, bundle)
+            bundle_errors = validate_bound_manifest_assets(root, manifest, mappings=asset_mappings, destination_key="bundle")
+            if bundle_errors:
+                raise RuntimeError("new immutable render bundle failed post-move validation: " + "; ".join(bundle_errors))
+
+        transaction_id = uuid.uuid4().hex
+        prepared: list[tuple[Path, Path]] = [
+            (_prepare_copy(bundle / "pages", page_dir, digest, transaction_id), page_dir),
+            (_prepare_copy(bundle / "longstrip", out_dir, digest, transaction_id), out_dir),
+        ]
+        bundle_pdf = bundle / "print" / pdf_path.name
+        prepared.append((_prepare_copy(bundle_pdf if bundle_pdf.is_file() else None, pdf_path, digest, transaction_id), pdf_path))
+        if qc_target is not None:
+            bundle_qc = bundle / "qc" / qc_target.name
+            if bundle_qc.is_file():
+                prepared.append((_prepare_copy(bundle_qc, qc_target, digest, transaction_id), qc_target))
+        prepared.append((_prepare_copy(bundle / "export_manifest.json", manifest_path, digest, transaction_id), manifest_path))
+
+        active_pointer = chapter_dir / "active_render_bundle.json"
+        expected_old_pointer = _path_snapshot(active_pointer)
+        if not activate:
+            raise RuntimeError("validated render bundles currently require active-pointer promotion")
+        pointer_payload = {
+            "schema_version": 2,
+            "kind": "comic_active_render_bundle",
+            "transaction_id": transaction_id,
+            "chapter": manifest.get("chapter", ""),
+            "render_digest": digest,
+            "bundle": str(bundle.relative_to(root)),
+            "manifest": str(manifest_path.relative_to(root)),
+            "manifest_sha256": sha256_file(bundle / "export_manifest.json"),
+            "previous_pointer": expected_old_pointer,
+            "asset_mappings": [
+                {key: value for key, value in mapping.items() if key != "staging"}
+                for mapping in asset_mappings
+            ],
+        }
+        pointer_pending = _prepare_copy(None, active_pointer, digest, transaction_id)
+        pointer_pending.write_text(json.dumps(pointer_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        prepared.append((pointer_pending, active_pointer))
+        _atomic_promote_bundle_mirrors_locked(
+            root,
+            chapter_dir,
+            digest,
+            prepared,
+            active_pointer,
+            transaction_id=transaction_id,
+            expected_old_pointer=expected_old_pointer,
+            pointer_payload=pointer_payload,
+        )
+    return bundle
 
 
 def render_pdf_document(
@@ -752,6 +1795,9 @@ def merge_lettering_stats(total: dict[str, Any], stats: dict[str, Any]) -> None:
     total["drawn_items"] += stats["drawn_items"]
     total["skipped_empty_items"].extend(stats["skipped_empty_items"])
     total["empty_slots_removed"].extend(stats["empty_slots_removed"])
+    total["tail_receipts"].extend(stats.get("tail_receipts") or [])
+    total["text_renderer_receipts"].extend(stats.get("text_renderer_receipts") or [])
+    total["glyph_coverage_receipts"].extend(stats.get("glyph_coverage_receipts") or [])
 
 
 def render_layout_pages(
@@ -772,7 +1818,14 @@ def render_layout_pages(
     font_path = manifest.get("font", "")
     language_mode = normalize_text_language(text_language)
     rendered_pages: list[tuple[dict[str, Any], Any]] = []
-    lettering_stats = {"drawn_items": 0, "skipped_empty_items": [], "empty_slots_removed": []}
+    lettering_stats = {
+        "drawn_items": 0,
+        "skipped_empty_items": [],
+        "empty_slots_removed": [],
+        "tail_receipts": [],
+        "text_renderer_receipts": [],
+        "glyph_coverage_receipts": [],
+    }
 
     for idx, segment in enumerate(layout.get("segments", []), 1):
         panels = segment_panels_in_reading_order(segment)
@@ -808,6 +1861,12 @@ def render_layout_pages(
                 lettering_items.get(pid, []),
                 font_path,
                 language_mode,
+                {
+                    "root": root,
+                    "overlay_dir": page_dir / "text_overlays",
+                    "text_language": language_mode,
+                    "publication_required": bool(manifest.get("publication_text_required")),
+                },
             )
             merge_lettering_stats(lettering_stats, stats)
             item["size"] = {"width": image.width, "height": image.height}
@@ -889,6 +1948,12 @@ def render_longstrip(
             and any(item.get("text_en") for item in (lettering or {}).get("items", []))
         )
         manifest["lettering_stats"] = lettering_stats
+        manifest["lettering_render_receipt"] = {
+            "kind": "comic_lettering_render_receipt",
+            "tail_targets": lettering_stats.get("tail_receipts") or [],
+            "resolved_tail_count": sum(bool(item.get("target_resolved")) for item in lettering_stats.get("tail_receipts") or []),
+            "fallback_tail_count": sum(not bool(item.get("target_resolved")) for item in lettering_stats.get("tail_receipts") or []),
+        }
         return
 
     combined, panel_ids = combine_pages(page_canvases, gap, background)
@@ -936,6 +2001,12 @@ def render_longstrip(
         and any(item.get("text_en") for item in (lettering or {}).get("items", []))
     )
     manifest["lettering_stats"] = lettering_stats
+    manifest["lettering_render_receipt"] = {
+        "kind": "comic_lettering_render_receipt",
+        "tail_targets": lettering_stats.get("tail_receipts") or [],
+        "resolved_tail_count": sum(bool(item.get("target_resolved")) for item in lettering_stats.get("tail_receipts") or []),
+        "fallback_tail_count": sum(not bool(item.get("target_resolved")) for item in lettering_stats.get("tail_receipts") or []),
+    }
 
 
 def slot_records(layout: dict) -> dict[tuple[str, str], dict[str, Any]]:
@@ -1060,7 +2131,15 @@ def main() -> int:
     pdf_path = Path(args.pdf_out).expanduser().resolve() if args.pdf_out else root / "排版" / args.chapter / "print" / f"{args.chapter}.pdf"
     lettering_path = None if args.no_lettering else (Path(args.lettering).expanduser().resolve() if args.lettering else root / "排版" / args.chapter / "lettering.json")
     font_path = resolve_font_path(args.font)
-    manifest_path = root / "排版" / args.chapter / "export_manifest.json"
+    chapter_dir = root / "排版" / args.chapter
+    manifest_path = chapter_dir / "export_manifest.json"
+    try:
+        recovered = recover_interrupted_promotion(root, chapter_dir)
+    except (OSError, RuntimeError, ValueError, json.JSONDecodeError) as exc:
+        print(f"[err] 无法安全恢复上次渲染提升事务：{exc}")
+        return 2
+    if recovered:
+        print("[ok] recovered interrupted render promotion")
 
     if not layout_path.is_file():
         print(f"[err] layout 不存在：{layout_path}")
@@ -1082,8 +2161,6 @@ def main() -> int:
             print("[hint] 重跑 build_lettering.py，处理 editorial_override/翻译表后再导出。")
             return 2
     panel_dir.mkdir(parents=True, exist_ok=True)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    page_dir.mkdir(parents=True, exist_ok=True)
     layout = load_json(layout_path)
     lettering = load_json(lettering_path) if lettering_path and lettering_path.is_file() else None
     max_height = parse_max_height(args.max_height, parse_max_height(read_setting(root, "单话分段高度", "0")))
@@ -1110,6 +2187,8 @@ def main() -> int:
     manifest["text_language"] = text_language
     manifest["target_platform"] = target_platform
     manifest["platform_profile"] = platform_profile.to_manifest()
+    renderer_preflight = text_renderer_preflight(root, lettering, text_language, font_path, usage)
+    manifest["publication_text_required"] = renderer_preflight["publication_required"]
     platform_asset_args = list(args.platform_asset)
     previous_manifest = load_json(manifest_path) if manifest_path.is_file() else {}
     previous_assets = previous_manifest.get("platform_assets") if isinstance(previous_manifest.get("platform_assets"), dict) else {}
@@ -1122,21 +2201,27 @@ def main() -> int:
     )
     unsupported_text = unsupported_lettering_items(lettering, text_language)
     manifest["text_layout_qc"] = {
-        "renderer": "pillow_draft",
+        "renderer_preflight": renderer_preflight,
         "unsupported_items": unsupported_text,
-        "verdict": "block" if unsupported_text else "pass",
+        "verdict": renderer_preflight["verdict"],
     }
+    render_digest = render_input_digest(manifest, layout_path, gap=args.gap, background=args.background)
+    manifest["render_digest"] = render_digest
+    staging = begin_render_staging(chapter_dir, render_digest) if args.render else None
+    render_out_dir = staging / "longstrip" if staging is not None else out_dir
+    render_page_dir = staging / "pages" if staging is not None else page_dir
+    render_pdf_path = staging / "print" / pdf_path.name if staging is not None else pdf_path
 
-    if args.render and unsupported_text:
-        manifest["render_error"] = "当前 Pillow 草稿嵌字不支持 RTL 或需词典分词的目标文字；请改用人工/专业排版 renderer。"
+    if args.render and renderer_preflight["blockers"]:
+        manifest["render_error"] = "当前文字缺少专业 renderer 或完整 glyph coverage 的真实收据；未按 Pillow 静默降级。"
         print(f"[warn] {manifest['render_error']}")
     elif args.render and export_formats:
         try:
             render_longstrip(
                 manifest,
                 root,
-                out_dir,
-                page_dir,
+                render_out_dir,
+                render_page_dir,
                 max_height,
                 args.gap,
                 args.background,
@@ -1145,12 +2230,30 @@ def main() -> int:
                 text_language,
                 export_formats,
                 args.chapter,
-                pdf_path,
+                render_pdf_path,
                 raster_dpi,
             )
         except (RuntimeError, OSError, ValueError) as err:
             manifest["render_error"] = str(err)
             print(f"[warn] {err}")
+
+    actual_text_receipts = ((manifest.get("lettering_stats") or {}).get("text_renderer_receipts") or [])
+    if renderer_preflight["publication_required"] and renderer_preflight["item_count"]:
+        publication_render_ok = bool(actual_text_receipts) and all(
+            item.get("status") == "rendered" and item.get("publication_claim_allowed") is True
+            for item in actual_text_receipts
+        )
+        if not publication_render_ok:
+            manifest["text_layout_qc"]["verdict"] = "block"
+            manifest["text_layout_qc"]["publication_render_error"] = "发布态缺少覆盖当前文字像素的 rendered receipt"
+    manifest["text_layout_qc"]["actual_render_receipts"] = actual_text_receipts
+    artifact_errors = stamp_and_validate_rendered_artifacts(manifest, root) if args.render else []
+    manifest["render_bundle_validation"] = {
+        "kind": "comic_render_bundle_validation",
+        "decoded_artifact_count": len(manifest.get("pages") or []) + len(manifest.get("rendered") or []) + len(manifest.get("documents") or []),
+        "errors": artifact_errors,
+        "verdict": "block" if artifact_errors else "pass",
+    }
 
     produced_formats = {
         str(item.get("format") or "").lower()
@@ -1176,23 +2279,92 @@ def main() -> int:
 
     manifest["platform_findings"] = validate_manifest(root, manifest, platform_profile, usage)
 
-    if args.qc_slots and args.render and manifest.get("pages"):
-        qc_path = (
+    qc_target: Path | None = None
+    if args.qc_slots and args.render and manifest.get("pages") and staging is not None:
+        qc_target = (
             Path(args.qc_out).expanduser().resolve()
             if args.qc_out
             else root / "生产数据" / "qa_previews" / f"{args.chapter}_lettering_slots.jpg"
         )
-        manifest["lettering_slot_qc"] = save_lettering_qc_sheet(manifest, root, layout, lettering, qc_path)
-        print(f"[ok] lettering slot QC {qc_path}")
+        stage_qc = staging / "qc" / qc_target.name
+        manifest["lettering_slot_qc"] = save_lettering_qc_sheet(manifest, root, layout, lettering, stage_qc)
+        print(f"[ok] lettering slot QC staged {stage_qc}")
 
-    manifest_path.parent.mkdir(parents=True, exist_ok=True)
-    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"[ok] {manifest_path}")
+    promoted = False
+    preserve_previous = False
+    if args.render and staging is not None:
+        render_ready = (
+            not manifest.get("render_error")
+            and not manifest.get("missing_panels")
+            and manifest["format_fulfillment"]["verdict"] == "pass"
+            and manifest["render_bundle_validation"]["verdict"] == "pass"
+            and manifest["text_layout_qc"]["verdict"] == "pass"
+        )
+        previous_healthy = bool(previous_manifest.get("rendered") or previous_manifest.get("documents")) and not previous_manifest.get("missing_panels") and not previous_manifest.get("render_error") and (previous_manifest.get("format_fulfillment") or {}).get("verdict", "pass") == "pass"
+        mappings = [
+            (staging / "pages", page_dir),
+            (staging / "longstrip", out_dir),
+            (staging / "print" / pdf_path.name, pdf_path),
+        ]
+        if qc_target is not None:
+            mappings.append((staging / "qc" / qc_target.name, qc_target))
+        staged_attempt_manifest = json.loads(json.dumps(manifest, ensure_ascii=False))
+        staged_attempt_manifest["render_transaction"] = {
+            "kind": "comic_render_attempt",
+            "render_digest": render_digest,
+            "attempt_staging": str(staging.relative_to(root)),
+            "activated": False,
+        }
+        manifest = remap_staged_manifest(manifest, root, mappings)
+        manifest["render_transaction"] = {
+            "kind": "comic_render_transaction",
+            "render_digest": render_digest,
+            "bundle": str((chapter_dir / ".render_bundles" / render_digest).relative_to(root)),
+            "active_pointer": str((chapter_dir / "active_render_bundle.json").relative_to(root)),
+            "promotion_policy": "validated_bundle_then_atomic_pointer",
+        }
+        if render_ready:
+            try:
+                bundle = finalize_render_bundle(
+                    root,
+                    chapter_dir,
+                    staging,
+                    render_digest,
+                    manifest,
+                    page_dir=page_dir,
+                    out_dir=out_dir,
+                    pdf_path=pdf_path,
+                    manifest_path=manifest_path,
+                    qc_target=qc_target,
+                    activate=True,
+                )
+                promoted = True
+                print(f"[ok] active render bundle {bundle}")
+            except (OSError, RuntimeError, ValueError) as exc:
+                print(f"[err] render bundle promotion failed and was rolled back: {exc}")
+                return 2
+        elif previous_healthy:
+            preserve_previous = True
+            staged_attempt_manifest["preserved_active_bundle"] = True
+            (staging / "export_manifest.json").write_text(json.dumps(staged_attempt_manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            print(f"[warn] render attempt blocked; preserved previous canonical outputs: {staging}")
+        else:
+            # First incomplete attempt remains an explicit staging receipt.  It
+            # does not create an active pointer or pretend to be an immutable
+            # accepted bundle, but the canonical manifest remains discoverable.
+            (staging / "export_manifest.json").write_text(json.dumps(staged_attempt_manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            _atomic_write_json(manifest_path, staged_attempt_manifest)
+            print(f"[warn] incomplete render attempt recorded without activation: {staging}")
+    else:
+        _atomic_write_json(manifest_path, manifest)
+        promoted = True
+    if promoted:
+        print(f"[ok] {manifest_path}")
     if manifest["missing_panels"]:
         print("[warn] 缺少面板图：" + ", ".join(manifest["missing_panels"]))
     if manifest["rendered"] or manifest.get("documents"):
         print(f"[ok] rendered {len(manifest['rendered'])} image(s), {len(manifest.get('documents') or [])} document(s)")
-    if args.write_progress:
+    if args.write_progress and promoted:
         deliverables_ready = bool(manifest["rendered"] or manifest.get("documents")) and manifest["format_fulfillment"]["verdict"] == "pass"
         if not manifest["missing_panels"] and deliverables_ready and manifest.get("lettering"):
             value = "✅"
@@ -1208,7 +2380,7 @@ def main() -> int:
             f"{args.chapter} export_manifest.json": manifest_path.is_file(),
         }):
             print("[ok] progress export checklist updated")
-    return 0
+    return 2 if preserve_previous else 0
 
 
 if __name__ == "__main__":

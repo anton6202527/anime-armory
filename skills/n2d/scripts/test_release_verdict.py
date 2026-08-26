@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import os
+import subprocess
 import time
 from pathlib import Path
 
@@ -21,6 +22,8 @@ from skill_snapshot import artifact_fingerprint  # noqa: E402
 @pytest.fixture(autouse=True)
 def _stable_ffprobe(monkeypatch):
     monkeypatch.setattr(release_verdict.script_supervisor_log, "ffprobe_duration", lambda path: 1.0 if Path(path).is_file() else None)
+    if release_verdict.creative_watchdown_mod is not None:
+        monkeypatch.setattr(release_verdict.creative_watchdown_mod, "probe_duration", lambda path: 1.0 if Path(path).is_file() else 0.0)
 
 
 def _write_json(path: Path, payload: dict) -> None:
@@ -28,9 +31,36 @@ def _write_json(path: Path, payload: dict) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True), encoding="utf-8")
 
 
+def test_json_cli_keeps_progress_diagnostics_off_stdout(tmp_path: Path, capsys) -> None:
+    rc = release_verdict.main([str(tmp_path), "第1集", "--json"])
+
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+    assert rc == 2
+    assert payload["status"] == "blocked"
+    assert "找不到" in captured.err
+
+
 def _write_bytes(path: Path, payload: bytes) -> str:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(payload)
+    return release_verdict.sha256_file(path)
+
+
+def _write_master(path: Path) -> str:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    proc = subprocess.run([
+        "ffmpeg", "-nostdin", "-y", "-v", "error",
+        "-f", "lavfi", "-i", "color=c=blue:s=16x16:r=24:d=0.6",
+        "-f", "lavfi", "-i", "sine=frequency=440:sample_rate=48000:duration=0.6",
+        "-map", "0:v", "-map", "1:a", "-c:v", "libx264", "-pix_fmt", "yuv420p",
+        "-x264-params", "colorprim=bt709:transfer=bt709:colormatrix=bt709:range=limited",
+        "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709",
+        "-color_range", "tv", "-c:a", "aac", "-ar", "48000", "-ac", "2",
+        "-movflags", "+faststart", str(path),
+    ], capture_output=True, text=True, check=False, timeout=60)
+    if proc.returncode != 0:
+        pytest.skip(f"ffmpeg unavailable for media receipt test: {proc.stderr}")
     return release_verdict.sha256_file(path)
 
 
@@ -58,7 +88,51 @@ def _release_ready_project(root: Path, episode: str = "第1集") -> None:
 | {episode} | 100 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 """, encoding="utf-8")
     master = root / "合成" / episode / f"成片_{episode}_zh.mp4"
-    _write_bytes(master, b"final master")
+    master_sha = _write_master(master)
+    media = release_verdict.media_artifact_mod
+    assert media is not None
+    media_duration = float(media.probe_media(master)["duration_sec"])
+    recipe = root / "生产数据" / "timelines" / episode / "render_recipe.json"
+    recipe_payload = {
+        "kind": media.RECIPE_KIND,
+        "version": media.RECIPE_VERSION,
+        "episode": episode,
+        "generated_at": "2026-08-20T00:00:00+00:00",
+        "picture": {"duration_sec": media_duration},
+        "ordered_sources": [{
+            "clip": "Clip_01", "source_sha256": master_sha, "edit_duration_sec": media_duration,
+        }],
+        "duration_sec": media_duration,
+    }
+    hash_scope = dict(recipe_payload)
+    hash_scope.pop("generated_at")
+    recipe_payload["recipe_sha256"] = media.canonical_json_sha(hash_scope)
+    _write_json(recipe, recipe_payload)
+    loudness = media.measure_loudness(master)
+    assert loudness["available"] is True, loudness
+    media_receipt = media.build_receipt(
+        root,
+        episode,
+        master,
+        media.default_master_spec(
+            width=16, height=16, fps="24", target_lufs=float(loudness["integrated_lufs"]),
+        ),
+        recipe_path=recipe,
+        transaction_id="release-verdict-test",
+    )
+    assert media_receipt["status"] == "pass", media_receipt
+    media.write_receipt(root, episode, media_receipt)
+    _write_json(root / "生产数据" / f"creative_watchdown_{episode}.json", {
+        "kind": "n2d_creative_watchdown", "version": 1, "episode": episode, "status": "pass",
+        "reviewer_kind": "executor_visual_audio",
+        "reviewed_at": "2026-08-20T00:00:00+00:00",
+        "master": {"path": f"合成/{episode}/{master.name}", "sha256": master_sha, "duration_sec": 1.0},
+        "watched_duration_sec": 1.0, "coverage": 1.0,
+        "dimensions_reviewed": list(release_verdict.creative_watchdown_mod.DIMENSIONS),
+        "timecode_findings": [], "review_notes": ["完整听看当前测试母版。"],
+        "scope": "creative_preflight_only", "final_user_acceptance": False,
+        "release_completion_verdict": False,
+    })
     past = time.time() - 10
     os.utime(master, (past, past))
 
@@ -350,14 +424,39 @@ def test_final_master_uses_same_canonical_resolver_as_acceptance(tmp_path: Path)
     assert result["details"]["selected"] == canonical.relative_to(tmp_path).as_posix()
 
 
+def test_final_master_blocks_old_receipt_when_newer_canonical_master_exists(tmp_path: Path) -> None:
+    """Regression: an old receipt cannot validate a different, newer master."""
+    _release_ready_project(tmp_path)
+    old_master = tmp_path / "合成" / "第1集" / "成片_第1集_zh.mp4"
+    new_master = old_master.with_name("成片_第1集_v2.mp4")
+    new_master.write_bytes(b"new canonical master")
+    future = time.time() + 10
+    os.utime(new_master, (future, future))
+
+    assert release_verdict.acceptance_contract.resolve_final_master(tmp_path, "第1集") == new_master.resolve()
+    result = release_verdict.check_final_master(tmp_path, "第1集")
+
+    assert result["status"] == "block"
+    assert any(
+        "different canonical artifact" in issue or "artifact SHA is stale" in issue
+        for issue in result["details"]["issues"]
+    )
+    watchdown = release_verdict.check_creative_watchdown(tmp_path, "第1集")
+    assert watchdown["status"] == "block"
+    assert any("SHA" in issue for issue in watchdown["details"]["issues"])
+
+
 def test_final_master_blocks_when_playability_cannot_be_proven(monkeypatch, tmp_path: Path) -> None:
     _release_ready_project(tmp_path)
-    monkeypatch.setattr(release_verdict.script_supervisor_log, "ffprobe_duration", lambda _path: None)
+    receipt = tmp_path / "生产数据" / "media_artifact_receipt_第1集.json"
+    data = json.loads(receipt.read_text(encoding="utf-8"))
+    data["validation"]["status"] = "block"
+    _write_json(receipt, data)
 
     result = release_verdict.check_final_master(tmp_path, "第1集")
 
     assert result["status"] == "block"
-    assert "无法证明可播放" in result["message"]
+    assert "MediaArtifactReceipt" in result["message"]
 
 
 def test_public_ai_label_gap_does_not_erase_technical_master_delivery(tmp_path: Path) -> None:

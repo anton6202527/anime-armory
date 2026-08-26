@@ -136,3 +136,91 @@ def test_visual_acceptance_is_invalidated_when_current_pixels_change(tmp_path):
     ok, reason = receipts.current_accepted(root, job)
     assert ok is False
     assert "output pixel SHA changed" in reason
+
+
+def test_visual_signoff_rejects_automated_reviewer_without_delegate_contract(tmp_path):
+    root = tmp_path / "project"
+    _image(root / "设定库" / "ref.png")
+    job = _job(root)
+    manifest = {"jobs": [job]}
+    receipts.preflight(root, manifest, job, 0)
+    job["actual_reference_inputs"] = list(job["reference_inputs"])
+    output = root / job["expected_output"]
+    _image(output)
+    receipts.postflight(root, job, _qc(root))
+    review = root / "生产数据" / "image_job_reviews" / "镜头01.json"
+    review.parent.mkdir(parents=True)
+    review.write_text(json.dumps({
+        "reviewer": "visual-review-agent",
+        "decision": "accepted",
+        "output_sha256": _sha(output),
+        "notes": "machine-authored review",
+        "checks": {key: "pass" for key in receipts.REQUIRED_VISUAL_CHECKS},
+    }, ensure_ascii=False), encoding="utf-8")
+    with pytest.raises(receipts.ReceiptBlocked, match="automated identity"):
+        receipts.signoff(root, manifest, job, review)
+
+
+def test_authorized_executor_visual_receipt_can_advance_but_is_not_human_signoff(tmp_path):
+    root = tmp_path / "project"
+    settings = root / "_设置.md"
+    settings.parent.mkdir(parents=True)
+    settings.write_text("- 审阅策略: 用户授权制作代理\n", encoding="utf-8")
+    _image(root / "设定库" / "ref.png")
+    job = _job(root)
+    manifest = {"jobs": [job]}
+    receipts.preflight(root, manifest, job, 0)
+    job["actual_reference_inputs"] = list(job["reference_inputs"])
+    output = root / job["expected_output"]
+    _image(output)
+    receipts.postflight(root, job, _qc(root))
+    review = root / "生产数据" / "image_job_reviews" / "镜头01.json"
+    review.parent.mkdir(parents=True)
+    review.write_text(json.dumps({
+        "reviewer": "delegate:visual-review-agent",
+        "review_kind": "executor_visual",
+        "human_signoff": False,
+        "decision": "accepted",
+        "output_sha256": _sha(output),
+        "notes": "制作代理已实际并排查看当前像素、参考图与连续帧。",
+        "checks": {key: "pass" for key in receipts.REQUIRED_VISUAL_CHECKS},
+        "authorization": {
+            "settings_path": "_设置.md",
+            "settings_sha256": _sha(settings),
+            "approved_by": "项目负责人甲",
+            "approval_reference": "brief-session-001",
+            "source_quote": "同意制作代理逐张实际查看并推进可逆中间生产",
+        },
+    }, ensure_ascii=False), encoding="utf-8")
+    receipt = receipts.signoff(root, manifest, job, review)
+    assert receipt["status"] == "accepted"
+    assert receipt["visual_review"]["review_kind"] == "executor_visual"
+    assert receipt["visual_review"]["human_signoff"] is False
+    assert receipts.current_accepted(root, job)[0] is True
+
+
+def test_executor_visual_receipt_rejects_stale_settings_authorization(tmp_path):
+    root = tmp_path / "project"
+    settings = root / "_设置.md"
+    settings.parent.mkdir(parents=True)
+    settings.write_text("- 审阅策略: 用户授权制作代理\n", encoding="utf-8")
+    _image(root / "设定库" / "ref.png")
+    job = _job(root)
+    manifest = {"jobs": [job]}
+    receipts.preflight(root, manifest, job, 0)
+    job["actual_reference_inputs"] = list(job["reference_inputs"])
+    output = root / job["expected_output"]
+    _image(output)
+    receipts.postflight(root, job, _qc(root))
+    review = root / "生产数据" / "image_job_reviews" / "镜头01.json"
+    review.parent.mkdir(parents=True)
+    review.write_text(json.dumps({
+        "reviewer": "delegate:visual-review-agent", "review_kind": "executor_visual",
+        "human_signoff": False, "decision": "accepted", "output_sha256": _sha(output),
+        "notes": "actual pixel inspection", "checks": {key: "pass" for key in receipts.REQUIRED_VISUAL_CHECKS},
+        "authorization": {"settings_path": "_设置.md", "settings_sha256": "0" * 64,
+                          "approved_by": "项目负责人甲", "approval_reference": "brief-session-001",
+                          "source_quote": "同意制作代理逐张审阅"},
+    }, ensure_ascii=False), encoding="utf-8")
+    with pytest.raises(receipts.ReceiptBlocked, match="current _设置.md SHA"):
+        receipts.signoff(root, manifest, job, review)

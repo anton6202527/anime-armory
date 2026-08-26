@@ -50,6 +50,8 @@ description: 漫剧质检 + 流程自审（n2d 的 QA 环节，不生产内容�
 
 > **canonical 整集验收**：先生成当前 `release_verdict_<集>.json`，再由真实 reviewer 运行 `python3 skills/n2d/_lib/acceptance_contract.py approve <作品根> 第N集 --reviewer <审核人> --decision approved`。唯一有效收据是 `生产数据/acceptance_receipt_第N集.json`，它绑定统一 resolver 选出的 canonical 母版以及 verdict、score、consistency ledger、review-ui/findings 的当前 SHA；每次复核都重新用 ffprobe 验证母版可播放及真实时长。事件账本 audit 与 release-scope、strict、completion-input artifact validation 是 verdict required components，必须通过 kind/version/root/source/content/current-artifact 重验，并只把目标集投影纳入完成哈希；裸 `{status: pass}` 无效，别集事件或派生报告时间戳也不会让本集签收自失效。`review_signoff` 只可作迁移诊断，不能继承旧 reviewer/decision 自动签新母版；`consistency_advisory_signoff` 只处理局部证据族误报，rejected/advisory/删除后的签收都不能令 `master_delivery_complete` 成立。复核用 `acceptance_contract.py check <作品根> 第N集 --json`。
 
+> **母版技术证据与创作听看分层**：release verdict 先要求 current `MediaArtifactReceipt`，证明 canonical 母版 SHA、规格、render recipe、faststart、完整解码、色彩与响度检查都对应当前 bytes；再要求 `creative_watchdown_<集>.json` 绑定同一母版 SHA，覆盖全片时长并记录故事表演、视觉连续性、对白声音、节奏四维及时间码问题。validator 会重验 reviewer、含时区时间、覆盖率、母版路径/SHA/时长、四维观察和 finding 结构，并从 finding 严重度重新推导状态；手改 `status=pass` 不能掩盖 BLOCK。watchdown 是执行者/人类的创作预检，不是最终用户 acceptance，也不能写第二套 release completion verdict。
+
 - **机检（确定性，先跑）**：`scripts/mechanical_check.py <作品根> 第N集` —— 秒级出确定性问题：字幕↔配音文本/时间码对账、中英字幕错位、占位未精修、单行溢出、配音占位音色未替换、产物完整性对账、钩子/集尾留存信号缺失、**脏标点 lint（中英）**（中文 `||` 气口残留 `。，`/`，，`/行首逗号 + 英文 标点前空格/多空格/叠逗号/行首逗号·省略号 `...` 豁免——即便字幕与配音"同样脏"对账能过也单独抓；源头 `voice_text.clean_text` + `finalize._clean_punct/_clean_en` 已修，旧集 stale 数据靠它兜）。**审查第1步即自动跑，无需人记得扫。**
   ```bash
   python3 <skill>/scripts/mechanical_check.py <作品根> 第N集          # 人读

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # 逐句 TTS 配音 → gap 拼接 → voice.wav + 时长清单.json
-# 后端优先级: 零样本克隆组(CosyVoice > FishSpeech > GPT-SoVITS > IndexTTS-2 > VoxCPM2，取第一个设了 URL 的) > MiniMax > 火山 > macOS say。
+# 后端优先级: 零样本克隆组(CosyVoice 3 > Fish Audio S2 / Fish Speech > GPT-SoVITS > IndexTTS-2.5 > VoxCPM2，取第一个设了 URL 的) > MiniMax > 火山 > macOS say。
 # 带持久缓存(同参数同文本不重复合成/调 API)——云端与本地零样本均缓存进 _voicecache/。
 # 用法: render_voice.py <作品根> <第N集> <zh|en>
 import sys, os, re, subprocess, json, base64, uuid, hashlib, urllib.request, shutil, time
@@ -20,7 +20,7 @@ except Exception:  # 采集绝不拖垮配音
 from voice_text import clean_text, parse_voiceover_line  # 念白文本清洗/格式解析（独立模块·带单测）
 import voice_manifest as vmf  # 时长清单条目 + voice_key 音色留痕（独立模块·带单测；契约字段 VOICE_KEY_FIELD）
 import voice_lexicon as vlex  # 专名/多音字读音词典（谐音只下到声学层，字幕/清单保留正名；独立模块·带单测）
-from gptsovits_adapter import endpoint_candidates  # GPT-SoVITS 官方 API / CosyVoice 兼容端点适配
+from gptsovits_adapter import endpoint_candidates  # GPT-SoVITS 官方 API / CosyVoice 3（兼容旧 endpoint）端点适配
 from voice_preproduction import (  # 声音选角锁 + 最终渲染守卫 + 估时单一真值源
     casting_backend,
     casting_blockers,
@@ -82,9 +82,9 @@ VOLC_CLUSTER=os.environ.get('VOLC_CLUSTER','volcano_tts'); VOLC_ENDPOINT=os.envi
 try:
     from voice_backends import zs_specs_legacy as _zs_legacy  # noqa: E402
     ZS_SPECS=[tuple(t) for t in _zs_legacy()]
-except Exception:  # 退化兜底：catalog 不可用时仍按内置优先级跑
-    ZS_SPECS=[('COSYVOICE_URL','COSY','CosyVoice',120),('FISHSPEECH_URL','FISH','FishSpeech',300),
-              ('GPTSOVITS_URL','GSV','GPT-SoVITS',300),('INDEXTTS_URL','IDX','IndexTTS-2',300),
+except Exception:  # 兼容 fallback 只保留旧 endpoint 合同；label 不声明 endpoint 已实际升级，精确模型必须进执行收据
+    ZS_SPECS=[('COSYVOICE_URL','COSY','CosyVoice 3',120),('FISHSPEECH_URL','FISH','Fish Audio S2 / Fish Speech',300),
+              ('GPTSOVITS_URL','GSV','GPT-SoVITS',300),('INDEXTTS_URL','IDX','IndexTTS-2.5',300),
               ('VOXCPM_URL','VOX','VoxCPM2',300)]
 ZS=next(((os.environ[e],pfx,lbl,to) for e,pfx,lbl,to in ZS_SPECS if os.environ.get(e)), None)
 USE_ZS=bool(ZS)   # 零样本克隆优先于 MiniMax；若也设了 MiniMax，本地零样本赢
@@ -132,6 +132,7 @@ def hook_kind(s):
 
 # items[i] = (role, text, emo_canonical, speed_mult, hook_kind)
 items=[]; shots=[]
+voice_listening_check = {"status": "not_applicable", "issues": [], "reason": "non_zh_or_guide"}
 if LANG=='zh':
     if not os.path.isfile(VO):
         sys.exit(f'⛔ 缺 {VO} —— 请先 n2d-script 产出 voiceover.txt（阶段1·剧本改编）。')
@@ -219,7 +220,7 @@ def volc_cfg(role):
     if '系统' in role: return V['SYS'],None,1.0
     return V['SHEN'],'neutral',1.0
 
-# ── 零样本克隆(CosyVoice/FishSpeech) 按角色分音色：角色→音色键→参考音 env ──
+# ── 零样本克隆(CosyVoice 3/Fish Audio S2/旧 Fish Speech) 按角色分音色：角色→音色键→参考音 env ──
 # 角色名(含子串)归到音色键；实现已抽到 voice_manifest.role_key（带单测，'沈念旁白'走SHEN等规则见彼处）
 def role_key(role): return vmf.role_key(role, VOICEMAP)
 # 取该角色的 (参考音wav, 逐字文本)：优先 <PREFIX>_REF_<KEY>，回退全局 <PREFIX>_REF_AUDIO，再回退 None=默认嗓
@@ -483,16 +484,70 @@ if LANG=='zh':
     manifest_placeholder_rows = placeholder_rows(manifest)
     placeholder_line_count = len(manifest_placeholder_rows)
     out_dir=os.path.dirname(os.path.join(W,'voice_zh.wav'))
-    _json.dump(manifest, open(os.path.join(out_dir,'时长清单.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
+    manifest_path = os.path.join(out_dir, '时长清单.json')
+    _json.dump(manifest, open(manifest_path,'w',encoding='utf-8'), ensure_ascii=False, indent=2)
     
-    # --- Emotional Flow Analysis (Optimization Point 3) ---
+    # --- Measured voice evidence + key-line best-of-N entry ---
     try:
         from voice_analysis import analyze_emotion_flow
         emotion_flow_path = os.path.join(out_dir, 'emotion_flow.json')
-        analyze_emotion_flow(W, manifest, emotion_flow_path)
-        print(f"   [opt] 情感能量流已提取 → emotion_flow.json")
+        evidence_path = os.path.join(out_dir, 'voice_quality_evidence.json')
+        analyze_emotion_flow(vd, manifest, emotion_flow_path, evidence_path)
+        evidence = _json.load(open(evidence_path, encoding='utf-8'))
+        print(f"   [opt] 配音证据已提取 → voice_quality_evidence.json status={evidence.get('status')}")
+        if evidence.get('status') != 'pass':
+            print("   [warn] ASR/CER、speaker、prosody 或 timing 尚有未测/阻断项；不得以能量分析冒充完整配音质检")
     except Exception as e:
-        print(f"   [warn] 情感能量流提取失败: {e}")
+        print(f"   [warn] 配音证据提取失败: {e}")
+
+    # 最终配音完成边界：关键句 plan 与实际听辨收据都重新绑定当前 manifest/WAV。
+    # 首次渲染通常没有收据，因此只落产物并保持 ⏳rough；执行者/真人实际听辨后记录收据，
+    # 再重跑时只要 manifest/WAV 字节未变即可通过。不得在这里自动生成/伪造听辨收据。
+    try:
+        from voice_analysis import build_key_line_best_of_n_plan, validate_listening_receipt
+        plan_path = os.path.join(out_dir, 'key_line_best_of_n_plan.json')
+        receipt_path = os.path.join(out_dir, 'voice_listening_receipt.json')
+        best_of_n = build_key_line_best_of_n_plan(
+            manifest,
+            int(os.environ.get('N2D_VOICE_KEY_LINE_N', '3')),
+            manifest_path=manifest_path,
+        )
+        _json.dump(best_of_n, open(plan_path, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+        if GUIDE_PURPOSE:
+            voice_listening_check = {
+                "kind": "n2d_voice_listening_check", "version": 1,
+                "status": "not_applicable", "issues": [], "reason": "guide_voice_not_final",
+                "final_user_acceptance": False,
+            }
+        else:
+            voice_listening_check = validate_listening_receipt(
+                vd,
+                manifest,
+                receipt_path,
+                manifest_path=manifest_path,
+                plan_path=plan_path,
+            )
+        _json.dump(
+            voice_listening_check,
+            open(os.path.join(out_dir, 'voice_listening_check.json'), 'w', encoding='utf-8'),
+            ensure_ascii=False,
+            indent=2,
+        )
+        if voice_listening_check.get('status') == 'block':
+            print("   [block] 关键句尚缺当前 WAV/manifest 绑定的实际听辨收据；最终配音保持 ⏳rough，不得自动补签")
+    except Exception as e:
+        voice_listening_check = {
+            "kind": "n2d_voice_listening_check", "version": 1, "status": "block",
+            "issues": [f"listening_validation_failed:{type(e).__name__}:{e}"],
+            "final_user_acceptance": False,
+        }
+        _json.dump(
+            voice_listening_check,
+            open(os.path.join(out_dir, 'voice_listening_check.json'), 'w', encoding='utf-8'),
+            ensure_ascii=False,
+            indent=2,
+        )
+        print(f"   [block] 关键句实际听辨合同校验失败，最终配音保持 ⏳rough: {e}")
 
     # 时长清单 sidecar：记录配音时 voiceover.txt 的台词指纹 + 后端 + 时间。
     # validate_timings 用它抓"配音之后又改 voiceover.txt（改词/插句/删句）→ 清单/字幕/镜头时长过期"，
@@ -521,7 +576,7 @@ if 'manifest_placeholder_rows' in globals() and manifest_placeholder_rows:
         )
         requirement = (
             "本项目制作模式=先出视频后配音: 可用于分镜/字幕时间轴 rough preview 和无声视频前置制作；"
-            "合成前换 CosyVoice/克隆/MiniMax 等真实配音重跑,再拟合到已锁镜头。"
+            "合成前换 CosyVoice 3/Fish Audio S2/IndexTTS-2.5/克隆/MiniMax 等真实配音重跑,再拟合到已锁镜头。"
         )
     else:
         warn = (
@@ -529,7 +584,7 @@ if 'manifest_placeholder_rows' in globals() and manifest_placeholder_rows:
             '。当前不是有声朗读,仅供出图前 rough timing;出图前请换真实配音重跑 n2d-voice。'
         )
         requirement = (
-            "本项目不是后配音默认流程: 跨过出图前,换 CosyVoice/克隆/MiniMax 等真实配音重跑,"
+            "本项目不是后配音默认流程: 跨过出图前,换 CosyVoice 3/Fish Audio S2/IndexTTS-2.5/克隆/MiniMax 等真实配音重跑,"
             "并用真实时长回跑 n2d-script 阶段2。"
         )
     open(os.path.join(W,'_占位说明.md'),'w',encoding='utf-8').write(
@@ -551,7 +606,8 @@ if LANG == 'zh' and os.environ.get('N2D_UPDATE_PROGRESS', '1') != '0':
         # 占位判定走单一真值源：不仅静音回退算占位，say 占位级音色（voice_key=say:...）
         # 也算——否则 say 有声会误写 ✅，而 finalize/validate 用同一谓词判 12/12 占位、口径打架。
         _too_slow = (sum(measured)+sum(gaps)) > max(180.0, (sum(expected)+sum(gaps))*2.8)
-        progress_value = '⏳rough' if (GUIDE_PURPOSE or manifest_is_placeholder(manifest) or _too_slow) else '✅'
+        _listening_ready = voice_listening_check.get('status') in {'pass', 'not_applicable'}
+        progress_value = '⏳rough' if (GUIDE_PURPOSE or manifest_is_placeholder(manifest) or _too_slow or not _listening_ready) else '✅'
         subprocess.run(['python3', prog, 'set', ROOT, EP, '配音', progress_value], check=False)
     except Exception:
         pass
@@ -559,13 +615,17 @@ if LANG == 'zh' and os.environ.get('N2D_UPDATE_PROGRESS', '1') != '0':
 
 # 记录生产数据 (P0)
 PROVIDER = ZS_LABEL if USE_ZS else 'MiniMax' if USE_MM else '火山' if USE_VOLC else 'say'
+_voice_event_status = 'pass'
+if LANG == 'zh' and not GUIDE_PURPOSE and voice_listening_check.get('status') == 'block':
+    _voice_event_status = 'needs_listening_review'
 record_event(
     ROOT, EP, stage="voice", event="generation",
     asset=os.path.join(W, f'voice_{LANG}.wav'),
-    status="pass",
+    status=_voice_event_status,
     duration_sec=TIMER.elapsed(),
     provider=PROVIDER,
-    meta={"lines": n, "placeholder_lines": len(placeholders), "purpose": VOICE_PURPOSE}
+    meta={"lines": n, "placeholder_lines": len(placeholders), "purpose": VOICE_PURPOSE,
+          "listening_check_status": voice_listening_check.get('status')}
 )
 
 print(f"配音 {LANG}: {n} 句（purpose={VOICE_PURPOSE}，后端={ZS_LABEL if USE_ZS else 'MiniMax' if USE_MM else '火山' if USE_VOLC else 'say'}，顺序拼接 gap={GAP}s+钩子留拍，无压速）→ voice_{LANG}.wav")

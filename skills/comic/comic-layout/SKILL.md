@@ -18,7 +18,8 @@ deterministic adapter 现支持三个最低可靠几何 profile：条漫 `longst
 
 ## 输出
 
-- `排版/第N话/layout.json`：schema 见 `references/layout_schema.md`，会继承 `name_board.json` 的 manuscript、page_side、spread_id、page_turn_hook、bubble_first、effects_hint 等元数据。
+- `排版/第N话/layout.json`：schema 见 `references/layout_schema.md`，会继承 `name_board.json` 的 manuscript、page_side、spread_id、spread_mode/cross_page_art、page_turn_hook、bubble_first、speaker anchors、effects_hint 等元数据。
+- `排版/第N话/layout_previews/`：候选的真实几何预览；条漫为连续 9:16 手机 screen-beat SVG，页漫/四格为 spread/page-turn contact sheet SVG，均带 SHA 并进入 selection receipt。
 - 可选 `排版/第N话/layout_notes.md`：说明大格、留白、气泡风险、出图注意。
 - `_进度.md`：默认 layout 草案只写 `🟡待签收`；validator 与人工或已授权制作代理的审批均有效后才把 `页面排版` 标为 `✅`。
 
@@ -63,7 +64,7 @@ python3 skills/comic/comic-layout/scripts/render_storyboard_svg.py "创作区/�
 6. 运行确定性 validator：panel ID 唯一且同序覆盖，矩形不重叠/不越界，阅读顺序一致，每段正文/SFX 都有界内 bubble slot。
 7. 输出 draft `layout.json`。如果文字过多，回 `comic-script`；如果页流不顺，回 `comic-name`，不要靠缩小字号硬塞。
 8. 人工或项目内已授权制作代理签收后写 SHA-bound approval receipt，才回写 `_进度.md` 的 `页面排版=✅`。`delegate:` 签收只接受 `_设置.md` 显式的 `审阅策略=用户授权制作代理`，或当前有效、摘要匹配的 `生产数据/authorizations/editorial_review.json`；batch 的机器结构签收明确记为 `review_kind=delegated_policy_auto_review`，不冒充视觉/语义人审。缺 key 不继承默认，授权撤销或变化会使签收失效。
-9. `layout_candidates.py` 以 balanced / fast_read / dramatic_pause 三套参数生成候选，按眼动合同、气泡负载、安全区、翻页钩子与重复构图排序。无 spread 的普通版式可 `--apply-best` 写 hash-bound selection；跨页/复杂版式强制保护，不自动套版。
+9. `layout_candidates.py` 以 balanced / fast_read / dramatic_pause 三套参数生成候选，实际渲染手机连续屏或翻页接触表，再以屏占比、空屏/拥挤、内侧气泡风险等几何信号联合眼动合同、气泡负载和翻页钩子排序。信号只作 B10 advisory ranking；普通左右页即使有 `spread_id` 仍可 `--apply-best`，只有显式 `cross_page_art` 强制保护。
 
 ## 排版原则
 

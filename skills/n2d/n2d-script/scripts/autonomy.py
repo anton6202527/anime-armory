@@ -38,6 +38,7 @@ from signoff_contract import (  # noqa: E402
     validate_manifest,
     write_manifest,
 )
+from story_acceptance_packets import review_execution_status  # noqa: E402
 
 
 READY_STATUSES = {"confirmed", "ready", "pass", "approved", "locked", "accepted"}
@@ -135,6 +136,11 @@ def approve(root: Path, profile: str, episode: str = "") -> Dict[str, Any]:
     if authorization_issues:
         return {"status": "invalid_authorization", "issues": authorization_issues}
     ready, readiness_issues = _review_ready(root, spec["evidence_paths"])
+    if profile in {"table_read", "animatic"}:
+        execution = review_execution_status(root, str(spec["episode"]), profile)
+        if execution["status"] != "pass":
+            readiness_issues.extend(execution["issues"])
+            ready = False
     if not ready:
         return {"status": "not_ready", "issues": readiness_issues}
 

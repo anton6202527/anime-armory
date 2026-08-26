@@ -7,7 +7,7 @@ consume without hard-coding one backend path.
 """
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 import re
 from typing import Any
 
@@ -30,6 +30,11 @@ class ImageBackendCapabilities:
     # 是执行真值（供 runner/planner 分配槽位）。二者不一致时以本字段为准，
     # 禁止在 runner 里再写死第二份数字。
     executable_attachment_limit: int = 0
+    # ``persistent_subject`` is an *effective* capability, not a marketing or
+    # model-name guess.  Planning may mark a route as theoretically capable,
+    # but it becomes true only after intersect_with_execution() sees a
+    # verified runner feature and an actual subject-id argument contract.
+    persistent_subject_evidence: str = ""
 
     def __post_init__(self) -> None:
         if int(self.executable_attachment_limit or 0) <= 0:
@@ -95,13 +100,18 @@ def resolve_capabilities(model: str, channel: str = "") -> ImageBackendCapabilit
             model=model_raw,
             channel=channel_raw,
             supports_image_inputs=True,
-            persistent_subject=True,
+            # A model/channel label is not execution evidence.  A registered
+            # adapter may turn this on through ``intersect_with_execution``.
+            persistent_subject=False,
             reference_image_limit=10,
             single_character_reference_limit=4,
             multi_character_reference_limit=3,
             non_character_reference_limit=2,
             style_reference_limit=1,
-            notes="Backend appears subject-library capable; registry should record any real subject id separately from reference images.",
+            notes=(
+                "Route may expose a subject library, but no persistent subject capability is claimed "
+                "until a project adapter declares a verified subject-id argument and evidence."
+            ),
         )
 
     if any(token in combined for token in ("dreamina", "即梦")):
@@ -155,3 +165,50 @@ def resolve_capabilities(model: str, channel: str = "") -> ImageBackendCapabilit
 
 def capabilities_from_settings(settings: dict[str, str]) -> ImageBackendCapabilities:
     return resolve_capabilities(settings.get("生图模型", "自定义"), settings.get("生图渠道", "manual"))
+
+
+def intersect_with_execution(
+    planned: ImageBackendCapabilities,
+    execution_adapter: dict[str, Any] | None,
+) -> ImageBackendCapabilities:
+    """Return model ∩ channel ∩ executable-runner capabilities.
+
+    ``resolve_capabilities`` is intentionally useful before a runner exists,
+    while a paid job must only advertise features the selected executable can
+    actually consume.  Persistent subjects therefore require all of:
+
+    - an executable adapter;
+    - ``features.persistent_subject=true``;
+    - a concrete ``features.subject_id_parameter``;
+    - dated/source evidence accepted by ``image_execution_adapter``.
+    """
+    adapter = execution_adapter if isinstance(execution_adapter, dict) else {}
+    features = adapter.get("features") if isinstance(adapter.get("features"), dict) else {}
+    executable = str(adapter.get("status") or "") == "executable"
+    image_inputs = bool(executable and features.get("image_inputs"))
+    subject_param = str(features.get("subject_id_parameter") or "").strip()
+    evidence = adapter.get("feature_evidence") if isinstance(adapter.get("feature_evidence"), dict) else {}
+    evidence_text = str(evidence.get("source") or evidence.get("command_help_sha256") or "").strip()
+    subject_verified = bool(
+        executable
+        and features.get("persistent_subject") is True
+        and subject_param
+        and evidence.get("verified_at")
+        and evidence_text
+    )
+    notes = planned.notes
+    if not executable:
+        notes += " Execution intersection: no executable adapter; planning capability only."
+    elif features.get("persistent_subject") and not subject_verified:
+        notes += " Execution intersection: persistent-subject declaration ignored because parameter/evidence is incomplete."
+    return replace(
+        planned,
+        supports_image_inputs=bool(planned.supports_image_inputs and image_inputs),
+        persistent_subject=subject_verified,
+        persistent_subject_evidence=(
+            f"{adapter.get('adapter_id')}:{subject_param}:{evidence.get('verified_at')}:{evidence_text}"
+            if subject_verified
+            else ""
+        ),
+        notes=notes,
+    )

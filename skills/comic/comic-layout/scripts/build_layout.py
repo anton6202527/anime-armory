@@ -504,6 +504,58 @@ def panel_metadata(
             regions.append(item)
         return regions
 
+    def mapped_speaker_anchors() -> Any:
+        """Map authored name-board anchors into final panel coordinates.
+
+        Anchors may be a mapping keyed by speaker/character id or a list of
+        records.  Point and bbox/rect forms are supported; unknown fields are
+        preserved so downstream renderers can remain forwards compatible.
+        """
+        raw = name_panel.get("speaker_anchors")
+        if not isinstance(raw, (dict, list)):
+            return {} if isinstance(raw, dict) else []
+        tx, ty, tw, th = (int(thumb.get(item) or 0) for item in ("x", "y", "w", "h"))
+
+        def map_rect(source_rect: dict[str, Any]) -> dict[str, int]:
+            rx, ry, rw, rh = (float(source_rect.get(field) or 0) for field in ("x", "y", "w", "h"))
+            if all(0.0 <= value <= 1.0 for value in (rx, ry, rw, rh)) and (rx or ry or rw or rh):
+                return {
+                    "x": int(rect["x"] + rx * rect["w"]),
+                    "y": int(rect["y"] + ry * rect["h"]),
+                    "w": max(1, int(rw * rect["w"])),
+                    "h": max(1, int(rh * rect["h"])),
+                }
+            if tw <= 0 or th <= 0:
+                return {"x": int(rx), "y": int(ry), "w": max(1, int(rw)), "h": max(1, int(rh))}
+            return {
+                "x": int(rect["x"] + (rx - tx) / tw * rect["w"]),
+                "y": int(rect["y"] + (ry - ty) / th * rect["h"]),
+                "w": max(1, int(rw / tw * rect["w"])),
+                "h": max(1, int(rh / th * rect["h"])),
+            }
+
+        def map_anchor(value: Any) -> Any:
+            if not isinstance(value, dict):
+                return copy.deepcopy(value)
+            item = copy.deepcopy(value)
+            source_rect = item.get("bbox") if isinstance(item.get("bbox"), dict) else item.get("rect") if isinstance(item.get("rect"), dict) else None
+            if source_rect is not None:
+                field = "bbox" if isinstance(item.get("bbox"), dict) else "rect"
+                item[field] = map_rect(source_rect)
+            elif "x" in item and "y" in item:
+                source_x, source_y = float(item.get("x") or 0), float(item.get("y") or 0)
+                if 0.0 <= source_x <= 1.0 and 0.0 <= source_y <= 1.0:
+                    item["x"] = int(rect["x"] + source_x * rect["w"])
+                    item["y"] = int(rect["y"] + source_y * rect["h"])
+                elif tw > 0 and th > 0:
+                    item["x"] = int(rect["x"] + (source_x - tx) / tw * rect["w"])
+                    item["y"] = int(rect["y"] + (source_y - ty) / th * rect["h"])
+            return item
+
+        if isinstance(raw, dict):
+            return {str(key): map_anchor(value) for key, value in raw.items()}
+        return [map_anchor(value) for value in raw]
+
     out: dict[str, Any] = {
         "panel_id": str(panel.get("panel_id")),
         **rect,
@@ -516,9 +568,13 @@ def panel_metadata(
         "name_page_id": name_page.get("page_id") or "",
         "page_side": name_page.get("page_side") or "",
         "spread_id": name_page.get("spread_id") or "",
+        "spread_mode": name_page.get("spread_mode") or "paired_pages",
+        "cross_page_art": bool(name_page.get("cross_page_art")),
         "page_turn_hook": name_page.get("page_turn_hook") or "",
         "page_turn": name_page.get("page_turn") if isinstance(name_page.get("page_turn"), dict) else {},
         "subject_regions": mapped_regions("subject_regions"),
+        "character_regions": mapped_regions("character_regions"),
+        "speaker_anchors": mapped_speaker_anchors(),
         "avoid_regions": mapped_regions("avoid_regions"),
         "eye_flow_entry": name_panel.get("eye_flow_entry") or "",
         "eye_flow_exit": name_panel.get("eye_flow_exit") or "",
@@ -557,6 +613,8 @@ def _build_paged_segments(
                 "segment_id": str(page.get("page_id") or f"PAGE_{page_number:03d}"),
                 "page_side": str(page.get("page_side") or ""),
                 "spread_id": str(page.get("spread_id") or ""),
+                "spread_mode": str(page.get("spread_mode") or "paired_pages"),
+                "cross_page_art": bool(page.get("cross_page_art")),
                 "width": width,
                 "height": page_h,
                 "reading_order": [item["panel_id"] for item in items],
@@ -637,6 +695,7 @@ def build_layout(
     gutter: int,
     *,
     allow_legacy_name: bool = False,
+    honor_candidate_selection: bool = True,
 ) -> dict:
     panel_path = root / "脚本" / chapter / "panel_script.json"
     name_path = root / "排版" / chapter / "name_board.json"
@@ -647,10 +706,11 @@ def build_layout(
     panel_script = load_json(panel_path)
     name_board = load_json(name_path)
     selection_path = root / "排版" / chapter / "layout_candidate_selection.json"
-    selection = load_optional_json(selection_path)
+    selection = load_optional_json(selection_path) if honor_candidate_selection else {}
     bindings = selection.get("input_bindings") if isinstance(selection.get("input_bindings"), dict) else {}
     if (
-        selection.get("kind") == "comic_layout_candidate_selection"
+        honor_candidate_selection
+        and selection.get("kind") == "comic_layout_candidate_selection"
         and bindings.get("panel_script_sha256") == sha256_file(panel_path)
         and bindings.get("name_board_sha256") == sha256_file(name_path)
         and bindings.get("settings_sha256") == sha256_file(root / "_设置.md")

@@ -31,6 +31,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 if _HERE not in sys.path:
     sys.path.insert(0, _HERE)
 import loudness_conform  # noqa: E402  本目录·复用平台响度目标（PLATFORM_TARGETS）
+import media_artifact  # noqa: E402  direct/batch/release 共用媒体验证
 
 
 # ── 选择点解析（最小本地实现·不引 n2d/_lib，保持自包含可测） ──────────────────
@@ -59,15 +60,18 @@ ALL_ASPECTS = ("9:16", "16:9", "1:1")
 # 上传码率给足避免糊（竖屏短剧事实标准 H.264 High/yuv420p/30fps/8-12Mbps；B站/YT 横屏更高）。
 # 只作交付建议 + reframe/派生件渲染码控，不改母带编码（母带规格见 compose.sh：CRF20/aac192k）。
 PLATFORM_ENCODING = {
-    "vertical_short": {"video_codec": "h264", "pix_fmt": "yuv420p", "fps": 30,
+    "vertical_short": {"video_codec": "h264", "pix_fmt": "yuv420p", "fps": "preserve_master",
                        "video_bitrate": "8M", "maxrate": "12M",
-                       "audio_codec": "aac", "audio_bitrate": "192k"},
-    "bilibili": {"video_codec": "h264", "pix_fmt": "yuv420p", "fps": 30,
+                       "audio_codec": "aac", "audio_bitrate": "192k", "audio_sample_rate": 48000,
+                       "h264_profile": "high", "closed_gop_seconds": 2, "faststart": True},
+    "bilibili": {"video_codec": "h264", "pix_fmt": "yuv420p", "fps": "preserve_master",
                  "video_bitrate": "12M", "maxrate": "20M",
-                 "audio_codec": "aac", "audio_bitrate": "192k"},
-    "youtube": {"video_codec": "h264", "pix_fmt": "yuv420p", "fps": 30,
+                 "audio_codec": "aac", "audio_bitrate": "192k", "audio_sample_rate": 48000,
+                 "h264_profile": "high", "closed_gop_seconds": 2, "faststart": True},
+    "youtube": {"video_codec": "h264", "pix_fmt": "yuv420p", "fps": "preserve_master",
                 "video_bitrate": "12M", "maxrate": "20M",
-                "audio_codec": "aac", "audio_bitrate": "192k"},
+                "audio_codec": "aac", "audio_bitrate": "192k", "audio_sample_rate": 48000,
+                "h264_profile": "high", "closed_gop_seconds": 2, "faststart": True},
 }
 PLATFORM_ENCODING["default"] = dict(PLATFORM_ENCODING["vertical_short"])
 
@@ -189,6 +193,16 @@ def build_matrix(root, ep, platform, aspect_setting, duration_setting,
     encoding = encoding_for_platform(platform)
 
     master = find_master(root, ep)
+    if master:
+        current = media_artifact.current_receipt(root, ep, master)
+        if current.get("status") == "pass":
+            probe_video = (((current.get("receipt") or {}).get("validation") or {}).get("probe") or {}).get("video") or {}
+            encoding["fps"] = str(probe_video.get("fps_rational") or probe_video.get("fps") or "")
+            encoding["master_receipt"] = current.get("path")
+        else:
+            master = None
+            encoding["master_receipt_error"] = current.get("issues") or ["current MediaArtifactReceipt required"]
+    encoding["target_lufs"] = target_lufs
     deliverables = []
 
     # 1) 多时长 cutdown（母带原生比例下重剪）
@@ -268,7 +282,10 @@ def run_deliverables(root, ep, matrix):
                                 "msg": "cutdown 计划被阻断（镜头时长缺失）：" +
                                        "；".join(x["msg"] for x in findings if x["severity"] in ("block", "error"))})
                 continue
-            ok, msg, _ = _cut.render_cutdown(root, ep, kept, item["duration"], out_abs, native)
+            ok, msg, _ = _cut.render_cutdown(
+                root, ep, kept, item["duration"], out_abs, native,
+                encoding=matrix.get("encoding"),
+            )
             results.append({"id": item["deliverable_id"], "ok": ok, "msg": msg})
         elif item["kind"] == "reframe":
             if not master_abs or not os.path.isfile(master_abs):
@@ -279,8 +296,9 @@ def run_deliverables(root, ep, matrix):
             mode = "pad" if aspect_value(item["aspect"]) > aspect_value(native) else "crop"
             src = "1080x1920" if aspect_value(native) < 1 else "1920x1080"
             vf = _ref.reframe_filter(src, item["aspect"], mode)
+            expected_size = _ref.out_resolution(item["aspect"])
             ok, msg = _ref.render_reframe(master_abs, out_abs, vf,
-                                          encoding=matrix.get("encoding"))
+                                          encoding=matrix.get("encoding"), expected_size=expected_size)
             results.append({"id": item["deliverable_id"], "ok": ok, "msg": f"({mode}) {msg}"})
     return results
 

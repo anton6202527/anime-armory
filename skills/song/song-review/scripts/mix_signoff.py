@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 from datetime import date
 from typing import Any
 
@@ -24,6 +25,16 @@ REQUIRED_CHECKS = (
 )
 PASS_VALUES = {"pass", "passed", "ok", "通过"}
 NA_VALUES = {"na", "n/a", "not_applicable", "不适用"}
+AUTOMATED_REVIEWER_RE = re.compile(
+    r"(?:^|[^a-z0-9])(agent|ai|assistant|automation|bot|chatgpt|claude|codex|delegate|listener|"
+    r"machine|model|producer|supervisor|system)(?:[^a-z0-9]|$)|"
+    r"^(?:代理|制作代理|自动化|机器人|模型|系统|系统代理|执行器)(?:$|[:：/#@])", re.I
+)
+
+
+def is_human_reviewer(value: Any) -> bool:
+    name = str(value or "").strip()
+    return bool(name) and not AUTOMATED_REVIEWER_RE.search(name)
 
 
 def sha256_file(path: str) -> str:
@@ -58,6 +69,12 @@ def build(root: str, args: argparse.Namespace) -> dict[str, Any]:
             findings.append({"id": "MIX-NA-REASON", "severity": "blocking", "message": f"{name}=N/A 时必须说明理由。"})
     if not str(args.reviewer or "").strip():
         findings.append({"id": "MIX-REVIEWER", "severity": "blocking", "message": "缺签核人。"})
+    elif not is_human_reviewer(args.reviewer):
+        findings.append({
+            "id": "MIX-REVIEWER-AUTOMATED",
+            "severity": "blocking",
+            "message": "最终签核人必须是真实具名人，不能是 AI / agent / automation / system / delegate 身份。",
+        })
     return {
         "schema_version": 1,
         "kind": KIND,

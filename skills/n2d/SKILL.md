@@ -2,23 +2,17 @@
 name: n2d
 description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked to turn a novel into a final AI comic-drama / short-drama master. Inspects `_进度.md`, automatically applies auditable recommendations for ordinary reversible choices, and routes through `n2d-script`, `n2d-voice`, `n2d-image`, `n2d-video`, `n2d-compose`, and `n2d-review`; paid generation, compliance/rights, destructive changes, public release, and final master acceptance remain explicit gates. Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 一键成片, 自动推进, 分镜, 配音, 出图, 出视频, 合成, 成片, 验收, 即梦, 可灵, 双语字幕, 海外投放, n2d.
 ---
-> 规模统计：Skill 数 21 | SKILL.md 总行数 4858 | 目录文本总行数 319824
-
+> 规模统计：Skill 数 21 | SKILL.md 总行数 4877 | 目录文本总行数 327625
 # n2d — 主状态机调度器
-
 > **n2d 系列**（本调度 + `n2d-script`/`n2d-voice`/`n2d-image`/`n2d-video`/`n2d-compose`/`n2d-review`）专管"小说→AI 漫剧/短剧"，**产物统一落 `创作区/制漫剧/<剧名>/`**。
-
 你是 **AI 漫剧制作总调度**。这个 skill 本身不做生产工作，它的职责是：
 
 1. **定位作品根**（创作区/制漫剧/<剧名>/）
 2. **读 `_进度.md`** 判断当前作品处于哪一阶段
 3. **推荐并连续推进下一步子 skill**（n2d-script 阶段1/2 · n2d-voice · n2d-image · n2d-video · n2d-compose · n2d-review）
 4. **解释流水线整体结构** 给第一次使用的用户
-
 详细架构与目录约定见 `references/architecture.md`。机器契约见 `references/contract.md`（脚本真值源：`skills/n2d/_lib/n2d_contract.py`，定义阶段图、`_进度.md` schema、manifest、gate 回滚字段）。实战 Q&A 见 `Q&A.md`（全阶段共用，沉淀的翻车修正都在那）。
-
 **生产数据分层与独立性**：n2d 的 `_进度.md`、设置、合同、签收、事件账与正式媒体仍是本线业务真值；`生产数据/artifact_catalog.json` 只是可删除、可重建的只读索引，缺失或过期不得成为 gate。持久时间线放 `生产数据/timelines/`，人读 Markdown/HTML 派生视图放 `生产数据/views/`，可重建 `_work` / `_clipcache` 由本线 cache manifest 管理。持久路径使用作品根相对路径。n2d 不 import `tools/artifact-catalog` 或其它系列实现，不回读其它系列状态/缓存；跨线输入只能是用户显式交付并复制入本项目的成品文件与来源 SHA。
-
 ## 资产目录边界（正式约定）
 
 - **作品根 `设定库/`**：保留，继续做世界观、角色圣经、场景语义、提示词与制作规则的真值层；它比视觉角色资产更广，不被 `角色库/` 替代。
@@ -27,7 +21,6 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 - **系列根 `创作区/制漫剧/_资产库/`**：只供制漫剧系列不同作品复用，不是仓库公共层。其它五条生产线各有自己的 `_资产库/`，任何生产线不得运行时 import 或回读另一条线的目录。
 - **跨系列 / 跨仓库 / 跨机器**：只显式交付所需的单个自包含 asset pack。目标侧复制或 fork 后自行适配；包必须 `requires_source_library=false`，不要求顺带打包整个系列库。
 - **旧目录迁移**：运行 `python3 skills/n2d/n2d-image/scripts/migrate_character_library.py <作品根>` 先 dry-run，确认后加 `--apply`。发现旧、新两套同时存在时脚本拒绝自动合并，避免双真值长期并存。
-
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
 本 skill 的可选项**不写死在阶段实现里**。按 `references/选择点与偏好.md` 读用户私有选择：项目值优先，其次全局默认；仍缺失的普通、可逆选择默认由 `普通选择策略=推荐方案自动继续` 采用推荐值，写回 `_设置.md` 并标 `source=auto_recommended`。用户显式设置永远优先，也可把策略改成 `逐项询问`。阶段预算包的创建/扩大、合规/授权、公开发布、破坏性操作与最终母版验收不属于普通选择，仍显式停审；已获批且仍精确匹配的预算包内不逐次重复问。
@@ -73,7 +66,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 > **一键 producer**：用户要求“一键成片/自动跑完”时，入口优先持续运行 `python3 skills/n2d/n2d-supervisor/scripts/producer.py <作品根> [第N集] --json`，而不是每次 NextAction 都把命令交回用户。producer 自动执行安全修复、已登记 specialist adapter、无付费本地阶段和已获预算包授权的 exact runner；只有预算包创建/扩大/过期、合规/权利、能力或环境真实缺口、公开发布/破坏性覆盖、当前像素硬伤和最终具名验收才停。它的收据只是派生执行证据；canonical 完成仍只认本节的 release verdict + acceptance receipt。
 
-> **一个状态、一个哈希、一个完成定义**：`run.py next --json` 的当前 `frontier.stage_key` 是生产任务能否执行的唯一状态裁决；`frontier=null` 只表示 `stop_reason=done`，batch queue 只是租约/重试视图，任务与当前 frontier 不相等时必须 fail-closed，不能把“已排队”当作付费授权。所有正式 prompt 消费、图片/视频提交与旧产物复用统一绑定 `n2d_content_fingerprint`，其 SHA 覆盖全部直接输入、路由、模型/渠道、能力档与参考素材；任一输入变化即失效。worker 的 `done` 只表示“命令成功 + 产物验证 + post gate 通过”三者都成立；整集 `master_delivery_complete` 只由可接受的 canonical `release_verdict` 与仍新鲜的 `acceptance_receipt_<集>.json` 共同证明，且二者必须指向同一份可探测播放的 canonical 母版。旧 signoff、advisory、进度表里的单个 `✅` 和 manifest 自算的 ready 都只是迁移诊断或展示信息，不能继承旧审批或单独证明完成。
+> **一个状态、一个哈希、一个完成定义**：`run.py next --json` 的当前 `frontier.stage_key` 是生产任务能否执行的唯一状态裁决；batch queue 只是租约/重试视图，runner 必须按动作卡的 `task_id + current_plan_digest + episode + stage` 精确认领，任一不符即 fail-closed。所有正式 prompt 消费、图片/视频提交与旧产物复用统一绑定 `n2d_content_fingerprint`；任一输入、路由、模型/渠道、能力档或参考素材变化即失效。worker 的 `done` 只表示“命令成功 + 产物验证 + post gate 通过”；母版先由 RenderTransaction 以 compare-and-swap 晋级并生成绑定 canonical 媒体 SHA、规格 SHA、render recipe SHA 与完整解码结果的 current `MediaArtifactReceipt`，整集 `master_delivery_complete` 最终仍只由可接受的 canonical `release_verdict` 与新鲜 `acceptance_receipt_<集>.json` 共同证明。进度 `✅`、provider `succeeded`、queue done、watchdown、telemetry 或其它 manifest ready 都不能宣布第二套完成。
 
 > **机器契约层**：阶段顺序、列名、gate stage、每集 manifest、回退目标统一由 `skills/n2d/_lib/n2d_contract.py` 定义，`progress.py` / `n2d-progress` / `n2d-review gate` 复用它。改阶段职责或列名时，先改 contract，再同步 `references/contract.md` 与本说明。
 >
@@ -130,7 +123,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 python3 skills/n2d/n2d-script/scripts/development_pack.py <作品根> scaffold --write
 python3 skills/n2d/n2d-script/scripts/development_pack.py <作品根> check --json --write-missing
 ```
-> **低成本围读 gate（导演排戏前的编剧室/演员围读层）**：每集完成 voiceover/时长脚手架后先生成 `table_read_packet.json/md`。内容 `status=confirmed` 只表示可审；标准模式由 director/head_writer 在 `table_read_signoff.json` 签收，有效自主授权则由代理按负责人豁免独立人审的范围签当前哈希。这样先发现“台词不活、信息太满、角色声线不清”，同时不把代理签收伪装成人工围读。
+> **低成本围读 gate（导演排戏前的编剧室/演员围读层）**：每集完成 voiceover/时长脚手架后先生成 `table_read_packet.json/md`。内容 `status=confirmed` 只表示可审；还必须有覆盖全部台词、逐行 SHA 与真实观察笔记绑定的 `table_read_execution.json`，再由标准 reviewer 或有效自主授权签当前哈希。裸 confirmed/布尔开关不能自证围读，代理签收也不冒充真人演员围读。
 ```bash
 python3 skills/n2d/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 scaffold --kind table_read
 python3 skills/n2d/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 check --kind table_read --json --write-missing
@@ -141,7 +134,7 @@ python3 skills/n2d/n2d-script/scripts/director_blocking_pack.py <作品根> 第1
 python3 skills/n2d/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 check --json --write-missing
 ```
 > **正反打连续性合同（传统影视语法 → AI 生产）**：P-2 的 `axis_blocking_map.json` 不只写“守轴线”，还必须在 `shot_reverse_patterns[]` 锁 180° 行动轴线、A/B 屏幕左右或 9:16 纵深高低位、互补视线、OTS/clean single/insert coverage、镜头高度/距离匹配、越轴策略和缓冲/重建空间镜。凡 `storyboard.json` 用 `dialogue_shot_reverse`，先跑 `python3 skills/n2d/n2d-script/scripts/shot_reverse_contract.py <作品根> 第N集 --write --sync-axis-map` 物化 `脚本/第N集/shot_reverse_contract.json` 并回填 `shot_reverse_patterns[]`；P-3 会把它继承进 `continuity_bible.json#shot_reverse_continuity`，出图/出视频 prompt 收据也会记录该合同 SHA。无理由越轴、左右互换、看镜头替代看戏内对象、OTS 没有前景肩部，视为连续性硬伤，不靠后期补救。
-> **Animatic 粗剪 gate（出图 prompt 前的导演预演验收层）**：从 storyboard + 镜头时长物化 timed preview、working `editorial_timeline.otio` 与不可变 `animatic_timeline.otio` 签收快照。放行要同时满足预览可生成、packet 内容 confirmed，以及标准人工签收或有效自主授权下的 delegated signoff；后续镜头替换只更新 working OTIO。
+> **Animatic 粗剪 gate（出图 prompt 前的导演预演验收层）**：从 storyboard、镜头时长、真实 guide voice 与 SRT 物化可播放 timed HTML、working `editorial_timeline.otio` 与不可变签收快照。放行要有完整时长的音画听看 execution receipt、packet confirmed 与标准/授权签收；缺音频或字幕只能标 `unmeasured`，后续镜头替换只更新 working OTIO。
 ```bash
 python3 skills/n2d/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 scaffold --kind animatic
 python3 skills/n2d/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 check --kind animatic --json --write-missing

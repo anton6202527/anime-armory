@@ -87,7 +87,7 @@
 - [ ] `[BLOCK]` 每个具名角色在每格至少保留一个真实身份锚；多人同格没有因预算只保留主角。
 - [ ] `[BLOCK]` 需要的 LOC、常驻 PROP、换装、强表情和极端角度参考已选择；关键参考文件存在。
 - [ ] `[BLOCK]` 超过后端真实附件上限时已经拆反打、拆格或制定分区合成，未静默丢弃关键约束。
-- [ ] `[BLOCK]` `panel_jobs.json` 为 schema v2，panel 覆盖完整；每格含结构化 bindings、reference path/SHA、`panel_plan_sha256`、`execution_input_sha256`、`consumed_contracts`。
+- [ ] `[BLOCK]` `panel_jobs.json` 为 schema v2，panel 覆盖完整；每格含结构化 bindings、DNA/variant/form/outfit/expression/state 的 `identity_execution_contracts`、exact reference SHA、多人 bbox/mask/occlusion locator、`panel_plan_sha256`、完整 `execution_input`/SHA 与 `consumed_contracts`。
 - [ ] `[BLOCK]` `build_panel_jobs.py --check` 没有 stale/missing panel；提交 prompt 来自当前 compiler/profile。
 - [ ] `[WARN]` 低风险被省略附件已在 bundle 中留痕，文字合同仍保留约束。
 
@@ -96,12 +96,13 @@
 - [ ] `[BLOCK]` 当前 `image_preflight` receipt 非 block，且 `inputs_fingerprint_sha256`/panel jobs SHA 当前。
 - [ ] `[BLOCK]` 每个必需 panel 文件存在、可解码，job 状态为 ready；生成记录的 execution input SHA 与当前 job 一致。
 - [ ] `[BLOCK]` 确定性 post-QC 没有图片损坏、空文件、错误尺寸或明确不可用状态。
-- [ ] `[BLOCK]` 正式图只在 `panels/`，旧图/候选在 `candidates/`；重抽没有覆盖审计历史。
+- [ ] `[BLOCK]` provider raw 不可变，active master 与 panel 原子派生；raw/master/panel 的 SHA、color space、bit depth、ICC、alpha、derivative chain 完整；旧图/候选没有被覆盖。
+- [ ] `[BLOCK]` 关键格多候选已逐张完成 B14，candidate manifest 达到目标数，adoption receipt 绑定当前执行输入与当前像素。
 - [ ] `[WARN]` 人物脸、发型、体型、服装和标志物跨格稳定；动作格手脚归属和道具接触清楚。
 - [ ] `[WARN]` 同一 LOC 的建筑结构、门窗、光向/冷暖、轴线、常驻道具和人物左右关系连续。
 - [ ] `[WARN]` 单格没有意外拼贴 gutter、照片墙、内部分栏、截图边或空白气泡。
 - [ ] `[WARN]` 风格/角色/场景/道具 contact sheet、embedding/像素离群和 near-duplicate 告警都已查看原图。
-- [ ] `[WARN]` VLM verdict 同时匹配当前 panel SHA、task SHA、全部 reference SHA 和 evaluator model/version；否则忽略旧裁决。
+- [ ] `[WARN]` VLM verdict 同时匹配当前 panel/task/exact-reference SHA，完整覆盖该轴 score keys，含 bbox/mask/occlusion region evidence、notes 与 evaluator model/version/reviewed_at；否则忽略旧裁决。
 - [ ] `[WARN]` 误报签收含 reason/evidence/current artifact SHA；重抽后重新审。
 
 ## 9. 嵌字与导出

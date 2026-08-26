@@ -37,7 +37,7 @@ from signoff_contract import (  # noqa: E402
 
 KIND = "n2d_story_acceptance_packets"
 CHECK_KIND = "n2d_story_acceptance_packets_check"
-VERSION = 1
+VERSION = 2
 PLACEHOLDER_RE = re.compile(r"(待补|待填写|TODO|TBD|__.+?__|<[^>]+>)", re.I)
 
 PACKETS = {
@@ -81,6 +81,13 @@ def file_sha256(path: Path) -> str:
         for chunk in iter(lambda: fh.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def relpath(root: Path, path: Path) -> str:
+    try:
+        return path.resolve().relative_to(root.resolve()).as_posix()
+    except Exception:
+        return str(path)
 
 
 def path_digest(root: Path, rel: str) -> str | None:
@@ -170,6 +177,145 @@ def packet_input_rels(ep: str, kind: str) -> List[str]:
     ]
 
 
+def review_execution_path(root: Path, ep: str, kind: str) -> Path:
+    ep = episode_label(ep)
+    if kind == "table_read":
+        return root / "脚本" / ep / "table_read_execution.json"
+    if kind == "animatic":
+        return root / "生产数据" / f"animatic_review_execution_{ep}.json"
+    raise ValueError(f"unknown review kind: {kind}")
+
+
+def _review_source_rels(ep: str, kind: str) -> List[str]:
+    rels = packet_input_rels(ep, kind)
+    if kind == "animatic":
+        rels += [f"生产数据/animatic_{ep}.json", f"生产数据/animatic_{ep}.html"]
+    return rels
+
+
+def record_review_execution(
+    root: Path,
+    ep: str,
+    kind: str,
+    *,
+    reviewer_kind: str,
+    coverage: float,
+    review_notes: List[str],
+    reviewed_line_count: int = 0,
+    watched_duration_sec: float = 0.0,
+    findings: List[Mapping[str, Any]] | None = None,
+) -> Dict[str, Any]:
+    """Record a hash-bound read/watch receipt; this is not final user acceptance."""
+    ep = episode_label(ep)
+    reviewer_kind = str(reviewer_kind or "").strip()
+    if reviewer_kind not in {"human", "executor_text_audio", "executor_visual_audio"}:
+        raise ValueError("reviewer_kind 必须说明实际执行围读/听看的一方")
+    if not review_notes or not any(str(x).strip() for x in review_notes):
+        raise ValueError("review_notes 不能为空；必须留下本次实际围读/听看的观察")
+    try:
+        coverage = float(coverage)
+    except Exception as exc:
+        raise ValueError("coverage 必须是 0..1") from exc
+    if not (0.98 <= coverage <= 1.0):
+        raise ValueError("review coverage 必须至少 0.98")
+
+    payload: Dict[str, Any] = {
+        "kind": f"n2d_{kind}_execution",
+        "version": 1,
+        "episode": ep,
+        "status": "reviewed",
+        "reviewed_at": now_iso(),
+        "reviewer_kind": reviewer_kind,
+        "coverage": round(coverage, 4),
+        "review_notes": [str(x).strip() for x in review_notes if str(x).strip()],
+        "findings": [dict(x) for x in (findings or []) if isinstance(x, Mapping)],
+        "source_fingerprint": artifact_fingerprint(root, _review_source_rels(ep, kind)),
+        "final_user_acceptance": False,
+    }
+    if kind == "table_read":
+        lines = clean_lines(read_text(ep_dir(root, ep) / "voiceover.txt"), limit=10000)
+        if not lines:
+            raise ValueError("voiceover.txt 没有可围读台词")
+        if int(reviewed_line_count) < len(lines):
+            raise ValueError(f"围读行数不足：{reviewed_line_count}/{len(lines)}")
+        payload["reviewed_line_count"] = int(reviewed_line_count)
+        payload["line_receipts"] = [
+            {"line": i, "sha256": hashlib.sha256(line.encode("utf-8")).hexdigest()}
+            for i, line in enumerate(lines, start=1)
+        ]
+    elif kind == "animatic":
+        preview_status = _animatic_preview_status(root, ep)
+        if preview_status.get("status") != "pass":
+            raise ValueError("animatic 尚不可实际听看：" + "；".join(preview_status.get("issues") or []))
+        manifest_path = root / "生产数据" / f"animatic_{ep}.json"
+        preview_path = root / "生产数据" / f"animatic_{ep}.html"
+        manifest = load_json(manifest_path)
+        expected = float(((manifest or {}).get("summary") or {}).get("total_duration_sec") or 0)
+        if expected <= 0:
+            raise ValueError("animatic 总时长无效")
+        if float(watched_duration_sec) + 0.05 < expected * 0.98:
+            raise ValueError(f"实际听看时长不足：{watched_duration_sec:.3f}/{expected:.3f}s")
+        payload.update({
+            "watched_duration_sec": round(float(watched_duration_sec), 3),
+            "expected_duration_sec": round(expected, 3),
+            "audio_consumed": True,
+            "subtitle_consumed": True,
+            "preview": {
+                "path": relpath(root, preview_path),
+                "sha256": file_sha256(preview_path),
+            },
+        })
+    else:
+        raise ValueError(f"unknown review kind: {kind}")
+    write_json_atomic(review_execution_path(root, ep, kind), payload)
+    return payload
+
+
+def review_execution_status(root: Path, ep: str, kind: str) -> Dict[str, Any]:
+    ep = episode_label(ep)
+    path = review_execution_path(root, ep, kind)
+    data = load_json(path)
+    issues: List[str] = []
+    if not isinstance(data, Mapping):
+        issues.append("缺真实围读/听看 execution receipt")
+    else:
+        if data.get("kind") != f"n2d_{kind}_execution" or data.get("status") != "reviewed":
+            issues.append("execution receipt kind/status 不正确")
+        if data.get("final_user_acceptance") is not False:
+            issues.append("execution receipt 不得冒充最终用户验收")
+        try:
+            if float(data.get("coverage") or 0) < 0.98:
+                issues.append("实际审阅 coverage < 0.98")
+        except Exception:
+            issues.append("实际审阅 coverage 无效")
+        if not any(str(x).strip() for x in (data.get("review_notes") or [])):
+            issues.append("实际审阅缺 review_notes")
+        fresh = fingerprint_is_fresh(data.get("source_fingerprint"), root)
+        if fresh is False:
+            issues.append("execution receipt 对应的输入/预览已变化")
+        elif fresh is None:
+            issues.append("execution receipt 缺 source_fingerprint")
+        if kind == "table_read":
+            expected = len(clean_lines(read_text(ep_dir(root, ep) / "voiceover.txt"), limit=10000))
+            if int(data.get("reviewed_line_count") or 0) < expected:
+                issues.append("实际围读行数不足")
+        else:
+            preview = data.get("preview") if isinstance(data.get("preview"), Mapping) else {}
+            preview_path = root / str(preview.get("path") or "")
+            if not preview_path.is_file() or str(preview.get("sha256") or "") != file_sha256(preview_path):
+                issues.append("实际听看的 preview 缺失或 SHA 已变化")
+            manifest = load_json(root / "生产数据" / f"animatic_{ep}.json")
+            expected = float(((manifest or {}).get("summary") or {}).get("total_duration_sec") or 0)
+            if float(data.get("watched_duration_sec") or 0) + 0.05 < expected * 0.98:
+                issues.append("实际听看时长不足")
+    return {
+        "packet": f"{kind}_execution",
+        "file": str(path),
+        "status": "pass" if not issues else "block",
+        "issues": issues,
+    }
+
+
 def _machine_reference(root: Path, ep: str, kind: str) -> Dict[str, Any]:
     """给围读/animatic 的主观验收布尔配上已算好的机器参考量（advisory·不改签收语义）。
 
@@ -238,6 +384,7 @@ def _table_read_payload(root: Path, ep: str, *, confirmed: bool = False) -> Dict
         placeholder_count = blob.count("占位") + blob.lower().count("placeholder")
     elif isinstance(timing_estimate, Mapping):
         timing_status = "estimate_only"
+    execution = load_json(review_execution_path(root, ep, "table_read")) if confirmed else {}
     return {
         "kind": "n2d_table_read_packet",
         "version": VERSION,
@@ -267,7 +414,8 @@ def _table_read_payload(root: Path, ep: str, *, confirmed: bool = False) -> Dict
             "exposition_not_overloaded": "unreviewed" if not confirmed else "accepted",
             "duration_risk_understood": "unreviewed" if not confirmed else "accepted",
             "rewrite_notes": [],
-            "reviewer": "",
+            "reviewer": str((execution or {}).get("reviewer_kind") or ""),
+            "execution_receipt": relpath(root, review_execution_path(root, ep, "table_read")),
             "signoff_manifest": f"脚本/{ep}/table_read_signoff.json",
         },
     }
@@ -293,6 +441,7 @@ def _animatic_payload(root: Path, ep: str, *, confirmed: bool = False) -> Dict[s
             "transition": (clip.get("continuity") or {}).get("transition") if isinstance(clip.get("continuity"), Mapping) else "",
             "review_focus": "hook/reversal/seam/readability" if idx in {1, len(clips)} else "rhythm/readability",
         })
+    execution = load_json(review_execution_path(root, ep, "animatic")) if confirmed else {}
     return {
         "kind": "n2d_animatic_packet",
         "version": VERSION,
@@ -320,7 +469,8 @@ def _animatic_payload(root: Path, ep: str, *, confirmed: bool = False) -> Dict[s
             "mid_episode_drag_checked": "unreviewed" if not confirmed else "accepted",
             "cliffhanger_or_payoff_clear": "unreviewed" if not confirmed else "accepted",
             "image_generation_ready": "unreviewed" if not confirmed else "accepted",
-            "reviewer": "",
+            "reviewer": str((execution or {}).get("reviewer_kind") or ""),
+            "execution_receipt": relpath(root, review_execution_path(root, ep, "animatic")),
             "signoff_manifest": f"脚本/{ep}/animatic_signoff.json",
         },
     }
@@ -363,6 +513,10 @@ def _animatic_preview_status(root: Path, ep: str) -> Dict[str, Any]:
             issues.append("animatic manifest kind 不正确")
         if str(data.get("status") or "").lower() == "block":
             issues.append("timed animatic preview 为 block")
+        reviewability = data.get("reviewability") if isinstance(data.get("reviewability"), Mapping) else {}
+        if reviewability.get("status") != "ready":
+            reasons = "；".join(str(x) for x in (reviewability.get("reasons") or []) if str(x).strip())
+            issues.append("timed animatic 未形成可听看的音画+字幕预览" + (f"：{reasons}" if reasons else ""))
         fresh = fingerprint_is_fresh(data.get("inputs_fingerprint"), root)
         if fresh is False:
             issues.append("timed animatic preview 输入已变化，需重建")
@@ -487,6 +641,12 @@ def render_md(payload: Mapping[str, Any]) -> str:
 def scaffold(root: Path, ep: str, *, kind: str = "both", confirmed: bool = False, force: bool = False) -> Dict[str, Any]:
     ep = episode_label(ep)
     kinds = list(PACKETS) if kind == "both" else [kind]
+    if confirmed:
+        blocked = [item for item in kinds if review_execution_status(root, ep, item)["status"] != "pass"]
+        if blocked:
+            raise ValueError(
+                "--confirm 不能自行证明已审阅；请先完成并记录 execution receipt：" + ", ".join(blocked)
+            )
     created: List[str] = []
     for item in kinds:
         json_path, md_path = packet_paths(root, ep, item)
@@ -578,6 +738,7 @@ def check(root: Path, ep: str, *, kind: str = "both", write_missing: bool = Fals
         if item == "animatic":
             rows.append(_animatic_preview_status(root, ep))
             rows.append(_story_economy_status(root, ep))
+        rows.append(review_execution_status(root, ep, item))
         rows.append(_signoff_status(root, ep, item))
     blockers = [r for r in rows if r["status"] != "pass"]
     payload = {
@@ -589,7 +750,7 @@ def check(root: Path, ep: str, *, kind: str = "both", write_missing: bool = Fals
         "generated_at": now_iso(),
         "summary": {"required": len(rows), "pass": len(rows) - len(blockers), "block": len(blockers)},
         "files": rows,
-        "next_when_blocked": "补齐围读/animatic 内容与 timed preview，把内容 status 改为 confirmed，再用 signoff.py 由明确角色签收当前输入与证据哈希。",
+        "next_when_blocked": "实际完成围读/音画字幕 Animatic 听看并记录 hash-bound execution receipt，再确认 packet，并用 signoff.py 由明确角色签收当前输入与证据哈希。",
     }
     out = root / "生产数据" / f"story_acceptance_packets_check_{kind}_{ep}.json"
     write_json_atomic(out, payload)
@@ -601,18 +762,38 @@ def main(argv: List[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("root")
     ap.add_argument("episode")
-    ap.add_argument("command", choices=("scaffold", "check"))
+    ap.add_argument("command", choices=("scaffold", "check", "record-review"))
     ap.add_argument("--kind", choices=("table_read", "animatic", "both"), default="both")
     ap.add_argument("--write", action="store_true")
     ap.add_argument("--write-missing", action="store_true")
     ap.add_argument("--confirm", action="store_true")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--reviewer-kind", choices=("human", "executor_text_audio", "executor_visual_audio"))
+    ap.add_argument("--coverage", type=float, default=1.0)
+    ap.add_argument("--reviewed-line-count", type=int, default=0)
+    ap.add_argument("--watched-duration-sec", type=float, default=0.0)
+    ap.add_argument("--review-note", action="append", default=[])
     ns = ap.parse_args(argv)
 
     root = Path(ns.root)
     if ns.command == "scaffold":
         payload = scaffold(root, ns.episode, kind=ns.kind, confirmed=ns.confirm, force=ns.force)
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+        return 0
+    if ns.command == "record-review":
+        if ns.kind == "both":
+            ap.error("record-review 必须指定单一 --kind")
+        payload = record_review_execution(
+            root,
+            ns.episode,
+            ns.kind,
+            reviewer_kind=ns.reviewer_kind or "",
+            coverage=ns.coverage,
+            review_notes=ns.review_note,
+            reviewed_line_count=ns.reviewed_line_count,
+            watched_duration_sec=ns.watched_duration_sec,
+        )
         print(json.dumps(payload, ensure_ascii=False, indent=2))
         return 0
     payload = check(root, ns.episode, kind=ns.kind, write_missing=ns.write_missing)

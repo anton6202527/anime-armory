@@ -10,7 +10,7 @@ description: 写歌质检 + 流程自审（song 写歌线的 QA 环节，不生�
 - **模式①「作品质检」**——审**一首歌的产物**（`词/lyrics.md` + `歌/song.wav` + 蓝图/meta）：扫问题 → 定位（段落 / 行号 / 时间码）→ 定级 → 给修法 → 出报告。发布或交付前 / 各阶段闸门跑。
 - **模式①b「母带/交付检查」**——跑 `master_check.py`，默认优先检查 `导出/master.wav`，使用 ffmpeg 的 ITU-R BS.1770 分析取得 integrated LUFS、true peak 与 LRA，同时检查采样率、位深、声道、静音和削波；报告绑定音频 sha256。`-14 LUFS` 只作为流媒体归一化参考，不强制把所有音乐压成同一响度。
 - **模式①c「一致性 findings」**——跑 `consistency_findings.py`，把歌词 prosody、曲式/和声草图、多版挑版、母带、AI 使用披露和权益元数据收成 `评审/consistency_findings.{json,md}`，避免审歌时散看多份 JSON。
-- **模式①d「表演/混音签核」**——`mix_signoff.py` 由真实试听者确认歌词对齐、咬字/伪影、情绪、人声与伴奏平衡、编曲转译、编辑接缝、mono 兼容和低频/headroom，并绑定当前 `pre_master.wav` hash。任何换声、返修或重混都会使旧签核失效。
+- **模式①d「表演/混音签核」**——`mix_signoff.py` 由真实具名试听者确认歌词对齐、咬字/伪影、情绪、人声与伴奏平衡、编曲转译、编辑接缝、mono 兼容和低频/headroom，并绑定当前 `pre_master.wav` hash。`agent` / `automation` / `system` / `delegate` / `listener` 不能充当最终 reviewer；任何换声、返修或重混都会使旧签核失效。
 - **模式②「流程自审」**——审**写歌流水线本身**：联网拉市场基准，对照 `song-*` 各 skill + references，产出"差距清单 + 建议改哪个 skill 哪段"。让"整套流程不断自我优化"成为一条可复跑命令。
 
 > 写歌的三大验收维：**可唱性（词）· 听感（曲+演唱）· 合规**。本 skill 把这套体检在 song 产线里落成可跑流程。词的工艺标尺 = `song-lyrics/references/songcraft.md`；出歌后端能力 = `song-compose/references/backends.md`。

@@ -22,6 +22,13 @@ import re
 import shutil
 import subprocess
 import sys
+import uuid
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+import loudness_conform  # noqa: E402
+import media_artifact  # noqa: E402
 
 
 def parse_aspect(s):
@@ -91,10 +98,25 @@ def _encoding_args(encoding):
         m = re.fullmatch(r"([0-9.]+)\s*([MmKk]?)", maxrate)
         bufsize = f"{float(m.group(1)) * 2:g}{m.group(2)}" if m else maxrate
         out += ["-maxrate", maxrate, "-bufsize", bufsize]
+    profile = str(encoding.get("h264_profile") or "").strip()
+    if profile:
+        out += ["-profile:v", profile]
+    fps = str(encoding.get("fps") or "").strip()
+    if fps and fps != "preserve_master":
+        out += ["-r", fps]
+        try:
+            if "/" in fps:
+                a, b = fps.split("/", 1); fps_value = float(a) / float(b)
+            else:
+                fps_value = float(fps)
+            gop = max(1, round(fps_value * float(encoding.get("closed_gop_seconds") or 2)))
+            out += ["-g", str(gop), "-keyint_min", str(gop), "-sc_threshold", "0"]
+        except (TypeError, ValueError, ZeroDivisionError):
+            pass
     return out
 
 
-def render_reframe(in_path, out_path, vf, encoding=None):
+def render_reframe(in_path, out_path, vf, encoding=None, expected_size=None):
     """实际跑 ffmpeg 把 in_path 按 vf reframe 成 out_path。返回 (ok, msg)。
     encoding：可选交付编码规格（码率/上限），此前派生件只有 libx264 默认码控（≈CRF23），
     比母带（CRF20）糊一档还无人知晓；传入后按平台上传档控码率。"""
@@ -105,17 +127,36 @@ def render_reframe(in_path, out_path, vf, encoding=None):
         return False, f"缺输入：{in_path}"
     os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
     enc = _encoding_args(encoding)
-    color = ["-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709", "-color_range", "tv"]
-    args = [ff, "-y", "-loglevel", "error", "-i", in_path, "-vf", vf,
-            "-c:v", "libx264", "-pix_fmt", "yuv420p", *color, *enc, "-c:a", "copy", out_path]
+    color = ["-x264-params", "colorprim=bt709:transfer=bt709:colormatrix=bt709:range=limited",
+             "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709", "-color_range", "tv"]
+    stage = os.path.join(os.path.dirname(os.path.abspath(out_path)), f".reframe-stage.{os.getpid()}.{uuid.uuid4().hex[:8]}")
+    os.makedirs(stage, exist_ok=True)
+    pre_loud = os.path.join(stage, "pre_loudnorm.mp4")
+    final_filter = vf + ",colorspace=all=bt709:range=tv:format=yuv420p"
+    args = [ff, "-y", "-loglevel", "error", "-i", in_path, "-vf", final_filter,
+            "-c:v", "libx264", "-pix_fmt", "yuv420p", *color, *enc,
+            "-c:a", "aac", "-b:a", str((encoding or {}).get("audio_bitrate") or "192k"),
+            "-ar", "48000", "-ac", "2", "-movflags", "+faststart", pre_loud]
     rc = subprocess.run(args, capture_output=True, text=True)
     if rc.returncode != 0:
-        # 某些输入无音轨，-c:a copy 会报错；重试无音轨
-        args2 = [ff, "-y", "-loglevel", "error", "-i", in_path, "-vf", vf, "-an",
-                 "-c:v", "libx264", "-pix_fmt", "yuv420p", *color, *enc, out_path]
-        rc2 = subprocess.run(args2, capture_output=True, text=True)
-        if rc2.returncode != 0:
-            return False, f"reframe 渲染失败：{rc.stderr[-500:]}"
+        return False, f"reframe 渲染失败：{rc.stderr[-500:]}"
+    candidate = os.path.join(stage, "candidate.mp4")
+    target_lufs = float((encoding or {}).get("target_lufs") or -16.0)
+    loudness = loudness_conform.two_pass_conform(pre_loud, candidate, target_lufs=target_lufs)
+    if loudness.get("status") != "pass":
+        return False, f"reframe loudness conform failed: {loudness.get('error')}"
+    probe = media_artifact.probe_media(candidate)
+    width, height = expected_size or (
+        int((probe.get("video") or {}).get("width") or 0),
+        int((probe.get("video") or {}).get("height") or 0),
+    )
+    fps = str((encoding or {}).get("fps") or (probe.get("video") or {}).get("fps_rational") or "30")
+    spec = media_artifact.default_master_spec(width=width, height=height, fps=fps, target_lufs=target_lufs)
+    validation = media_artifact.validate_media(candidate, spec)
+    if validation.get("status") != "pass":
+        return False, "reframe derivative failed shared media validation"
+    os.replace(candidate, out_path)
+    shutil.rmtree(stage, ignore_errors=True)
     return True, f"reframe 成片：{out_path}"
 
 

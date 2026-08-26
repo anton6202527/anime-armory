@@ -86,7 +86,14 @@ def test_resolve_target_known_platforms():
     assert lc.resolve_target("bilibili") == -14.0
     assert lc.resolve_target("tiktok") == -14.0
     assert lc.resolve_target("broadcast") == -23.0
+    assert lc.resolve_target("broadcast_atsc") == -24.0
     assert lc.resolve_target("default") == -16.0
+
+
+def test_platform_target_authority_does_not_mislabel_house_profiles():
+    assert lc.PLATFORM_TARGET_AUTHORITIES["tiktok"].startswith("house_profile")
+    assert "EBU" in lc.PLATFORM_TARGET_AUTHORITIES["broadcast"]
+    assert "ATSC" in lc.PLATFORM_TARGET_AUTHORITIES["broadcast_atsc"]
 
 
 def test_resolve_target_case_insensitive_and_unknown():

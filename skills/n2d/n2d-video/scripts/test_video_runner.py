@@ -3,6 +3,10 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import multiprocessing
+import os
+import sys
+import time
 from pathlib import Path
 
 import pytest
@@ -91,6 +95,64 @@ def canonical_manifest(root: Path, payload: dict) -> dict:
     payload.setdefault("batch_id", "")
     payload["input_fingerprint"] = video_runner.current_video_manifest_input_fingerprint(root, payload)
     return payload
+
+
+def test_execute_clip_resumes_existing_submit_id_without_resubmit(monkeypatch, tmp_path: Path) -> None:
+    manifest_file = tmp_path / "manifest.json"
+    payload = {
+        "episode": "第1集",
+        "items": [{
+            "clip": "Clip_01",
+            "target": "Clip_01.mp4",
+            "status": "submitted",
+            "submit_id": "provider-123",
+        }],
+    }
+    video_runner.atomic_write_json(manifest_file, payload)
+
+    def forbidden_submit(*_args, **_kwargs):
+        raise AssertionError("recovery must not submit again")
+
+    def fake_wait(_root, path, clip, **_kwargs):
+        current = video_runner.load_json(path)
+        item = video_runner.find_item(current, clip)
+        item["status"] = "downloaded"
+        item["last_query"] = {"gen_status": "completed", "submit_id": "provider-123"}
+        video_runner.update_manifest(path, current)
+        return item
+
+    monkeypatch.setattr(video_runner, "submit_clip", forbidden_submit)
+    monkeypatch.setattr(video_runner, "wait_for_clip", fake_wait)
+    monkeypatch.setattr(
+        video_runner,
+        "run_batch_qc",
+        lambda *_args, **_kwargs: {"json_path": "qc.json", "markdown_path": "qc.md"},
+    )
+
+    result = video_runner.execute_clip(tmp_path, manifest_file, "Clip_01")
+
+    assert result["submit_id"] == "provider-123"
+    assert result["durable_execution"]["status"] == "machine_qc_complete"
+
+
+def test_execute_clip_never_resubmits_unknown_paid_state(monkeypatch, tmp_path: Path) -> None:
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(manifest_file, {
+        "episode": "第1集",
+        "items": [{
+            "clip": "Clip_01",
+            "target": "Clip_01.mp4",
+            "status": "submitting",
+            "submitted_at": "2026-08-26T00:00:00+0000",
+        }],
+    })
+    called = []
+    monkeypatch.setattr(video_runner, "submit_clip", lambda *_a, **_k: called.append(True))
+
+    with pytest.raises(RuntimeError, match="unknown paid provider state"):
+        video_runner.execute_clip(tmp_path, manifest_file, "Clip_01")
+
+    assert called == []
 
 
 def test_parse_prompt_pack_prefers_compiled_submit_prompt(tmp_path: Path) -> None:
@@ -1016,6 +1078,152 @@ def test_submit_clip_runs_video_preflight_before_backend(monkeypatch, tmp_path: 
     assert result["status"] == "submitted"
 
 
+def test_registered_adapter_dry_run_argv_exactly_matches_paid_execution(
+    monkeypatch, tmp_path: Path
+) -> None:
+    wrapper = tmp_path / "adapter-wrapper.py"
+    registry = tmp_path / "生产数据" / "video_execution_adapters.json"
+    registry.parent.mkdir(parents=True)
+    registry.write_text(json.dumps({
+        "kind": video_runner.execution_adapter_v2.REGISTRY_KIND,
+        "version": video_runner.execution_adapter_v2.ADAPTER_VERSION,
+        "adapters": {
+            "seedance": {
+                "adapter_id": "seedance-test-v2",
+                "execution_backend": "seedance",
+                "provider": "seedance-test",
+                "command": [sys.executable, str(wrapper)],
+                "operations": ["submit", "query"],
+                "result_contract": {
+                    "submit_id": "task.id",
+                    "status": "task.status",
+                },
+            },
+        },
+    }, ensure_ascii=False), encoding="utf-8")
+    prompt = tmp_path / "prompt.txt"
+    prompt.write_text("人物运动：抬眼；\n镜头运动：慢推；", encoding="utf-8")
+    image = tmp_path / "first.png"
+    image.write_bytes(b"png")
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(
+        manifest_file,
+        canonical_manifest(tmp_path, {
+            "episode": "第1集",
+            "backend": "seedance",
+            "items": [{
+                "clip": "Clip_01",
+                "target": "Clip_01.mp4",
+                "image": str(image),
+                "prompt_file": str(prompt),
+                "submit_duration": 4,
+                "status": "prepared",
+            }],
+        }),
+    )
+
+    preview = video_runner.submit_clip(tmp_path, manifest_file, "Clip_01", dry_run=True)
+    executed: list[list[str]] = []
+
+    class Proc:
+        returncode = 0
+        stdout = '{"task":{"id":"registered-job-1","status":"processing"}}'
+        stderr = ""
+
+    def fake_run(args, **_kwargs):
+        executed.append(list(args))
+        return Proc()
+
+    monkeypatch.setattr(video_runner, "run_preflight_gate", lambda *_a, **_k: None)
+    monkeypatch.setattr(video_runner, "run_identity_handoff_guard", lambda *_a, **_k: None)
+    monkeypatch.setattr(video_runner.subprocess, "run", fake_run)
+
+    result = video_runner.submit_clip(tmp_path, manifest_file, "Clip_01")
+
+    assert result["submit_id"] == "registered-job-1"
+    assert preview["cmd_argv"] == executed[0]
+    assert preview["cmd_argv"][:3] == [sys.executable, str(wrapper), "submit"]
+
+
+def test_submit_clip_cross_process_lock_prevents_double_paid_submit(monkeypatch, tmp_path: Path) -> None:
+    """Two callers that both read ``prepared`` may cross the provider boundary only once."""
+    try:
+        ctx = multiprocessing.get_context("fork")
+    except ValueError:  # pragma: no cover - project targets macOS/Linux, never spawn-only hosts
+        pytest.skip("cross-process flock regression requires fork")
+    prompt = tmp_path / "prompt.txt"
+    prompt.write_text("人物运动：抬眼；\n镜头运动：慢推；", encoding="utf-8")
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(
+        manifest_file,
+        canonical_manifest(tmp_path, {
+            "episode": "第1集",
+            "items": [{
+                "clip": "Clip_01",
+                "target": "Clip_01.mp4",
+                "image": str(tmp_path / "first.png"),
+                "prompt_file": str(prompt),
+                "submit_duration": 4,
+                "status": "prepared",
+            }],
+        }),
+    )
+    provider_calls = tmp_path / "provider_calls.txt"
+    ready = ctx.Barrier(2)
+    results = ctx.Queue()
+
+    class Proc:
+        returncode = 0
+        stdout = '{"submit_id":"one-durable-job","gen_status":"processing"}'
+        stderr = ""
+
+    def fake_provider(*_args, **_kwargs):
+        fd = os.open(provider_calls, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o600)
+        try:
+            os.write(fd, f"{os.getpid()}\n".encode("ascii"))
+            os.fsync(fd)
+        finally:
+            os.close(fd)
+        time.sleep(0.35)  # keep the winner inside the paid boundary while loser waits
+        return Proc()
+
+    def synchronized_identity_guard(*_args, **_kwargs):
+        # Both processes have already loaded ``prepared`` and built the same preview.
+        ready.wait(timeout=5)
+
+    monkeypatch.setattr(video_runner, "run_identity_handoff_guard", synchronized_identity_guard)
+    monkeypatch.setattr(video_runner, "verify_cli_contract", lambda *_a, **_k: None)
+    monkeypatch.setattr(video_runner, "record_waiver", lambda *_a, **_k: None)
+    monkeypatch.setattr(video_runner, "_record_flow_milestone", lambda *_a, **_k: None)
+    monkeypatch.setattr(video_runner.subprocess, "run", fake_provider)
+
+    def worker() -> None:
+        try:
+            item = video_runner.submit_clip(
+                tmp_path, manifest_file, "Clip_01", skip_preflight=True,
+            )
+            results.put(("ok", item.get("submit_id")))
+        except Exception as exc:  # expected for the lock loser after its inside-lock reload
+            results.put(("error", str(exc)))
+
+    workers = [ctx.Process(target=worker) for _ in range(2)]
+    for process in workers:
+        process.start()
+    for process in workers:
+        process.join(timeout=10)
+    assert all(not process.is_alive() for process in workers)
+    assert all(process.exitcode == 0 for process in workers)
+    outcomes = [results.get(timeout=2) for _ in workers]
+
+    assert [row[0] for row in outcomes].count("ok") == 1
+    assert [row[0] for row in outcomes].count("error") == 1
+    assert any("durable submit_id=one-durable-job" in row[1] for row in outcomes if row[0] == "error")
+    assert len(provider_calls.read_text(encoding="utf-8").splitlines()) == 1
+    saved = video_runner.load_json(manifest_file)["items"][0]
+    assert saved["submit_id"] == "one-durable-job"
+    assert saved["status"] == "submitted"
+
+
 def test_resolve_video_backend_dreamina_and_aliases():
     for raw in ("dreamina", "即梦", "Jimeng", None, ""):
         key, adapter = video_runner.resolve_video_backend({"backend": raw} if raw is not None else {})
@@ -1417,6 +1625,94 @@ def test_submit_clip_blocks_next_until_previous_physical_clip_is_accepted(tmp_pa
 
     with pytest.raises(RuntimeError, match="sequential video QC interlock"):
         video_runner.submit_clip(tmp_path, manifest_file, "Clip_02")
+
+
+@pytest.mark.parametrize(
+    "prior",
+    [
+        {"status": "prepared", "submit_id": "durable-job-1"},
+        {"status": "failed", "submit_id": "durable-job-2"},
+        {"status": "submit_failed"},
+        {"status": "failed", "submitted_at": "2026-08-25T10:00:00+0800"},
+    ],
+)
+def test_sequential_qc_interlock_paid_evidence_overrides_status_enum(
+    tmp_path: Path, prior: dict,
+) -> None:
+    current = {"clip": "Clip_02", "target": "Clip_02.mp4", "status": "prepared"}
+    previous = {"clip": "Clip_01", "target": "Clip_01.mp4", **prior}
+    manifest_file = tmp_path / "manifest.json"
+    manifest = {"episode": "第1集", "items": [previous, current]}
+    video_runner.atomic_write_json(manifest_file, manifest)
+
+    blockers = video_runner.sequential_qc_blockers(tmp_path, manifest_file, manifest, current)
+
+    assert blockers
+    if prior.get("submit_id"):
+        assert "恢复/查询同一 job" in blockers[0]
+    else:
+        assert "未知付费状态" in blockers[0]
+    assert "禁止新建 retry" in blockers[0]
+
+
+def test_sequential_qc_interlock_does_not_hide_same_clip_paid_state_in_other_manifest(
+    tmp_path: Path,
+) -> None:
+    prod = tmp_path / "生产数据"
+    prod.mkdir(parents=True)
+    old_file = prod / "video_batch_第1集_01_01.json"
+    old_manifest = {
+        "episode": "第1集",
+        "items": [{
+            "clip": "Clip_02",
+            "target": "Clip_02-old.mp4",
+            "status": "submitted_unknown_id",
+            "submitted_at": "2026-08-25T10:00:00+0800",
+        }],
+    }
+    video_runner.atomic_write_json(old_file, old_manifest)
+    current = {"clip": "Clip_02", "target": "Clip_02.mp4", "status": "prepared"}
+    current_file = prod / "video_batch_第1集_02_02.json"
+    current_manifest = {"episode": "第1集", "items": [current]}
+    video_runner.atomic_write_json(current_file, current_manifest)
+
+    blockers = video_runner.sequential_qc_blockers(
+        tmp_path, current_file, current_manifest, current,
+    )
+
+    assert len(blockers) == 1
+    assert "Clip_02@video_batch_第1集_01_01.json" in blockers[0]
+    assert "未知付费状态" in blockers[0]
+
+
+@pytest.mark.parametrize(
+    "state",
+    [
+        {"status": "submit_failed", "submitted_at": "2026-08-25T10:00:00+0800"},
+        {"status": "submitted_unknown_id"},
+        {"status": "rejected", "submit_id": "durable-job-rejected"},
+    ],
+)
+def test_submit_clip_current_unknown_or_known_paid_state_never_resubmits(
+    tmp_path: Path, state: dict,
+) -> None:
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(
+        manifest_file,
+        {
+            "episode": "第1集",
+            "items": [{
+                "clip": "Clip_01", "target": "Clip_01.mp4",
+                "image": str(tmp_path / "first.png"),
+                "prompt_file": str(tmp_path / "prompt.txt"),
+                "submit_duration": 4,
+                **state,
+            }],
+        },
+    )
+
+    with pytest.raises(RuntimeError, match="Never (retry|create a second paid submit)"):
+        video_runner.submit_clip(tmp_path, manifest_file, "Clip_01")
 
 
 def test_sequential_qc_interlock_accepts_current_pixel_machine_and_visual_receipt(tmp_path: Path) -> None:

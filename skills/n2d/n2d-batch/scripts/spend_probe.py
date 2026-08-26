@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import argparse
 from copy import deepcopy
-import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -32,24 +31,6 @@ def _load_runner() -> ModuleType:
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
-
-
-def _plan_projection(task: Dict[str, Any]) -> Dict[str, Any]:
-    """Immutable planning fields used to reject a stale active queue row."""
-    return {
-        key: task.get(key)
-        for key in (
-            "idempotency_key", "episode", "stage_key", "command", "reason", "estimated_cost",
-            "rerun_scope", "affected_artifacts", "affected_shots", "finding_fingerprints",
-        )
-    }
-
-
-def _plan_digest(task: Dict[str, Any]) -> str:
-    raw = json.dumps(
-        _plan_projection(task), ensure_ascii=False, sort_keys=True, separators=(",", ":")
-    )
-    return "sha256:" + hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
 def _task_for(runtime: ModuleType, root: str, episode: str, stage: str) -> Dict[str, Any]:
@@ -91,15 +72,16 @@ def _task_for(runtime: ModuleType, root: str, episode: str, stage: str) -> Dict[
             (
                 candidate
                 for candidate in candidates
-                if _plan_projection(candidate) == _plan_projection(current)
+                if runtime.queue_mod.task_plan_projection(candidate)
+                == runtime.queue_mod.task_plan_projection(current)
             ),
             None,
         )
         if exact is not None:
             task = deepcopy(exact)
-            task["_probe_current_plan_digest"] = _plan_digest(current)
+            task["_probe_current_plan_digest"] = runtime.queue_mod.task_plan_digest(current)
             return task
-    current["_probe_current_plan_digest"] = _plan_digest(current)
+    current["_probe_current_plan_digest"] = runtime.queue_mod.task_plan_digest(current)
     return current
 
 
@@ -114,6 +96,18 @@ def probe(
     runtime = runtime or _load_runner()
     root = str(Path(root).expanduser().resolve())
     try:
+        interlock_fn = getattr(runtime, "production_governance_interlock", None)
+        governance_issue = interlock_fn(root) if callable(interlock_fn) else None
+        if governance_issue:
+            return {
+                "status": "blocked_governance",
+                "read_only": True,
+                "consumed": False,
+                "episode": str(episode),
+                "stage": str(stage),
+                "issue": "critical production governance interlock",
+                "governance": governance_issue,
+            }
         task = _task_for(runtime, root, episode, stage)
         config = runtime.load_config(root, config_path)
         runtime._bind_execution_context(task, config)
@@ -137,7 +131,21 @@ def probe(
             }
         request = runtime._phase_consumption_kwargs(task)
         verification = runtime.spend_envelope_mod.verify(root, authorization, **request)
-        status = "authorized" if verification.get("status") == "pass" else "blocked"
+        checkpoint_fn = getattr(runtime, "provider_recovery_checkpoint", None)
+        checkpoint = checkpoint_fn(root, task) if callable(checkpoint_fn) else {}
+        recoverable_fn = getattr(runtime, "_only_recoverable_in_flight_issues", None)
+        recovery_authorized = (
+            isinstance(checkpoint, dict)
+            and checkpoint.get("state") == "provider_pending"
+            and bool(checkpoint.get("provider_submit_id"))
+            and callable(recoverable_fn)
+            and recoverable_fn(verification.get("issues") or [])
+        )
+        status = (
+            "authorized"
+            if verification.get("status") == "pass"
+            else "authorized_recovery" if recovery_authorized else "blocked"
+        )
         return {
             "status": status,
             "read_only": True,
@@ -153,6 +161,7 @@ def probe(
             "envelope_id": str(authorization.get("envelope_id") or ""),
             "authorization_digest": str(authorization.get("authorization_digest") or ""),
             "verification": verification,
+            "provider_recovery": checkpoint if recovery_authorized else {},
         }
     except Exception as exc:
         return {

@@ -48,7 +48,7 @@ export function HomePage({ onCreate }: { onCreate: (work: WebWork, attachments: 
             <span className="brand-icon"><BrandIcon /></span>
             <h1>LabuTV <em>Web</em></h1>
           </div>
-          <p>选择对应模型，即刻开始创作吧！</p>
+          <p>选择对应技能，即刻开始创作吧！</p>
         </header>
 
         <section className="hub-composer" onClick={(event) => event.stopPropagation()}>

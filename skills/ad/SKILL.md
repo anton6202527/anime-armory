@@ -2,7 +2,7 @@
 name: ad
 description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 广告片（目标/KPI→创意→脚本→VO→分镜→产品/角色/场景定妆→AI出图→AI视频→剪辑交付→发布合规→质检→投放反馈）。产物落 创作区/拍广告/项目名/（成片_主片.mp4 + cutdown + 多比例）。**不拆集**、**自包含**。读 _进度.md 路由到 ad-progress / ad-update / ad-craft / ad-concept / ad-script / ad-voice / ad-image / ad-video / ad-compose / ad-review / ad-feedback。Use when given a 客户需求/brief（哪怕只有一句话）, a product/brand to advertise, an existing 拍广告 project, or asked 拍广告 / 广告创意 / TVC / 信息流广告 / 产品demo / 带货视频 / 投放复盘. Triggers 拍广告, 广告片, 广告创意, 广告脚本, 广告分镜, TVC, 信息流广告, 品牌片, 产品demo, 带货视频, 广告成片, 投放复盘, ad.
 ---
-> 规模统计：Skill 数 14 | SKILL.md 总行数 1273 | 目录文本总行数 59095
+> 规模统计：Skill 数 14 | SKILL.md 总行数 1279 | 目录文本总行数 59662
 
 # ad — 拍广告生产线 · 总调度
 
@@ -18,7 +18,9 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 
 > **发布合规是流水线内闸门**：产线不伪造平台 UI 操作，也不擅自给母版烙通用水印；但必须分别记录 AI 生成标识与商业/付费合作披露，二者不能互相替代。`campaign_readiness.json` 还要闭合落地页、offer/CTA/价格、行业×平台×辖区准入、转化事件与诊断、归因/UTM/deep-link、consent/privacy。平台动作或本地证据未完成时母版可生成，不能标记 release-ready，最终 `ad-review` 会阻断。
 
-> **一键成片默认**：`普通选择策略=推荐方案自动继续`、`审阅策略=用户授权制作代理`、`付费授权策略=按阶段预算包一次确认`。普通创意路线、构图、节奏、镜头/版位原生适配和内部技术审查由制作代理采用有证据优势的推荐方案并留痕；不存在证据优势时仍优先走可回滚的默认路线。付费 image/video runner 前把 exact scope、具体模型/渠道、最大调用数、唯一 phase retry rounds、费用上限、expiry 和 canonical input SHA 合成一个 spend envelope；真实人确认一次后包内连续执行。只有成本未知/超预算、过期、改模型/渠道、扩大范围或输入/合同变化才重授权。runner 不能自批或扩大，`approver + approval_reference + source_quote` 必须来自真实人审记录；delegate/agent 只能做代理审阅，不能签付费包。claim/音乐/肖像/声音/字体权利、法规辖区、逐图当前像素验收（B14）、机械裁切风险接受、不可逆覆盖、公开投放和最终逐项签收仍停下。
+> **一键成片默认**：`普通选择策略=推荐方案自动继续`、`审阅策略=用户授权制作代理`、`付费授权策略=按阶段预算包一次确认`。普通创意路线、构图、节奏、镜头/版位原生适配和内部技术审查由制作代理采用有证据优势的推荐方案并留痕；不存在证据优势时仍优先走可回滚的默认路线。付费 image/video runner 前把 exact scope、具体模型/渠道、最大调用数、唯一 phase retry rounds、费用上限、expiry 和 canonical input SHA 合成一个 spend envelope；真实人确认一次后包内连续执行。只有成本未知/超预算、过期、改模型/渠道、扩大范围或输入/合同变化才重授权。runner 不能自批或扩大，`approver + approval_reference + source_quote` 必须来自真实人审记录；delegate/agent 只能做代理审阅，不能签付费包。逐图当前像素检查按 B14：无明确授权时停下；当前 `_设置.md` 已明确 `审阅策略=用户授权制作代理`，且授权收据绑定该设置当前 SHA、具名批准人、引用与原话时，实际查看当前像素的执行者可写 `review_kind=executor_visual + human_signoff=false`，只用于可逆中间生产接力。claim/音乐/肖像/声音/字体权利、法规辖区、机械裁切风险接受、不可逆覆盖、公开投放和最终逐项签收仍停下；代理收据绝不冒充最终真人验收。
+
+> **唯一完成定义**：阶段表、dashboard、`release_variant_manifest.summary.release_ready` 与 `compliance_manifest.summary.release_ready` 都只提供证据。最终只认 `skills/ad/scripts/release_verdict.py` 对当前 release variant、compliance、delivery plan、全部未取消交付媒体和具名最终 human signoff 实际字节生成的 canonical digest；状态仅为 `blocked|complete`。媒体或清单任一字节变化，旧签收绑定不再匹配，裁决立即失效。`ad-progress` 只读展示，不写第二套完成状态。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
@@ -40,7 +42,7 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 ├── 配音/                        line_NN.wav + vo.wav + 时长清单.json + voice_qc.json
 ├── 出图/共享/ 出图/分镜/         三层定妆库（角色/场景/产品）+ 逐镜首尾帧 + 逐 job 生成/人审哈希收据
 ├── 出视频/分镜/                 每 Clip MP4 + video_model_routes.json + video_qc.json
-├── 生产数据/                    producer/platform/render profile + placement adaptation + campaign readiness + dependency receipts + final frames/contact sheets + stage acceptance
+├── 生产数据/                    producer/platform/render profile + placement adaptation + campaign readiness + dependency receipts + final frames/contact sheets + stage acceptance + release_verdict.json
 ├── 合成/                        成片/cutdown/多比例 + delivery/color/rendered-text/ASR/accessibility QC
 ├── 合规/                        locale matrix + AI usage + provenance + release variants + compliance + M0 + human signoff
 ├── 投放反馈/                    experiment_plan/validation + raw/ + feedback_report
@@ -61,7 +63,7 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 | 三层定妆库+出图 | **`ad-image`** | 角色/场景/**产品**定妆 + 逐镜首尾帧 PNG + 每张图的提交/输出/参考/QC/具名人审哈希收据 | ✅ |
 | 图生视频 | **`ad-video`** | Clip MP4 + 契约继承机检 + 模型路由 + 统一 render profile + requested↔observed 媒体收据 + video_qc | ✅ |
 | 剪辑包装+交付 | **`ad-compose`** | placement adaptation 明确的原生版本/受控裁切 + actual-mode execution receipt + 原子 cutdown + 技术/色彩/最终文字/ASR/无障碍/实际 provenance QC | ✅ |
-| 发布合规+投放就绪 | **`ad-craft`** | locale + 逐交付链 + 独立 AI label/商业披露收据 + campaign readiness + compliance | ✅ |
+| 发布合规+投放就绪 | **`ad-craft`** | locale + 逐交付链 + 独立 AI label/商业披露收据 + campaign readiness + compliance + 唯一 release verdict | ✅（旧 release-ready 只作证据） |
 | 质检/自审(横切) | **`ad-review`** | 最终 clip/交付件首中尾帧、逐资产 contact sheet + M0 + 具名逐项哈希签收 | ✅ |
 | 投放反馈(可选) | **`ad-feedback`** | 预注册单变量实验 + 平台 CSV/JSONL → 有统计边界的 Test→Learn→Refresh 报告 | ✅ |
 

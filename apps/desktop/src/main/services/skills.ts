@@ -8,6 +8,16 @@ import type { SkillInfo, SkillTreeEntry } from '@shared/types'
 const SKILL_FILE_LIMIT = 512 * 1024
 const TREE_DEPTH_LIMIT = 6
 
+// These were the pre-migration names of independent canvas/Web App skills.
+// Keep legacy ID resolution elsewhere for old projects, but never advertise
+// these aliases as members of the n2d production line.
+const LEGACY_APP_SKILL_DIRS = new Set([
+  'n2d-audio-video',
+  'n2d-character-turnaround',
+  'n2d-first-frame-video',
+  'n2d-script-workbench',
+])
+
 function parseFrontmatter(md: string): { name: string; description: string } {
   const m = /^---\r?\n([\s\S]*?)\r?\n---/.exec(md)
   let name = ''
@@ -28,6 +38,10 @@ function assertBareName(dir: string) {
   if (!dir || /[\\/]|\.\./.test(dir)) throw new Error('非法技能目录名')
 }
 
+export function isSeriesSkillDirectory(dir: string, line: string): boolean {
+  return !LEGACY_APP_SKILL_DIRS.has(dir) && (dir === line || dir.startsWith(`${line}-`))
+}
+
 export class SkillsService {
   /** skills/<line> + skills/<line>-* — dispatcher first, then alphabetical. */
   async list(repoRoot: string, line: string): Promise<SkillInfo[]> {
@@ -40,7 +54,7 @@ export class SkillsService {
       return []
     }
     const names = entries
-      .filter((e) => e.isDirectory() && (e.name === line || e.name.startsWith(`${line}-`)))
+      .filter((e) => e.isDirectory() && isSeriesSkillDirectory(e.name, line))
       .map((e) => e.name)
       .sort((a, b) => (a === line ? -1 : b === line ? 1 : a.localeCompare(b)))
     const out: SkillInfo[] = []

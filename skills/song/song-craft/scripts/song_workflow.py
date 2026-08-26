@@ -10,13 +10,25 @@ from __future__ import annotations
 
 import argparse
 import glob
+import importlib.util
 import json
 import os
 from datetime import date
+from pathlib import Path
 from typing import Any
 
 
 KIND = "song_workflow"
+
+
+def release_verdict_module():
+    path = Path(__file__).resolve().parents[2] / "scripts" / "release_verdict.py"
+    spec = importlib.util.spec_from_file_location("song_release_verdict_for_workflow", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot load release verdict: {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def load_json(path: str, default: Any = None) -> Any:
@@ -113,7 +125,9 @@ def build_steps(root: str) -> list[dict[str, Any]]:
     mix_ok, mix_blockers = check_report(root, "混音/mix_signoff.json")
     rights_ok, rights_blockers = check_report(root, "合规/rights_metadata_check.json")
     release_metadata_ok, release_metadata_blockers = check_report(root, "发行/release_metadata_check.json")
-    release_ok, release_blockers = check_report(root, "导出/release_pack.json", "release_ready")
+    release_verdict = release_verdict_module().build_verdict(Path(root))
+    release_blockers = [str(row.get("message") or row.get("code") or "release blocked")
+                        for row in release_verdict.get("blockers") or []]
     feedback_exists = rel_exists(root, "发行/feedback_summary.json")
     unresolved_notes = unresolved_listening_notes(root)
     return [
@@ -236,12 +250,15 @@ def build_steps(root: str) -> list[dict[str, Any]]:
         },
         {
             "key": "release_pack",
-            "label": "发布交付包",
-            "status": done(release_ok),
-            "evidence": ["导出/release_pack.json", "导出/release_pack.md"],
+            "label": "发布交付包与唯一完成裁决",
+            "status": done(bool(release_verdict.get("complete"))),
+            "evidence": ["导出/release_pack.json", "生产数据/release_verdict.json", "生产数据/release_acceptance.json"],
             "blockers": release_blockers,
-            "warnings": [],
-            "command": f'python3 skills/song/song-craft/scripts/release_pack.py "{root}" --write',
+            "warnings": (["发布证据已齐；运行 accept 以当前最终真人签收闭合唯一 release digest"]
+                         if release_verdict.get("status") == "ready_for_acceptance" else []),
+            "command": (f'python3 skills/song/scripts/release_verdict.py accept "{root}"'
+                        if release_verdict.get("status") == "ready_for_acceptance"
+                        else f'python3 skills/song/scripts/release_verdict.py check "{root}" --write'),
         },
         {
             "key": "feedback",
@@ -258,14 +275,21 @@ def build_steps(root: str) -> list[dict[str, Any]]:
 def build_workflow(root: str) -> dict[str, Any]:
     root = os.path.abspath(root)
     steps = build_steps(root)
-    next_step = next((s for s in steps if s["status"] != "done"), None)
+    verdict = release_verdict_module().build_verdict(Path(root))
+    next_step = next((s for s in steps if s["status"] == "pending"), None)
     return {
         "schema_version": 1,
         "kind": KIND,
         "generated_at": date.today().isoformat(),
         "project_root": root,
-        "current_step": next_step["key"] if next_step else "complete",
+        "current_step": next_step["key"] if next_step else ("complete" if verdict.get("complete") else "release_verdict"),
         "next_action": next_step["command"] if next_step else "",
+        "release_verdict": {
+            "status": verdict.get("status"),
+            "complete": bool(verdict.get("complete")),
+            "release_digest": verdict.get("release_digest"),
+            "blockers": verdict.get("blockers") or [],
+        },
         "steps": steps,
     }
 
@@ -276,6 +300,8 @@ def render_markdown(payload: dict[str, Any]) -> str:
         "",
         f"- 生成日期：{payload['generated_at']}",
         f"- 当前步骤：{payload['current_step']}",
+        f"- 唯一发布裁决：{(payload.get('release_verdict') or {}).get('status')}",
+        f"- release digest：{(payload.get('release_verdict') or {}).get('release_digest')}",
     ]
     if payload.get("next_action"):
         lines.append(f"- 下一步命令：`{payload['next_action']}`")

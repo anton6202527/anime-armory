@@ -15,6 +15,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -245,57 +246,51 @@ def normalize_panel(source: Path, target: Path, size: dict[str, int]) -> dict[st
     }
 
 
-def run_dreamina(
+def submit_dreamina(
     prompt: str,
     image_paths: list[Path],
-    raw_output: Path,
     *,
     ratio: str,
     model_version: str,
     resolution_type: str,
     timeout_sec: int,
+    poll_sec: int = 0,
+) -> tuple[str, str]:
+    """Submit exactly once and return the provider receipt without polling."""
+    cmd = [
+        "dreamina", "image2image", "--images", ",".join(str(path) for path in image_paths),
+        "--prompt", prompt, "--ratio", ratio, "--model_version", model_version,
+        "--resolution_type", resolution_type, "--poll", str(max(0, min(poll_sec, timeout_sec))),
+    ]
+    try:
+        proc = subprocess.run(
+            cmd, stdin=subprocess.DEVNULL, text=True, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, check=False, timeout=timeout_sec,
+        )
+    except subprocess.TimeoutExpired:
+        return "", f"dreamina image2image timed out after {timeout_sec}s; submission state is ambiguous"
+    combined = "\n".join(part for part in (proc.stdout, proc.stderr) if part)
+    submit_id = submit_id_from(combined)
+    if submit_id:
+        return submit_id, "" if proc.returncode == 0 else f"submit returned {proc.returncode} after receipt: {combined[-2000:]}"
+    if proc.returncode != 0:
+        return "", f"dreamina image2image exit {proc.returncode}: {combined[-4000:]}"
+    return "", f"dreamina output did not include submit_id: {combined[-2000:]}"
+
+
+def poll_dreamina(
+    submit_id: str,
+    raw_output: Path,
+    *,
+    timeout_sec: int,
     poll_sec: int,
-) -> tuple[bool, str, str]:
+) -> tuple[str, str]:
+    """Poll one existing provider task; never submits a replacement task."""
+    hard_error_tokens = ("unauthorized", "forbidden", "invalid parameter", "insufficient", "余额不足")
+    started = time.monotonic()
+    last_output = ""
     with tempfile.TemporaryDirectory(prefix="comic-dreamina-download-") as tmp:
         download_dir = Path(tmp)
-        cmd = [
-            "dreamina",
-            "image2image",
-            "--images",
-            ",".join(str(path) for path in image_paths),
-            "--prompt",
-            prompt,
-            "--ratio",
-            ratio,
-            "--model_version",
-            model_version,
-            "--resolution_type",
-            resolution_type,
-            "--poll",
-            str(max(0, min(poll_sec, timeout_sec))),
-        ]
-        started = time.monotonic()
-        try:
-            proc = subprocess.run(
-                cmd,
-                stdin=subprocess.DEVNULL,
-                text=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                check=False,
-                timeout=timeout_sec,
-            )
-        except subprocess.TimeoutExpired:
-            return False, "", f"dreamina image2image timed out after {timeout_sec}s"
-        combined = "\n".join(part for part in (proc.stdout, proc.stderr) if part)
-        if proc.returncode != 0:
-            return False, "", f"dreamina image2image exit {proc.returncode}: {combined[-4000:]}"
-        submit_id = submit_id_from(combined)
-        if not submit_id:
-            return False, "", f"dreamina output did not include submit_id: {combined[-2000:]}"
-
-        hard_error_tokens = ("unauthorized", "forbidden", "invalid parameter", "insufficient", "余额不足")
-        last_output = ""
         while time.monotonic() - started < timeout_sec:
             try:
                 query = subprocess.run(
@@ -322,13 +317,43 @@ def run_dreamina(
             candidates = downloaded_images(download_dir)
             if query.returncode == 0 and candidates:
                 if materialize_png(candidates[0], raw_output):
-                    return True, submit_id, ""
-                return False, submit_id, f"downloaded result could not be converted to PNG: {candidates[0]}"
+                    return "downloaded", ""
+                return "hard_failed", f"downloaded result could not be converted to PNG: {candidates[0]}"
             lowered = last_output.lower()
             if any(token in lowered for token in hard_error_tokens):
-                return False, submit_id, f"dreamina query_result hard failure: {last_output[-4000:]}"
-            time.sleep(3)
-        return False, submit_id, f"dreamina result not ready within {timeout_sec}s: {last_output[-2000:]}"
+                return "hard_failed", f"dreamina query_result hard failure: {last_output[-4000:]}"
+            time.sleep(max(1, min(10, poll_sec or 3)))
+    return "polling", f"dreamina result not ready within {timeout_sec}s: {last_output[-2000:]}"
+
+
+def run_dreamina(
+    prompt: str,
+    image_paths: list[Path],
+    raw_output: Path,
+    *,
+    ratio: str,
+    model_version: str,
+    resolution_type: str,
+    timeout_sec: int,
+    poll_sec: int,
+    resume_submit_id: str = "",
+    on_submitted: Any = None,
+) -> tuple[bool, str, str]:
+    """Compatibility wrapper with a durable receipt callback."""
+    submit_id = str(resume_submit_id or "").strip()
+    if not submit_id:
+        submit_id, error = submit_dreamina(
+            prompt, image_paths, ratio=ratio, model_version=model_version,
+            resolution_type=resolution_type, timeout_sec=timeout_sec, poll_sec=0,
+        )
+        if not submit_id:
+            return False, "", error
+        if on_submitted is not None:
+            on_submitted(submit_id)
+    state, error = poll_dreamina(
+        submit_id, raw_output, timeout_sec=timeout_sec, poll_sec=poll_sec,
+    )
+    return state == "downloaded", submit_id, error
 
 
 def write_reference_manifest(
@@ -387,6 +412,195 @@ def unrepresented_required_ids(
     }
 
 
+def _persist_provider_execution(
+    jobs_path: Path,
+    data: dict[str, Any],
+    job: dict[str, Any],
+    **updates: Any,
+) -> dict[str, Any]:
+    execution = job.get("provider_execution") if isinstance(job.get("provider_execution"), dict) else {}
+    execution = dict(execution)
+    execution.update(updates)
+    execution["updated_at"] = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+    job["provider_execution"] = execution
+    shared.write_json(jobs_path, data)
+    return execution
+
+
+def recoverable_paid_submission(
+    context: dict[str, Any],
+    *,
+    jobs_path: Path,
+    data: dict[str, Any],
+    job: dict[str, Any],
+    panel_id: str,
+    retry_round: int,
+    raw_output: Path,
+    submitter: Any,
+    poller: Any,
+) -> dict[str, Any]:
+    """Drive one paid provider call without ever replaying an uncertain submit."""
+    envelope_path = Path(context["envelope_path"])
+    root = Path(context["root"])
+    execution = job.get("provider_execution") if isinstance(job.get("provider_execution"), dict) else {}
+    current_input = str(job.get("execution_input_sha256") or "")
+    state = str(execution.get("state") or "")
+    if state:
+        if str(execution.get("execution_input_sha256") or "") != current_input:
+            raise shared.spend_envelope.SpendAuthorizationError(
+                "reconcile_binding_mismatch",
+                "the pending provider task belongs to a different panel execution input",
+                panel_id=panel_id,
+            )
+        consumption_id = str(execution.get("consumption_id") or "")
+        if not consumption_id:
+            raise shared.spend_envelope.SpendAuthorizationError(
+                "reconcile_receipt_missing", "pending provider task lacks consumption_id", panel_id=panel_id
+            )
+        record = shared.spend_envelope.submission_record(
+            envelope_path, root, consumption_id=consumption_id
+        )
+        submit_id = str(record.get("provider_submit_id") or execution.get("submit_id") or "")
+        if not submit_id:
+            # Reserved but no provider receipt is intrinsically ambiguous.  The
+            # only safe operation is external reconciliation, never resubmit.
+            _persist_provider_execution(
+                jobs_path, data, job, state="reserved", ambiguous=True,
+                error="reserved paid call has no durable provider submit_id; replacement submission forbidden",
+            )
+            return {"status": "ambiguous", "submit_id": "", "consumption_id": consumption_id}
+        ledger_state = str(record.get("status") or "")
+        provider_frontier = str(record.get("provider_state") or ledger_state)
+        if ledger_state == "settled":
+            # The process can die after the spend ledger commits but before the
+            # panel job mirrors that terminal state.  Rebuild the mirror from
+            # the ledger instead of polling or, worse, submitting again.
+            terminal = "downloaded" if provider_frontier == "downloaded" else "hard_failed"
+            _persist_provider_execution(
+                jobs_path,
+                data,
+                job,
+                state="settled",
+                submit_id=submit_id,
+                terminal_outcome=terminal,
+                settled_actual_cost=record.get("actual_cost"),
+                recovered_from_ledger=True,
+            )
+            return {
+                "status": terminal, "submit_id": submit_id,
+                "consumption_id": consumption_id,
+                "reservation": record, "settlement": record,
+            }
+        if provider_frontier == "downloaded":
+            # poll_dreamina writes ``raw_output`` before this durable frontier
+            # is recorded.  A crash between that write and settlement must
+            # therefore settle the already-consumed call directly.  Moving the
+            # ledger back to polling is forbidden by the monotonic state
+            # machine, and a replacement submit is never safe.
+            settlement = shared.spend_envelope.settle_submission(
+                envelope_path,
+                root,
+                consumption_id=consumption_id,
+                actual_cost=context["actual_cost"],
+            )
+            _persist_provider_execution(
+                jobs_path,
+                data,
+                job,
+                state="settled",
+                submit_id=submit_id,
+                terminal_outcome="downloaded",
+                settled_actual_cost=settlement.get("actual_cost"),
+                recovered_from_ledger=True,
+            )
+            return {
+                "status": "downloaded",
+                "submit_id": submit_id,
+                "consumption_id": consumption_id,
+                "reservation": record,
+                "settlement": settlement,
+            }
+    else:
+        scope = shared.spend_envelope.requested_scope(
+            str(context["chapter"]), [panel_id], force=bool(context["force"])
+        )
+        consumption_id = f"comic-image-{uuid.uuid4().hex}"
+        attempt_id = f"{context['chapter']}:{shared.spend_envelope.STAGE}:retry-round:{int(retry_round)}"
+        reservation = shared.spend_envelope.reserve_submission(
+            envelope_path, root, stage=shared.spend_envelope.STAGE,
+            input_sha256=str(context["data_input_sha256"]), model=str(context["model"]),
+            channel=str(context["channel"]), scope=scope,
+            consumption_id=consumption_id, attempt_id=attempt_id,
+        )
+        _persist_provider_execution(
+            jobs_path, data, job, state="reserved", consumption_id=consumption_id,
+            attempt_id=attempt_id, execution_input_sha256=current_input,
+            envelope_path=shared.rel_to_root(root, envelope_path),
+            raw_output=shared.rel_to_root(root, raw_output),
+        )
+        submit_id, submit_note = submitter()
+        if not submit_id:
+            _persist_provider_execution(
+                jobs_path, data, job, state="reserved", ambiguous=True, error=submit_note,
+            )
+            return {
+                "status": "ambiguous", "submit_id": "", "error": submit_note,
+                "consumption_id": consumption_id, "reservation": reservation,
+            }
+        record = shared.spend_envelope.mark_provider_state(
+            envelope_path, root, consumption_id=consumption_id, state="submitted",
+            provider_submit_id=submit_id, provider_note=submit_note,
+        )
+        _persist_provider_execution(
+            jobs_path, data, job, state="submitted", submit_id=submit_id,
+            ambiguous=False, error=submit_note,
+        )
+
+    shared.spend_envelope.mark_provider_state(
+        envelope_path, root, consumption_id=consumption_id, state="polling",
+        provider_submit_id=submit_id,
+    )
+    _persist_provider_execution(
+        jobs_path, data, job, state="polling", submit_id=submit_id,
+    )
+    provider_state, error = poller(submit_id)
+    if provider_state == "polling":
+        _persist_provider_execution(
+            jobs_path, data, job, state="polling", submit_id=submit_id, error=error,
+        )
+        return {
+            "status": "polling", "submit_id": submit_id, "error": error,
+            "consumption_id": consumption_id,
+        }
+    if provider_state == "downloaded":
+        shared.spend_envelope.mark_provider_state(
+            envelope_path, root, consumption_id=consumption_id, state="downloaded",
+            provider_submit_id=submit_id,
+        )
+        _persist_provider_execution(
+            jobs_path, data, job, state="downloaded", submit_id=submit_id,
+        )
+        terminal = "downloaded"
+    elif provider_state == "hard_failed":
+        terminal = "hard_failed"
+    else:
+        raise RuntimeError(f"unknown Dreamina provider state: {provider_state}")
+    settlement = shared.spend_envelope.settle_submission(
+        envelope_path, root, consumption_id=consumption_id,
+        actual_cost=context["actual_cost"],
+    )
+    _persist_provider_execution(
+        jobs_path, data, job, state="settled", submit_id=submit_id,
+        terminal_outcome=terminal, error=error,
+        settled_actual_cost=settlement.get("actual_cost"),
+    )
+    return {
+        "status": terminal, "submit_id": submit_id, "error": error,
+        "consumption_id": consumption_id, "reservation": record,
+        "settlement": settlement,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="用 Dreamina 官方 CLI 生成 comic panel PNG")
     parser.add_argument("project_root")
@@ -424,6 +638,11 @@ def main() -> int:
         "--recheck-existing",
         action="store_true",
         help="只复核并恢复现有 panel PNG 的状态，不归档、不调用 Dreamina，也不消耗新的生成尝试",
+    )
+    parser.add_argument(
+        "--reconcile",
+        action="store_true",
+        help="只按已持久化 submit_id 恢复轮询/下载/结算；绝不创建新的 Dreamina 提交",
     )
     parser.add_argument(
         "--accept-reviewed",
@@ -501,8 +720,35 @@ def main() -> int:
     if args.recheck_existing and len(targets) != 1:
         print("[err] --recheck-existing 每次必须且只能 --targets 一个 panel", file=sys.stderr)
         return 2
+    if args.reconcile and (args.recheck_existing or args.force or args.accept_reviewed):
+        print("[err] --reconcile 不能与 --recheck-existing/--force/--accept-reviewed 同用", file=sys.stderr)
+        return 2
 
     all_jobs = [job for job in data.get("jobs") or [] if isinstance(job, dict)]
+    pending_provider_jobs = [
+        row for row in all_jobs
+        if isinstance(row.get("provider_execution"), dict)
+        and str(row["provider_execution"].get("state") or "") in {"reserved", "submitted", "polling", "downloaded"}
+    ]
+    if args.reconcile:
+        if not pending_provider_jobs:
+            print("[ok] no recoverable Dreamina provider task")
+            return 0
+        if len(pending_provider_jobs) != 1:
+            print("[err] multiple in-flight provider tasks require ledger repair before reconciliation", file=sys.stderr)
+            return 5
+        pending_id = str(pending_provider_jobs[0].get("panel_id") or "")
+        if targets and pending_id not in targets:
+            print(f"[err] pending provider task is {pending_id}; --reconcile cannot switch target", file=sys.stderr)
+            return 5
+        targets = {pending_id}
+    elif pending_provider_jobs:
+        pending_id = str(pending_provider_jobs[0].get("panel_id") or "")
+        print(
+            f"[err] {pending_id} has an in-flight/ambiguous Dreamina call; run --reconcile --targets {pending_id}; replacement submit forbidden",
+            file=sys.stderr,
+        )
+        return 5
     barrier, barrier_status = shared.first_sequence_barrier(root, all_jobs)
     if barrier is None:
         if not args.force:
@@ -541,7 +787,7 @@ def main() -> int:
                 )
                 return 4
 
-    if not args.recheck_existing:
+    if not args.recheck_existing and not args.reconcile:
         if args.skip_gate:
             receipt_status = shared.validate_gate_receipt(root, args.chapter, jobs_path)
             if receipt_status.get("status") != "current_pass":
@@ -556,7 +802,11 @@ def main() -> int:
             print("[err] dreamina not found in PATH", file=sys.stderr)
             return 2
 
-    jobs = shared.selected_jobs(data.get("jobs") or [], targets, args.limit, args.force or args.recheck_existing)
+    jobs = (
+        [pending_provider_jobs[0]]
+        if args.reconcile
+        else shared.selected_jobs(data.get("jobs") or [], targets, args.limit, args.force or args.recheck_existing)
+    )
     if not jobs:
         print("[ok] no pending jobs")
         return 0
@@ -571,7 +821,32 @@ def main() -> int:
         return 2
 
     spend_context: dict[str, Any] | None = None
-    if not args.recheck_existing:
+    if args.reconcile:
+        execution = jobs[0]["provider_execution"]
+        raw_envelope = Path(str(execution.get("envelope_path") or ""))
+        envelope_path = raw_envelope if raw_envelope.is_absolute() else root / raw_envelope
+        record = shared.spend_envelope.submission_record(
+            envelope_path, root, consumption_id=str(execution.get("consumption_id") or "")
+        )
+        if not record:
+            print("[err] pending provider task has no matching spend reservation", file=sys.stderr)
+            return 5
+        actual_cost = (
+            shared.spend_envelope.money_text(
+                shared.spend_envelope.money(args.actual_cost_per_call, field="actual_cost_per_call", allow_zero=True)
+            )
+            if args.actual_cost_per_call.strip()
+            else str(record.get("reserved_cost") or "")
+        )
+        spend_context = {
+            "root": root, "chapter": args.chapter, "force": False,
+            "model": DREAMINA_MODEL, "channel": DREAMINA_CHANNEL,
+            "envelope_path": envelope_path, "actual_cost": actual_cost,
+            "data_input_sha256": shared.spend_envelope.panel_jobs_input_sha256(data, args.chapter),
+            "authorization": {"envelope_id": "reconcile-existing"},
+        }
+        print(f"[reconcile] resume submit_id={execution.get('submit_id') or record.get('provider_submit_id')}", flush=True)
+    elif not args.recheck_existing:
         try:
             spend_context = shared.prepare_spend_context(
                 root,
@@ -739,29 +1014,54 @@ def main() -> int:
         )
 
         for attempt in range(1, max_attempts + 1):
+            pending_execution = job.get("provider_execution") if isinstance(job.get("provider_execution"), dict) else {}
+            effective_attempt = int(str(pending_execution.get("attempt_id") or "").rsplit(":", 1)[-1]) if args.reconcile else attempt
+            existing_raw = str(pending_execution.get("raw_output") or "") if args.reconcile else ""
             stamp = dt.datetime.now().strftime("%Y%m%dT%H%M%S")
-            raw_path = candidate_root / panel_id / f"{stamp}_attempt{attempt}_dreamina_raw.png"
+            raw_path = (
+                shared.resolve_path(root, existing_raw)
+                if existing_raw
+                else candidate_root / panel_id / f"{stamp}_attempt{effective_attempt}_dreamina_raw.png"
+            )
             assert spend_context is not None
             try:
-                paid_result, spend_reservation, spend_settlement = shared.run_paid_submission(
+                outcome = recoverable_paid_submission(
                     spend_context,
+                    jobs_path=jobs_path,
+                    data=data,
+                    job=job,
                     panel_id=panel_id,
-                    retry_round=attempt,
-                    submit=lambda: run_dreamina(
-                        prompt,
-                        image_paths,
-                        raw_path,
+                    retry_round=effective_attempt,
+                    raw_output=raw_path,
+                    submitter=lambda: submit_dreamina(
+                        prompt, image_paths,
                         ratio=ratio,
                         model_version=args.model_version,
                         resolution_type=args.resolution_type,
                         timeout_sec=max(60, int(args.timeout_sec)),
+                        poll_sec=0,
+                    ),
+                    poller=lambda sid: poll_dreamina(
+                        sid, raw_path, timeout_sec=max(60, int(args.timeout_sec)),
                         poll_sec=max(0, int(args.poll_sec)),
                     ),
                 )
             except shared.spend_envelope.SpendAuthorizationError as exc:
                 shared.print_spend_stop(exc, Path(spend_context["envelope_path"]))
                 return 5
-            success, submit_id, error = paid_result
+            submit_id = str(outcome.get("submit_id") or "")
+            error = str(outcome.get("error") or "")
+            if outcome.get("status") in {"ambiguous", "polling"}:
+                state = str(outcome.get("status"))
+                print(
+                    f"[reconcile-required] {panel_id} provider_state={state} submit_id={submit_id or 'unknown'}; "
+                    "run the same command with --reconcile; no replacement submit will be made",
+                    file=sys.stderr, flush=True,
+                )
+                return 5
+            spend_reservation = outcome.get("reservation") or {}
+            spend_settlement = outcome.get("settlement") or {}
+            success = outcome.get("status") == "downloaded"
             if not success:
                 last_error = error
                 shared.append_event(
@@ -772,7 +1072,7 @@ def main() -> int:
                         "status": "attempt_failed",
                         "backend": DREAMINA_CHANNEL,
                         "model": DREAMINA_MODEL,
-                        "attempt": attempt,
+                        "attempt": effective_attempt,
                         "max_attempts": max_attempts,
                         "submit_id": submit_id,
                         "reference_manifest": shared.rel_to_root(root, reference_manifest),
@@ -784,7 +1084,15 @@ def main() -> int:
                         "duration_sec": round(time.monotonic() - started, 2),
                     },
                 )
-                print(f"[retry] {panel_id} attempt {attempt}/{max_attempts}: {error}", file=sys.stderr, flush=True)
+                execution_history = job.get("provider_execution_history") if isinstance(job.get("provider_execution_history"), list) else []
+                if isinstance(job.get("provider_execution"), dict):
+                    execution_history.append(dict(job["provider_execution"]))
+                    job["provider_execution_history"] = execution_history[-10:]
+                job.pop("provider_execution", None)
+                shared.write_json(jobs_path, data)
+                print(f"[retry] {panel_id} attempt {effective_attempt}/{max_attempts}: {error}", file=sys.stderr, flush=True)
+                if args.reconcile:
+                    return 1
                 continue
 
             if should_archive_existing and not archived_existing:
@@ -829,7 +1137,7 @@ def main() -> int:
                     "generated_at": generated_at,
                     "backend_version": backend_version,
                     "artifact_sha256": shared.file_sha256(final),
-                    "attempt": attempt,
+                    "attempt": effective_attempt,
                     "submit_id": submit_id,
                     "service_ratio": ratio,
                     "resolution_type": args.resolution_type,
@@ -864,7 +1172,7 @@ def main() -> int:
                     "path": job["result_path"],
                     "raw_candidate_path": job["raw_candidate_path"],
                     "sha256": job["artifact_sha256"],
-                    "attempt": attempt,
+                    "attempt": effective_attempt,
                     "max_attempts": max_attempts,
                     "submit_id": submit_id,
                     "service_ratio": ratio,

@@ -41,6 +41,8 @@ python3 skills/n2d/n2d-supervisor/scripts/producer.py <作品根> [第N集] --pl
 
 `producer.py` 的退出码 `0` 只表示 canonical workflow 已返回 `done`；遇硬边界、adapter 缺失、执行失败或不收敛返回 `2`，并把完整 stop receipt 写到 `生产数据/producer/producer_run_<集>.json`。这份 receipt 是执行证据，不是第二套完成状态。
 
+每次运行先获取作品+集的 OS 独占 lease。每个实际副作用都以不含 cycle/时间戳的 stable work-unit digest 登记，并在调用执行器前按 `prepared → started`、返回后按 `committed` 追加到 fsync WAL。重启时会先 reconciliation：只有 `prepared`且从未 `started` 的动作可安全重领；`started` 后 frontier 已变的动作标记为已观测副作用并禁止重放，frontier 未变则以 `ambiguous_started_work_unit` fail-closed。WAL/lease/运行收据都不能替代 canonical frontier、预算授权或 release verdict。
+
 创作工位需要非交互执行器时，在作品内登记 `生产数据/specialist_execution_adapters.json`：
 
 ```json

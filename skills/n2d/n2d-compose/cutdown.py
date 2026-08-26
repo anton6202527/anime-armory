@@ -27,6 +27,14 @@ import os
 import shutil
 import subprocess
 import sys
+import uuid
+from pathlib import Path
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+import loudness_conform  # noqa: E402
+import media_artifact  # noqa: E402
 
 # rhythm 张力词（rhythm 含此子串即命中）→ cutdown 保留优先级。数字越大越先保留。
 # 漫剧引流版骨架：钩子/爽点/反转/高潮/集尾 cliffhanger 必保，铺垫/留白/细节可砍。
@@ -260,51 +268,98 @@ def _aspect_size(aspect, out_long=1920):
     return ow - ow % 2, oh - oh % 2
 
 
-def render_cutdown(root, ep, kept, target_label, out_path=None, aspect="9:16"):
-    """按 kept 计划，从 出视频/<集>/视频/ 取对应 clip，filter-concat 归一拼接，产出 MP4。
-    返回 (ok, msg, out_path)。无 ffmpeg → (False, 提示, None)。"""
+def _normalized_clip_id(value):
+    regex = __import__("re")
+    raw = str(value or "")
+    match = regex.search(r"(?:clip|镜头|shot)[_\s-]*0*(\d+)", raw, regex.I)
+    if not match:
+        nums = regex.findall(r"\d+", raw)
+        match = regex.search(r"0*(\d+)", nums[-1]) if nums else None
+    return f"Clip_{int(match.group(1)):02d}" if match else str(value or "").strip().lower()
+
+
+def _master_ranges(root, ep, kept):
+    current = media_artifact.current_receipt(root, ep)
+    if current.get("status") != "pass":
+        return None, None, None, "current MediaArtifactReceipt is required: " + "; ".join(current.get("issues") or [])
+    receipt = current["receipt"]
+    master = Path(root) / str((receipt.get("artifact") or {}).get("path") or "")
+    recipe_rel = str((receipt.get("recipe") or {}).get("path") or "")
+    recipe_path = Path(root) / recipe_rel
+    recipe = media_artifact.load_json(recipe_path)
+    wanted = {_normalized_clip_id(shot_id(row)) for row in kept}
+    ranges = []
+    matched = set()
+    for row in recipe.get("ordered_sources") or []:
+        if not isinstance(row, dict):
+            continue
+        cid = _normalized_clip_id(row.get("clip"))
+        if cid not in wanted:
+            continue
+        start = float(row.get("timeline_in_sec") or 0.0)
+        end = float(row.get("timeline_out_sec") or 0.0)
+        if end > start:
+            ranges.append((start, end, cid))
+            matched.add(cid)
+    missing = sorted(wanted - matched)
+    if missing:
+        return None, None, None, "render recipe has no canonical-master ranges for: " + ", ".join(missing)
+    return master, ranges, receipt, ""
+
+
+def render_cutdown(root, ep, kept, target_label, out_path=None, aspect="9:16", encoding=None):
+    """Trim selected ranges from the canonical mixed master, never raw clips."""
     ff = _ffmpeg()
     if not ff:
         return False, "无 ffmpeg：跳过渲染（计划已出，可在带 ffmpeg 的机器上 --render）", None
-    clip_dir = os.path.join(root, "出视频", ep, "视频")
     out_path = out_path or os.path.join(root, "合成", "交付", ep, f"成片_{safe_label(target_label)}.mp4")
-    work = os.path.join(root, "合成", "交付", ep, "_work")
+    work = os.path.join(root, "合成", "交付", ep, f".cutdown-stage.{os.getpid()}.{uuid.uuid4().hex[:8]}")
     os.makedirs(work, exist_ok=True)
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
-
-    inputs = []
-    missing = []
-    for idx, cl in enumerate(kept):
-        sid = shot_id(cl)
-        p = _clip_path_for_shot(clip_dir, sid, idx)
-        if p is None:
-            missing.append(sid or f"#{idx}")
-        else:
-            inputs.append(p)
-    if missing:
-        return False, f"缺 clip：{', '.join(str(m) for m in missing)}（出视频/{ep}/视频/ 内未找到对应文件）", None
-    if not inputs:
-        return False, "无可拼接 clip", None
+    master, ranges, receipt, issue = _master_ranges(root, ep, kept)
+    if issue:
+        return False, issue, None
+    if not master or not master.is_file() or not ranges:
+        return False, "canonical master has no selectable ranges", None
 
     ow, oh = _aspect_size(aspect)
-    args = [ff, "-y", "-loglevel", "error"]
-    for p in inputs:
-        args += ["-i", p]
-    n = len(inputs)
+    fps = str((((receipt.get("validation") or {}).get("probe") or {}).get("video") or {}).get("fps_rational") or
+              (((receipt.get("validation") or {}).get("probe") or {}).get("video") or {}).get("fps") or "30")
+    n = len(ranges)
     pre = []
-    for k in range(n):
-        pre.append(f"[{k}:v]scale={ow}:{oh}:force_original_aspect_ratio=decrease,"
-                   f"pad={ow}:{oh}:(ow-iw)/2:(oh-ih)/2:black,setsar=1,fps=30[v{k}]")
-    concat_in = "".join(f"[v{k}]" for k in range(n))
-    fc = ";".join(pre) + f";{concat_in}concat=n={n}:v=1:a=0[outv]"
-    args += ["-filter_complex", fc, "-map", "[outv]",
-             "-c:v", "libx264", "-pix_fmt", "yuv420p",
-             "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709", "-color_range", "tv",
-             out_path]
+    for k, (start, end, _cid) in enumerate(ranges):
+        pre.append(
+            f"[0:v]trim=start={start:.6f}:end={end:.6f},setpts=PTS-STARTPTS,"
+            f"scale={ow}:{oh}:force_original_aspect_ratio=decrease,"
+            f"pad={ow}:{oh}:(ow-iw)/2:(oh-ih)/2:black,setsar=1,fps={fps},"
+            f"colorspace=all=bt709:range=tv:format=yuv420p[v{k}]"
+        )
+        pre.append(f"[0:a]atrim=start={start:.6f}:end={end:.6f},asetpts=PTS-STARTPTS,aresample=48000[a{k}]")
+    concat_in = "".join(f"[v{k}][a{k}]" for k in range(n))
+    fc = ";".join(pre) + f";{concat_in}concat=n={n}:v=1:a=1[outv][outa]"
+    pre_loud = os.path.join(work, "pre_loudnorm.mp4")
+    args = [ff, "-y", "-loglevel", "error", "-i", str(master), "-filter_complex", fc,
+            "-map", "[outv]", "-map", "[outa]", "-c:v", "libx264", "-profile:v", "high",
+            "-x264-params", "colorprim=bt709:transfer=bt709:colormatrix=bt709:range=limited",
+            "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", str((encoding or {}).get("audio_bitrate") or "192k"),
+            "-ar", "48000", "-ac", "2", "-movflags", "+faststart",
+            "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709", "-color_range", "tv",
+            pre_loud]
     rc = subprocess.run(args, capture_output=True, text=True)
     if rc.returncode != 0:
         return False, f"cutdown 渲染失败：{rc.stderr[-600:]}", None
-    return True, f"cutdown 成片：{out_path}", out_path
+    candidate = os.path.join(work, "candidate.mp4")
+    target_lufs = float((encoding or {}).get("target_lufs") or (receipt.get("spec") or {}).get("target_lufs") or -16.0)
+    loudness = loudness_conform.two_pass_conform(pre_loud, candidate, target_lufs=target_lufs)
+    if loudness.get("status") != "pass":
+        return False, f"cutdown loudness conform failed: {loudness.get('error')}", None
+    spec = media_artifact.default_master_spec(width=ow, height=oh, fps=fps, target_lufs=target_lufs)
+    validation = media_artifact.validate_media(candidate, spec)
+    if validation.get("status") != "pass":
+        return False, "cutdown derivative failed shared media validation", None
+    os.replace(candidate, out_path)
+    shutil.rmtree(work, ignore_errors=True)
+    return True, f"cutdown from canonical mixed master：{out_path}", out_path
 
 
 def main():

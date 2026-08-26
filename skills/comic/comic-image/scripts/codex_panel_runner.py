@@ -56,6 +56,10 @@ SKILLS_ROOT = Path(__file__).resolve().parents[2]
 CODEX_IMAGE_GENERATION_REFERENCE_LIMIT = resolve_capabilities(
     CODEX_MODEL, CODEX_CHANNEL
 ).executable_attachment_limit
+BASE_VISUAL_REVIEW_AXES = (
+    "style_light_color",
+    "composition_axis_and_adjacent_continuity",
+)
 
 
 def recorded_channel(*, adopt_builtin: bool) -> str:
@@ -472,6 +476,130 @@ def resize_png(path: Path, size: dict[str, int]) -> None:
     fitted.save(path)
 
 
+def image_artifact_metadata(path: Path) -> dict[str, Any]:
+    try:
+        from PIL import Image
+        with Image.open(path) as image:
+            icc = image.info.get("icc_profile")
+            mode = str(image.mode)
+            return {
+                "mode": mode,
+                "color_space": "embedded_icc" if icc else ("grayscale" if mode in {"1", "L", "I", "F"} else "sRGB_unprofiled"),
+                "bit_depth": 16 if "16" in mode else 8,
+                "icc_sha256": hashlib.sha256(icc).hexdigest() if isinstance(icc, bytes) and icc else "",
+                "alpha": "A" in mode or mode in {"LA", "PA"},
+            }
+    except (ImportError, OSError):
+        return {"mode": "unknown", "color_space": "unknown", "bit_depth": 0, "icc_sha256": "", "alpha": False}
+
+
+def atomic_copy(source: Path, target: Path) -> None:
+    target.parent.mkdir(parents=True, exist_ok=True)
+    fd, temp_name = tempfile.mkstemp(dir=str(target.parent), prefix=f".{target.name}.", suffix=".tmp")
+    os.close(fd)
+    temp = Path(temp_name)
+    try:
+        shutil.copy2(source, temp)
+        if not png_valid(temp):
+            raise ValueError(f"staged PNG invalid: {temp}")
+        os.replace(temp, target)
+    except BaseException:
+        temp.unlink(missing_ok=True)
+        raise
+
+
+def promote_generated_artifacts(
+    root: Path,
+    chapter: str,
+    panel_id: str,
+    generated: Path,
+    final: Path,
+    size: dict[str, int],
+    *,
+    attempt: int,
+    resize: bool,
+) -> dict[str, Any]:
+    """Promote immutable provider raw → active master → panel derivative.
+
+    All bytes are decoded in staging before an active path is replaced.  The
+    immutable raw is never subsequently edited, allowing repairs/adoptions to
+    name an exact source master instead of a mutable filename.
+    """
+    if not png_valid(generated):
+        raise ValueError("provider output is not a valid PNG")
+    stamp = dt.datetime.now().strftime("%Y%m%d_%H%M%S") + "_" + uuid.uuid4().hex[:8]
+    raw = root / "出图" / chapter / "candidates" / panel_id / f"{stamp}_attempt{attempt}_raw.png"
+    raw.parent.mkdir(parents=True, exist_ok=True)
+    os.replace(generated, raw)
+    raw_sha = file_sha256(raw)
+    master = root / "出图" / chapter / "masters" / f"{panel_id}.png"
+    master_stage = master.parent / f".{panel_id}.{uuid.uuid4().hex}.master.png"
+    derivative_stage = final.parent / f".{panel_id}.{uuid.uuid4().hex}.panel.png"
+    master_backup = master.parent / f".{panel_id}.{uuid.uuid4().hex}.master.before"
+    derivative_backup = final.parent / f".{panel_id}.{uuid.uuid4().hex}.panel.before"
+    master.parent.mkdir(parents=True, exist_ok=True)
+    final.parent.mkdir(parents=True, exist_ok=True)
+    had_master = master.is_file()
+    had_derivative = final.is_file()
+    try:
+        shutil.copy2(raw, master_stage)
+        shutil.copy2(raw, derivative_stage)
+        if resize:
+            resize_png(derivative_stage, size)
+        if not png_valid(master_stage) or not png_valid(derivative_stage):
+            raise ValueError("staged master/derivative decode failed")
+        native_w, native_h = image_size(master_stage)
+        target_w, target_h = image_size(derivative_stage)
+        fit_scale = max(target_w / max(native_w, 1), target_h / max(native_h, 1))
+        # Preserve an old active master as immutable history before switching.
+        if png_valid(master):
+            old_sha = file_sha256(master)
+            old = raw.parent / f"{stamp}_previous_master_{old_sha[:12]}.png"
+            atomic_copy(master, old)
+        if had_master:
+            shutil.copy2(master, master_backup)
+        if had_derivative:
+            shutil.copy2(final, derivative_backup)
+        os.replace(master_stage, master)
+        os.replace(derivative_stage, final)
+    except BaseException:
+        master_stage.unlink(missing_ok=True)
+        derivative_stage.unlink(missing_ok=True)
+        if master_backup.is_file():
+            os.replace(master_backup, master)
+        elif not had_master:
+            master.unlink(missing_ok=True)
+        if derivative_backup.is_file():
+            os.replace(derivative_backup, final)
+        elif not had_derivative:
+            final.unlink(missing_ok=True)
+        raise
+    finally:
+        master_backup.unlink(missing_ok=True)
+        derivative_backup.unlink(missing_ok=True)
+    master_sha = file_sha256(master)
+    panel_sha = file_sha256(final)
+    return {
+        "requested_resolution_tier": "highest_available",
+        "maximum_verified": False,
+        "native_size": {"width": native_w, "height": native_h},
+        "native_sha256": master_sha,
+        "raw_candidate_path": rel_to_root(root, raw),
+        "raw_candidate_sha256": raw_sha,
+        "master_path": rel_to_root(root, master),
+        "derivative_size": {"width": target_w, "height": target_h},
+        "normalization_scale": round(fit_scale, 6),
+        "upscaled": fit_scale > 1.0,
+        "artifact_metadata": image_artifact_metadata(master),
+        "derivative_metadata": image_artifact_metadata(final),
+        "derivative_chain": [
+            {"role": "immutable_provider_raw", "path": rel_to_root(root, raw), "sha256": raw_sha},
+            {"role": "active_master", "path": rel_to_root(root, master), "sha256": master_sha, "derived_from_sha256": raw_sha},
+            {"role": "layout_panel", "path": rel_to_root(root, final), "sha256": panel_sha, "derived_from_sha256": master_sha},
+        ],
+    }
+
+
 def likely_blank_bubble_regions(path: Path) -> list[dict[str, int]]:
     """Conservative hint for baked blank bubbles/text boxes in raw panel art."""
     try:
@@ -633,6 +761,43 @@ def comparison_inputs_sha256(inputs: list[dict[str, Any]]) -> str:
     ).hexdigest()
 
 
+def required_visual_axes(job: dict[str, Any]) -> list[str]:
+    axes = list(BASE_VISUAL_REVIEW_AXES)
+    identities = [
+        item for item in job.get("identity_execution_contracts") or []
+        if isinstance(item, dict) and item.get("character_id")
+    ]
+    if identities:
+        axes[:0] = ["subject_identity_and_face", "hair_outfit_body_and_state"]
+    if any(str(ref.get("id") or "").startswith(("LOC_", "PROP_", "WEAPON_")) for ref in job.get("references") or [] if isinstance(ref, dict)):
+        axes.insert(-1, "location_prop_structure")
+    return axes
+
+
+def subject_review_contracts(job: dict[str, Any]) -> list[dict[str, Any]]:
+    contracts = [
+        item for item in job.get("identity_execution_contracts") or []
+        if isinstance(item, dict) and item.get("character_id")
+    ]
+    multi = len(contracts) > 1
+    out: list[dict[str, Any]] = []
+    for item in contracts:
+        locator = item.get("subject_locator") if isinstance(item.get("subject_locator"), dict) else {}
+        if not locator and not multi:
+            locator = {"scope": "full_panel_single_subject"}
+        out.append({
+            "character_id": str(item.get("character_id") or ""),
+            "form_id": str(item.get("form_id") or ""),
+            "outfit_id": str(item.get("outfit_id") or ""),
+            "expression_id": str(item.get("expression_id") or ""),
+            "state_id": str(item.get("state_id") or ""),
+            "contract_sha256": str(item.get("contract_sha256") or ""),
+            "locator": locator,
+            "exact_references": item.get("exact_references") or [],
+        })
+    return out
+
+
 def build_visual_review_packet(
     root: Path,
     chapter: str,
@@ -684,13 +849,8 @@ def build_visual_review_packet(
         "status": "unverifiable",
         "comparison_inputs": inputs,
         "comparison_inputs_sha256": fingerprint,
-        "required_axes": [
-            "subject_identity_and_face",
-            "hair_outfit_body_and_state",
-            "location_prop_structure",
-            "style_light_color",
-            "composition_axis_and_adjacent_continuity",
-        ],
+        "required_axes": required_visual_axes(job),
+        "subject_review_contracts": subject_review_contracts(job),
         "human_review_status": "pending",
     }
     try:
@@ -709,6 +869,23 @@ def build_visual_review_packet(
         opened.append((item, image))
     if not opened or not current:
         packet["reason"] = "current panel is missing from the visual review packet"
+        return packet
+    missing_multi_locators = [
+        item.get("character_id")
+        for item in packet["subject_review_contracts"]
+        if (
+            len(packet["subject_review_contracts"]) > 1
+            and not any(
+                (item.get("locator") or {}).get(key) not in (None, "", [], {})
+                for key in ("bbox", "mask_path", "occlusion", "review_region")
+            )
+        )
+    ]
+    if missing_multi_locators:
+        packet["reason"] = (
+            "multi-subject review requires binding-resolved bbox/mask/occlusion locator for: "
+            + ",".join(map(str, missing_multi_locators))
+        )
         return packet
 
     cell_w, cell_h, caption_h = 360, 360, 34
@@ -792,6 +969,135 @@ def machine_review_sha256(
     ).hexdigest()
 
 
+def _parse_iso8601(value: str) -> bool:
+    try:
+        dt.datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return False
+    return True
+
+
+def structured_review_path(root: Path, chapter: str, panel_id: str) -> Path:
+    return root / "生产数据" / "panel_qc" / chapter / f"{panel_id}_visual_review.json"
+
+
+def load_structured_review(
+    root: Path,
+    chapter: str,
+    panel_id: str,
+    source: str,
+) -> tuple[dict[str, Any], Path | None]:
+    """Load a review result; prose can never imply all axes passed."""
+    raw = str(source or "").strip()
+    if raw.startswith("{"):
+        try:
+            value = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"{panel_id} --review-result JSON 无法解析: {exc}") from exc
+        if not isinstance(value, dict):
+            raise ValueError(f"{panel_id} structured review 必须是 JSON 对象")
+        return value, None
+    candidate = resolve_path(root, raw) if raw else structured_review_path(root, chapter, panel_id)
+    try:
+        value = load_json(candidate)
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(
+            f"{panel_id} 必须提供结构化逐轴结果；写入 {structured_review_path(root, chapter, panel_id)} "
+            "或传 --review-result <json-file>，一段 review notes 不能自动通过所有轴"
+        ) from exc
+    if not isinstance(value, dict):
+        raise ValueError(f"{panel_id} structured review 必须是 JSON 对象")
+    return value, candidate
+
+
+def validate_structured_review(
+    root: Path,
+    panel_id: str,
+    review: dict[str, Any],
+    packet: dict[str, Any],
+    *,
+    artifact_sha256: str,
+    reviewer: str,
+) -> dict[str, Any]:
+    """Validate a SHA-bound, per-axis human/delegate current-pixel result."""
+    errors: list[str] = []
+    if review.get("kind") != "comic_panel_visual_review":
+        errors.append("kind 必须为 comic_panel_visual_review")
+    for key, expected in (
+        ("artifact_sha256", artifact_sha256),
+        ("comparison_inputs_sha256", str(packet.get("comparison_inputs_sha256") or "")),
+        ("contact_sheet_sha256", str(packet.get("contact_sheet_sha256") or "")),
+    ):
+        if str(review.get(key) or "") != expected:
+            errors.append(f"{key} 未绑定当前像素/比较包")
+    evaluator = review.get("evaluator") if isinstance(review.get("evaluator"), dict) else {}
+    evaluator_name = str(evaluator.get("name") or "").strip()
+    evaluator_kind = str(evaluator.get("kind") or "").strip().lower()
+    if not evaluator_name or evaluator_kind not in {"human", "delegated_agent"}:
+        errors.append("evaluator.name 与 evaluator.kind(human|delegated_agent) 必填")
+    if reviewer.strip() and evaluator_name != reviewer.strip():
+        errors.append("evaluator.name 必须与 --reviewer 一致")
+    reviewed_at = str(review.get("reviewed_at") or evaluator.get("reviewed_at") or "")
+    if not _parse_iso8601(reviewed_at):
+        errors.append("reviewed_at 必须是 ISO-8601")
+    axes = review.get("axes") if isinstance(review.get("axes"), dict) else {}
+    required = [str(item) for item in packet.get("required_axes") or []]
+    missing = [axis for axis in required if axis not in axes]
+    if missing:
+        errors.append("缺少必需审查轴: " + ",".join(missing))
+    allowed_evidence = {
+        (str(item.get("path") or ""), str(item.get("sha256") or ""))
+        for item in packet.get("comparison_inputs") or []
+        if isinstance(item, dict)
+    }
+    subject_ids = {
+        str(item.get("character_id") or "")
+        for item in packet.get("subject_review_contracts") or []
+        if isinstance(item, dict)
+    }
+    for axis in required:
+        result = axes.get(axis) if isinstance(axes.get(axis), dict) else {}
+        verdict = str(result.get("verdict") or "").lower()
+        if verdict not in {"pass", "warn", "fail"}:
+            errors.append(f"axes.{axis}.verdict 必须是 pass|warn|fail")
+        elif verdict == "fail":
+            errors.append(f"axes.{axis}=fail，不能采用")
+        if not str(result.get("notes") or "").strip():
+            errors.append(f"axes.{axis}.notes 必填")
+        evidence = result.get("evidence") if isinstance(result.get("evidence"), list) else []
+        if not evidence:
+            errors.append(f"axes.{axis}.evidence 必须至少绑定一个比较输入")
+        for index, item in enumerate(evidence):
+            if not isinstance(item, dict):
+                errors.append(f"axes.{axis}.evidence[{index}] 必须是对象")
+                continue
+            pair = (str(item.get("path") or ""), str(item.get("sha256") or ""))
+            if pair not in allowed_evidence:
+                errors.append(f"axes.{axis}.evidence[{index}] path/SHA 不属于当前比较包")
+        if axis in {"subject_identity_and_face", "hair_outfit_body_and_state"}:
+            observations = result.get("subjects") if isinstance(result.get("subjects"), list) else []
+            observed = {str(item.get("character_id") or "") for item in observations if isinstance(item, dict)}
+            if subject_ids - observed:
+                errors.append(f"axes.{axis}.subjects 未逐主体覆盖: {','.join(sorted(subject_ids - observed))}")
+            for item in observations:
+                if not isinstance(item, dict):
+                    continue
+                locator = item.get("locator") if isinstance(item.get("locator"), dict) else {}
+                if len(subject_ids) > 1 and not any(key in locator for key in ("bbox", "mask_path", "occlusion", "review_region")):
+                    errors.append(f"axes.{axis}.{item.get('character_id')} 缺 bbox/mask/occlusion 定位证据")
+    if errors:
+        raise ValueError(f"{panel_id} structured review 无效: " + "；".join(errors))
+    normalized = dict(review)
+    normalized["reviewed_at"] = reviewed_at
+    normalized["evaluator"] = {
+        **evaluator,
+        "name": evaluator_name,
+        "kind": evaluator_kind,
+    }
+    normalized["axes"] = {axis: axes[axis] for axis in required}
+    return normalized
+
+
 def post_qc_panel(
     root: Path,
     chapter: str,
@@ -846,6 +1152,31 @@ def post_qc_panel(
                     "reason": "layout 派生图需要放大原生 master；必须改用更高原生档重新生成，不能插值冒充高清",
                 }
             )
+        chain = provenance.get("derivative_chain") if isinstance(provenance.get("derivative_chain"), list) else []
+        if len(chain) < 3:
+            issues.append({
+                "severity": "block",
+                "category": "derivative_lineage",
+                "reason": "缺 immutable raw → active master → layout panel 的完整 derivative chain",
+            })
+        else:
+            for node in chain:
+                if not isinstance(node, dict):
+                    continue
+                node_path = resolve_path(root, str(node.get("path") or ""))
+                if not node_path.is_file() or file_sha256(node_path) != str(node.get("sha256") or ""):
+                    issues.append({
+                        "severity": "block",
+                        "category": "derivative_lineage_stale",
+                        "reason": f"derivative chain 节点缺失或 SHA 变化: {node.get('path')}",
+                    })
+        metadata = provenance.get("artifact_metadata") if isinstance(provenance.get("artifact_metadata"), dict) else {}
+        if not metadata or not metadata.get("color_space") or not metadata.get("bit_depth"):
+            issues.append({
+                "severity": "block",
+                "category": "master_pixel_metadata",
+                "reason": "master 缺 color space/bit depth/ICC/alpha 元数据",
+            })
 
     declared_bindings = [
         ref for ref in job.get("references") or []
@@ -1054,8 +1385,8 @@ def panel_acceptance_status(root: Path, job: dict[str, Any]) -> dict[str, Any]:
     if str(manual.get("verdict") or "").lower() != required_manual_verdict:
         return {"accepted": False, "reason": "human_review_pending", "artifact_sha256": current_sha}
     reviewer = str(manual.get("reviewed_by") or "").strip()
-    if not reviewer or not str(manual.get("reason") or "").strip():
-        return {"accepted": False, "reason": "human_review_identity_or_reason_missing", "artifact_sha256": current_sha}
+    if not reviewer:
+        return {"accepted": False, "reason": "human_review_identity_missing", "artifact_sha256": current_sha}
     delegated_errors = visual_authorization_errors(
         root, reviewer, "panel_pixels", manual.get("authorization")
     )
@@ -1080,6 +1411,28 @@ def panel_acceptance_status(root: Path, job: dict[str, Any]) -> dict[str, Any]:
     findings = warning_findings(post_qc)
     if verdict == "warn" and manual.get("acknowledged_warnings") != findings:
         return {"accepted": False, "reason": "warning_disposition_incomplete", "artifact_sha256": current_sha}
+    structured = manual.get("structured_review") if isinstance(manual.get("structured_review"), dict) else {}
+    try:
+        validated_review = validate_structured_review(
+            root,
+            panel_id,
+            structured,
+            packet,
+            artifact_sha256=current_sha,
+            reviewer=reviewer,
+        )
+    except ValueError as exc:
+        return {
+            "accepted": False,
+            "reason": "structured_axis_review_invalid",
+            "detail": str(exc),
+            "artifact_sha256": current_sha,
+        }
+    review_sha = hashlib.sha256(
+        json.dumps(validated_review, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    if str(manual.get("structured_review_sha256") or "") != review_sha:
+        return {"accepted": False, "reason": "structured_axis_review_sha_mismatch", "artifact_sha256": current_sha}
     for item in comparison_inputs:
         if not isinstance(item, dict) or not item.get("path") or not item.get("sha256"):
             return {"accepted": False, "reason": "comparison_input_incomplete", "artifact_sha256": current_sha}
@@ -1112,15 +1465,15 @@ def accept_panel_review(
     jobs_path: Path,
     panel_id: str,
     reviewer: str,
-    reason: str,
+    review_source: str,
 ) -> dict[str, Any]:
     """Record the subjective gate for one exact pixel SHA.
 
     Heuristic warnings require an explicit named disposition.  Deterministic
     blocks and unverifiable/skipped results remain ineligible.
     """
-    if not reviewer.strip() or not reason.strip():
-        raise ValueError("--reviewer and --review-notes are required for per-panel acceptance")
+    if not reviewer.strip():
+        raise ValueError("--reviewer is required for per-panel acceptance")
     job = next(
         (item for item in data.get("jobs") or [] if isinstance(item, dict) and str(item.get("panel_id") or "") == panel_id),
         None,
@@ -1188,6 +1541,23 @@ def accept_panel_review(
     except VisualAuthorizationError as exc:
         raise ValueError(f"{panel_id} delegated visual review is not authorized: {exc}") from exc
     is_delegate = reviewer.strip().startswith("delegate:")
+    raw_review, review_file = load_structured_review(root, chapter, panel_id, review_source)
+    structured_review = validate_structured_review(
+        root,
+        panel_id,
+        raw_review,
+        packet,
+        artifact_sha256=artifact_sha256,
+        reviewer=reviewer,
+    )
+    evaluator_kind = str((structured_review.get("evaluator") or {}).get("kind") or "")
+    if is_delegate and evaluator_kind != "delegated_agent":
+        raise ValueError(f"{panel_id} delegate:* 必须使用 evaluator.kind=delegated_agent")
+    if not is_delegate and evaluator_kind != "human":
+        raise ValueError(f"{panel_id} 具名真人必须使用 evaluator.kind=human")
+    structured_review_sha = hashlib.sha256(
+        json.dumps(structured_review, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
     manual = {
         "verdict": "accepted_with_warnings" if verdict == "warn" else "accepted",
         "artifact_sha256": artifact_sha256,
@@ -1198,11 +1568,11 @@ def accept_panel_review(
         "reviewed_by": reviewer.strip(),
         "human_signoff": not is_delegate,
         "review_kind": "delegated_current_pixel_review" if is_delegate else "named_human_current_pixel_review",
-        "reviewed_at": now,
-        "reason": reason.strip(),
-        "confirmations": {
-            axis: True for axis in packet.get("required_axes") or []
-        },
+        "reviewed_at": str(structured_review.get("reviewed_at") or now),
+        "reason": str(structured_review.get("summary") or "逐轴结构化审查通过").strip(),
+        "structured_review": structured_review,
+        "structured_review_sha256": structured_review_sha,
+        "structured_review_source": rel_to_root(root, review_file) if review_file else "inline_json",
         "policy": (
             "heuristic warnings explicitly dispositioned by named reviewer; deterministic blocks remain non-waivable"
             if verdict == "warn"
@@ -1226,7 +1596,8 @@ def accept_panel_review(
     if not status.get("accepted"):
         raise ValueError(f"acceptance receipt failed current-pixel validation: {status.get('reason')}")
     write_json(jobs_path, data)
-    return status
+    candidate_result = record_accepted_candidate(root, chapter, data, jobs_path, job)
+    return {**status, "candidate_result": candidate_result}
 
 
 def status_after_post_qc(post_qc: dict[str, Any]) -> str:
@@ -1306,23 +1677,19 @@ def validate_compiled_job(job: dict[str, Any], expected_backend: str = "") -> No
     if not re.fullmatch(r"[0-9a-f]{64}", execution_hash):
         errors.append("execution_input_hash_invalid")
     else:
-        consumed = job.get("consumed_contracts") if isinstance(job.get("consumed_contracts"), dict) else {}
-        reference_plan = consumed.get("reference_plan") if isinstance(consumed.get("reference_plan"), dict) else {}
-        material = {
-            "submit_prompt_sha256": actual_hash,
-            "size": job.get("size") or {},
-            "references": [
-                {"id": ref.get("id"), "path": ref.get("path"), "sha256": ref.get("sha256")}
-                for ref in job.get("references") or [] if isinstance(ref, dict)
-            ],
-            "character_bindings": [
-                {key: binding.get(key) for key in ("character_id", "form_id", "outfit_id", "expression_id", "state_id")}
-                for binding in job.get("character_bindings") or [] if isinstance(binding, dict)
-            ],
-            "panel_plan_sha256": str(reference_plan.get("panel_plan_sha256") or ""),
-        }
-        if job.get("resolution_policy"):
-            material["resolution_policy"] = str(job.get("resolution_policy"))
+        material = job.get("execution_input") if isinstance(job.get("execution_input"), dict) else {}
+        if not material:
+            errors.append("execution_input_contract_missing")
+        if str(material.get("submit_prompt_sha256") or "") != actual_hash:
+            errors.append("execution_input_submit_prompt_mismatch")
+        if str(material.get("identity_contracts_sha256") or "") != str(job.get("identity_execution_contracts_sha256") or ""):
+            errors.append("execution_input_identity_contract_mismatch")
+        identity_contracts = job.get("identity_execution_contracts") if isinstance(job.get("identity_execution_contracts"), list) else []
+        identity_sha = hashlib.sha256(
+            json.dumps(identity_contracts, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
+        if identity_sha != str(job.get("identity_execution_contracts_sha256") or ""):
+            errors.append("identity_execution_contract_hash_mismatch")
         actual_execution_hash = hashlib.sha256(
             json.dumps(material, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
         ).hexdigest()
@@ -1548,16 +1915,51 @@ def selected_jobs(jobs: list[dict], targets: set[str], limit: int, force: bool) 
 
 
 def previous_accepted_panel_paths(root: Path, jobs: list[dict], panel_id: str) -> list[Path]:
-    previous: Path | None = None
-    for job in jobs:
-        if str(job.get("panel_id") or "") == panel_id:
+    """Choose continuity-relevant accepted predecessors, never global previous.
+
+    An unrelated cutaway must not become identity evidence merely because it
+    sits one row earlier.  Explicit ``continuity_from`` wins; otherwise use
+    the nearest accepted panel sharing a subject and/or scene anchor.
+    """
+    target = next((row for row in jobs if str(row.get("panel_id") or "") == panel_id), None)
+    if not isinstance(target, dict):
+        return []
+    target_continuity = target.get("continuity_contract") if isinstance(target.get("continuity_contract"), dict) else {}
+    explicit = {
+        token.strip()
+        for token in re.split(r"[,，/\s]+", str(target_continuity.get("continuity_from") or ""))
+        if token.strip() and token.strip().lower() not in {"none", "n/a", "无", "-"}
+    }
+    target_subjects = {
+        str(item.get("character_id") or "")
+        for item in target.get("identity_execution_contracts") or []
+        if isinstance(item, dict) and item.get("character_id")
+    }
+    target_scene = str(target_continuity.get("scene_anchor_id") or "")
+    scored: list[tuple[int, int, Path]] = []
+    for index, job in enumerate(jobs):
+        pid = str(job.get("panel_id") or "")
+        if pid == panel_id:
             break
         if not panel_acceptance_status(root, job).get("accepted"):
             continue
         raw = str(job.get("result_path") or "").strip()
-        if raw:
-            previous = resolve_path(root, raw)
-    return [previous] if previous is not None else []
+        if not raw:
+            continue
+        subjects = {
+            str(item.get("character_id") or "")
+            for item in job.get("identity_execution_contracts") or []
+            if isinstance(item, dict) and item.get("character_id")
+        }
+        continuity = job.get("continuity_contract") if isinstance(job.get("continuity_contract"), dict) else {}
+        score = 100 if pid in explicit else 0
+        score += 10 * len(target_subjects & subjects)
+        if target_scene and str(continuity.get("scene_anchor_id") or "") == target_scene:
+            score += 5
+        if score:
+            scored.append((score, index, resolve_path(root, raw)))
+    scored.sort(key=lambda item: (item[0], item[1]), reverse=True)
+    return [path for _score, _index, path in scored[:2]]
 
 
 def first_sequence_barrier(root: Path, jobs: list[dict]) -> tuple[dict[str, Any] | None, dict[str, Any]]:
@@ -1567,6 +1969,242 @@ def first_sequence_barrier(root: Path, jobs: list[dict]) -> tuple[dict[str, Any]
         if not status.get("accepted"):
             return job, status
     return None, {"accepted": True, "reason": "all_panels_accepted"}
+
+
+def candidate_manifest_path(root: Path, chapter: str, panel_id: str) -> Path:
+    return root / "生产数据" / "panel_candidates" / chapter / f"{panel_id}.json"
+
+
+def candidate_budget_binding(root: Path, job: dict[str, Any]) -> dict[str, Any]:
+    """Resolve the settled paid-call receipt behind one candidate.
+
+    Codex records the envelope fields directly.  Other provider runners may
+    only persist the consumption id, so the shared acceptance path resolves it
+    against the line-local spend ledger.  This keeps the N-candidate sequence
+    inside one human-approved stage envelope without depending on provider
+    names or CLI-specific receipts.
+    """
+    consumption_id = str(job.get("spend_consumption_id") or "").strip()
+    declared = {
+        "envelope_id": str(job.get("spend_envelope_id") or "").strip(),
+        "authorization_sha256": str(job.get("spend_authorization_sha256") or "").strip(),
+    }
+    binding = {
+        **declared,
+        "consumption_id": consumption_id,
+        "request_sha256": str(job.get("spend_request_sha256") or "").strip(),
+        "actual_cost": str(job.get("spend_actual_cost") or "").strip(),
+        "currency": str(job.get("spend_currency") or "").strip(),
+        "status": str(job.get("spend_status") or "").strip(),
+    }
+    ledger_match = False
+    if consumption_id:
+        try:
+            ledger = load_json(spend_envelope.ledger_path(root))
+        except (OSError, json.JSONDecodeError):
+            ledger = {}
+        for envelope_id, entry in (ledger.get("envelopes") or {}).items() if isinstance(ledger, dict) else []:
+            if not isinstance(entry, dict):
+                continue
+            record = (entry.get("reservations") or {}).get(consumption_id)
+            if not isinstance(record, dict):
+                continue
+            ledger_match = True
+            if (
+                declared["envelope_id"] and declared["envelope_id"] != str(envelope_id)
+            ) or (
+                declared["authorization_sha256"]
+                and declared["authorization_sha256"] != str(entry.get("authorization_sha256") or "")
+            ):
+                raise ValueError("candidate spend fields disagree with the immutable spend ledger")
+            binding.update({
+                "envelope_id": str(envelope_id),
+                "authorization_sha256": str(entry.get("authorization_sha256") or ""),
+                "request_sha256": str(record.get("request_sha256") or ""),
+                "actual_cost": str(record.get("actual_cost") or ""),
+                "currency": str(record.get("currency") or ""),
+                "status": str(record.get("status") or ""),
+            })
+            break
+    if (
+        not binding["envelope_id"]
+        or len(binding["authorization_sha256"]) != 64
+        or not binding["consumption_id"]
+        or not ledger_match
+        or binding["status"] != "settled"
+    ):
+        raise ValueError("key-panel candidate lacks a settled receipt from one bound stage spend envelope")
+    return binding
+
+
+def _candidate_quality_key(record: dict[str, Any]) -> tuple[int, int, str]:
+    review = (((record.get("post_qc") or {}).get("manual_review") or {}).get("structured_review") or {})
+    axes = review.get("axes") if isinstance(review.get("axes"), dict) else {}
+    warn_axes = sum(1 for item in axes.values() if isinstance(item, dict) and str(item.get("verdict") or "") == "warn")
+    machine_warnings = len(warning_findings(record.get("post_qc") or {}))
+    return (warn_axes, machine_warnings, str(record.get("accepted_at") or ""))
+
+
+def adopt_candidate(
+    root: Path,
+    chapter: str,
+    job: dict[str, Any],
+    manifest: dict[str, Any],
+    record: dict[str, Any],
+) -> dict[str, Any]:
+    panel_id = str(job.get("panel_id") or "")
+    active_panel = root / "出图" / chapter / "panels" / f"{panel_id}.png"
+    active_master = root / "出图" / chapter / "masters" / f"{panel_id}.png"
+    panel_source = resolve_path(root, str(record.get("panel_path") or ""))
+    master_source = resolve_path(root, str(record.get("master_path") or ""))
+    contact_source = resolve_path(root, str(record.get("contact_sheet_path") or ""))
+    if not all(png_valid(path) for path in (panel_source, master_source, contact_source)):
+        raise ValueError(f"{panel_id} candidate adoption source missing")
+    if file_sha256(panel_source) != record.get("artifact_sha256") or file_sha256(master_source) != record.get("master_sha256"):
+        raise ValueError(f"{panel_id} candidate adoption source SHA changed")
+    post_qc = json.loads(json.dumps(record.get("post_qc") or {}, ensure_ascii=False))
+    packet = post_qc.get("visual_review_packet") if isinstance(post_qc.get("visual_review_packet"), dict) else {}
+    active_contact = resolve_path(root, str(packet.get("contact_sheet_path") or f"生产数据/panel_qc/{chapter}/{panel_id}_contact_sheet.png"))
+    atomic_copy(master_source, active_master)
+    atomic_copy(panel_source, active_panel)
+    atomic_copy(contact_source, active_contact)
+    generation = record.get("job_generation") if isinstance(record.get("job_generation"), dict) else {}
+    job.update(generation)
+    job.update({
+        "status": "ready",
+        "result_path": rel_to_root(root, active_panel),
+        "master_path": rel_to_root(root, active_master),
+        "artifact_sha256": file_sha256(active_panel),
+        "post_qc": post_qc,
+        "accepted_at": str(record.get("accepted_at") or ""),
+    })
+    qc_path = root / "生产数据" / "panel_qc" / chapter / f"{panel_id}.json"
+    write_json(qc_path, post_qc)
+    manifest_sha = hashlib.sha256(
+        json.dumps(manifest, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    adoption = {
+        "schema_version": 1,
+        "kind": "comic_panel_candidate_adoption",
+        "chapter": chapter,
+        "panel_id": panel_id,
+        "candidate_id": str(record.get("candidate_id") or ""),
+        "artifact_sha256": str(record.get("artifact_sha256") or ""),
+        "master_sha256": str(record.get("master_sha256") or ""),
+        "execution_input_sha256": str(job.get("execution_input_sha256") or ""),
+        "candidate_manifest_path": rel_to_root(root, candidate_manifest_path(root, chapter, panel_id)),
+        "candidate_manifest_sha256": manifest_sha,
+        "spend_envelope_id": str(manifest.get("spend_envelope_id") or ""),
+        "spend_authorization_sha256": str(manifest.get("spend_authorization_sha256") or ""),
+        "policy": "fewest_structured_axis_warnings_then_earliest",
+        "adopted_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
+    }
+    adoption["adoption_sha256"] = hashlib.sha256(
+        json.dumps(adoption, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    adoption_path = root / "生产数据" / "panel_candidates" / chapter / f"{panel_id}_adoption.json"
+    write_json(adoption_path, adoption)
+    job["candidate_adoption"] = {"path": rel_to_root(root, adoption_path), **adoption}
+    return adoption
+
+
+def record_accepted_candidate(
+    root: Path,
+    chapter: str,
+    data: dict[str, Any],
+    jobs_path: Path,
+    job: dict[str, Any],
+) -> dict[str, Any]:
+    policy = job.get("candidate_policy") if isinstance(job.get("candidate_policy"), dict) else {}
+    target = int(policy.get("target_count") or 1)
+    if not policy.get("enabled") or target <= 1:
+        return {"status": "not_applicable"}
+    status = panel_acceptance_status(root, job)
+    if not status.get("accepted"):
+        raise ValueError(f"candidate cannot be recorded before B14 acceptance: {status.get('reason')}")
+    panel_id = str(job.get("panel_id") or "")
+    budget_binding = candidate_budget_binding(root, job)
+    manifest_path = candidate_manifest_path(root, chapter, panel_id)
+    try:
+        manifest = load_json(manifest_path)
+    except (OSError, json.JSONDecodeError):
+        manifest = {
+            "schema_version": 1,
+            "kind": "comic_panel_candidate_manifest",
+            "chapter": chapter,
+            "panel_id": panel_id,
+            "execution_input_sha256": str(job.get("execution_input_sha256") or ""),
+            "spend_envelope_id": budget_binding["envelope_id"],
+            "spend_authorization_sha256": budget_binding["authorization_sha256"],
+            "target_count": target,
+            "candidates": [],
+        }
+    if str(manifest.get("execution_input_sha256") or "") != str(job.get("execution_input_sha256") or ""):
+        raise ValueError("candidate manifest belongs to a stale execution contract")
+    if (
+        str(manifest.get("spend_envelope_id") or "") != budget_binding["envelope_id"]
+        or str(manifest.get("spend_authorization_sha256") or "") != budget_binding["authorization_sha256"]
+    ):
+        raise ValueError("all key-panel candidates must use the same stage spend envelope")
+    artifact_sha = str(job.get("artifact_sha256") or "")
+    existing = next((row for row in manifest.get("candidates") or [] if row.get("artifact_sha256") == artifact_sha), None)
+    if existing:
+        record = existing
+    else:
+        accepted_at = str(job.get("accepted_at") or dt.datetime.now().isoformat(timespec="seconds"))
+        candidate_id = f"C{len(manifest.get('candidates') or []) + 1:02d}_{artifact_sha[:12]}"
+        base = root / "出图" / chapter / "candidates" / panel_id / "adoptable" / candidate_id
+        panel_copy = base / "panel.png"
+        master_copy = base / "master.png"
+        contact_copy = base / "contact_sheet.png"
+        active_panel = resolve_path(root, str(job.get("result_path") or ""))
+        active_master = resolve_path(root, str(job.get("master_path") or ""))
+        packet = ((job.get("post_qc") or {}).get("visual_review_packet") or {})
+        active_contact = resolve_path(root, str(packet.get("contact_sheet_path") or ""))
+        for source, target_path in ((active_panel, panel_copy), (active_master, master_copy), (active_contact, contact_copy)):
+            atomic_copy(source, target_path)
+        generation_keys = (
+            "source", "model", "generated_at", "backend_version", "attempt", "reference_input_mode",
+            "reference_input_count", "reference_manifest", "generated_from_contract_sha256",
+            "generated_from_submit_prompt_sha256", "generated_from_execution_input_sha256",
+            "resolution_provenance", "raw_candidate_path", "spend_envelope_id",
+            "spend_authorization_sha256", "spend_consumption_id", "spend_request_sha256",
+            "spend_actual_cost", "spend_currency", "spend_status",
+        )
+        record = {
+            "candidate_id": candidate_id,
+            "artifact_sha256": artifact_sha,
+            "master_sha256": file_sha256(active_master),
+            "panel_path": rel_to_root(root, panel_copy),
+            "master_path": rel_to_root(root, master_copy),
+            "contact_sheet_path": rel_to_root(root, contact_copy),
+            "contact_sheet_sha256": file_sha256(contact_copy),
+            "accepted_at": accepted_at,
+            "spend_receipt": budget_binding,
+            "post_qc": job.get("post_qc"),
+            "post_qc_sha256": hashlib.sha256(
+                json.dumps(job.get("post_qc") or {}, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+            ).hexdigest(),
+            "job_generation": {key: job.get(key) for key in generation_keys if key in job},
+        }
+        manifest.setdefault("candidates", []).append(record)
+        manifest["updated_at"] = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+        write_json(manifest_path, manifest)
+    count = len(manifest.get("candidates") or [])
+    if count < target:
+        for key in (
+            "result_path", "master_path", "artifact_sha256", "post_qc", "accepted_at", "generated_at",
+            "resolution_provenance", "raw_candidate_path", "generated_from_contract_sha256",
+            "generated_from_submit_prompt_sha256", "generated_from_execution_input_sha256",
+        ):
+            job.pop(key, None)
+        job["status"] = "planned"
+        write_json(jobs_path, data)
+        return {"status": "more_candidates_required", "count": count, "target": target, "manifest": rel_to_root(root, manifest_path)}
+    best = min(manifest.get("candidates") or [], key=_candidate_quality_key)
+    adoption = adopt_candidate(root, chapter, job, manifest, best)
+    write_json(jobs_path, data)
+    return {"status": "adopted", "count": count, "target": target, "adoption": adoption}
 
 
 def all_ready(root: Path, jobs: list[dict]) -> bool:
@@ -1618,7 +2256,19 @@ def main() -> int:
         help="对唯一当前 panel 写入 SHA 绑定签收；pass 或启发式 warn 可用，确定性 block 不可用",
     )
     parser.add_argument("--reviewer", default="", help="--accept-reviewed 必填：实际查看 contact sheet 的审核人；delegate:* 还需项目当前视觉授权")
-    parser.add_argument("--review-notes", default="", help="--accept-reviewed 必填：逐轴目检结论与理由")
+    parser.add_argument(
+        "--review-result",
+        default="",
+        help=(
+            "--accept-reviewed 的结构化逐轴 JSON 文件（默认读取 "
+            "生产数据/panel_qc/<chapter>/<panel>_visual_review.json）；一段 notes 不能自动通过所有轴"
+        ),
+    )
+    parser.add_argument(
+        "--review-notes",
+        default="",
+        help="兼容参数：仅当内容是结构化 JSON 文件路径/内联 JSON 时使用；普通文字会被拒绝",
+    )
     parser.add_argument(
         "--spend-envelope",
         default="",
@@ -1662,8 +2312,9 @@ def main() -> int:
                 jobs_path,
                 panel_id,
                 args.reviewer,
-                args.review_notes,
+                args.review_result or args.review_notes,
             )
+            candidate_result = accepted.get("candidate_result") or {"status": "not_applicable"}
         except ValueError as exc:
             print(f"[err] {exc}", file=sys.stderr)
             return 3
@@ -1676,7 +2327,20 @@ def main() -> int:
                 evidence=f"生产数据/panel_qc/{args.chapter}",
                 actor="comic-image.panel_acceptance",
             )
-        print(f"[accepted] {panel_id} sha256={accepted['artifact_sha256']}", flush=True)
+        if candidate_result.get("status") == "more_candidates_required":
+            print(
+                f"[candidate-accepted] {panel_id} {candidate_result['count']}/{candidate_result['target']}；"
+                "同一预算包内顺序生成下一候选，每张仍须 B14",
+                flush=True,
+            )
+        elif candidate_result.get("status") == "adopted":
+            print(
+                f"[candidate-adopted] {panel_id} -> {candidate_result['adoption']['candidate_id']} "
+                f"sha256={candidate_result['adoption']['artifact_sha256']}",
+                flush=True,
+            )
+        else:
+            print(f"[accepted] {panel_id} sha256={accepted['artifact_sha256']}", flush=True)
         return 0
     if args.recheck_existing and len(targets) != 1:
         print("[err] --recheck-existing 每次必须且只能 --targets 一个 panel", file=sys.stderr)
@@ -1911,29 +2575,24 @@ def main() -> int:
                     })
                     print(f"[retry] {pid} attempt {attempt}/{max_attempts}: {error}", file=sys.stderr, flush=True)
                     continue
-                native_w, native_h = image_size(temp_path)
-                master = root / "出图" / args.chapter / "masters" / f"{pid}.png"
-                master.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(temp_path, master)
-                target_size = job.get("size") or {}
-                target_w = int(target_size.get("width") or native_w)
-                target_h = int(target_size.get("height") or native_h)
-                fit_scale = max(target_w / max(native_w, 1), target_h / max(native_h, 1))
-                job["master_path"] = rel_to_root(root, master)
-                job["resolution_provenance"] = {
-                    "requested_resolution_tier": "highest_available",
-                    "maximum_verified": False,
-                    "native_size": {"width": native_w, "height": native_h},
-                    "native_sha256": file_sha256(master),
-                    "master_path": rel_to_root(root, master),
-                    "derivative_size": {"width": target_w, "height": target_h},
-                    "normalization_scale": round(fit_scale, 6),
-                    "upscaled": fit_scale > 1.0,
-                }
-                if not args.no_resize:
-                    resize_png(temp_path, job.get("size") or {})
-                final.parent.mkdir(parents=True, exist_ok=True)
-                os.replace(temp_path, final)
+                try:
+                    provenance = promote_generated_artifacts(
+                        root,
+                        args.chapter,
+                        str(pid),
+                        temp_path,
+                        final,
+                        job.get("size") or {},
+                        attempt=attempt,
+                        resize=not args.no_resize,
+                    )
+                except (OSError, ValueError) as exc:
+                    last_error = f"artifact promotion failed without replacing current panel: {exc}"
+                    print(f"[retry] {pid} attempt {attempt}/{max_attempts}: {last_error}", file=sys.stderr, flush=True)
+                    continue
+                job["master_path"] = str(provenance["master_path"])
+                job["raw_candidate_path"] = str(provenance["raw_candidate_path"])
+                job["resolution_provenance"] = provenance
                 rel = str(final.relative_to(root))
                 post_qc = post_qc_panel(
                     root,
@@ -1966,6 +2625,13 @@ def main() -> int:
                         "generated_from_contract_sha256": str(job.get("source_contract_sha256") or ""),
                         "generated_from_submit_prompt_sha256": str(job.get("submit_prompt_sha256") or ""),
                         "generated_from_execution_input_sha256": str(job.get("execution_input_sha256") or ""),
+                        "spend_envelope_id": str(spend_context["authorization"].get("envelope_id") or ""),
+                        "spend_authorization_sha256": str(spend_context["authorization"].get("authorization_sha256") or ""),
+                        "spend_consumption_id": str(spend_reservation.get("consumption_id") or ""),
+                        "spend_request_sha256": str(spend_reservation.get("request_sha256") or ""),
+                        "spend_actual_cost": str(spend_settlement.get("actual_cost") or ""),
+                        "spend_currency": str(spend_reservation.get("currency") or ""),
+                        "spend_status": str(spend_settlement.get("status") or ""),
                         "post_qc": post_qc,
                     }
                 )

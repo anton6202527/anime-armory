@@ -737,6 +737,7 @@ class CompletionHealthTest(unittest.TestCase):
             with open(os.path.join(root, "_进度.md"), "w", encoding="utf-8") as handle:
                 handle.write("# 进度\n\n## 制MV 阶段\n| 阶段 | skill | 状态 |\n|---|---|---|\n" + table + "\n")
             chain = make_compose_chain(root)
+            mv_utils.update_meta_flags(root)
             ai_rel, ai_path = make_ai_usage(root)
             provenance_rel, provenance_path = make_provenance(root, ai_rel, ai_path)
             review_rel = "生产数据/review/review_receipt.json"
@@ -819,14 +820,34 @@ class CompletionHealthTest(unittest.TestCase):
             self.assertTrue(health["ok"])
             receipt = read_json(os.path.join(root, "合规", "handoff_receipt.json"))
             self.assertEqual(receipt["reviewer"], "发行负责人")
+            self.assertEqual(
+                receipt["release_digest"], completion.canonical_final_release_digest(root)
+            )
             self.assertEqual(receipt["inputs_sha256"][review_rel], mv_utils.content_hash(review_path))
             self.assertIn(release_rel, receipt["inputs_sha256"])
+            self.assertEqual(set(receipt["inputs_sha256"]), set(completion.FINAL_RELEASE_INPUTS))
+            verdict = completion.final_completion_verdict(root)
+            self.assertEqual(verdict["status"], "complete", verdict)
+            self.assertTrue(verdict["acceptance"]["current"])
             self.assertIn("| 发布/交平台 | mv-craft/scripts/completion.py | [x] |",
                           mv_utils.read_text(os.path.join(root, "_进度.md")))
             release_payload = read_json(os.path.join(root, release_rel))
             release_payload["requirements"] = []
             write_json(root, release_rel, release_payload)
             self.assertTrue(any("重算全集" in message for message in completion._release_decision_errors(root)))
+            stale = completion.final_completion_verdict(root)
+            self.assertEqual(stale["status"], "blocked")
+            self.assertFalse(stale["complete"])
+            self.assertNotEqual(stale["release_digest"], receipt["release_digest"])
+
+    def test_final_acceptance_rejects_automated_reviewer_vocabulary(self):
+        for reviewer in (
+            "Codex", "AI", "delegate:review", "system/reviewer",
+            "制作代理:审片", "机器人/审片",
+        ):
+            with self.subTest(reviewer=reviewer):
+                self.assertFalse(completion._valid_reviewer(reviewer))
+        self.assertTrue(completion._valid_reviewer("发行负责人王晓明"))
 
 
 if __name__ == "__main__":

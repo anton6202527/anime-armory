@@ -4,10 +4,19 @@
 按证据族从 gate.py 拆出的 check_ 闸（增量3）。从 gate_core 取共享基座，避免与 gate.py 循环导入；
 gate.py `from gates.voice import *` 回灌，run()/按名自省助手照常解析；成员经校验 call-graph-closed。
 """
+import os
+import sys
+from pathlib import Path
+
 from gate_core import *  # noqa: F401,F403
 from gate_core import (
     _native_voice_segments_errors,
 )
+
+_VOICE_SCRIPTS = Path(__file__).resolve().parents[3] / "n2d-voice"
+if str(_VOICE_SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(_VOICE_SCRIPTS))
+import voice_analysis as voice_quality  # noqa: E402
 
 def check_voiceover_fingerprint(root: str, ep: str) -> None:
     """配音定稿后 voiceover.txt 又被改词/插句/删句 → 时长清单/字幕/镜头时长全部过期。
@@ -220,9 +229,44 @@ def check_voice_conditioned_lipsync_policy(root: str, ep: str, storyboard: Dict[
         add(BLOCK, "口型同步", os.path.join(root, "合成", ep, "配音"),
             f"检测到 {len(lp_clips)} 个配音条件口型镜，但未检测到主配音轨 (voice_zh.wav)；该模式依赖配音驱动口型，请先 n2d-voice。")
 
+
+def check_voice_listening_receipt(root: str, ep: str, stage: str) -> None:
+    """Compose/review must revalidate key-line listening against current bytes."""
+    if gate_family(stage) not in {"compose", "review"} or is_native_av_production(root):
+        return
+    manifest_file = manifest_path(root, ep)
+    manifest = load_json(manifest_file) if manifest_file else None
+    if not isinstance(manifest, list) or not manifest:
+        return  # Existing timing/progress checks own missing final voice manifests.
+    out_dir = Path(manifest_file).parent
+    check = voice_quality.validate_listening_receipt(
+        out_dir / "voice",
+        manifest,
+        out_dir / "voice_listening_receipt.json",
+        manifest_path=manifest_file,
+        plan_path=out_dir / "key_line_best_of_n_plan.json",
+    )
+    if check.get("status") == "block":
+        issues = [str(x) for x in check.get("issues") or [] if str(x).strip()]
+        add(
+            BLOCK,
+            "关键句实际听辨",
+            str(out_dir / "voice_listening_receipt.json"),
+            "最终配音的关键句听辨证据缺失、伪造或已过期：" + "；".join(issues[:12])
+            + "。回 n2d-voice 对当前 key-line WAV 真实听辨并记录 hash-bound 收据；不得自动补签。",
+            return_to_stage="voice",
+            affected_artifacts=[
+                str(out_dir / "时长清单.json"),
+                str(out_dir / "key_line_best_of_n_plan.json"),
+                str(out_dir / "voice_listening_receipt.json"),
+            ],
+            evidence_family="audio_sync",
+        )
+
 __all__ = [
     'check_voiceover_fingerprint',
     'check_voice_cross_episode',
     'check_native_voice_identity',
     'check_voice_conditioned_lipsync_policy',
+    'check_voice_listening_receipt',
 ]

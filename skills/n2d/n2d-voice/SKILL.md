@@ -1,6 +1,6 @@
 ---
 name: n2d-voice
-description: Voice casting, timing and rendering stage of n2d — 默认先做项目级声音选角与无 WAV 文本时长基准，音色定妆通过后才生成最终逐句配音；可为口型可见镜头显式生成可信表演/导引音轨。最终音轨写 line_NN.wav、voice_{zh,en}.wav、时长清单.json 与 voice_key 跨集一致性证据。支持 CosyVoice / GPT-SoVITS / MiniMax / 火山等后端与声音克隆合规闸门。Use when asked to 配音、声音选角、音色定妆、导引音轨、最终配音、声音克隆、时长清单。
+description: Voice casting, timing and rendering stage of n2d — 默认先做项目级声音选角与无 WAV 文本时长基准，音色定妆通过后才生成最终逐句配音；可为口型可见镜头显式生成可信表演/导引音轨。最终音轨写 line_NN.wav、voice_{zh,en}.wav、时长清单.json 与 voice_key 跨集一致性证据。支持 CosyVoice 3 / Fish Audio S2 / IndexTTS-2.5 / GPT-SoVITS / MiniMax / 火山等后端与声音克隆合规闸门。Use when asked to 配音、声音选角、音色定妆、导引音轨、最终配音、声音克隆、时长清单。
 ---
 
 # n2d-voice — 声音选角、时间基准与最终配音
@@ -18,6 +18,9 @@ description: Voice casting, timing and rendering stage of n2d — 默认先做�
 本 skill 涉及的选择点：`配音后端`、`制作模式`、`合规用途`。默认 `制作模式=混合自动路由`：制作先后顺序由每个镜头的声音策略决定，不再给整个项目强制套同一种顺序。声音克隆/参考音授权不是普通偏好，必须同时写入 `合规/compliance_manifest.json`。
 
 ## 核心原则
+
+- **配音质检不允许能量假绿**：`render_voice.py` 生成后同步写 `emotion_flow.json` 与 `voice_quality_evidence.json`。后者逐句绑定 `line_wav` 当前 SHA，并分别记录 ffmpeg 能量、ffprobe 实际时长、可插拔 ASR/CER、speaker 与 prosody；任一工具失败为 block，适配器未配置为 `unmeasured`，不得把“命令跑过”或空分析当 pass。适配器通过 `N2D_VOICE_ASR_CMD`、`N2D_VOICE_SPEAKER_CMD`、`N2D_VOICE_PROSODY_CMD` 接入，stdout 必须是 JSON。
+- **关键句 best-of-N + 实际听辨**：每次最终配音同步写 `key_line_best_of_n_plan.json`，钩子、强情绪与强调句默认规划 3 个候选；选定前必须实际听辨，调用 `voice_analysis.record_listening_receipt(...)`（同时传当前 `manifest_path` 与 `plan_path`）把已听句、当前 manifest 与逐句 WAV 路径/SHA 写入 `voice_listening_receipt.json`。`render_voice.py` 写进度前及 `n2d-review` 的 compose/review gate 都会调用 `validate_listening_receipt(...)` 重新推导覆盖率并复核 kind/version/reviewer/含时区时间/notes/manifest/逐句 WAV；缺失、伪造、旧收据只保留 `⏳rough` 并阻断交付边界。当前 manifest 无关键句时明确为 `not_applicable`，不阻塞。该收据是内部创作证据，固定 `final_user_acceptance=false`，不冒充最终用户验收；任何 runner 都不得自动补签。
 - **⛔ 声音克隆合规闸门（non-negotiable·每次确认 + 合规包留痕）**：克隆/复刻/零样本参考音只能是 ①本人嗓 / ②已授权他人嗓 / ③纯合成音色；复刻真人歌手/演员/公众人物需本人授权（2026 opt-in）。这是项目约定里的"合规/不可逆"点，**即使 `_设置.md` 记过也每次重确认**。脚本侧：`voice_clone.py` 需显式 `VOICE_CLONE_AUTHORIZED=1`；**零样本后端（CosyVoice/Fish/GSV/IndexTTS/Vox）也同级硬闸门**——`render_voice.py` 一旦检测到任一 `<后端>_REF_*` 参考音（即要用参考音克隆嗓音）就要求 `VOICE_CLONE_AUTHORIZED=1`，否则停止；用默认嗓（不喂参考音）才无需授权。长期审计侧：必须把 `voice.uses_voice_clone=true`、`voice.status=licensed|self_owned|synthetic`、授权证据和适用角色写入 `合规/compliance_manifest.json`；`gate.py --stage video|compose|review` 会阻断未授权或无证据的克隆音。**两道闸门缺一不可**：运行时 `VOICE_CLONE_AUTHORIZED=1`（拦生成）与合规包 `voice` 授权段（拦付费 video/compose/review gate）是两层，满足其一仍会被另一层拦。**`distribution_intent=internal_only` 不豁免声音克隆授权**——它只免平台审核/出海本地化。详见 references/cloning.md 与 `n2d-compliance`。（AI 标识/AI 披露/水印只做非阻断发布待办。）
 - **默认不是最终配音先行，而是时间基准先行**：先运行 `voice_preflight.py prepare`。它只解析文本、估时并建立选角表，**不会生成任何 WAV**；`timing_estimate.json` 可用于 animatic、字幕初定时、旁白/口外音节奏和画面先行镜头，但不能冒充最终声音或可见口型表演证据。
 - **声音选角先行，最终配音后置**：先用少量、有代表性的 audition 台词锁角色声音；所有必需角色通过定妆后，才允许 `render_voice.py` 批量生成 `purpose=final` 音轨。不要为了推进状态机合成一整集注定删除的次品配音。
@@ -29,7 +32,7 @@ description: Voice casting, timing and rendering stage of n2d — 默认先做�
 - **用户显式选择项目级旧模式时保持兼容**：`配音先行` 仍可要求全片真音先出；`先出视频后配音` 仍可整集画面先行；二者都不是新项目默认。新默认 `混合自动路由` 把它们拆成逐镜头策略。
 - **`制作模式`=`原生音画`（native AV）时，说话镜不在本步配音**：`制作模式=原生音画` 时，对话/说话镜由视频后端一次原生生成台词+口型+环境声（见 `n2d-model-router` `native_speech` 路由），**这些镜头不出逐句 `时长清单`、不在本步跑配音**。本步只处理仍需配音先行的部分（如旁白/纯画外音镜头、或用户对个别镜头要求精细念白时的回退配音）；整剧若全程原生音画，本步可整体跳过。注意：原生人声仍受声音克隆合规闸门约束（仿真人音色需授权）。
 - **念白是表演，不是平读**：voiceover.txt 每句的 `情绪/语速/停顿/钩子` 标注**会驱动 TTS**（不是注释）——这是留存的一部分，见 `n2d/references/导演节奏.md §六`。
-- **后端可插拔但不静默换路**：按声音定妆表锁定的 backend/model/voice_id 调用 CosyVoice、GPT-SoVITS、MiniMax、火山等；混合模式缺凭证、后端不匹配或音色未锁时直接阻断，不自动回退 macOS `say`。
+- **后端可插拔但不静默换路**：按声音定妆表锁定的 backend/model/voice_id 调用 CosyVoice 3、Fish Audio S2 / Fish Speech、IndexTTS-2.5、GPT-SoVITS、MiniMax、火山等；新版候选只更新能力档案，旧 endpoint 可继续服务旧模型，执行收据必须记精确模型版本；混合模式缺凭证、后端不匹配或音色未锁时直接阻断，不自动回退 macOS `say`。
 - **🔒 音色定妆照（canonical 参考音冻结·防漂先行，非事后报漂）**：克隆/零样本后端的**参考音应钉死成每角色一条 canonical wav 全篇·跨集复用**——等价图像层「共享定妆库先行」。源头若每集临时喂不同样本（或不喂、靠后端零样本每次重克隆），音色会逐集漂，而声纹机检（`n2d-identity` `voice_print_consistency.py`）只能**事后 WARN**、不能预防。做法：在 `设定库/voiceprints/<角色>.wav` 冻结一条满意参考音（可由一次定妆配音挑定后冻结），voicemap 该角色条目加 `"ref":"设定库/voiceprints/<角色>.wav"`（可选 `"ref_text"` 逐字文本）。`render_voice.role_ref` 在 env 未显式指定参考音时**自动回退该 voicemap `ref`**（项目内相对路径，env 仍可临时覆盖）。**合规同级**：voicemap 钉死的 `ref` 与 env `<后端>_REF_*` 一样触发声音克隆授权闸门（须 `VOICE_CLONE_AUTHORIZED=1` + 合规包 `voice` 授权段），绝不因换成项目内文件就绕过。
 - **一角一色（跨集持久绑定）**：角色→音色映射优先读 `<作品根>/设定库/voicemap.json`（`{"角色子串":{"key","mm","volc","speed","pitch","emo","ref","ref_text","accent"}}`；`ref`/`ref_text` 见上「音色定妆照」；可选 `accent`/`口音`/`方言` 锁该角色口音方言，由 `n2d-review` 的 `audio_continuity.py` 口音方言(ACC)检消费——同一 `key` 被多角色用却口音冲突=WARN，已锁口音的角色出验收听辨提醒），缺文件才回退内置(demo)映射，env 仍可覆盖。**新剧务必建 voicemap.json 把每个角色绑定音色**——否则新角色全部掉进默认嗓互相撞，且跨集靠每次手动 export env 极易漂。manifest 每句记 **`voice_key`**（契约标准字段 `n2d_contract.VOICE_KEY_FIELD`，=该句实际应用的 voicemap 音色键；macOS say 占位后端没有走 voicemap 选音，记 `say:<声音名>#placeholder` 留痕并显式声明非注册音色）+ `音色键`(legacy 中文字段，保留兼容)/`voice_id`/`情绪_已应用`。**`voice_key` 是一角一色跨集对账的数据源**：`n2d-identity` 的 `voice_consistency.py` 逐集读它对账 voicemap、产出音色跨集漂移报表（老清单缺该字段按 `insufficient_data` 跳过，不报假漂移）；`n2d-review` 机检同源。**这条对账已硬接进 image gate 渲染前自动落地**（`gate.py check_voice_cross_episode`，`--stage image`）：实际用键 ≠ voicemap 注册键 = **BLOCK**（确定性失配，出图前必须修，否则跨集换脸又换声）；同角色跨集换键 = WARN（可能附身/苍老/闪回有意换嗓，交人确认）；声纹 embedding 漂移（resemblyzer/speechbrain 后端可缺则静默跳过）= WARN。不再只靠人手动跑 `identity.py --write` 当副作用打印；占位/应急轨与未登记角色已排除，不会误 BLOCK。条目构造在 `voice_manifest.py`（独立模块·带单测）。
 - **生产数据记账铁律（P0）**：每次配音生成后必须调用 `n2d-dashboard` 记录 `stage=voice` 事件：后端、耗时、成本、输出音轨、句数、失败/占位句数。若某句降级占位或重跑，必须在 `meta` 或 `redraw_reason` 里写明，方便后续统计“配音导致的重定时/返工”。
@@ -44,7 +47,7 @@ description: Voice casting, timing and rendering stage of n2d — 默认先做�
 
 | 标注 | 解析 | 落到 TTS |
 |---|---|---|
-| **情绪** | 归类成 angry/fearful/sad/happy/serious/neutral（关键词匹配，兼容旧自由词） | **MiniMax 逐句覆盖角色默认 emotion**（走情绪集，`serious→neutral`）；**火山后端不逐句驱动情绪**（只用角色固定情绪），情绪吃重的集选 MiniMax/IndexTTS-2。每句实际下发的情绪记进 manifest `情绪_已应用` 字段（可见火山的"角色固定"与 MiniMax 的 serious 降级），不再静默 |
+| **情绪** | 归类成 angry/fearful/sad/happy/serious/neutral（关键词匹配，兼容旧自由词） | **MiniMax 逐句覆盖角色默认 emotion**（走情绪集，`serious→neutral`）；**火山后端不逐句驱动情绪**（只用角色固定情绪），情绪吃重的集选 MiniMax/IndexTTS-2.5。每句实际下发的情绪记进 manifest `情绪_已应用` 字段（可见火山的"角色固定"与 MiniMax 的 serious 降级），不再静默 |
 | **语速 快/慢** | ×1.10 / ×0.90 | 叠到角色基速（clamp 0.7~1.5）；say 后端体现在 rate |
 | **停顿 `||`** | 替换成逗号 | TTS 自然气口（反转词前留一拍） |
 | **钩子 ⚡/💥/🪝**（或行尾裸词 钩子/爽点/集尾） | 从念白文本剥掉（不念出来），记进 `时长清单.json` 的 `钩子` 字段 | 句后留"悬念呼吸"拍：hook 0.6s / 爽点 0.7s / 集尾 1.0s（env `GAP_HOOK/GAP_CLIMAX/GAP_END` 可调，常规句 `LINE_GAP` 0.4s） |
@@ -70,13 +73,13 @@ description: Voice casting, timing and rendering stage of n2d — 默认先做�
    ```
 3. 分镜/视频按 `production_mode_route_第N集.json` 推进：可见口型镜头读取已批准表演/guide 轨；没有表演轨时只出 neutral-mouth base plate，后续走 `lipsync_pass.py`。旁白/口外音和画面先行镜头使用无 WAV 时间基准。
 4. 最终配音：选角检查通过后运行 `render_voice.py`。需要导引音轨时显式设 `N2D_VOICE_PURPOSE=guide`，输出到 `合成/第N集/配音_导引/`；默认 `final` 输出到 `配音/`。若用参考音，还必须满足 `VOICE_CLONE_AUTHORIZED=1` 与合规包授权。
-5. final 音轨逐句生成 → loudnorm -16 → 实测时长，写 `line_NN.wav`、`voice_{zh,en}.wav`、`时长清单.json`；成功后回写 `配音=✅`。真实时长偏离前期估时后，回跑阶段2/OTIO，重做受影响口型而不是强行压速。
+5. final 音轨逐句生成 → loudnorm -16 → 实测时长，写 `line_NN.wav`、`voice_{zh,en}.wav`、`时长清单.json`、质量证据与关键句候选计划。存在关键句时，实际听辨当前 WAV 并写 hash-bound `voice_listening_receipt.json`；只有 validator 对当前 manifest/plan/WAV 全部通过才回写 `配音=✅`，否则保留 `⏳rough`。当前计划明确 `not_applicable`（无关键句）时不误拦。真实时长偏离前期估时后，回跑阶段2/OTIO，重做受影响口型而不是强行压速。
 6. 记录生产数据：
    ```bash
    python3 skills/n2d/n2d-dashboard/scripts/dashboard.py record <作品根> \
      --episode 第N集 --stage voice --event generation \
      --asset <voice_zh.wav路径> --status pass \
-     --duration-sec <配音耗时秒> --provider <CosyVoice|MiniMax|say|...> \
+     --duration-sec <配音耗时秒> --provider <CosyVoice-3|Fish-Audio-S2|IndexTTS-2.5|MiniMax|say|...> \
      --cost <成本数值> --unit <USD|CNY|credits> \
      --meta lines=<句数> --meta placeholder_lines=<占位句数>
    ```
@@ -90,7 +93,7 @@ description: Voice casting, timing and rendering stage of n2d — 默认先做�
 - casting：待选 / guide_approved / locked；列出仍未签收角色
 - timing_estimate.json：N 句、总时长 ~Y 秒、audio_generated=false
 - final 时长清单.json（若已生成）：N 句、实测总时长 ~Y 秒；voice_key 已逐句记录
-- _进度.md「配音」：时间基准就绪=⏳rough / 最终真实配音=✅
+- _进度.md「配音」：时间基准或待听辨 final=⏳rough / 最终真实配音且关键句听辨收据有效（或明确无关键句）=✅
 下一步建议（以 progress.py 前沿为准）：
 - 混合自动路由：继续 n2d-script 阶段2；口型可见镜头按 route 补表演/guide 轨或先出 neutral-mouth base plate
 - 最终音色未锁：先完成声音试镜签收，不批量生成 WAV
@@ -117,7 +120,7 @@ description: Voice casting, timing and rendering stage of n2d — 默认先做�
 | 漏记 `voice_key` 实际应用音色键 | 导致 `n2d-identity` 无法进行跨集音色一致性对账 |
 
 ## 声音克隆
-见 references/cloning.md（MiniMax 复刻 / GPT-SoVITS / CosyVoice 本地克隆 + demucs 人声分离清洗）。
+见 references/cloning.md（MiniMax 复刻 / GPT-SoVITS / CosyVoice 3 本地克隆 + demucs 人声分离清洗）。
 
 ## 详细参考
 - 后端接入与凭证：references/backends.md

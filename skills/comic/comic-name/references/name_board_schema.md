@@ -24,6 +24,8 @@
       "page_id": "PAGE_001",
       "page_side": "right",
       "spread_id": "SPREAD_001",
+      "spread_mode": "paired_pages",
+      "cross_page_art": false,
       "page_turn_hook": "P004 reveal",
       "page_turn": {
         "setup": {"panel_id": "P004", "story_function": "reveal"},
@@ -108,3 +110,5 @@
 - `balloons` 为每段旁白、每句对白和每个 SFX 建一个稳定 `content_ref`，并记录 speaker、顺序和尾巴目标；缺 speaker 时显式写 `unresolved_speaker`，不偷偷猜人物。
 - `subject_regions` / `avoid_regions` 是低保真构图辅助。自动生成项必须标 `confidence=heuristic`，不能单凭这些区域做审美硬阻断。
 - `page_side`、`spread_id`、`gutter_intent`、`effects_hint` 都由 layout adapter 消费；不能只写入却在下游丢弃。
+- `spread_id` 只把面对的左右页组成一组；普通 `paired_pages` 不触发复杂跨页保护。只有源脚本显式 `cross_page_art=true` / `spread_mode=cross_page_art` 时，`cross_page_art` 才为真并要求人工或授权制作代理处理跨装订线构图。条漫使用 `spread_mode=scroll_sequence` 且 `spread_id` 为空。
+- 可选 `speaker_anchors`（按 speaker/character ID 映射 point/bbox）与 `character_regions` 会进入 name 合同，再由 layout 映射到正式坐标；缺失时不猜说话人位置，嵌字收据会明确标记 legacy fallback。

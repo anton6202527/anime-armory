@@ -10,6 +10,7 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 import autonomy  # noqa: E402
+from story_acceptance_packets import record_review_execution  # noqa: E402
 
 
 def _write_json(path: Path, payload: dict) -> None:
@@ -33,6 +34,15 @@ def test_autonomy_refuses_draft_and_approves_confirmed_table_read(tmp_path: Path
     assert autonomy.approve(tmp_path, "table_read", "第1集")["status"] == "not_ready"
 
     _write_json(ep / "table_read_packet.json", {"status": "confirmed"})
+    record_review_execution(
+        tmp_path,
+        "第1集",
+        "table_read",
+        reviewer_kind="executor_text_audio",
+        coverage=1.0,
+        reviewed_line_count=1,
+        review_notes=["逐句围读并核对角色口吻与节奏。"],
+    )
     result = autonomy.approve(tmp_path, "table_read", "第1集")
     assert result["status"] == "approved"
     manifest = json.loads((ep / "table_read_signoff.json").read_text(encoding="utf-8"))

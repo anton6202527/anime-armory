@@ -3,9 +3,12 @@ from __future__ import annotations
 import importlib.util
 import json
 from pathlib import Path
+import subprocess
+import sys
 import zipfile
 
 from PIL import Image
+import pytest
 
 
 MODULE_PATH = Path(__file__).with_name("release_verdict.py")
@@ -210,20 +213,28 @@ def prepare_accessible_delivery(root: Path, epub: Path | None = None) -> tuple[P
     epub = epub or write_valid_epub(root)
     manifest_path = root / "排版" / "第1话" / "export_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    semantic_sha = release_verdict.stable_sha256([{"page_id": "page_001", "panels": [{"panel_id": "P001", "description": "fixture panel"}]}])
     manifest["documents"] = [{
         "path": str(epub.relative_to(root)), "format": "epub",
         "sha256": release_verdict.sha256_file(epub),
+        "semantic_transcript_sha256": semantic_sha,
+        "semantic_coverage": {"panels": 1, "dialogue": 0, "speaker": 0, "descriptions": 1, "long_descriptions": 0},
     }]
     write_json(manifest_path, manifest)
     contract_path = root / "排版" / "第1话" / "accessible_digital_contract.json"
     write_json(contract_path, {
-        "kind": "comic_accessible_digital_contract", "chapter": "第1话",
+        "schema_version": 2, "kind": "comic_accessible_digital_contract", "chapter": "第1话",
         "artifact": {"path": str(epub.relative_to(root)), "sha256": release_verdict.sha256_file(epub)},
         "rendering": {"rendition_layout": "pre-paginated"},
         "reading_order": ["page_001"],
         "text_alternatives": {
             "coverage": 1.0, "missing": [], "reviewer": "a11y-editor",
             "reviewed_at": "2026-08-20T00:00:00Z", "reason": "逐页核对替代文本与画面语义",
+        },
+        "semantic_transcript": {
+            "sha256": semantic_sha, "pages": 1, "panels": 1, "dialogue_lines": 0,
+            "speaker_attribution_coverage": 1.0, "extended_descriptions": 1,
+            "programmatic_order": ["P001"],
         },
         "navigation": {"toc": True, "landmarks": ["bodymatter"]},
         "accessibility_metadata": {
@@ -234,7 +245,10 @@ def prepare_accessible_delivery(root: Path, epub: Path | None = None) -> tuple[P
             "accessibility_hazards": ["none"],
             "accessibility_summary": "human reviewed alternatives",
         },
-        "provenance": {"standard": "EPUB Accessibility 1.1", "url": "https://www.w3.org/TR/epub-a11y-11/"},
+        "provenance": {
+            "formal_baseline": {"standard": "EPUB Accessibility 1.1", "url": "https://www.w3.org/TR/epub-a11y-11/"},
+            "candidate_tracking": {"standard": "EPUB Accessibility 1.2 Candidate Recommendation", "not_claimed_as_formal_baseline": True},
+        },
         "assurance": {"level": "workflow_readiness_human_attested", "not_conformance_certification": True},
     })
     refresh_review_receipt(root)
@@ -682,3 +696,202 @@ def test_disposition_ledger_integrity_errors_block_public_not_internal() -> None
     assert {item["code"] for item in issues} == {"finding_disposition_ledger_integrity_failed"}
     assert release_verdict.issue_blocks(issues[0], "web_images", "public") is True
     assert release_verdict.issue_blocks(issues[0], "web_images", "internal") is False
+
+
+def test_write_outputs_promotes_immutable_digest_bundle_via_active_pointer(tmp_path: Path) -> None:
+    prepare_project(tmp_path)
+    report = release_verdict.build(tmp_path, "第1话", "internal")
+    release_verdict.write_outputs(tmp_path, "第1话", report)
+    contract_path = tmp_path / "生产数据" / "release_contract_第1话.json"
+    contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    bundle = tmp_path / contract["bundle_path"]
+    assert contract["release_digest"] == report["release_digest"]
+    assert bundle.is_file()
+    assert release_verdict.sha256_file(bundle) == contract["bundle_sha256"]
+    first_bundle_sha = contract["bundle_sha256"]
+
+    # Volatile report metadata may change, but the digest bundle remains the
+    # first immutable evidence packet for those exact material inputs.
+    refreshed = dict(report)
+    refreshed["created_at"] = "2099-01-01T00:00:00+00:00"
+    release_verdict.write_outputs(tmp_path, "第1话", refreshed)
+    second = json.loads(contract_path.read_text(encoding="utf-8"))
+    assert second["bundle_path"] == contract["bundle_path"]
+    assert second["bundle_sha256"] == first_bundle_sha
+
+
+def test_release_revision_pointer_is_last_and_post_pointer_crash_is_consistent(tmp_path: Path) -> None:
+    prepare_project(tmp_path)
+    first = release_verdict.build(tmp_path, "第1话", "internal")
+    release_verdict.write_outputs(tmp_path, "第1话", first)
+    contract_path = tmp_path / "生产数据" / "release_contract_第1话.json"
+    first_contract = json.loads(contract_path.read_text(encoding="utf-8"))
+    assert first_contract["schema_version"] == 3
+    assert release_verdict.verify_stored_completion(tmp_path, "第1话")["current"] is True
+    second = dict(first)
+    second.update({"usage": "public", "delivery_axis": "web_images+public"})
+    second["release_digest"] = release_verdict.canonical_release_digest(second)
+    second["business_status"] = release_verdict.build_completion_verdict(tmp_path, second)["status"]
+
+    def fail_before_pointer(stage: str) -> None:
+        if stage == "before_pointer":
+            raise RuntimeError("injected before active pointer")
+
+    with pytest.raises(RuntimeError, match="before active pointer"):
+        release_verdict.write_outputs(
+            tmp_path, "第1话", second, _fault_hook=fail_before_pointer
+        )
+    assert json.loads(contract_path.read_text(encoding="utf-8")) == first_contract
+    # The compatibility completion may have advanced, but authoritative
+    # readers follow the old revision's immutable candidate until the pointer
+    # switches.
+    assert release_verdict.verify_stored_completion(tmp_path, "第1话")["current"] is True
+
+    report_path = tmp_path / "second-release-report.json"
+    report_path.write_text(json.dumps(second, ensure_ascii=False), encoding="utf-8")
+    script = (
+        "import importlib.util,json,os,pathlib\n"
+        f"p=pathlib.Path({str(MODULE_PATH)!r})\n"
+        "s=importlib.util.spec_from_file_location('release_crash_tested',p)\n"
+        "m=importlib.util.module_from_spec(s); s.loader.exec_module(m)\n"
+        f"root=pathlib.Path({str(tmp_path)!r})\n"
+        f"report=json.loads(pathlib.Path({str(report_path)!r}).read_text(encoding='utf-8'))\n"
+        "def crash(stage):\n"
+        "  if stage=='after_pointer': os._exit(47)\n"
+        "m.write_outputs(root,'第1话',report,_fault_hook=crash)\n"
+    )
+    crashed = subprocess.run([sys.executable, "-c", script], check=False)
+    assert crashed.returncode == 47
+    active = json.loads(contract_path.read_text(encoding="utf-8"))
+    assert active["release_digest"] == second["release_digest"]
+    assert (tmp_path / active["completion_path"]).is_file()
+    assert release_verdict.verify_stored_completion(tmp_path, "第1话")["current"] is True
+
+
+def test_final_acceptance_atomically_selects_new_completion_candidate(tmp_path: Path) -> None:
+    prepare_project(tmp_path)
+    report = release_verdict.build(tmp_path, "第1话", "internal")
+    release_verdict.write_outputs(tmp_path, "第1话", report)
+    contract_path = tmp_path / "生产数据" / "release_contract_第1话.json"
+    before = json.loads(contract_path.read_text(encoding="utf-8"))
+    assert release_verdict.verify_stored_completion(tmp_path, "第1话")["status"] == "machine_ready"
+
+    release_verdict.accept_final(
+        tmp_path, report, accepted_by="Wesley", note="current release pixels accepted"
+    )
+
+    after = json.loads(contract_path.read_text(encoding="utf-8"))
+    assert after["release_digest"] == before["release_digest"]
+    assert after["completion_path"] != before["completion_path"]
+    verified = release_verdict.verify_stored_completion(tmp_path, "第1话")
+    assert verified["current"] is True
+    assert verified["status"] == "accepted"
+
+
+def test_professional_print_receipt_binds_pages_pdf_and_both_validators(tmp_path: Path) -> None:
+    page = tmp_path / "排版" / "第1话" / "pages" / "page_001.png"
+    write_png(page, (32, 32))
+    profile = tmp_path / "profiles" / "press.icc"
+    profile.parent.mkdir(parents=True)
+    profile.write_bytes(b"icc-profile")
+    pdf = tmp_path / "排版" / "第1话" / "print" / "第1话_PDF-X-4.pdf"
+    pdf.parent.mkdir(parents=True)
+    pdf.write_bytes(b"%PDF-1.7\n/Type /Page /TrimBox /BleedBox /OutputIntent PDF/X-4\n%%EOF")
+    contract_path = tmp_path / "排版" / "第1话" / "print_delivery_contract.json"
+    contract = {
+        "kind": "comic_print_delivery_contract", "chapter": "第1话", "pdf_standard": "PDF/X-4",
+        "renderer": {"mode": "professional_external"}, "dpi": 300,
+        "geometry_mm": {"trim": {"width": 100, "height": 150}, "bleed": {"top": 3, "bottom": 3, "inside": 3, "outside": 3}, "safe_area": {"top": 5, "bottom": 5, "inside": 5, "outside": 5}},
+        "binding": {"reading_direction": "ltr", "edge": "left"},
+        "font_handling": {"mode": "outlined"},
+        "color": {"icc_profile_path": str(profile), "icc_profile_sha256": release_verdict.sha256_file(profile)},
+    }
+    write_json(contract_path, contract)
+    external = {"status": "pass", "pdf_standard": "PDF/X-4", "validator": "fixture", "checks": {"boxes": True, "icc": True}}
+    receipt_path = tmp_path / "生产数据" / "professional_print_receipt_第1话.json"
+    receipt = {
+        "kind": "comic_professional_print_receipt", "status": "pass", "chapter": "第1话",
+        "contract": {"path": str(contract_path.relative_to(tmp_path)), "sha256": release_verdict.sha256_file(contract_path)},
+        "inputs": [{"path": str(page.relative_to(tmp_path)), "sha256": release_verdict.sha256_file(page)}],
+        "pdf": {"path": str(pdf.relative_to(tmp_path)), "sha256": release_verdict.sha256_file(pdf), "standard": "PDF/X-4"},
+        "internal_validation": {"status": "pass", "checks": {"header": True, "output_intent": True}},
+        "external_validator_receipt": external,
+        "external_validator_receipt_sha256": release_verdict.stable_sha256(external),
+    }
+    write_json(receipt_path, receipt)
+    write_json(tmp_path / "生产数据" / "print_readiness_receipt_第1话.json", {
+        "kind": "comic_print_readiness_receipt", "status": "approved", "reviewer": "press-editor",
+        "checks": {"safe": True, "order": True, "color": True, "font": True},
+        "professional_print_receipt": {"path": str(receipt_path.relative_to(tmp_path)), "sha256": release_verdict.sha256_file(receipt_path)},
+    })
+    manifest = {
+        "pages": [{"path": str(page.relative_to(tmp_path))}],
+        "documents": [{"format": "pdf_x4", "path": str(pdf.relative_to(tmp_path)), "sha256": release_verdict.sha256_file(pdf)}],
+    }
+    artifacts = [{
+        "format": "pdf", "declared_document_format": "pdf_x4",
+        "path": str(pdf.relative_to(tmp_path)), "sha256": release_verdict.sha256_file(pdf),
+    }]
+    assert release_verdict.print_delivery_checks(tmp_path, "第1话", manifest, artifacts) == []
+    medium_binding = release_verdict.medium_specific_binding(
+        tmp_path, "第1话", "print_pdf", manifest, artifacts
+    )
+    assert medium_binding["icc_profile"] == {
+        "path": "profiles/press.icc",
+        "sha256": release_verdict.sha256_file(profile),
+        "declared_sha256": release_verdict.sha256_file(profile),
+        "profile_name": "press.icc",
+        "source_kind": "project_file",
+    }
+    settings = tmp_path / "_设置.md"
+    settings.write_text(
+        "- 交付介质: print_pdf\n- 交付用途: internal\n- 目标平台: 通用\n",
+        encoding="utf-8",
+    )
+    release_report = {
+        "schema_version": 2,
+        "kind": "comic_release_verdict",
+        "chapter": "第1话",
+        "medium": "print_pdf",
+        "usage": "internal",
+        "target_platform": "通用",
+        "delivery_axis": "print_pdf+internal",
+        "profile": "print",
+        "verdict": "pass",
+        "issues": [],
+        "artifacts": artifacts,
+        "settings_binding": {
+            "path": "_设置.md", "sha256": release_verdict.sha256_file(settings),
+        },
+        "medium_specific_binding": medium_binding,
+    }
+    release_report["release_digest"] = release_verdict.canonical_release_digest(release_report)
+    release_verdict.write_outputs(tmp_path, "第1话", release_report)
+    assert release_verdict.verify_stored_completion(tmp_path, "第1话")["current"] is True
+    profile.write_bytes(b"tampered-icc-profile")
+    stale = release_verdict.verify_stored_completion(tmp_path, "第1话")
+    assert stale["current"] is False
+    assert any("icc_profile" in problem for problem in stale["issues"])
+
+    external["checks"]["icc"] = False
+    receipt["external_validator_receipt"] = external
+    receipt["external_validator_receipt_sha256"] = release_verdict.stable_sha256(external)
+    write_json(receipt_path, receipt)
+    assert "professional_print_receipt_invalid_or_stale" in {
+        item["code"] for item in release_verdict.print_delivery_checks(tmp_path, "第1话", manifest, artifacts)
+    }
+
+
+def test_c2pa_sidecar_never_satisfies_signed_claim(tmp_path: Path) -> None:
+    sidecar = tmp_path / "out.png.provenance.json"
+    write_json(sidecar, {"kind": "comic_c2pa_compatible_disclosure_sidecar", "c2pa_status": "not_signed"})
+    issues = release_verdict.check_c2pa_truth(tmp_path, {
+        "artifact_credentials": [{
+            "path": "out.png", "sha256": "a" * 64, "c2pa_status": "signed",
+            "c2pa_receipt": {"path": sidecar.name, "sha256": release_verdict.sha256_file(sidecar)},
+        }]
+    })
+    assert {item["code"] for item in issues} == {"c2pa_signed_claim_invalid"}
+    assert release_verdict.check_c2pa_truth(tmp_path, {
+        "artifact_credentials": [{"path": "out.png", "sha256": "a" * 64, "c2pa_status": "not_signed"}]
+    }) == []

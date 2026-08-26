@@ -275,7 +275,9 @@ def test_post_qc_blocks_max_resolution_without_native_master(tmp_path: Path, mon
     payload = runner.post_qc_panel(tmp_path, "第1话", job, panel, [], [])
 
     assert payload["verdict"] == "block"
-    assert {issue["category"] for issue in payload["issues"]} == {"resolution_lineage"}
+    assert {issue["category"] for issue in payload["issues"]} == {
+        "resolution_lineage", "derivative_lineage", "master_pixel_metadata"
+    }
 
 
 def test_post_qc_blocks_upscaled_derivative(tmp_path: Path, monkeypatch) -> None:
@@ -331,9 +333,18 @@ def test_gate_receipt_stales_when_non_job_preflight_input_changes(tmp_path: Path
     assert runner.validate_gate_receipt(tmp_path, "第1话", jobs)["status"] == "stale_or_not_passed"
 
 
-def _reviewable_job(tmp_path: Path, monkeypatch, *, warning: bool = False, block: bool = False) -> tuple[dict, dict, Path, Path]:
+def _reviewable_job(
+    tmp_path: Path,
+    monkeypatch,
+    *,
+    warning: bool = False,
+    block: bool = False,
+    color: tuple[int, int, int] = (40, 80, 120),
+) -> tuple[dict, dict, Path, Path]:
     panel = tmp_path / "出图" / "第1话" / "panels" / "P001.png"
-    write_png(panel)
+    master = tmp_path / "出图" / "第1话" / "masters" / "P001.png"
+    write_png(panel, color=color)
+    write_png(master, color=color)
     monkeypatch.setattr(
         runner,
         "likely_blank_bubble_regions",
@@ -346,6 +357,7 @@ def _reviewable_job(tmp_path: Path, monkeypatch, *, warning: bool = False, block
         "resolution_policy": "后端最高可达" if block else "按最终画布",
         "references": [],
         "result_path": str(panel.relative_to(tmp_path)),
+        "master_path": str(master.relative_to(tmp_path)),
     }
     post_qc = runner.post_qc_panel(tmp_path, "第1话", job, panel, [], [])
     job.update(
@@ -361,19 +373,165 @@ def _reviewable_job(tmp_path: Path, monkeypatch, *, warning: bool = False, block
     return data, job, jobs_path, panel
 
 
+def structured_review(job: dict, reviewer: str, *, delegated: bool = False) -> str:
+    packet = job["post_qc"]["visual_review_packet"]
+    evidence = [
+        {"path": item["path"], "sha256": item["sha256"]}
+        for item in packet["comparison_inputs"]
+    ]
+    axes = {
+        axis: {"verdict": "pass", "notes": f"{axis} current pixels checked", "evidence": evidence}
+        for axis in packet["required_axes"]
+    }
+    return json.dumps({
+        "kind": "comic_panel_visual_review",
+        "artifact_sha256": job["artifact_sha256"],
+        "comparison_inputs_sha256": packet["comparison_inputs_sha256"],
+        "contact_sheet_sha256": packet["contact_sheet_sha256"],
+        "reviewed_at": "2026-08-26T10:00:00+08:00",
+        "evaluator": {"name": reviewer, "kind": "delegated_agent" if delegated else "human"},
+        "axes": axes,
+        "summary": "fixture structured current-pixel review",
+    }, ensure_ascii=False)
+
+
 def test_warn_never_auto_ready_but_named_review_can_accept(tmp_path: Path, monkeypatch) -> None:
     data, job, jobs_path, _panel = _reviewable_job(tmp_path, monkeypatch, warning=True)
 
     assert job["status"] == "qc_warn"
     assert not runner.panel_acceptance_status(tmp_path, job)["accepted"]
     accepted = runner.accept_panel_review(
-        tmp_path, "第1话", data, jobs_path, "P001", "reviewer-a", "亮区是画内灯笼，不是空白气泡"
+        tmp_path, "第1话", data, jobs_path, "P001", "reviewer-a", structured_review(job, "reviewer-a")
     )
 
     assert accepted["accepted"] is True
     assert job["status"] == "ready"
     assert job["post_qc"]["manual_review"]["verdict"] == "accepted_with_warnings"
     assert job["post_qc"]["manual_review"]["acknowledged_warnings"][0]["code"] == "baked_text_container"
+
+
+def test_key_panel_candidates_share_budget_each_pass_b14_and_auto_adopt_best(
+    tmp_path: Path, monkeypatch
+) -> None:
+    data, job, jobs_path, panel = _reviewable_job(tmp_path, monkeypatch)
+    master = tmp_path / job["master_path"]
+    job.update({
+        "execution_input_sha256": "1" * 64,
+        "source_contract_sha256": "2" * 64,
+        "submit_prompt_sha256": "3" * 64,
+        "candidate_policy": {
+            "enabled": True,
+            "target_count": 2,
+            "generation_order": "sequential_same_stage_budget_envelope",
+            "each_candidate_requires_b14": True,
+        },
+    })
+    runner.write_json(jobs_path, data)
+    envelope = runner.spend_envelope.issue_envelope(
+        tmp_path,
+        chapter="第1话",
+        data=data,
+        model=runner.CODEX_MODEL,
+        channel=runner.CODEX_CHANNEL,
+        scope=runner.spend_envelope.requested_scope("第1话", ["P001"], force=False),
+        expires_at="2099-01-01T00:00:00Z",
+        max_calls=2,
+        max_attempts=1,
+        currency="CNY",
+        max_total="20",
+        max_cost_per_call="10",
+        approver="Wesley Chen",
+        approval_reference="chat://budget/key-panel",
+        source_quote="我批准关键格在同一预算包内顺序生成两个候选。",
+    )
+    envelope_path = runner.spend_envelope.default_envelope_path(tmp_path, "第1话")
+    runner.spend_envelope.save_envelope(envelope_path, envelope)
+    context = runner.prepare_spend_context(
+        tmp_path,
+        "第1话",
+        data,
+        [job],
+        force=False,
+        model=runner.CODEX_MODEL,
+        channel=runner.CODEX_CHANNEL,
+    )
+
+    def bind_paid_receipt() -> None:
+        _result, reservation, settlement = runner.run_paid_submission(
+            context, panel_id="P001", retry_round=1, submit=lambda: "generated"
+        )
+        job.update({
+            "spend_envelope_id": context["authorization"]["envelope_id"],
+            "spend_authorization_sha256": context["authorization"]["authorization_sha256"],
+            "spend_consumption_id": reservation["consumption_id"],
+            "spend_request_sha256": reservation["request_sha256"],
+            "spend_actual_cost": settlement["actual_cost"],
+            "spend_currency": reservation["currency"],
+            "spend_status": settlement["status"],
+        })
+
+    bind_paid_receipt()
+    first_sha = runner.file_sha256(panel)
+    accepted_first = runner.accept_panel_review(
+        tmp_path,
+        "第1话",
+        data,
+        jobs_path,
+        "P001",
+        "reviewer-a",
+        structured_review(job, "reviewer-a"),
+    )
+    assert accepted_first["candidate_result"]["status"] == "more_candidates_required"
+    assert job["status"] == "planned"
+
+    write_png(panel, color=(140, 55, 40))
+    write_png(master, color=(140, 55, 40))
+    monkeypatch.setattr(runner, "likely_blank_bubble_regions", lambda _path: [{"x": 1, "y": 1, "w": 20, "h": 20}])
+    post_qc = runner.post_qc_panel(tmp_path, "第1话", job, panel, [], [])
+    job.update({
+        "status": runner.status_after_post_qc(post_qc),
+        "artifact_sha256": runner.file_sha256(panel),
+        "post_qc": post_qc,
+        "result_path": str(panel.relative_to(tmp_path)),
+        "master_path": str(master.relative_to(tmp_path)),
+    })
+    bind_paid_receipt()
+    runner.write_json(jobs_path, data)
+    accepted_second = runner.accept_panel_review(
+        tmp_path,
+        "第1话",
+        data,
+        jobs_path,
+        "P001",
+        "reviewer-a",
+        structured_review(job, "reviewer-a"),
+    )
+
+    assert accepted_second["candidate_result"]["status"] == "adopted"
+    assert job["status"] == "ready"
+    assert runner.file_sha256(panel) == first_sha
+    manifest = runner.load_json(runner.candidate_manifest_path(tmp_path, "第1话", "P001"))
+    assert len(manifest["candidates"]) == 2
+    assert {item["spend_receipt"]["envelope_id"] for item in manifest["candidates"]} == {
+        envelope["envelope_id"]
+    }
+    assert all(item["spend_receipt"]["status"] == "settled" for item in manifest["candidates"])
+    adoption = runner.load_json(tmp_path / "生产数据" / "panel_candidates" / "第1话" / "P001_adoption.json")
+    assert adoption["candidate_id"] == manifest["candidates"][0]["candidate_id"]
+    assert adoption["candidate_manifest_sha256"] == runner.hashlib.sha256(
+        runner.json.dumps(manifest, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    gate_path = MODULE_PATH.parents[2] / "comic-review" / "scripts" / "gate.py"
+    gate_spec = importlib.util.spec_from_file_location("comic_gate_candidate_fixture", gate_path)
+    assert gate_spec and gate_spec.loader
+    gate_module = importlib.util.module_from_spec(gate_spec)
+    gate_spec.loader.exec_module(gate_module)
+    findings: list[dict] = []
+    gate_module.check_panel_jobs_ready(tmp_path, "第1话", data, findings)
+    assert not {
+        item["code"] for item in findings
+        if str(item.get("code") or "").startswith("candidate_")
+    }
 
 
 def test_authorized_delegate_can_accept_reversible_current_pixels(tmp_path: Path, monkeypatch) -> None:
@@ -384,7 +542,7 @@ def test_authorized_delegate_can_accept_reversible_current_pixels(tmp_path: Path
     data, job, jobs_path, _panel = _reviewable_job(tmp_path, monkeypatch)
     status = runner.accept_panel_review(
         tmp_path, "第1话", data, jobs_path, "P001", "delegate:visual-agent",
-        "已实际检查 contact sheet 的全部必检轴；仅批准可逆内部制作",
+        structured_review(job, "delegate:visual-agent", delegated=True),
     )
     manual = job["post_qc"]["manual_review"]
     assert status["accepted"] is True
@@ -421,13 +579,98 @@ def test_acceptance_stales_after_pixel_or_comparison_input_changes(tmp_path: Pat
     post_qc = runner.post_qc_panel(tmp_path, "第1话", job, panel, records, [])
     job.update({"status": "awaiting_review", "post_qc": post_qc})
     runner.write_json(jobs_path, data)
-    runner.accept_panel_review(tmp_path, "第1话", data, jobs_path, "P001", "reviewer-a", "逐轴复核通过")
+    runner.accept_panel_review(
+        tmp_path, "第1话", data, jobs_path, "P001", "reviewer-a", structured_review(job, "reviewer-a")
+    )
     assert runner.panel_acceptance_status(tmp_path, job)["accepted"]
 
     write_png(reference, color=(20, 130, 40))
     assert runner.panel_acceptance_status(tmp_path, job)["reason"] == "comparison_input_changed"
     write_png(panel, color=(10, 10, 10))
     assert runner.panel_acceptance_status(tmp_path, job)["reason"] == "job_artifact_sha_mismatch"
+
+
+def test_prose_cannot_auto_confirm_all_visual_axes(tmp_path: Path, monkeypatch) -> None:
+    data, _job, jobs_path, _panel = _reviewable_job(tmp_path, monkeypatch)
+    with pytest.raises(ValueError, match="结构化逐轴结果"):
+        runner.accept_panel_review(
+            tmp_path, "第1话", data, jobs_path, "P001", "reviewer-a", "我看过了，全部通过"
+        )
+
+
+def test_previous_panels_are_selected_by_subject_or_scene_not_global_position(tmp_path: Path, monkeypatch) -> None:
+    for pid in ("P001", "P002", "P003"):
+        write_png(tmp_path / "出图" / "第1话" / "panels" / f"{pid}.png")
+    jobs = [
+        {"panel_id": "P001", "result_path": "出图/第1话/panels/P001.png",
+         "identity_execution_contracts": [{"character_id": "CHAR_A"}],
+         "continuity_contract": {"scene_anchor_id": "LOC_A"}},
+        {"panel_id": "P002", "result_path": "出图/第1话/panels/P002.png",
+         "identity_execution_contracts": [{"character_id": "CHAR_B"}],
+         "continuity_contract": {"scene_anchor_id": "LOC_B"}},
+        {"panel_id": "P003", "result_path": "出图/第1话/panels/P003.png",
+         "identity_execution_contracts": [{"character_id": "CHAR_A"}],
+         "continuity_contract": {"scene_anchor_id": "LOC_A", "continuity_from": "P001"}},
+    ]
+    monkeypatch.setattr(runner, "panel_acceptance_status", lambda _root, _job: {"accepted": True})
+    selected = runner.previous_accepted_panel_paths(tmp_path, jobs, "P003")
+    assert [path.stem for path in selected] == ["P001"]
+
+
+def test_promotion_keeps_immutable_raw_and_pixel_metadata(tmp_path: Path) -> None:
+    generated = tmp_path / "generated.png"
+    write_png(generated, (120, 100))
+    final = tmp_path / "出图" / "第1话" / "panels" / "P001.png"
+    provenance = runner.promote_generated_artifacts(
+        tmp_path, "第1话", "P001", generated, final,
+        {"width": 60, "height": 50}, attempt=1, resize=True,
+    )
+    assert runner.png_valid(tmp_path / provenance["raw_candidate_path"])
+    assert runner.png_valid(tmp_path / provenance["master_path"])
+    assert runner.image_size(final) == (60, 50)
+    assert [item["role"] for item in provenance["derivative_chain"]] == [
+        "immutable_provider_raw", "active_master", "layout_panel"
+    ]
+    assert provenance["artifact_metadata"]["color_space"] == "sRGB_unprofiled"
+
+
+def test_promotion_rolls_back_both_active_paths_on_partial_switch_failure(
+    tmp_path: Path, monkeypatch
+) -> None:
+    generated = tmp_path / "generated.png"
+    final = tmp_path / "出图" / "第1话" / "panels" / "P001.png"
+    master = tmp_path / "出图" / "第1话" / "masters" / "P001.png"
+    write_png(generated, color=(180, 40, 40))
+    write_png(final, color=(20, 50, 80))
+    write_png(master, color=(20, 50, 80))
+    old_panel_sha = runner.file_sha256(final)
+    old_master_sha = runner.file_sha256(master)
+    original_replace = runner.os.replace
+    failed = False
+
+    def fail_panel_switch(source, target):
+        nonlocal failed
+        source_path = Path(source)
+        target_path = Path(target)
+        if not failed and source_path.name.endswith(".panel.png") and target_path == final:
+            failed = True
+            raise OSError("simulated derivative switch failure")
+        return original_replace(source, target)
+
+    monkeypatch.setattr(runner.os, "replace", fail_panel_switch)
+    with pytest.raises(OSError, match="simulated"):
+        runner.promote_generated_artifacts(
+            tmp_path,
+            "第1话",
+            "P001",
+            generated,
+            final,
+            {"width": 100, "height": 100},
+            attempt=1,
+            resize=True,
+        )
+    assert runner.file_sha256(final) == old_panel_sha
+    assert runner.file_sha256(master) == old_master_sha
 
 
 def test_write_json_is_atomic_and_valid(tmp_path):

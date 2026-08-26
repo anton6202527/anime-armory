@@ -32,7 +32,7 @@ description: 拍广告 第5阶段·三层定妆库 + AI出图 — 建角色/场�
 python3 skills/ad/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--storyboard PATH] [--strict] [--no-vlm]
 ```
 
-**逐图即时 QC（B14，ad 线自维护）**：`image_jobs_manifest.json` 中每张图都是独立签收单元。`image_job_receipt.py` 在花费前核对 prompt SHA、非空且可解码的实际参考像素、每份参考的项目内路径/owner/purpose/SHA，以及上一张仍按当前像素 SHA accepted；尾帧和后续镜把上一张已签收图作为真实相邻帧输入。runner 实际提交清单必须与前闸完全一致。落图后立即跑 full `product_qc.py` 并把机器报告、当前输出 SHA 与参考清单写进 `生产数据/image_job_receipts/`；任何 block/warn/unverifiable、精度降级或参考覆盖缺口都停在本张。机器通过后仍须由用户/具名审片人把**当前输出 SHA**和六项目视检查写入项目内 review JSON，再运行 `image_job_receipt.py signoff`。未 accepted 不生成下一张；`--force`、`--only`、批处理或后端切换都不能绕过。不得抽成跨线公共实现。
+**逐图即时 QC（B14，ad 线自维护）**：`image_jobs_manifest.json` 中每张图都是独立签收单元。`image_job_receipt.py` 在花费前核对 prompt SHA、非空且可解码的实际参考像素、每份参考的项目内路径/owner/purpose/SHA，以及上一张仍按当前像素 SHA accepted；尾帧和后续镜把上一张已签收图作为真实相邻帧输入。runner 实际提交清单必须与前闸完全一致。落图后立即跑 full `product_qc.py` 并把机器报告、当前输出 SHA 与参考清单写进 `生产数据/image_job_receipts/`；任何 block/warn/unverifiable、精度降级或参考覆盖缺口都停在本张。机器通过后仍须把**当前输出 SHA**和六项目视检查写入项目内 review JSON，再运行 `image_job_receipt.py signoff`：默认 `review_kind=human_current_pixels + human_signoff=true`，要求用户/具名审片人；仅当当前 `_设置.md` 明确 `审阅策略=用户授权制作代理`，并同时绑定该设置当前 SHA、具名 `approved_by`、`approval_reference` 与 `source_quote` 时，可由实际查看当前像素的执行者写 `review_kind=executor_visual + human_signoff=false`，用于可逆中间生产接力。它不能满足最终交付/发布的真人验收。未 accepted 不生成下一张；`--force`、`--only`、批处理或后端切换都不能绕过。不得抽成跨线公共实现。
 
 增强后的落档检（自包含；缺 Pillow/numpy 优雅降级，只跑结构化/prompt-lint 并在报告标降级）：
 1. **prompt-lint（HARD BLOCK，无 Pillow 也跑）**：每个产品镜（`storyboard.assets` 标 `PROD_*: true`，或镜头语义含 App/UI/包装/logo/品牌/CTA/end card）的 `出图/分镜/prompt/镜头N.md` 必须有 参考图/资产引用块 + 结构化 `PROD_*` 资产 ID + 身份锁定句 + 负向(不要改包装文字 / 不要变形 logo)。缺任一 → block。把"绝不文生图产品"从散文落成机检硬约束。

@@ -214,7 +214,19 @@ def layer_contract(render_stage: str, delivery_mode: str) -> dict[str, Any]:
             for name in sequence
         ],
         "text_separation": "dialogue/narration stay in post-lettering layers; only contracted drawn SFX may enter art layers",
-        "flatten_policy": "keep logical layer manifest even when a backend returns one flattened raster",
+        "editable_master_contract": {
+            "preferred_container": "layered master (ORA/PSD/KRA or provider-native equivalent)",
+            "required_groups": ["art_base", "line_or_detail", "tone_or_color", "effects", "lettering_sfx", "dialogue_and_narration"],
+            "immutable_provider_raw": True,
+            "active_master_is_atomic_derivative": True,
+            "dialogue_and_narration_separate": True,
+        },
+        "flat_fallback": {
+            "allowed": True,
+            "required_receipts": ["immutable_raw_sha256", "master_sha256", "color_space", "bit_depth", "icc_sha256", "alpha", "derivative_chain"],
+            "repair_policy": "localized edits require source-master SHA + mask SHA + bbox + prompt transaction; failure never replaces active pixels",
+        },
+        "flatten_policy": "a flat backend result is a compatibility fallback, never evidence that editable layers exist",
     }
 
 
@@ -226,6 +238,9 @@ def panel_layer_items(panel: dict[str, Any], render_stage: str) -> list[dict[str
             "layer": layer,
             "role": "art" if layer not in {"effects", "lettering_sfx"} else layer,
             "mask_scope": "panel",
+            "editable_artifact_role": layer,
+            "preferred_storage": "separate layer/group",
+            "flat_fallback_requires_lineage": True,
             "no_bake_dialogue_or_narration": True,
         }
         for layer in stage_sequence(render_stage)
@@ -433,6 +448,9 @@ def validate_finishing_plan(plan: dict[str, Any], panel_script: dict[str, Any], 
         errors.append("page_value_plans 必须覆盖所有 page/segment")
     if not plan.get("delivery_mode") or not plan.get("layer_contract"):
         errors.append("缺 delivery_mode/layer_contract")
+    layer = plan.get("layer_contract") if isinstance(plan.get("layer_contract"), dict) else {}
+    if not layer.get("editable_master_contract") or not layer.get("flat_fallback"):
+        errors.append("layer_contract 缺 editable_master_contract/flat_fallback")
     return errors
 
 

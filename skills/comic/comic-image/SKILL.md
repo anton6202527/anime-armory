@@ -63,11 +63,12 @@ python3 skills/comic/comic-image/scripts/build_panel_jobs.py "创作区/画漫�
   "form_id": "FORM_BASE",
   "outfit_id": "OUTFIT_BASE",
   "expression_id": "EXPR_NEUTRAL",
-  "state_id": "STATE_BASE"
+  "state_id": "STATE_BASE",
+  "review_region": {"bbox": [180, 90, 420, 700], "occlusion": "右肩被 CHAR_B 前臂遮挡"}
 }]
 ```
 
-上述 ID 必须存在于 identity registry v2；未知 form/outfit/expression/state、由 `story_function/strong_emotion/expression_intensity` 明确声明的强情绪格仍绑定中性或无表情参考、裸名字角色都会阻断 job 构建。只靠画面文字关键词猜出的情绪信号仍是 heuristic WARN。
+上述 ID 必须存在于 identity registry v2；未知 form/outfit/expression/state、由 `story_function/strong_emotion/expression_intensity` 明确声明的强情绪格仍绑定中性或无表情参考、裸名字角色都会阻断 job 构建。多人同格还必须为每个 binding 提供 `bbox`、`mask_path`、`occlusion` 或 `review_region`，让像素审查逐主体定位，不能拿整图相似度掩盖串脸。只靠画面文字关键词猜出的情绪信号仍是 heuristic WARN。
 
 脚本只写 `panel_jobs.json` 和 `出图/共享/prompt/00_索引.md`，不调用任何生图后端；它会把本话 `出图包` 标为 `✅`，但不会把 `出图` 标完成。
 
@@ -121,18 +122,38 @@ python3 skills/comic/comic-image/scripts/dreamina_panel_runner.py "创作区/画
 
 逐格 runner 每次最多生成一张，并在该张获得当前证据签收前拒绝生成下一张。落盘后立刻写 `生产数据/panel_qc/第N话/Pxxx.json` 和 contact sheet：机器 `pass` 对应 `awaiting_review`，启发式 `warn` 对应 `qc_warn`，确定性缺件/损坏/参考覆盖/分辨率血统等问题对应 `qc_block`。三者都不会自动成为 `ready`；`skipped/unverifiable` 也不能授权生产。
 
-实际查看 contact sheet 后，对唯一当前格具名签收。机器 pass 写 `accepted`；启发式 warn 可在说明具体判断理由后写 `accepted_with_warnings`，并保留 warning codes；确定性 block 永不可人工豁免：
+实际查看 contact sheet 后，对唯一当前格写结构化逐轴结果。结果必须绑定当前 artifact/comparison/contact-sheet SHA，逐轴含 `verdict/evidence/notes`、ISO `reviewed_at` 与 evaluator；身份轴还要逐主体给出 bbox/mask/occlusion 观察。普通 `--review-notes "我看过了"` 不再能自动把所有轴写成 true。机器 pass 写 `accepted`；启发式 warn 可逐轴写 `warn` 并保留 warning codes；确定性 block 永不可人工豁免：
+
+```json
+{
+  "kind": "comic_panel_visual_review",
+  "artifact_sha256": "<当前 panel SHA>",
+  "comparison_inputs_sha256": "<当前比较包 SHA>",
+  "contact_sheet_sha256": "<当前 contact sheet SHA>",
+  "reviewed_at": "2026-08-26T10:00:00+08:00",
+  "evaluator": {"name": "责任编辑", "kind": "human"},
+  "axes": {
+    "subject_identity_and_face": {
+      "verdict": "pass",
+      "notes": "逐主体脸型、眼型、发际线与 exact refs 一致",
+      "evidence": [{"path": "出图/第1话/panels/P001.png", "sha256": "<SHA>"}],
+      "subjects": [{"character_id": "CHAR_MAIN", "locator": {"bbox": [180,90,420,700]}}]
+    }
+  }
+}
+```
 
 ```bash
 python3 skills/comic/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 \
-  --targets P001 --accept-reviewed --reviewer "责任编辑" --review-notes "逐轴检查身份、动作、场景与留白；启发式边带可接受"
+  --targets P001 --accept-reviewed --reviewer "责任编辑" \
+  --review-result 生产数据/panel_qc/第1话/P001_visual_review.json
 ```
 
 Dreamina 使用完全相同的 `--accept-reviewed` 合同。签收绑定当前像素 SHA、on-disk/job post-QC、机器 findings、contact sheet、比较包及每个比较输入 SHA；任一项变化都会使签收 stale，并阻断 `comic-review gate --stage image`。只有全部格逐张签收后才把本话 `出图` 标为 `✅`。这个 post-QC 是 comic 线自维护实现，只服务漫画 panel；不要被其它系列 import。
 
 若项目 `_设置.md` 显式写 `视觉审阅策略: 用户授权制作代理实际查看当前像素`，或存在当前有效的 `生产数据/authorizations/visual_review.json`，实际看过 contact sheet 的视觉代理可用 `--reviewer delegate:visual-qc-agent` 签收可逆内部生产。收据固定写 `review_kind=delegated_current_pixel_review`、`human_signoff=false` 和当前授权摘要；授权撤销/过期/哈希变化立刻 stale。它绝不授权预算、权利、公开发布或最终验收。
 
-模型能力与本机执行能力分离：`_lib/image_execution_adapter.py` 对 Codex/Dreamina 返回 executable，未知 Gemini/Flux/自定义路线默认 `planning_only`；只有项目 `生产数据/image_execution_adapters.json` 注册安全 argv adapter 后才可执行，不再静默回退到 Codex。
+模型能力与本机执行能力分离：job 只记录 `model ∩ channel ∩ 当前 runner/registry feature` 的有效交集。`_lib/image_execution_adapter.py` 对 Codex/Dreamina 返回 executable，未知 Gemini/Flux/自定义路线默认 `planning_only`；只有项目 `生产数据/image_execution_adapters.json` 注册安全 argv adapter 后才可执行，不再静默回退到 Codex。`persistent_subject=true` 还必须同时登记真实 `subject_id_parameter`、`verified_at` 与 help/文档证据，并让角色资产的 `subject_bindings[adapter_id]` 提供真实 subject ID；模型名称含“主体库/subject”不算证据。
 
 带 `references` 的正式格要求每个 reference path 存在且实际进入附件/比较证据。Codex runner 会把这些图片作为 `codex exec --image` 附件传入，并落 `codex_reference_bundles`；缺引用必须先回 `comic-identity` 修复。纯文生图试验只能写入隔离候选目录，不得通过正式 runner 改 job、进度或 `ready`。
 
@@ -190,10 +211,10 @@ python3 skills/comic/comic-image/scripts/dreamina_panel_runner.py "创作区/画
    - 漫画格也要锁脸、眼神和身体完整性：脸型、眼型/眼距、发际线、发型、服装主色、配饰/伤痕/标志物、手脚和关键道具不能跨格漂移；动作格不得为了构图裁掉叙事需要的头发、脸、手脚、武器或接触点。
    - 除非本格明确 `camera_role=POV/破第四墙`，不要让角色看读者镜头；眼神应锁定对话对象、对手、武器/道具、命中点、画外声源或下一动作目标。
    - 启用传统原稿流程时，应先跑 `comic-finishing`，让 job 带 `traditional_finish_contract`，把墨线、黑场、网点/灰阶、效果线、漫符和手绘拟声词计划注入 prompt。缺该契约时 gate 给 warn，正式长线项目应补齐后再批量出图。
-2. 生成 job 包时通过 comic 自己的 `image_backend_adapter` 把 `生图模型 + 生图渠道` 归一成参考图预算、是否支持真实图片输入、是否具备持久主体能力等结构字段；不要把 Codex/渠道壳当生成模型，也不要把未知后端写死成唯一口径。
+2. 生成 job 包时通过 comic 自己的 `image_backend_adapter` 把 `生图模型 + 生图渠道 + execution adapter verified features` 取交集，归一成参考图预算、真实图片输入和持久主体等结构字段；不要把 Codex/渠道壳当生成模型，也不要按模型名字猜主体库能力。
    - 即梦官方 CLI 的 `image2image` 当前实机支持 1–10 张本地图片（2026-07-16 以 `dreamina image2image --help` 核验）；适配层按 10 张总预算规划，仍需为 `style_only`、具名主体、LOC 与关键 PROP 公平保留槽位。CLI/版本变化后先重跑 `--help` 再改能力表，不能凭旧印象降成 2 张。
 3. 跑 `comic-identity report --write`，确认主角、常驻角色、关键场景、关键道具、标志服装都有可传给模型的真实参考图；`character_dna`、`variant_policy`、`STYLE_` 风格锚进入完整合同，模型通过真实图片输入 + 精简身份保持语句消费，不把 registry 全文粘进 prompt。
-4. `build_panel_jobs.py` 会生成并立即消费 `生产数据/comic_reference_plan_第N话.json`。计划绑定 panel script、registry、memory anchor、设置与实际参考图片 SHA，逐格写 `panel_plan_sha256`；job 再写 `execution_input_sha256` 和 `consumed_contracts`。计划过期、具名角色没有至少一个真实身份锚、LOC/常驻 PROP 缺真实图、关键附件超过执行后端上限时拒绝构建并给拆反打/分区合成建议，不静默丢约束。
+4. `build_panel_jobs.py` 会生成并立即消费 `生产数据/comic_reference_plan_第N话.json`。计划绑定 panel script、registry、memory anchor、设置与实际参考图片 SHA，逐格写 `panel_plan_sha256`；job 再把每个主体的 DNA、variant policy、form/outfit/expression/state、exact reference SHA、review locator 与真实 subject binding 固化为 `identity_execution_contracts[]`，连同 execution adapter evidence 一起进入 `execution_input_sha256` 和 `consumed_contracts`。任一项变化都必须重建并重抽。
 5. 正式批量出图前跑 `comic-review/scripts/gate.py --stage image_preflight`，阻断缺共享参考、多视图缺口、缺风格锚、缺逐格视觉契约、混用生成配方、legacy schema、缺 compiler、后端/profile 不一致或 prompt/hash 漂移；`comic-batch` 会自动跑。
 6. 若共享参考不足，先停在 `comic-identity` 补定妆/锚点，不直接批量生成面板图。
 7. 明确要求“无字画面 + 低细节留白”，不要让模型直接生成中文正文、英文正文、对白气泡、空白气泡、旁白框或文字框；`文字语言` 只影响后期嵌字和导出元数据。
@@ -202,12 +223,12 @@ python3 skills/comic/comic-image/scripts/dreamina_panel_runner.py "创作区/画
 10. 每生成一格立刻做落盘 QC，并停下来完成该格的人审：PNG 有效性、尺寸、真实参考输入数、疑似烘焙空白气泡/文字容器，以及下面的原生清晰度血统。机器 pass/warn 都不是 `ready`；只有当前 SHA 的具名签收可放行下一格，`block/unverifiable/skipped` 不可签收。
     - `_设置.md` 默认 `生图分辨率策略=后端最高可达`。runner 必须在提交前读取当前模型/渠道的实时能力或本机 CLI `--help`，请求其可实际返回的最高原生档；具体 `2k/4k/尺寸枚举` 会变化，不得把旧版本上限永久写死。后端没有显式分辨率参数时，执行包装仍要明确要求最高原生输出，并在 manifest 标记 `maximum_verified=false`，不得声称已达到最高档。
     - **一格一次原生生成**：正式 panel 必须各自拥有独立生成的 master。禁止先生成整页/整话/多格拼图，再从 864px、1024px 等合成图裁出多格并放大冒充逐格高清；同一个 master 被多个无明确分区合成合同的 panel 复用，属于确定性 BLOCK。
-    - 原始服务端文件必须无损保存在 `出图/第N话/masters/Pxxx.png`（或后端 runner 已有的等价 raw candidate），记录 `requested_resolution_tier / maximum_verified / native_size / native_sha256 / master_path`。`panels/Pxxx.png` 只可由该 master 等比安全裁切并**向下采样**到 layout 画布；任一轴需要放大、先缩小再放大、只留导出图不留 master，均为确定性 BLOCK。
+    - 原始服务端文件必须作为 immutable raw 无损保存在 `candidates/Pxxx/*_raw.png`，解码成功后原子晋升为 active `masters/Pxxx.png`，再派生 `panels/Pxxx.png`。receipt 必须记录 raw/master/panel SHA、color space、bit depth、ICC、alpha 和完整 derivative chain；任一轴需要放大、先缩小再放大、只留导出图不留 raw/master，均为确定性 BLOCK。
     - “水墨、柔焦、像素漫画”等是画风，不是降低像素尺寸的许可。像素风也应以最高原生画布生成/归档，需要硬边时用 nearest-neighbor 制作派生图，但不得降低 master 分辨率。
 11. 若单格 QC 发现角色/道具漂移，先回 `comic-identity` 种锚点或补引用，再对该格 `--force --targets Pxxx` 重抽。
 12. 如果用户已在外部生成图片，把文件放入 `出图/第N话/panels/` 后，用唯一目标的 `--recheck-existing` 建立当前 post-QC/比较包，再走 `--accept-reviewed`；不得手改 `status=ready`。
 13. job 包齐全后可把 `出图包` 标 `✅`；所有必需 panel 都有当前像素、当前比较包与具名签收，且无待重抽目标后，才把 `出图` 标 `✅`。
-14. 预算允许多抽时，保留失败和重抽证据；不要把候选图混进正式 `panels/`，正式目录只留当前采纳版本。
+14. 关键格默认按 `_设置.md` 的 `关键格候选数`（默认 2）在同一 image stage 预算 envelope 内顺序出候选；每张仍须单独完成 B14。manifest 逐张绑定 settled spend consumption、同一 envelope id/authorization SHA、冻结 panel/master/contact sheet 与逐轴 review SHA；达到目标数后按“结构化轴 warning 最少 → 机器 warning 最少 → 最早完成”自动采用，写 `candidate_manifest + adoption receipt`；正式 `panels/` 只留当前采纳版本。任一候选换预算包、缺 B14 或 manifest/adoption SHA 变化均不得 ready。
 
 ## Prompt 要点
 

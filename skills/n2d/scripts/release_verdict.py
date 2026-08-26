@@ -8,10 +8,12 @@ pass / blocked / demo-only / internal-only decision.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import datetime as dt
 import glob
 import hashlib
 import importlib.util
+import io
 import json
 import os
 import re
@@ -93,6 +95,26 @@ def _load_compliance_module():
 
 
 compliance_mod = _load_compliance_module()
+
+
+def _load_local_module(name: str, path: Path):
+    if not path.is_file():
+        return None
+    spec = importlib.util.spec_from_file_location(name, path)
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+    return mod
+
+
+media_artifact_mod = _load_local_module(
+    "n2d_media_artifact_for_release_verdict",
+    N2D_DIR / "n2d-compose" / "media_artifact.py",
+)
+creative_watchdown_mod = _load_local_module(
+    "n2d_creative_watchdown_for_release_verdict",
+    N2D_DIR / "n2d-review" / "scripts" / "creative_watchdown.py",
+)
 
 
 def now_iso() -> str:
@@ -527,37 +549,62 @@ def _master_details(root: Path, masters: Sequence[Path]) -> List[Dict[str, Any]]
 
 
 def check_final_master(root: Path, episode: str) -> Dict[str, Any]:
-    masters = _final_master_files(root, episode)
-    if not masters:
-        return component("final_master", "block", "缺最终母版 mp4/mov；release verdict 不能在无母版时放行。", path=relpath(root, root / "合成" / episode))
-    details = _master_details(root, masters)
-    latest = acceptance_contract.resolve_final_master(root, episode)
-    assert latest is not None
-    duration = script_supervisor_log.ffprobe_duration(latest)
-    if duration is None or duration <= 0:
+    if media_artifact_mod is None:
+        return component("final_master", "block", "统一 MediaArtifactReceipt validator 不可用。")
+    canonical = acceptance_contract.resolve_final_master(root, episode)
+    if canonical is None:
+        return component(
+            "final_master", "block", "缺 canonical final master；MediaArtifactReceipt 不能替代母版。",
+            path=relpath(root, root / "合成" / episode),
+        )
+    current = media_artifact_mod.current_receipt(root, episode, canonical=canonical)
+    if current.get("status") != "pass":
         return component(
             "final_master",
             "block",
-            f"最终母版无法证明可播放或无有效时长：{relpath(root, latest)}。",
-            path=relpath(root, latest),
-            details={
-                "masters": details,
-                "selected": relpath(root, latest),
-                "selected_sha256": sha256_file(latest),
-                "duration_sec": duration,
-            },
+            "canonical master 缺 current MediaArtifactReceipt；文件存在或 provider succeeded 均不能放行。",
+            path=str(current.get("path") or ""),
+            details={"issues": current.get("issues") or [], "receipt": current.get("receipt") or {}},
         )
+    receipt = current.get("receipt") or {}
+    probe = ((receipt.get("validation") or {}).get("probe") or {})
     return component(
         "final_master",
         "pass",
-        f"最终母版存在：{relpath(root, latest)}。",
-        path=relpath(root, latest),
+        f"current MediaArtifactReceipt 已绑定 canonical SHA/规格/recipe 并通过完整解码：{current.get('artifact')}。",
+        path=str(current.get("artifact") or ""),
         details={
-            "masters": details,
-            "selected": relpath(root, latest),
-            "selected_sha256": sha256_file(latest),
-            "duration_sec": duration,
+            "selected": current.get("artifact"),
+            "selected_sha256": current.get("artifact_sha256"),
+            "duration_sec": probe.get("duration_sec"),
+            "spec_sha256": receipt.get("spec_sha256"),
+            "recipe": receipt.get("recipe"),
+            "validator_version": receipt.get("validator_version"),
         },
+    )
+
+
+def check_creative_watchdown(root: Path, episode: str) -> Dict[str, Any]:
+    if creative_watchdown_mod is None:
+        return component("creative_watchdown", "block", "creative_watchdown validator 不可用。")
+    path = creative_watchdown_mod.receipt_path(root, episode)
+    canonical = acceptance_contract.resolve_final_master(root, episode)
+    if canonical is None:
+        return component(
+            "creative_watchdown", "block", "缺 canonical final master，无法进行整片听看校验。",
+            path=relpath(root, path),
+        )
+    result = creative_watchdown_mod.validate_watchdown(root, episode, master=canonical)
+    if result.get("status") != "pass":
+        return component(
+            "creative_watchdown", "block",
+            "current canonical master 尚无完整、hash-bound 的创作听看收据。",
+            path=relpath(root, path), details={"issues": result.get("issues") or []},
+        )
+    return component(
+        "creative_watchdown", "pass",
+        "整片故事表演/视觉连续性/对白声音/节奏听看已绑定当前 canonical SHA；不冒充最终用户验收。",
+        path=relpath(root, path), details={"final_user_acceptance": False},
     )
 
 
@@ -853,6 +900,7 @@ def build_components(root: Path, episode: str, profile: str) -> List[Dict[str, A
         check_audience_experience(root, episode, profile),
         check_stop_loss(root, episode, profile),
         check_final_master(root, episode),
+        check_creative_watchdown(root, episode),
         check_release_evidence_freshness(root, episode),
         check_taxonomy(root, episode, profile),
     ]
@@ -1086,10 +1134,26 @@ def parser() -> argparse.ArgumentParser:
 def main(argv: Optional[Sequence[str]] = None) -> int:
     ns = parser().parse_args(argv)
     root = Path(ns.root)
-    payload = build_verdict(root, ns.episode, profile=ns.profile)
-    if ns.write:
-        payload["outputs"] = write_outputs(root, payload["episode"], payload)
-    print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) if ns.json else render_markdown(payload))
+    if ns.json:
+        # Imported legacy checks may still emit human diagnostics (notably progress.py when
+        # `_progress.md` is absent).  JSON mode is a machine contract: preserve those messages
+        # on stderr while guaranteeing that stdout contains exactly one JSON document.
+        diagnostics = io.StringIO()
+        try:
+            with contextlib.redirect_stdout(diagnostics):
+                payload = build_verdict(root, ns.episode, profile=ns.profile)
+                if ns.write:
+                    payload["outputs"] = write_outputs(root, payload["episode"], payload)
+        finally:
+            captured = diagnostics.getvalue()
+            if captured:
+                sys.stderr.write(captured)
+        print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True))
+    else:
+        payload = build_verdict(root, ns.episode, profile=ns.profile)
+        if ns.write:
+            payload["outputs"] = write_outputs(root, payload["episode"], payload)
+        print(render_markdown(payload))
     return 2 if payload.get("status") == "blocked" else 0
 
 

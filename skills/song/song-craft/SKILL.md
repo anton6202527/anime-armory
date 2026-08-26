@@ -7,7 +7,7 @@ description: Shared machine contracts and deterministic helpers for the song-* s
 
 `song-craft` 是 `song-*` 家族的机器单一真值源，不直接写歌、不直接生成音频。它只沉淀可复用的字段、选择点、状态表和合规留痕脚本，避免每个 skill 各自硬写一套。
 
-**连续执行边界**：`song_workflow.py` 只检查证据并给下一步命令，不是完整 batch/provider runner。编排 agent 可自动 chain 本 skill 的免费确定性 helper 并继续路由现有 `song-*` skill；真实音乐生成、当前音频听审、最终成品验收与发布仍由对应阶段完成。实际调用层若持有与当前 input/model/channel/scope/cost 精确绑定且有效的阶段预算授权，包内不逐调用打断；本线不得自行签发预算授权。
+**连续执行边界**：`song_workflow.py` 只检查证据、展示唯一 release verdict 并给下一步命令，不是完整 batch/provider runner，也不得自行宣布完成。编排 agent 可自动 chain 本 skill 的免费确定性 helper 并继续路由现有 `song-*` skill；真实音乐生成、当前音频听审、最终成品验收与发布仍由对应阶段完成。实际调用层若持有与当前 input/model/channel/scope/cost 精确绑定且有效的阶段预算授权，包内不逐调用打断；本线不得自行签发预算授权。
 
 ## 包含内容
 
@@ -20,7 +20,8 @@ description: Shared machine contracts and deterministic helpers for the song-* s
 | 旋律/和声草图 | `scripts/melody_chord_packet.py` | 写 `歌/song_form.json`、`chord_sheet.md`、`topline_notes.md`，给作曲任务包提供曲式/和声/topline 方向 |
 | 歌词 prosody | `scripts/lyric_prosody_check.py` | 写 `词/lyric_prosody.json`，检查 hook、标题、副歌、字密度和乐句对称 |
 | 权益元数据 | `scripts/rights_metadata.py` | 写 `合规/rights_metadata.json` + `split_sheet.md`，记录词曲 split、ISRC/ISWC/PRO/MLC/SoundExchange 状态 |
-| 发布交付包 | `scripts/release_pack.py` | 写 `导出/release_pack.json`，绑定音频、歌词、take、母带、AI 披露、权益元数据 hash |
+| 发布交付包 | `scripts/release_pack.py` | 写 `导出/release_pack.json`，绑定音频、歌词、take、母带、AI 披露、权益元数据 hash；`release_ready` 仅为组件证据 |
+| 唯一完成裁决 | `../scripts/release_verdict.py` | `check` 聚合当前最终字节为 canonical digest；`accept` 只允许具名真人闭合该 digest，旧验收随字节变化失效 |
 | 阶段质量闸门 | `scripts/quality_gate.py` | compose/select 前验证上游证据、六维试听与音频 hash；例外必须写理由 |
 | 母版格式交付 | `scripts/master_delivery.py` | 从 `混音/pre_master.wav` 生成无隐式响度归一的 24-bit PCM `导出/master.wav` 与 hash receipt |
 | 发行级元数据 | `scripts/release_metadata.py` | 分离 track/release metadata：artist roles、language、explicit、date、territories、P/C line 与标识符 |
@@ -41,6 +42,8 @@ python3 skills/song/song-craft/scripts/rights_metadata.py "<写歌作品根>" \
   --rights-status original --derivative-type original --sample-usage-status none \
   --voice-authorization-status synthetic --write
 python3 skills/song/song-craft/scripts/release_pack.py "<写歌作品根>" --write
+python3 skills/song/scripts/release_verdict.py check "<写歌作品根>" --write
+python3 skills/song/scripts/release_verdict.py accept "<写歌作品根>" --accepted-by "<具名真人>"
 python3 skills/song/song-craft/scripts/ai_usage.py "<写歌作品根>" \
   --audio-mode AI-generated \
   --lyrics-mode AI-generated \
@@ -60,9 +63,9 @@ python3 skills/song/song-craft/scripts/ai_usage.py "<写歌作品根>" \
 - **多版是默认工程事实**：音乐生成随机性高，正式定稿应从 `歌/takes_manifest.json` 记录的多版里挑，不把第一版默认为成品。
 - **标准分层**：硬标准、项目合同、平台建议、人判标准不得混为一谈。逐阶段定义与官方依据见 `references/production-standards.md`。
 - **选中版不是母版**：select 只产生带 hash 的 `pre_master.wav`；正式交付必须再生成 `导出/master.wav`、跑 BS.1770 检查并重建 release pack。
-- **发布不是只有 wav**：正式交付必须同时有母带检查、权益元数据、AI 使用披露和 release pack；缺任一项都不能声称“发行就绪”。
+- **发布不是只有 wav**：正式交付必须同时有母带检查、权益元数据、AI 使用披露和 release pack；最终完成只认当前字节的唯一 release verdict + 同 digest 具名真人 acceptance。
 - **参考曲只作方向**：reference pack 只能迁移情绪、能量曲线、配器类别和段落功能；不得复刻旋律、歌词、hook/riff、声纹或标志性编曲。
-- **作品卡片字段（synopsis / cover）**：立项脚本在 `_meta.json` 固化 `synopsis`（一句话简介，≤240 字，取自 `创作/song_brief.json` 核心承诺，缺失时用 `theme`+`genre/mood` 组一句，占位后续回填）。song 是纯音频线、无图片产物，故 `cover` 恒为 `null`、不出封面，桌面卡片自动回退产线图标占位。写入用 `write_if_absent` 语义只补缺、不覆盖用户已填内容。
+- **作品卡片字段（synopsis / cover）**：立项脚本在 `_meta.json` 固化 `synopsis`（一句话简介，≤240 字，取自 `创作/song_brief.json` 核心承诺，缺失时用 `theme`+`genre/mood` 组一句，占位后续回填）。未进入正式发行时 `cover` 可为 `null` 并由桌面卡片回退产线图标；distribution/streaming 等 profile 若要求封面，则 `导出/cover.jpg` 必须进入唯一 release digest。写入用 `write_if_absent` 语义只补缺、不覆盖用户已填内容。
 
 ## 常见错误
 

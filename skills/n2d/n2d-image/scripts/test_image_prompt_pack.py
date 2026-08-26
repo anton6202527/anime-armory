@@ -4,6 +4,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 
 MODULE_PATH = Path(__file__).with_name("image_prompt_pack.py")
 SPEC = importlib.util.spec_from_file_location("image_prompt_pack", MODULE_PATH)
@@ -15,7 +17,21 @@ visual_reference_policy = sys.modules["visual_reference_policy"]
 
 
 def test_character_makeup_prompt_requires_neutral_gray_backdrop() -> None:
-    prompt = image_prompt_pack.shared_character_prompt()
+    old = image_prompt_pack.CHARACTER_DEFS
+    image_prompt_pack.CHARACTER_DEFS = {
+        "CHAR_TEST": {
+            "name": "测试角色", "scope": "本集角色", "form": "常态", "tier": "core",
+            "library_tier": "named_minimal", "planned_episode_count": 1,
+            "asset_key": "CHAR_TEST__常态", "anchor": "测试角色身份锚",
+            "age_context": "成年", "face": "稳定脸型", "hair": "稳定发型",
+            "outfit": "项目定义服装", "accessories": "无", "texture": "项目材质",
+            "performance_signature": "克制", "relative_scale": "标准体量", "drift": [],
+        }
+    }
+    try:
+        prompt = image_prompt_pack.shared_character_prompt()
+    finally:
+        image_prompt_pack.CHARACTER_DEFS = old
 
     assert "统一中性灰白/18%灰棚拍背景" in prompt
     assert "无窗、无房间、无家具、无剧情道具" in prompt
@@ -93,27 +109,17 @@ def test_negated_main_character_phrase_does_not_upgrade_one_episode_role() -> No
 
 
 def test_generic_door_hint_does_not_leak_another_projects_scene() -> None:
-    hint = image_prompt_pack.ASSET_ID_HINTS["PROP_DOOR"]
-
-    assert hint["name"] == "场景木门"
-    assert "贺平生" not in json.dumps(hint, ensure_ascii=False)
-    assert "杂役小屋" not in json.dumps(hint, ensure_ascii=False)
+    assert image_prompt_pack.ASSET_ID_HINTS == {}
 
 
-def test_missing_character_card_gets_project_specific_visual_fallback(tmp_path: Path) -> None:
+def test_missing_character_card_fails_closed_instead_of_using_demo_fallback(tmp_path: Path) -> None:
     story = {"clips": [{"character_ids": ["CHAR_WANG_DUN", "CHAR_HE_PINGSHENG"]}]}
 
-    defs = image_prompt_pack.derive_character_defs(tmp_path, story)
-
-    assert defs["CHAR_WANG_DUN"]["name"] == "王敦"
-    assert "黑黝黝宽脸" in defs["CHAR_WANG_DUN"]["face"]
-    assert "洗得发白的宽松青色道袍" in defs["CHAR_WANG_DUN"]["outfit"]
-    assert "角色脸部身份以角色卡为准" not in defs["CHAR_WANG_DUN"]["anchor"]
-    assert defs["CHAR_HE_PINGSHENG"]["name"] == "贺平生"
-    assert "瘦小少年脸" in defs["CHAR_HE_PINGSHENG"]["face"]
+    with pytest.raises(image_prompt_pack.PromptPackContractError, match="CHAR_WANG_DUN"):
+        image_prompt_pack.derive_character_defs(tmp_path, story)
 
 
-def test_char01_zhenmosi_uniform_form_uses_storyboard_name(tmp_path: Path) -> None:
+def test_project_character_card_does_not_invent_demo_extra_form(tmp_path: Path) -> None:
     card_dir = tmp_path / "设定库" / "characters"
     card_dir.mkdir(parents=True)
     (card_dir / "姜月初.md").write_text(
@@ -130,19 +136,15 @@ def test_char01_zhenmosi_uniform_form_uses_storyboard_name(tmp_path: Path) -> No
 
     defs = image_prompt_pack.derive_character_defs(tmp_path, story)
 
-    assert defs["CHAR_01"]["extra_forms"][0]["form"] == "镇魔司制服态"
-    assert defs["CHAR_01"]["extra_forms"][0]["asset_key"] == "CHAR_01__镇魔司制服态"
+    assert defs["CHAR_01"]["form"] == "囚途残损态"
+    assert "extra_forms" not in defs["CHAR_01"]
 
 
-def test_unknown_character_card_fallback_is_drawable_not_placeholder(tmp_path: Path) -> None:
+def test_unknown_character_id_fails_closed(tmp_path: Path) -> None:
     story = {"clips": [{"character_ids": ["CHAR_UNKNOWN_GUARD"]}]}
 
-    defs = image_prompt_pack.derive_character_defs(tmp_path, story)
-    cfg = defs["CHAR_UNKNOWN_GUARD"]
-
-    assert cfg["name"] == "Unknown Guard"
-    assert "角色脸部身份以角色卡为准" not in cfg["face"]
-    assert "低饱和古装衣袍" in cfg["outfit"]
+    with pytest.raises(image_prompt_pack.PromptPackContractError, match="CHAR_UNKNOWN_GUARD"):
+        image_prompt_pack.derive_character_defs(tmp_path, story)
 
 
 def test_character_scope_visual_hints_prevent_generic_human_demon(tmp_path: Path) -> None:
@@ -249,7 +251,14 @@ def test_shots_global_contract_is_not_a_shot_heading(tmp_path: Path) -> None:
 
 
 def test_weapon_refs_are_not_labeled_as_props() -> None:
-    refs = image_prompt_pack.shot_refs([], ["WEAPON_PEIJUE_SHORT_BLADE"])
+    old = image_prompt_pack.ASSET_DEFS
+    image_prompt_pack.ASSET_DEFS = {
+        "WEAPON_TEST": {"path_name": "定妆_武器_测试刀", "type": "weapon"}
+    }
+    try:
+        refs = image_prompt_pack.shot_refs([], ["WEAPON_TEST"])
+    finally:
+        image_prompt_pack.ASSET_DEFS = old
 
     assert refs
     assert "武器定妆" in refs[0]
@@ -374,32 +383,33 @@ def test_named_saber_gets_single_cutting_edge_and_offset_tip_contract(tmp_path: 
     assert "对称剑尖" in topology
 
 
-def test_story_prop_sabers_get_weapon_profiles_and_canonical_alias(tmp_path: Path) -> None:
-    story = {"clips": [{"object_ids": ["PROP_横刀", "PROP_断刀"]}], "visual_contract": {}}
+def test_project_defined_sabers_get_weapon_profiles_without_demo_alias(tmp_path: Path) -> None:
+    story = {
+        "clips": [{"object_ids": ["WEAPON_MAIN", "WEAPON_BROKEN"]}],
+        "asset_materials": {
+            "WEAPON_MAIN": {"name": "制式横刀", "type": "weapon", "profile": "一柄暗银直身单刃横刀"},
+            "WEAPON_BROKEN": {"name": "断裂横刀", "type": "weapon", "profile": "一柄断裂的暗银单刃横刀，断口粗粝"},
+        },
+        "visual_contract": {},
+    }
 
     defs = image_prompt_pack.derive_asset_defs(tmp_path, story)
 
-    assert defs["PROP_横刀"]["alias_of"] == "WEAPON_01"
-    assert defs["PROP_横刀"]["path_name"] == "定妆_武器_横刀"
-    assert defs["PROP_横刀"]["weapon_like_role"] == "entity_weapon"
-    assert defs["PROP_横刀"]["weapon_profile"]["design_intent"]
-    assert "broken_blade=1" in image_prompt_pack.flatten_contract_value(
-        defs["PROP_断刀"]["weapon_profile"]["blade_topology"]
+    assert defs["WEAPON_MAIN"]["alias_of"] == ""
+    assert defs["WEAPON_MAIN"]["weapon_like_role"] == "entity_weapon"
+    assert defs["WEAPON_MAIN"]["weapon_profile"]["design_intent"]
+    assert "cutting_edge_count=1" in image_prompt_pack.flatten_contract_value(
+        defs["WEAPON_BROKEN"]["constraints"]["blade_topology"]
     )
-    broken_topology = image_prompt_pack.flatten_contract_value(
-        defs["PROP_断刀"]["constraints"]["blade_topology"]
-    )
-    assert image_prompt_pack.BROKEN_SINGLE_EDGE_BLADE_TOPOLOGY in broken_topology
-    assert image_prompt_pack.SINGLE_EDGE_BLADE_TOPOLOGY not in broken_topology
     old_defs = image_prompt_pack.ASSET_DEFS
     try:
         image_prompt_pack.ASSET_DEFS = defs
         registry = image_prompt_pack.build_asset_registry(tmp_path)
     finally:
         image_prompt_pack.ASSET_DEFS = old_defs
-    prop_saber = next(row for row in registry["assets"] if row["id"] == "PROP_横刀")
-    broken_saber = next(row for row in registry["assets"] if row["id"] == "PROP_断刀")
-    assert prop_saber["alias_of"] == "WEAPON_01"
+    prop_saber = next(row for row in registry["assets"] if row["id"] == "WEAPON_MAIN")
+    broken_saber = next(row for row in registry["assets"] if row["id"] == "WEAPON_BROKEN")
+    assert "alias_of" not in prop_saber
     assert broken_saber["weapon_profile"]["forbidden_drift"]
 
 
@@ -1153,7 +1163,7 @@ def test_dict_asset_requirements_canonicalize_human_aliases() -> None:
 
     assert "WEAPON_01" in ids
     assert "VFX_系统面板" in ids
-    assert "VFX_道行计数overlay" in ids
+    assert "VFX_道行计数overlay" not in ids
     assert "VFX_官道马蹄火把" not in ids
     assert "LOC_01" in ids
     assert all(" " not in aid and "/" not in aid for aid in ids)
@@ -1217,30 +1227,27 @@ def test_material_list_supplies_asset_names_and_prompts(tmp_path: Path) -> None:
     assert "PROP GREEN WATER" not in defs["PROP_GREEN_WATER"]["positive"]
 
 
-def test_project_asset_hints_prevent_ascii_id_display_names(tmp_path: Path) -> None:
+def test_bare_project_asset_ids_fail_closed_without_definition(tmp_path: Path) -> None:
     story = {"clips": [{"object_ids": ["PROP_IRON_BOWL", "PROP_EMPTY_BUCKETS", "PROP_RUST_LOCK"]}]}
 
-    defs = image_prompt_pack.derive_asset_defs(tmp_path, story)
-
-    assert defs["PROP_IRON_BOWL"]["name"] == "旧铁碗"
-    assert defs["PROP_EMPTY_BUCKETS"]["name"] == "空木桶"
-    assert defs["PROP_RUST_LOCK"]["name"] == "生锈铁锁"
-    assert defs["PROP_RUST_LOCK"]["weapon_like_role"] == "not_entity_weapon"
+    with pytest.raises(image_prompt_pack.PromptPackContractError, match="PROP_IRON_BOWL"):
+        image_prompt_pack.derive_asset_defs(tmp_path, story)
 
 
-def test_derived_scene_drift_uses_generic_continuity_not_stale_wildland(tmp_path: Path) -> None:
+def test_unknown_scene_id_fails_closed_without_scene_definition(tmp_path: Path) -> None:
     story = {"clips": [{"location_id": "LOC_UNKNOWN_HALL"}]}
 
-    defs = image_prompt_pack.derive_asset_defs(tmp_path, story)
-    drift = "；".join(defs["LOC_UNKNOWN_HALL"]["drift"])
-
-    assert "巨岩/尸堆" not in drift
-    assert "空间轴线" in drift
+    with pytest.raises(image_prompt_pack.PromptPackContractError, match="LOC_UNKNOWN_HALL"):
+        image_prompt_pack.derive_asset_defs(tmp_path, story)
 
 
 def test_scene_visual_contract_is_scoped_to_matching_location(tmp_path: Path) -> None:
     story = {
         "clips": [{"location_id": "LOC_01"}, {"location_id": "LOC_02"}],
+        "asset_materials": {
+            "LOC_01": {"name": "一号场景", "type": "scene", "profile": "入口、木台与灰墙"},
+            "LOC_02": {"name": "二号场景", "type": "scene", "profile": "水缸、山路与木门"},
+        },
         "visual_contract": {
             "场景光位锚": {
                 "LOC_01": {"主光方向": "画左高处", "色温": "4800K冷灰"},
@@ -1433,6 +1440,10 @@ def test_magic_prop_keeps_weapon_profile_in_asset_registry(tmp_path: Path) -> No
     story = {
         "episode": 2,
         "clips": [{"object_ids": ["PROP_HEI_TAO_PEN"]}],
+        "asset_requirements": [{
+            "asset_id": "PROP_HEI_TAO_PEN", "type": "weapon", "name": "黑陶盆",
+            "profile": "可作防御法器的黑陶盆，结构固定",
+        }],
     }
     old_defs = image_prompt_pack.ASSET_DEFS
     try:
@@ -1443,8 +1454,8 @@ def test_magic_prop_keeps_weapon_profile_in_asset_registry(tmp_path: Path) -> No
 
     asset = next(item for item in registry["assets"] if item["id"] == "PROP_HEI_TAO_PEN")
 
-    assert asset["owner"] == "CHAR_HE_PINGSHENG"
-    assert asset["weapon_profile"]["combat_usage"].startswith("本集不攻击")
+    assert asset["owner"] == "剧情资产"
+    assert asset["weapon_profile"]["combat_usage"]
     assert "forbidden_drift" in asset["weapon_profile"]
 
 
@@ -1749,7 +1760,18 @@ def test_shot_prompt_section_emits_identity_lock_phrase_and_lens_params(tmp_path
         "description": "沈砚抬眼看向证据。",
     }
 
-    text = image_prompt_pack.shot_prompt_section(tmp_path, "第1集", 1, clip, {}, {"clips": [clip]})
+    old = image_prompt_pack.CHARACTER_DEFS
+    image_prompt_pack.CHARACTER_DEFS = {
+        "CHAR_SHEN_YAN": {
+            "name": "沈砚", "form": "常态", "tier": "core", "asset_key": "CHAR_SHEN_YAN__常态",
+            "anchor": "清瘦青年录事", "face": "稳定脸型", "hair": "束发", "outfit": "项目定义服装",
+            "accessories": "无", "relative_scale": "标准体量",
+        }
+    }
+    try:
+        text = image_prompt_pack.shot_prompt_section(tmp_path, "第1集", 1, clip, {}, {"clips": [clip]})
+    finally:
+        image_prompt_pack.CHARACTER_DEFS = old
 
     assert "**身份锁定句**" in text
     assert "\n身份保持：" in text
@@ -1778,7 +1800,7 @@ def test_shot_prompt_section_sanitizes_false_screen_director_injection(tmp_path:
 
     assert "屏幕/面板镜" not in text
     assert "锁定屏幕/光幕平面" not in text
-    assert "挑水蒙太奇以身体代价为第一目标" in text
+    assert "导演意图服务本镜戏剧功能" in text
 
 
 def test_nonfinal_nonrelay_does_not_need_endframe_exemption(tmp_path: Path) -> None:
@@ -1830,6 +1852,10 @@ def test_weapon01_contract_forbids_offhand_secondary_blade(tmp_path: Path) -> No
         "object_ids": ["WEAPON_01"],
     }
     story = {"clips": [clip], "visual_contract": {}, "style_contract": {}}
+    story["asset_requirements"] = [{
+        "asset_id": "WEAPON_01", "type": "weapon", "name": "项目横刀",
+        "profile": "一柄暗银直身单刃横刀",
+    }]
 
     defs = image_prompt_pack.derive_asset_defs(tmp_path, story)
     terms = defs["WEAPON_01"]["constraints"]["must_not_have"]
@@ -1931,7 +1957,7 @@ def test_char01_gets_character_level_longline_scope_and_tier(tmp_path: Path) -> 
     (card_dir / "姜月初.md").write_text(
         "\n".join([
             "# 角色卡 — 姜月初（ID: CHAR_01）",
-            "- 身份：二十一世纪现代人穿越者；百妖谱宿主。",
+            "- 身份：核心主角/全篇长线；二十一世纪现代人穿越者。",
             "- 固定外貌：东方少女脸。",
             "- 固定服装：灰褐囚服。",
             "- **锚点句**：黑色半散长发·灰褐粗布囚服",
@@ -1997,7 +2023,7 @@ def test_character_makeup_prompt_expands_age_from_roster(tmp_path: Path) -> None
     assert "十四岁东方少年脸" in prompt
 
 
-def test_derive_character_defs_keeps_registered_cards_not_only_current_story(tmp_path: Path) -> None:
+def test_derive_character_defs_only_emits_entities_required_by_current_story(tmp_path: Path) -> None:
     card_dir = tmp_path / "设定库" / "characters"
     card_dir.mkdir(parents=True)
     (card_dir / "甲.md").write_text(
@@ -2025,7 +2051,7 @@ def test_derive_character_defs_keeps_registered_cards_not_only_current_story(tmp
     defs = image_prompt_pack.derive_character_defs(tmp_path, story)
 
     assert "CHAR_ALPHA" in defs
-    assert "CHAR_BETA" in defs
+    assert "CHAR_BETA" not in defs
 
 
 def test_derive_character_defs_collapses_legacy_id_alias_by_material_name(tmp_path: Path) -> None:

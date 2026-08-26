@@ -33,7 +33,7 @@ python3 skills/ad/ad-review/scripts/human_signoff.py "<作品根>" --reviewer "<
 python3 skills/ad/ad-craft/scripts/stage_acceptance.py "<作品根>" --stage review
 ```
 
-产物：`生产数据/final_media_consistency.json` + `final_media_frames/` + 按 product/character/scene/prop 分类的 `final_media_contact_sheets/`，以及 `consistency_findings.{json,md}`、`asset_drift_report.{json,md}`、`合规/ad_review_m0.{json,md}`、`human_signoff.json`。签收 SHA-256 绑定全部未取消交付件、逐资产 contact sheet、delivery/color/accessibility/rendered-text/ASR/provenance/locale/release-variant QC 与当前 M0。每个检查都必须有本地证据哈希；URL/record 证据另传 `--evidence-sha CHECK=64HEX`。脚本刻意没有 `--approve-all`。
+产物：`生产数据/final_media_consistency.json` + `final_media_frames/` + 按 product/character/scene/prop 分类的 `final_media_contact_sheets/`，以及 `consistency_findings.{json,md}`、`asset_drift_report.{json,md}`、`合规/ad_review_m0.{json,md}`、`human_signoff.json`。签收 SHA-256 绑定全部未取消交付件、逐资产 contact sheet、delivery/color/accessibility/rendered-text/ASR/provenance/locale/release-variant QC 与当前 M0。每个检查都必须有本地证据哈希；URL/record 证据另传 `--evidence-sha CHECK=64HEX`。脚本刻意没有 `--approve-all`，并拒绝以 `agent` / `automation` / `system` / `delegate` / `listener` 作为最终 reviewer。
 
 ## 跨镜资产漂移报表（事后聚合）
 

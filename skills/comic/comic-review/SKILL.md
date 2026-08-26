@@ -93,7 +93,7 @@ python3 skills/comic/comic-review/scripts/continuity_audit.py "$ROOT" --through-
 - 核心多视图有当前 SHA 的人工并排签收；任一视图变化后 signoff stale。
 - LOC、常驻 PROP、服装和关键 VFX/STYLE 引用已登记且有真实图片。
 - reference plan 先保证每个具名角色至少一张身份锚，再保留场景/道具；超过后端附件上限时明确拆格或分区合成。
-- panel jobs 实际消费 reference plan，记录选中图片 SHA、`panel_plan_sha256`、`execution_input_sha256` 和 `consumed_contracts`。
+- panel jobs 实际消费 reference plan，并把 DNA/variant policy/form/outfit/expression/state、exact reference SHA、多人 bbox/mask/occlusion locator 和真实 subject binding 写入 `identity_execution_contracts` 与 `execution_input_sha256`。
 
 多视图技术检查和签收由 `comic-identity` 执行；comic-review 只验证其结果是否当前有效。
 
@@ -110,7 +110,7 @@ python3 skills/comic/comic-review/scripts/scene_prop_consistency.py "$ROOT" --ch
 - 风格报告检查生成配方、风格锚、场景族群、相邻格冷暖/亮度、黑白灰/线宽代理、拼贴 gutter/外框嫌疑和跨话 baseline。文件缺失与配方矛盾可确定性处理；像素离群只告警。
 - 角色报告把每个 CHAR/MON 参考与出场 panel 并排，CCIP 可用时做动漫身份 embedding 快筛，Pillow 指纹做辅助。公开 fallback 和项目内自标定都只驱动 warn，不给“相似度分数”硬阻断权。
 - 场景/道具报告按 LOC/PROP/VFX/OUTFIT 生成 contact sheet 和布局指纹；引用缺失是确定性问题，布局/色彩偏离是人审线索。
-- 多模态裁决只有在 panel SHA、task SHA、全部 reference SHA 和 evaluator `model/version` 与当前任务完全一致时才有效；重抽或换参考后旧 verdict 自动忽略。
+- 多模态裁决只有在 panel SHA、task SHA、全部 exact reference SHA、轴规定的完整 score keys、region evidence、notes 和 evaluator `model/version/reviewed_at` 与当前任务完全一致时才有效；重抽或换参考后旧 verdict 自动忽略。
 
 如果有人工金标集，可生成项目阈值登记：
 

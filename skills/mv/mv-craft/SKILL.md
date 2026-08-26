@@ -20,7 +20,7 @@ description: Shared machine contracts and deterministic helpers for the mv-* ski
 | 主题 | 参考 / 脚本 | 何时用 |
 |---|---|---|
 | 机器契约 | `references/contract.md` + `scripts/contract.py` | 初始化项目、写 `_设置.md` / `_meta.json`、按 `歌曲输入时序` 决定阶段顺序、生成 clip/timeline/video job manifest 时 |
-| 单一状态与完成态 | `scripts/state_contract.py` + `scripts/completion.py` | 审计/显式同步 `_设置.md`、`_meta.json`、`_进度.md`；所有产物阶段完成态均先复算 schema/hash/具名收据健康度 |
+| 单一状态与完成态 | `scripts/state_contract.py` + `scripts/completion.py` | 审计/显式同步 `_设置.md`、`_meta.json`、`_进度.md`；阶段 health 只作证据，最终 `verdict` 用一个 canonical release digest + 当前 handoff 真人收据判 `blocked\|ready_for_acceptance\|complete` |
 | 阶段验收标准 | `references/production-standards.md` | 查看每阶段输入真值、机器证据、人工签收、阈值与回流责任；区分导演/剪辑/音乐/连续性/交付 QC |
 | 身份/资产注册 | `scripts/identity_registry.py` | 从任意角色卡、状态变体、场景卡、视觉蓝图和 clip_plan 动态生成 registry；共享实现不含作品模板 |
 | 参考资产需求 | `scripts/identity_registry.py` | 同步生成身份/状态、交互道具、复用场景和 VFX 的参考缺口 |
@@ -41,6 +41,7 @@ python3 skills/mv/mv-craft/scripts/gate.py "<制MV作品根>" plan
 python3 skills/mv/mv-craft/scripts/progress_set.py "<制MV作品根>" plan
 python3 skills/mv/mv-craft/scripts/identity_registry.py "<制MV作品根>"
 python3 skills/mv/mv-craft/scripts/formal_readiness.py "<制MV作品根>" --no-fail
+python3 skills/mv/mv-craft/scripts/completion.py verdict "<制MV作品根>" --write --json
 python3 skills/mv/mv-craft/scripts/production_pack.py "<制MV作品根>"
 python3 skills/mv/mv-craft/scripts/render_animatic.py "<制MV作品根>"
 python3 skills/mv/mv-craft/scripts/picture_lock.py "<制MV作品根>" --reviewer <name> --notes "逐镜确认当前 animatic 与剪辑决定"

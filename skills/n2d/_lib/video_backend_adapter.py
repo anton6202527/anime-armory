@@ -6,7 +6,7 @@ This module records per-run evidence for the video backend that will execute a
 paid batch. Static profiles live in `n2d_platform_profiles.py`; this file adds
 the "checked today against official docs / CLI help / API capability" layer.
 
-采集日期：2026-07-24
+采集日期：2026-08-26
 """
 from __future__ import annotations
 
@@ -47,9 +47,10 @@ except Exception:  # pragma: no cover
 
 
 CATALOG_VERIFIED = {
-    "date": "2026-07-24",
-    "source": "n2d_platform_profiles static catalog + Gemini Omni Flash / Veo 3.1（Veo 3.0 端点 2026-06-30 已关停·与登记一致）"
-              " / Seedance 2.5 正式上线复核（即梦体验中心 07-06·API 随后）+ per-run official docs / CLI / API evidence",
+    "date": "2026-08-26",
+    "source": "n2d_platform_profiles static catalog + Gemini Omni Flash `gemini-omni-flash` / Veo 3.1 "
+              "/ Seedance 2.5 official capability (BytePlus API still coming soon at launch) "
+              "+ per-run official docs / CLI / API evidence",
     "profile_catalog": PROFILE_VERIFIED,
 }
 SKILLS_DIR = Path(__file__).resolve().parents[1]

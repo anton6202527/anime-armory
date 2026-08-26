@@ -25,7 +25,7 @@ description: 漫画缩略分镜/name board 阶段。Use when turning panel_scrip
 python3 skills/comic/comic-name/scripts/build_name_board.py "创作区/画漫画/作品名" --chapter 第1话
 ```
 
-脚本只用标准库。它会按 `story_function`、`layout_weight`、台词量和拟声词粗分大格/中格/小格；页漫会额外记录 `page_side`、`spread_id`、`page_turn_hook`，条漫会记录每个滚动段的停顿和呼吸。`panel_script.json` 若逐格提供数字 `page_hint`，会优先按明确页意图分组；只有没有完整 page_hint 时才回退到通用每页格数，避免自动平均切页破坏翻页钩子。
+脚本只用标准库。它会按 `story_function`、`layout_weight`、台词量和拟声词粗分大格/中格/小格；页漫会额外记录 `page_side`、`spread_id`、`spread_mode/cross_page_art`、`page_turn_hook`，条漫会记录每个滚动段的停顿和呼吸。`spread_id` 只表示左右页分组，不能冒充画面真正跨装订线；只有脚本显式 `cross_page_art=true` 或 `spread_mode=cross_page_art` 才保护为复杂跨页。`panel_script.json` 若逐格提供数字 `page_hint`，会优先按明确页意图分组；只有没有完整 page_hint 时才回退到通用每页格数，避免自动平均切页破坏翻页钩子。
 
 首次运行永远生成 `workflow_status=draft`，不会免费越过编辑签收。审阅后按两步变更状态：
 
@@ -47,7 +47,7 @@ python3 skills/comic/comic-name/scripts/build_name_board.py "创作区/画漫画
 1. 读分格脚本，确认每格 `story_function`、画面事实、对白/旁白/拟声词。
 2. 先做缩略图，不追求美术细节，只决定格子轻重、阅读入口、视线流和页末钩子。
 3. 给每格写 `thumbnail_rect`、`panel_shape`、`border_style`、`gutter_intent`、`bubble_first`、`effects_hint`，并为气泡记录 `content_ref/speaker/order/tail`。缩略格提示优先使用镜头职责或 `description` 的真实画面动作；`art_notes` 只在缺画面描述时降级使用，不能让禁错说明取代“这格画什么”。
-4. 给每格记录 subject/avoid regions、视线入口/出口；这些自动区域是低保真启发式，只服务后续排版，不作为审美硬闸。
+4. 给每格记录 subject/avoid regions、视线入口/出口；这些自动区域是低保真启发式，只服务后续排版，不作为审美硬闸。脚本如提供 `speaker_anchors` 或带角色 ID 的 `character_regions`，应保留给气泡尾使用；缺失时不猜人物坐标。
 5. 记录原稿口径：`trim_box`、`safe_area`、`bleed`、`inner_frame`。
 6. 每个翻页记录最后一格 setup 与下一页首格 payoff，不能把页中间的重格误记成翻页钩子。
 7. 输出 draft JSON/SVG；若页流或文字密度不顺，回 `comic-script` 改分格。

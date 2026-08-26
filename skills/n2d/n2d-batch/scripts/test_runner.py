@@ -194,6 +194,34 @@ def test_standard_batch_wrappers_and_example_config_exist() -> None:
     assert "run_n2d_review.sh" in data["commands"]["review"]
 
 
+@pytest.mark.parametrize(
+    "name",
+    (
+        "run_n2d_script_stage2.sh",
+        "run_n2d_image.sh",
+        "run_n2d_video.sh",
+        "run_n2d_compose.sh",
+        "run_n2d_review.sh",
+    ),
+)
+def test_standard_batch_wrapper_resolves_repo_root_from_arbitrary_cwd(
+    tmp_path: Path, name: str
+) -> None:
+    wrapper = SKILL_ROOT / "scripts" / name
+    completed = subprocess.run(
+        ["bash", str(wrapper)],
+        cwd=tmp_path,
+        env={**os.environ, "N2D_WRAPPER_SELF_CHECK": "1"},
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+    assert Path(completed.stdout.strip()).resolve() == SKILL_ROOT.parents[2]
+
+
 def test_image_wrapper_resolves_repository_root_not_skills_directory() -> None:
     wrapper = (SKILL_ROOT / "scripts" / "run_n2d_image.sh").read_text(encoding="utf-8")
 
@@ -244,6 +272,86 @@ def test_runner_sanitizes_local_queue_shadowing(monkeypatch) -> None:
             sys.modules["queue"] = original_queue
         else:
             sys.modules.pop("queue", None)
+
+
+def test_exact_action_card_never_falls_through_to_generic_claim(tmp_path: Path, monkeypatch) -> None:
+    calls = []
+    monkeypatch.setattr(runner, "production_governance_interlock", lambda _root: None)
+    monkeypatch.setattr(
+        runner.queue_mod,
+        "claim_exact",
+        lambda *args, **kwargs: calls.append((args, kwargs)) or [],
+    )
+    monkeypatch.setattr(
+        runner.queue_mod,
+        "claim",
+        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("generic claim forbidden")),
+    )
+
+    result = runner.run_once(
+        str(tmp_path),
+        limit=1,
+        task_id="001-video-progress-abc",
+        expected_plan_digest="sha256:" + "a" * 64,
+        episode="第1集",
+        stage_key="video",
+    )
+
+    assert len(calls) == 1
+    assert result["claimed"] == 0
+    assert result["results"][0]["runner_status"] == "fail"
+    assert "no fallback task" in result["results"][0]["note"]
+
+
+def test_stale_exact_claim_cli_returns_structured_failure_without_traceback(
+    tmp_path: Path, monkeypatch, capsys
+) -> None:
+    monkeypatch.setattr(runner, "production_governance_interlock", lambda _root: None)
+    monkeypatch.setattr(
+        runner.queue_mod,
+        "claim_exact",
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            ValueError("exact current plan unavailable or changed: stale action card")
+        ),
+    )
+
+    rc = runner.main([
+        str(tmp_path),
+        "--task-id", "001-video-progress-stale",
+        "--expected-plan-digest", "sha256:" + "a" * 64,
+        "--episode", "第1集",
+        "--stage", "video",
+    ])
+
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+    assert rc == 1
+    assert payload["claimed"] == 0
+    assert payload["results"][0]["queue_status"] == "blocked_exact_claim"
+    assert payload["results"][0]["error"]["type"] == "ValueError"
+    assert "stale action card" in payload["results"][0]["note"]
+    assert "Traceback" not in captured.err
+
+
+def test_critical_governance_interlock_blocks_before_claim(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(
+        runner,
+        "production_governance_interlock",
+        lambda _root: {
+            "status": "blocked",
+            "violations": [{"level": "critical", "kind": "stop_loss"}],
+        },
+    )
+    monkeypatch.setattr(
+        runner.queue_mod,
+        "claim",
+        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("claim forbidden")),
+    )
+
+    result = runner.run_once(str(tmp_path), limit=1)
+
+    assert result["claimed"] == 0
+    assert result["results"][0]["queue_status"] == "blocked_governance"
 
 
 def test_runner_claims_executes_marks_done_and_records_dashboard(

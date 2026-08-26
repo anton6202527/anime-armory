@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import importlib.util
 import json
-import subprocess
 from pathlib import Path
 
 import pytest
@@ -14,6 +13,8 @@ production_readiness = importlib.util.module_from_spec(spec)
 assert spec.loader is not None
 spec.loader.exec_module(production_readiness)
 
+from test_completion_evidence import write_test_master, write_valid_completion_receipts  # noqa: E402
+
 
 @pytest.fixture(autouse=True)
 def _stable_ffprobe(monkeypatch):
@@ -21,21 +22,13 @@ def _stable_ffprobe(monkeypatch):
 
 
 def _write_test_mp4(path: Path) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    try:
-        proc = subprocess.run(
-            [
-                "ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i",
-                "color=c=black:s=16x16:d=0.2", "-an", "-c:v", "mpeg4", str(path),
-            ],
-            check=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            timeout=30,
-        )
-    except FileNotFoundError:
-        pytest.skip("ffmpeg unavailable")
-    assert proc.returncode == 0, proc.stderr.decode("utf-8", errors="replace")
+    write_test_master(path)
+
+
+def _write_completion_receipts(root: Path, episode: str, master: Path, contract) -> None:
+    write_valid_completion_receipts(
+        root, episode, master, contract, transaction_id="production-readiness-test"
+    )
 
 
 def _release_ready_project(root: Path, episode: str) -> None:
@@ -197,6 +190,8 @@ def _release_ready_project(root: Path, episode: str) -> None:
     # Producer-owned release evidence exists before the immutable verdict is
     # issued.  A later readiness audit may recompute it, but must not introduce
     # the first version after human acceptance.
+    acceptance = production_readiness.release_manifest.acceptance_contract
+    _write_completion_receipts(root, episode, asset, acceptance)
     production_readiness.run_event_ledger(root, write=True, strict_trace=True)
     production_readiness.run_generation_recipe(root, episode, write=True)
     production_readiness.run_gate_policy_coverage(root, episode, write=True)
@@ -205,7 +200,6 @@ def _release_ready_project(root: Path, episode: str) -> None:
 
     # Completion is proved by one canonical, hash-bound verdict/acceptance
     # pair.  The legacy review_signoff above remains migration input only.
-    acceptance = production_readiness.release_manifest.acceptance_contract
     components = [
         {"name": name, "status": "pass", "message": f"{name} passed"}
         for name in sorted(acceptance.REQUIRED_VERDICT_COMPONENTS)

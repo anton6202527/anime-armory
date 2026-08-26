@@ -1049,7 +1049,8 @@ def review_receipt_prerequisite_errors(root):
 
 
 _REVIEWER_PLACEHOLDER = re.compile(
-    r"^(?:<.*>|ai|unknown|待填|待定|匿名)$|(?:codex|chatgpt|claude|agent|bot|机器人|自动化)",
+    r"^(?:<.*>|ai|unknown|待填|待定|匿名)$|"
+    r"(?:codex|chatgpt|claude|agent|assistant|automation|bot|delegate|listener|machine|model|producer|supervisor|system|制作代理|机器人|自动化|系统代理|执行器)",
     re.IGNORECASE,
 )
 

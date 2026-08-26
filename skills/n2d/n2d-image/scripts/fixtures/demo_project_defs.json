@@ -1,0 +1,16 @@
+{
+  "fixture_only": true,
+  "characters": {
+    "CHAR_DEMO_WANG": {
+      "name": "王敦",
+      "profile": "黑黝黝宽脸、洗旧青色道袍的古装逃犯"
+    }
+  },
+  "assets": {
+    "PROP_DEMO_DOOR": {
+      "name": "旧木门",
+      "profile": "古装杂役院的破旧木门"
+    }
+  },
+  "notice": "Demonstration-only migration fixture. Production prompt compilation never imports this file implicitly."
+}

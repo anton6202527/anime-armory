@@ -15,6 +15,7 @@ import tempfile
 import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+REPO_ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 SPEC = importlib.util.spec_from_file_location("mv_run_test", os.path.join(HERE, "run.py"))
 run = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(run)
@@ -107,11 +108,23 @@ def make_plan_receipts(root):
 
 
 class NextActionTest(unittest.TestCase):
-    def test_missing_progress_stops_with_init_hint(self):
+    def test_missing_progress_returns_executable_structured_bootstrap(self):
         with tempfile.TemporaryDirectory() as tmp:
-            action = run.build_next_action(tmp)
-            self.assertEqual(action["stop_reason"], "missing_progress")
-            self.assertIn("init_project", action["action_card"]["exact_command"])
+            project = os.path.join(tmp, "月光 MV Demo")
+            action = run.build_next_action(project)
+            self.assertEqual(action["stop_reason"], "needs_project_bootstrap")
+            card = action["action_card"]
+            self.assertEqual(card["action"], "bootstrap_project")
+            self.assertEqual(card["argv"][-4:], ["--title", "月光 MV Demo", "--out", project])
+            self.assertIn("--title", card["exact_command"])
+            self.assertIn("--out", card["exact_command"])
+
+            completed = subprocess.run(
+                card["argv"], cwd=REPO_ROOT, text=True,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            self.assertTrue(os.path.isfile(os.path.join(project, "_进度.md")))
 
     def test_frontier_plan_ready_to_run_with_exact_command(self):
         with tempfile.TemporaryDirectory() as tmp:

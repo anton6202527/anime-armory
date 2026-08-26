@@ -213,6 +213,34 @@ def simulate_generated(root: Path, chapter: str, jobs: dict) -> None:
         job["status"] = codex_panel_runner.status_after_post_qc(post_qc)
     write_json(root / "出图" / chapter / "prompt" / "panel_jobs.json", jobs)
     for job in jobs["jobs"]:
+        packet = job["post_qc"]["visual_review_packet"]
+        evidence = [
+            {"path": item["path"], "sha256": item["sha256"]}
+            for item in packet["comparison_inputs"]
+        ]
+        axes = {}
+        subject_ids = {
+            str(item.get("character_id") or "")
+            for item in packet.get("subject_review_contracts") or []
+            if isinstance(item, dict)
+        }
+        for axis in packet["required_axes"]:
+            result = {"verdict": "pass", "notes": f"fixture checked {axis}", "evidence": evidence}
+            if axis in {"subject_identity_and_face", "hair_outfit_body_and_state"}:
+                result["subjects"] = [
+                    {"character_id": cid, "locator": {"scope": "full_panel_single_subject"}}
+                    for cid in sorted(subject_ids)
+                ]
+            axes[axis] = result
+        review = {
+            "kind": "comic_panel_visual_review",
+            "artifact_sha256": job["artifact_sha256"],
+            "comparison_inputs_sha256": packet["comparison_inputs_sha256"],
+            "contact_sheet_sha256": packet["contact_sheet_sha256"],
+            "reviewed_at": "2026-08-26T10:00:00+08:00",
+            "evaluator": {"name": "test-reviewer", "kind": "human"},
+            "axes": axes,
+        }
         codex_panel_runner.accept_panel_review(
             root,
             chapter,
@@ -220,7 +248,7 @@ def simulate_generated(root: Path, chapter: str, jobs: dict) -> None:
             root / "出图" / chapter / "prompt" / "panel_jobs.json",
             str(job["panel_id"]),
             "test-reviewer",
-            "fixture comparison packet reviewed",
+            json.dumps(review, ensure_ascii=False),
         )
 
 
@@ -258,7 +286,7 @@ def test_preserve_resets_ready_when_submit_prompt_changed(tmp_path: Path) -> Non
     assert not rebuilt["jobs"][0].get("result_path")
 
 
-def test_preserve_keeps_ready_when_only_reference_execution_input_changes(tmp_path: Path) -> None:
+def test_preserve_resets_ready_when_reference_execution_input_changes(tmp_path: Path) -> None:
     root = tmp_path / "work"
     chapter = "第1话"
     make_fixture(root, chapter)
@@ -277,9 +305,9 @@ def test_preserve_keeps_ready_when_only_reference_execution_input_changes(tmp_pa
 
     preserved, stale = build_panel_jobs.preserve_ready_jobs(root, chapter, rebuilt)
 
-    assert preserved == 1
-    assert stale == []
-    assert rebuilt["jobs"][0]["status"] == "ready"
+    assert preserved == 0
+    assert stale == ["P001"]
+    assert rebuilt["jobs"][0]["status"] == "planned"
 
 
 def test_outfit_binding_injects_refs_and_contract(tmp_path: Path) -> None:

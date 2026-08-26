@@ -14,6 +14,7 @@ import json
 import os
 import re
 import sys
+import tempfile
 from typing import Any, Iterable
 
 SCRIPT_DIR = os.path.dirname(__file__)
@@ -95,13 +96,29 @@ def plan_paths(root: str) -> tuple[str, str]:
     return os.path.join(production_dir(root), PLAN_JSON), os.path.join(production_dir(root), PLAN_MD)
 
 
+def write_text(path: str, text: str) -> None:
+    directory = os.path.dirname(path) or "."
+    os.makedirs(directory, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(prefix=f".{os.path.basename(path)}.", suffix=".tmp", dir=directory)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            fh.write(text)
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(tmp, path)
+        dir_fd = os.open(directory, os.O_RDONLY)
+        try:
+            os.fsync(dir_fd)
+        finally:
+            os.close(dir_fd)
+    finally:
+        if os.path.exists(tmp):
+            os.unlink(tmp)
+
+
 def write_json(path: str, payload: dict[str, Any]) -> None:
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    tmp = f"{path}.tmp"
-    with open(tmp, "w", encoding="utf-8") as fh:
-        json.dump(payload, fh, ensure_ascii=False, indent=2, sort_keys=True)
-        fh.write("\n")
-    os.replace(tmp, path)
+    text = json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    write_text(path, text)
 
 
 def read_json(path: str) -> dict[str, Any] | None:
@@ -118,7 +135,13 @@ def load_meta(root: str) -> dict[str, Any]:
 
 def skill_name_for_relpath(path: str) -> str | None:
     parts = path.split("/")
-    if len(parts) >= 2 and parts[0] == "skills":
+    if len(parts) < 2 or parts[0] != "skills":
+        return None
+    if parts[1] == LINE:
+        if len(parts) >= 3 and parts[2].startswith(f"{LINE}-"):
+            return parts[2]
+        return LINE
+    if parts[1].startswith(f"{LINE}-"):
         return parts[1]
     return None
 
@@ -346,13 +369,18 @@ def build_execution_steps(root: str, plan: dict[str, Any]) -> list[dict[str, Any
                 "type": "command",
                 "purpose": "接受当前产物后记录新基线",
                 "command": f'python3 skills/ad/ad-update/scripts/update_plan.py record "{root}"',
-                "run_when": "用户确认无需返工",
+                "run_when": "确定性检查显示无需返工，且未触及预算、授权、不可逆覆盖或最终验收",
             })
         return steps
     steps.append({
         "type": "agent_step",
-        "purpose": "确认返工范围",
-        "instruction": f"向用户确认从 {stage_label(plan.get('rerun_from'))} 回放到 {stage_label(plan.get('rerun_until'))}，再进入对应 ad skill。",
+        "purpose": "执行最小安全返工",
+        "requires_confirmation": False,
+        "instruction": (
+            f"默认直接从 {stage_label(plan.get('rerun_from'))} 回放到 "
+            f"{stage_label(plan.get('rerun_until'))}，再进入对应 ad skill；仅在阶段预算创建/扩大/过期、"
+            "权利授权缺口、不可逆覆盖或最终真人验收时暂停。"
+        ),
     })
     if stage_index(plan.get("rerun_from")) <= stage_index("compose"):
         steps.append({
@@ -502,8 +530,7 @@ def write_plan(root: str, plan: dict[str, Any]) -> tuple[str, str]:
             lines.append(f"- 可执行命令{suffix}：`{step.get('command')}`")
         else:
             lines.append(f"- 人工/AI判断：{step.get('instruction')}")
-    with open(md_path, "w", encoding="utf-8") as fh:
-        fh.write("\n".join(lines).rstrip() + "\n")
+    write_text(md_path, "\n".join(lines).rstrip() + "\n")
     return json_path, md_path
 
 

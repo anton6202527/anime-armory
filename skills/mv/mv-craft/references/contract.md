@@ -143,6 +143,6 @@
 - `制片/intentional_discontinuity.json`：有意不连续接缝例外账本（既有约定，具名+理由才生效）。
 - `字幕/alignment_report.json` 必须把文字覆盖率与声学证据分开；WhisperX 原始分数不能包装成歌声专用置信度。正式接受要么提供经声明校准且适用于歌声的逐字/逐音素证据，要么提供具名逐行听审，并核对 vocal stem 到 master 的 offset/drift。
 - `生产数据/color/color_input_manifest.json` schema v2 精确同序覆盖 timeline 选中视频；每项绑定当前 hash、输入色彩分类和实际 ffmpeg 变换。BT.709 full 只在显式 full→limited 时通过；无标签只认具名且 hash-bound 的解释。
-- `生产数据/review/review_receipt.json` 绑定 final/master/delivery QC/provenance/disclosure 五个当前 SHA；`合规/handoff_receipt.json` 再绑定 review、release decision 与当前交付资产。任一上游变化都会令完成态陈旧。
+- `生产数据/review/review_receipt.json` 绑定 final/master/delivery QC/provenance/disclosure 五个当前 SHA；`合规/handoff_receipt.json` 再绑定由 `_设置.md`、final/master、delivery QC、disclosure、provenance、review、release decision 当前字节计算的 canonical release digest。`completion.py verdict` 是唯一整支 MV 完成裁决，阶段 done、provider success 和 handoff 文件存在本身都不能替代；任一上游变化都会令旧验收陈旧。
 
 每阶段机器证据、人工签收和失败回流的完整矩阵见 `production-standards.md`。

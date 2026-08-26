@@ -6,11 +6,16 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
+if [[ "${N2D_WRAPPER_SELF_CHECK:-}" == "1" ]]; then
+  [[ -f "$REPO_DIR/skills/n2d/run.py" ]] || { echo "invalid repository root: $REPO_DIR" >&2; exit 2; }
+  printf '%s\n' "$REPO_DIR"
+  exit 0
+fi
 ROOT="${1:?work root required}"
 EP="${2:?episode required}"
 LANG="${3:-${N2D_COMPOSE_LANG:-zh}}"
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 
 python3 "$REPO_DIR/skills/n2d/n2d-model-router/scripts/mouth_detect.py" "$ROOT" "$EP" --write --json >/dev/null || true
 python3 "$REPO_DIR/skills/n2d/n2d-video/scripts/materialize_shared_clips.py" "$ROOT" "$EP"

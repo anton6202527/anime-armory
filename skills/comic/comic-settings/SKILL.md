@@ -23,7 +23,7 @@ python3 skills/comic/comic-settings/scripts/settings_cli.py sync-global <作品�
 - `sync-global`：调用 `sync_global_settings()`，把当前项目可同步选择写入私有全局默认；可用 `--all` 或传 `选择点=值`。
 - `基础视觉风格` 的内置候选见 `skills/comic/references/视觉风格候选.md`；可写 `预设(补充词)` 或 `自定义(...)`。
 - `交付介质=web_images|print_pdf|epub_fxl` 与 `交付用途=internal|public|commercial` 分列；`epub_fxl` 可由 `comic-compose/scripts/build_epub_fxl.py` 生成真实固定版式 EPUB，替代文本仍须具名复核。
-- `审阅策略` 只覆盖 name/layout 编辑合同；`视觉审阅策略` 独立控制当前像素。默认 `逐图具名人工`，只有项目显式设为 `用户授权制作代理实际查看当前像素` 或提供当前 envelope，实际看过 contact sheet 的代理才可继续可逆内部制作，且收据必须 `human_signoff=false`。
+- `审阅策略` 只覆盖 name/layout 编辑合同；`视觉审阅策略` 独立控制当前像素。新项目默认显式写 `用户授权制作代理实际查看当前像素`，实际看过当前 contact sheet、逐轴留证的代理才可继续可逆内部制作，且收据必须 `human_signoff=false`。旧项目显式设为 `逐图具名人工` 时不得静默改写；最终具名验收也不由该默认代替。
 - `生图渠道=内置 imagegen` 表示使用当前 Codex 会话的内置图像工具；项目资产仍须复制进作品目录并写路径/SHA，不能只留在 `$CODEX_HOME/generated_images/`。
 
 ## 边界

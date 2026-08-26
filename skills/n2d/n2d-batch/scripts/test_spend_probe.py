@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -43,12 +45,23 @@ def _runtime(status: str = "pass"):
         calls["consume"] += 1
         raise AssertionError("read-only probe must never consume")
 
+    fields = (
+        "idempotency_key", "episode", "stage_key", "command", "runner_command",
+        "reason", "estimated_cost", "rerun_scope", "affected_artifacts",
+        "affected_shots", "finding_fingerprints", "producer_manifest", "physical_clips",
+    )
+    projection = lambda row: {key: row.get(key) for key in fields}
+    digest = lambda row: "sha256:" + hashlib.sha256(
+        json.dumps(projection(row), ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
     queue = SimpleNamespace(
-        ACTIVE_STATUSES={"queued", "running", "retry_queued", "qa_blocked"},
+        ACTIVE_STATUSES={"queued", "running", "provider_pending", "retry_queued", "qa_blocked"},
         normalize_episode=lambda value: value,
         load_queue=lambda root: {"tasks": [task]},
         load_cost_estimates=lambda root: {},
         route_tasks=lambda *args, **kwargs: [dict(task, status="queued", attempts=0)],
+        task_plan_projection=projection,
+        task_plan_digest=digest,
     )
     runtime = SimpleNamespace(
         queue_mod=queue,
@@ -124,3 +137,37 @@ def test_probe_uses_fresh_plan_when_active_queue_task_is_stale(tmp_path: Path) -
     assert selected == ["producer --current-input"]
     assert result["status"] == "blocked"
     assert calls == {"verify": 1, "consume": 0}
+
+
+def test_probe_authorizes_query_only_recovery_for_existing_submit_id(tmp_path: Path) -> None:
+    runtime, calls = _runtime("blocked")
+    runtime.spend_envelope_mod.verify = lambda *_a, **_k: {
+        "status": "blocked",
+        "issues": ["consumption_id has uncertain in_flight provider state; provider replay blocked"],
+    }
+    runtime.provider_recovery_checkpoint = lambda *_a, **_k: {
+        "state": "provider_pending",
+        "provider_submit_id": "job-123",
+    }
+    runtime._only_recoverable_in_flight_issues = lambda issues: all(
+        "in_flight provider state" in str(issue) for issue in issues
+    )
+
+    result = probe_mod.probe(str(tmp_path), "第1集", "image", runtime=runtime)
+
+    assert result["status"] == "authorized_recovery"
+    assert result["provider_recovery"]["provider_submit_id"] == "job-123"
+    assert calls["consume"] == 0
+
+
+def test_probe_critical_governance_interlock_runs_before_envelope_verify(tmp_path: Path) -> None:
+    runtime, calls = _runtime("pass")
+    runtime.production_governance_interlock = lambda _root: {
+        "status": "blocked",
+        "violations": [{"level": "critical", "kind": "stop_loss"}],
+    }
+
+    result = probe_mod.probe(str(tmp_path), "第1集", "image", runtime=runtime)
+
+    assert result["status"] == "blocked_governance"
+    assert calls == {"verify": 0, "consume": 0}

@@ -34,6 +34,13 @@ LEDGER_KIND = "comic_stage_spend_ledger"
 VERSION = 1
 STAGE = "image"
 OPERATION = "panel_image_generation"
+IN_FLIGHT_STATES = frozenset({"reserved", "submitted", "polling", "downloaded", "settlement_unknown"})
+PROVIDER_TRANSITIONS = {
+    "reserved": {"submitted"},
+    "submitted": {"polling", "downloaded"},
+    "polling": {"polling", "downloaded"},
+    "downloaded": set(),
+}
 _LOCAL_LOCK = threading.RLock()
 _FORBIDDEN_APPROVER = re.compile(
     r"(?:^|[\s._-])(agent|assistant|auto|automatic|automation|bot|codex|claude|"
@@ -466,7 +473,7 @@ def inspect_authorization(
         in_flight = sorted(
             key
             for key, row in entry.get("reservations", {}).items()
-            if row.get("status") == "reserved"
+            if row.get("status") in IN_FLIGHT_STATES
         )
         if in_flight:
             raise SpendAuthorizationError(
@@ -552,10 +559,11 @@ def reserve_submission(
             # would be a double-spend bug.  Settlement is idempotent; submit is
             # deliberately not resumable without a provider receipt.
             raise SpendAuthorizationError(
-                "submission_state_unknown" if existing.get("status") == "reserved" else "already_consumed",
+                "submission_state_unknown" if existing.get("status") in IN_FLIGHT_STATES else "already_consumed",
                 "consumption_id is already reserved/consumed; do not submit it again",
                 consumption_id=consumption_id,
                 status=existing.get("status"),
+                provider_submit_id=existing.get("provider_submit_id") or "",
             )
         if entry.get("blocked") or entry.get("violations"):
             raise SpendAuthorizationError("ledger_blocked", "a prior cost violation blocks further paid submits")
@@ -589,6 +597,71 @@ def reserve_submission(
         }
         entry["reservations"][consumption_id] = record
         return dict(record, idempotent=False)
+
+
+def mark_provider_state(
+    envelope_path: Path,
+    root: Path,
+    *,
+    consumption_id: str,
+    state: str,
+    provider_submit_id: str = "",
+    provider_note: str = "",
+) -> dict[str, Any]:
+    """Atomically persist the recoverable provider frontier for one paid call.
+
+    ``provider_submit_id`` is mandatory at the first ``submitted`` transition
+    and immutable afterwards.  A caller may therefore crash after this function
+    returns and resume polling without consuming another call or attempt.
+    """
+    target = str(state or "").strip()
+    if target not in {"submitted", "polling", "downloaded"}:
+        raise SpendAuthorizationError("invalid_provider_state", f"unsupported provider state: {target}")
+    with _locked_ledger(root, write=True) as (_path, ledger):
+        envelope = load_envelope(envelope_path)
+        entry = _entry(ledger, envelope, create=False)
+        record = entry.get("reservations", {}).get(consumption_id)
+        if record is None:
+            raise SpendAuthorizationError("unknown_consumption", "cannot update an unreserved paid submit")
+        current = str(record.get("status") or "")
+        if current in {"settled", "violation"}:
+            if current == "settled" and str(record.get("provider_state") or "") == target:
+                return dict(record, idempotent=True)
+            raise SpendAuthorizationError("already_consumed", "cannot change provider state after settlement")
+        allowed = PROVIDER_TRANSITIONS.get(current, set())
+        if target != current and target not in allowed:
+            raise SpendAuthorizationError(
+                "invalid_provider_transition",
+                f"provider state cannot move from {current!r} to {target!r}",
+                consumption_id=consumption_id,
+            )
+        supplied = str(provider_submit_id or "").strip()
+        recorded = str(record.get("provider_submit_id") or "").strip()
+        if target in {"submitted", "polling", "downloaded"} and not (supplied or recorded):
+            raise SpendAuthorizationError("provider_receipt_missing", "provider submit_id is required")
+        if supplied and recorded and supplied != recorded:
+            raise SpendAuthorizationError("idempotency_conflict", "provider submit_id differs from the recorded receipt")
+        submit_id = recorded or supplied
+        record.update(
+            {
+                "status": target,
+                "provider_state": target,
+                "provider_submit_id": submit_id,
+                f"{target}_at": iso_utc(),
+            }
+        )
+        if provider_note:
+            record["provider_note"] = str(provider_note)[-4000:]
+        return dict(record, idempotent=(target == current))
+
+
+def submission_record(envelope_path: Path, root: Path, *, consumption_id: str) -> dict[str, Any]:
+    """Read one reservation under the same inter-process lock as mutations."""
+    envelope = load_envelope(envelope_path)
+    with _locked_ledger(root, write=False) as (_path, ledger):
+        entry = _entry(ledger, envelope, create=False)
+        record = entry.get("reservations", {}).get(consumption_id)
+        return dict(record) if isinstance(record, dict) else {}
 
 
 def settle_submission(
@@ -637,6 +710,7 @@ def settle_submission(
         _calls, _attempts, before = _totals(entry)
         reserved = money(record.get("reserved_cost"), field="ledger.reserved_cost", allow_zero=True)
         after = before - reserved + actual
+        provider_state = str(record.get("provider_state") or record.get("status") or "")
         record.update({"settled_at": iso_utc(), "actual_cost": money_text(actual)})
         if actual > per_call or after > total:
             record["status"] = "violation"
@@ -657,6 +731,7 @@ def settle_submission(
                 violation=violation,
             )
         record["status"] = "settled"
+        record["provider_state"] = provider_state
         record["released_cost"] = money_text(max(decimal.Decimal("0"), reserved - actual))
         record["additional_cost"] = money_text(max(decimal.Decimal("0"), actual - reserved))
         record.pop("settlement_error", None)

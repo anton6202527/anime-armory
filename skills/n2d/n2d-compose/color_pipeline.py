@@ -7,6 +7,7 @@ import datetime as dt
 import json
 import os
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any, Dict, Mapping, Optional, Sequence
 
@@ -14,6 +15,8 @@ from typing import Any, Dict, Mapping, Optional, Sequence
 KIND = "n2d_color_pipeline_contract"
 REPORT_KIND = "n2d_color_pipeline_report"
 VERSION = 1
+UNKNOWN = {"", "unknown", "unspecified", "reserved", "n/a"}
+HDR_TRANSFERS = {"smpte2084", "arib-std-b67"}
 
 
 def now_iso() -> str:
@@ -43,6 +46,8 @@ def default_contract() -> Dict[str, Any]:
             "color_range": "tv",
             "pixel_format": "yuv420p",
         },
+        "unknown_source_policy": "reject",
+        "hdr_source_policy": "reject_without_explicit_tonemap_contract",
         "ocio": {"enabled": False, "config": "", "display": "", "view": ""},
         "status": "confirmed_default",
         "note": "Change only with an explicit delivery/mastering requirement; version the contract when changed.",
@@ -116,6 +121,49 @@ def probe_tags(path: Path, runner=subprocess.run) -> Dict[str, str]:
     )}
 
 
+def source_normalization_filter(
+    path: str | Path,
+    contract: Mapping[str, Any],
+    *,
+    runner=subprocess.run,
+) -> str:
+    """Return a real colorspace conversion filter or fail closed.
+
+    Merely attaching Rec.709 tags to pixels is forbidden.  Unknown source
+    properties are rejected because guessing BT.709 can silently reinterpret
+    full-range, HDR or wide-gamut pixels.  HDR needs a separately versioned
+    tone-map contract; the default SDR contract intentionally refuses it.
+    """
+    source = probe_tags(Path(path), runner=runner)
+    unknown = [
+        key for key in ("color_space", "color_transfer", "color_primaries", "color_range")
+        if str(source.get(key) or "").lower() in UNKNOWN
+    ]
+    if unknown:
+        raise ValueError(
+            f"source color metadata unknown ({', '.join(unknown)}): {path}; "
+            "normalize/tag the source explicitly before compose"
+        )
+    transfer = str(source.get("color_transfer") or "").lower()
+    primaries = str(source.get("color_primaries") or "").lower()
+    if transfer in HDR_TRANSFERS or primaries == "bt2020":
+        raise ValueError(
+            f"HDR/wide-gamut source requires an explicit tone-map contract: {path} "
+            f"({primaries}/{transfer})"
+        )
+    target = output_tags(contract)
+    # Explicit input properties make the result deterministic even when a
+    # decoder drops metadata while frames travel through scale/pad.
+    return (
+        "colorspace="
+        f"ispace={source['color_space']}:itrc={source['color_transfer']}:"
+        f"iprimaries={source['color_primaries']}:irange={source['color_range']}:"
+        f"space={target['color_space']}:trc={target['color_transfer']}:"
+        f"primaries={target['color_primaries']}:range={target['color_range']}:"
+        f"format={target['pixel_format']}:fast=0"
+    )
+
+
 def analyze(root: str | Path, episode: str, *, runner=subprocess.run) -> Dict[str, Any]:
     root_path = Path(root)
     contract = load_contract(root_path)
@@ -169,10 +217,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("--write-missing", action="store_true")
     ap.add_argument("--print-tags", action="store_true")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--source-filter", default=None,
+                    help="print a deterministic source→contract colorspace filter; unknown/HDR input blocks")
     ns = ap.parse_args(argv)
     if ns.write_missing:
         write_missing(ns.root)
     contract = load_contract(ns.root) or default_contract()
+    if ns.source_filter:
+        try:
+            print(source_normalization_filter(ns.source_filter, contract))
+            return 0
+        except ValueError as exc:
+            print(f"color source blocked: {exc}", file=sys.stderr)
+            return 2
     if ns.print_tags:
         tags = output_tags(contract)
         print(" ".join(tags[key] for key in ("color_primaries", "color_transfer", "color_space", "color_range", "pixel_format")))

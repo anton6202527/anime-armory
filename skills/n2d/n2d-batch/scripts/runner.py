@@ -74,6 +74,14 @@ spend_envelope_mod = load_module(
     "n2d_spend_envelope_for_batch_runner",
     os.path.join(REPO_SKILLS, "_lib", "spend_envelope.py"),
 )
+governance_mod = load_module(
+    "n2d_batch_governance_for_runner",
+    os.path.join(SCRIPT_DIR, "governance.py"),
+)
+media_artifact_mod = load_module(
+    "n2d_media_artifact_for_batch_runner",
+    os.path.join(REPO_SKILLS, "n2d-compose", "media_artifact.py"),
+)
 import paid_execution_contract  # noqa: E402  producer-owned final paid-boundary interlock
 
 
@@ -85,6 +93,21 @@ _PRODUCER_MODULES: Dict[str, Any] = {}
 
 class UnrunnableTask(RuntimeError):
     pass
+
+
+def production_governance_interlock(root: str) -> Optional[Dict[str, Any]]:
+    """Live critical stop-loss/dead-letter interlock used at every paid boundary."""
+    return governance_mod.critical_interlock(root)
+
+
+def governance_block_message(issue: Mapping[str, Any]) -> str:
+    rows = issue.get("violations") if isinstance(issue.get("violations"), list) else []
+    details = "; ".join(
+        str(row.get("kind") or row.get("metric") or row)
+        for row in rows[:4]
+        if isinstance(row, Mapping)
+    )
+    return "critical production governance interlock" + (f": {details}" if details else "")
 
 
 def production_dir(root: str) -> str:
@@ -355,7 +378,18 @@ def _probe_media_issue(path: str, suffix: str) -> Optional[str]:
             return f"invalid or undecodable {suffix[1:]} media ({exc})"
         return None
 
-    stream = "v:0" if suffix in {".mp4", ".mov", ".m4v"} else "a:0"
+    if suffix in {".mp4", ".mov", ".m4v"}:
+        validation = media_artifact_mod.validate_media(
+            path,
+            {"audio_required": False, "known_color_required": False, "faststart_required": False},
+        )
+        if validation.get("status") != "pass":
+            failed = [row for row in validation.get("checks") or [] if row.get("status") == "block"]
+            detail = ", ".join(str(row.get("code") or "media") for row in failed) or "shared media validation failed"
+            return f"invalid or undecodable {suffix[1:]} media ({detail})"
+        return None
+
+    stream = "a:0"
     try:
         probe = subprocess.run(
             [
@@ -593,10 +627,26 @@ def verify_producer_contract_outputs(root: str, task: Dict[str, Any]) -> List[st
         for row in baseline_rows
         if isinstance(row, Mapping) and row.get("exists")
     } if isinstance(baseline_rows, list) else {}
+    recovery = task.get("_runner_provider_recovery")
+    recovery_target = ""
+    recovery_sha = ""
+    if isinstance(recovery, Mapping) and recovery.get("provider_submit_id"):
+        target = str(recovery.get("target") or "").strip()
+        recovery_target = f"出视频/{queue_mod.normalize_episode(str(task.get('episode') or ''))}/视频/{target}"
+        if str(recovery.get("download_submit_id") or "") == str(
+            recovery.get("provider_submit_id") or ""
+        ):
+            recovery_sha = str(recovery.get("download_artifact_sha256") or "")
     for row in bindings:
         path = str(row.get("path") or "")
         if row.get("exists") and baseline.get(path) and baseline[path] == str(row.get("sha256") or ""):
-            issues.append(f"producer target was not refreshed by this attempt: {path}")
+            recovered_existing_output = (
+                path == recovery_target
+                and bool(recovery_sha)
+                and hmac.compare_digest(recovery_sha, str(row.get("sha256") or ""))
+            )
+            if not recovered_existing_output:
+                issues.append(f"producer target was not refreshed by this attempt: {path}")
     return issues
 
 
@@ -611,9 +661,21 @@ def verify_task_completion(root: str, task: Dict[str, Any]) -> List[str]:
     spec = _task_stage_spec(task)
     ep = str(task.get("episode") or "")
     issues.extend(verify_output_contract(root, task, spec))
+    if str(task.get("stage_key") or "") == "compose":
+        receipt = media_artifact_mod.current_receipt(root, str(task.get("episode") or ""))
+        if receipt.get("status") != "pass":
+            issues.append(
+                "compose output lacks a current MediaArtifactReceipt: "
+                + "; ".join(receipt.get("issues") or ["shared master validation did not pass"])
+            )
     issues.extend(verify_producer_contract_outputs(root, task))
 
     progress_cols = [str(col) for col in spec.get("progress_columns", ()) or ()]
+    if str(task.get("stage_key") or "") == "video" and task.get("physical_clips"):
+        # A physical provider task completes at downloaded bytes + machine QC.  The episode-level
+        # 视频 column is advanced only after every clip crosses the separate current-pixel accept
+        # boundary, so it cannot be a per-clip postcondition.
+        progress_cols = []
     if str(task.get("stage_key") or "") == "review":
         # `验收` is the later human-only commit. Machine review evidence must be allowed to
         # reach qa_blocked while that cell is still open; queue acceptance enforces it at done.
@@ -1428,7 +1490,22 @@ def production_task_scope(task: Dict[str, Any]) -> Dict[str, Any]:
 def production_authorized_attempt(task: Mapping[str, Any]) -> int:
     """One approval authorizes exactly one claim attempt, never an unlimited retry loop."""
     attempts = max(0, int(task.get("attempts") or 0))
-    return attempts if task.get("status") == "running" and attempts > 0 else attempts + 1
+    return attempts if task.get("status") in {"running", "provider_pending"} and attempts > 0 else attempts + 1
+
+
+def provider_recovery_checkpoint(root: str, task: Mapping[str, Any]) -> Dict[str, Any]:
+    """Return the durable provider checkpoint for a one-clip video task, if any."""
+    return queue_mod.provider_submission_state({"root": root}, task)
+
+
+def _only_recoverable_in_flight_issues(issues: Sequence[Any]) -> bool:
+    texts = [str(item) for item in issues if str(item).strip()]
+    allowed = (
+        "consumption_id has uncertain in_flight provider state",
+        "consumption_id already completed; provider replay blocked",
+        "prior spend consumption has uncertain in_flight provider state",
+    )
+    return bool(texts) and all(any(fragment in text for fragment in allowed) for text in texts)
 
 
 def production_task_digest(task: Dict[str, Any]) -> str:
@@ -1571,6 +1648,34 @@ def _phase_consumption_kwargs(task: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def recovered_spend_consumption(
+    task: Dict[str, Any], authorization: Mapping[str, Any]
+) -> Dict[str, Any]:
+    """Reconstruct the already-consumed reservation binding without consuming again."""
+    request = _phase_consumption_kwargs(task)
+    row = {
+        "consumption_id": request["consumption_id"],
+        "attempt_id": request["attempt_id"],
+        "calls": request["calls"],
+        "cost": {"amount": request["cost"], "currency": request["currency"]},
+        "stage": request["stage"],
+        "model": request["model"],
+        "channel": request["channel"],
+        "input_sha256": request["input_sha256"],
+        "scope": request["scope"],
+        "state": "in_flight",
+    }
+    return {
+        "status": "pass",
+        "idempotent": True,
+        "replay_blocked": True,
+        "recovered": True,
+        "envelope_id": str(authorization.get("envelope_id") or ""),
+        "authorization_digest": str(authorization.get("authorization_digest") or ""),
+        "consumption": row,
+    }
+
+
 def _parse_aware_datetime(value: Any) -> Optional[dt.datetime]:
     text = str(value or "").strip()
     if not text:
@@ -1642,7 +1747,13 @@ def _authorization_issue(task: Dict[str, Any], root: str = "") -> Optional[str]:
             result = spend_envelope_mod.verify(root, receipt, **_phase_consumption_kwargs(task))
         except (ValueError, spend_envelope_mod.SpendEnvelopeError) as exc:
             return f"phase production authorization invalid: {exc}"
-        if result.get("status") != "pass":
+        checkpoint = provider_recovery_checkpoint(root, task)
+        recoverable = (
+            checkpoint.get("state") == "provider_pending"
+            and bool(checkpoint.get("provider_submit_id"))
+            and _only_recoverable_in_flight_issues(result.get("issues") or [])
+        )
+        if result.get("status") != "pass" and not recoverable:
             return "phase production authorization blocked: " + "; ".join(
                 str(item) for item in (result.get("issues") or [])
             )
@@ -1807,7 +1918,8 @@ def _canonical_next_preflight_issue(
             card.get("execution_effect"), Mapping
         ) else {}
         authorized_execution = (
-            stop == "needs_stage_execution" and phase_probe.get("status") == "authorized"
+            stop == "needs_stage_execution"
+            and phase_probe.get("status") in {"authorized", "authorized_recovery"}
         )
         safe_local_compose = (
             task_stage == "compose"
@@ -1947,9 +2059,27 @@ def execute_task(
                     # intentionally *not* executable-idempotent: if this process dies after a
                     # provider may have charged, the same id and every later call fail closed
                     # until durable provider completion evidence finalizes the reservation.
-                    task["_runner_spend_consumption"] = spend_envelope_mod.consume(
-                        root, authorization, **_phase_consumption_kwargs(task)
-                    )
+                    checkpoint = provider_recovery_checkpoint(root, task)
+                    if checkpoint.get("state") == "unknown_paid_state":
+                        raise UnrunnableTask(
+                            "video provider paid state is unknown and has no submit_id; "
+                            "automatic resubmission is blocked"
+                        )
+                    if (
+                        checkpoint.get("state") == "provider_pending"
+                        and checkpoint.get("provider_submit_id")
+                    ):
+                        task["_runner_provider_recovery"] = checkpoint
+                        task["_runner_spend_consumption"] = recovered_spend_consumption(
+                            task, authorization
+                        )
+                    else:
+                        governance_issue = production_governance_interlock(root)
+                        if governance_issue:
+                            raise UnrunnableTask(governance_block_message(governance_issue))
+                        task["_runner_spend_consumption"] = spend_envelope_mod.consume(
+                            root, authorization, **_phase_consumption_kwargs(task)
+                        )
             execution_started = True
             exit_code, stdout, stderr = run_process(
                 command,
@@ -1959,6 +2089,28 @@ def execute_task(
             )
             status = "pass" if exit_code == 0 else "fail"
             note = f"exit_code={exit_code}"
+            if status == "fail" and stage_key == "video":
+                checkpoint = provider_recovery_checkpoint(root, task)
+                if (
+                    checkpoint.get("state") == "provider_pending"
+                    and checkpoint.get("provider_submit_id")
+                ):
+                    status = "provider_pending"
+                    task["_runner_provider_recovery"] = checkpoint
+                    note = (
+                        f"provider job remains pending after runner exit_code={exit_code}; "
+                        f"resume query-only submit_id={checkpoint.get('provider_submit_id')}"
+                    )
+                elif checkpoint.get("state") in {
+                    "unknown_paid_state",
+                    "provider_terminal_failure",
+                }:
+                    status = "qa_blocked"
+                    task["_runner_provider_recovery"] = checkpoint
+                    note = (
+                        "provider state cannot be replayed safely; automatic resubmission blocked "
+                        f"({checkpoint.get('state')})"
+                    )
             if paid_stage_execution:
                 producer_contract = task.get("_runner_producer_contract")
                 if (
@@ -2030,17 +2182,55 @@ def execute_task(
                     evidence=completion_evidence,
                 )
     except subprocess.TimeoutExpired as exc:
-        status = "fail"
+        checkpoint = provider_recovery_checkpoint(root, task)
+        if (
+            checkpoint.get("state") == "provider_pending"
+            and checkpoint.get("provider_submit_id")
+        ):
+            status = "provider_pending"
+        elif checkpoint.get("state") in {"unknown_paid_state", "provider_terminal_failure"}:
+            status = "qa_blocked"
+        else:
+            status = "fail"
+        if status == "provider_pending":
+            task["_runner_provider_recovery"] = checkpoint
         exit_code = None
         stdout = exc.stdout if isinstance(exc.stdout, str) else ""
         stderr = exc.stderr if isinstance(exc.stderr, str) else ""
-        note = f"timeout after {timeout_sec}s"
+        note = (
+            f"provider query timeout after {timeout_sec}s; resume original "
+            f"submit_id={checkpoint.get('provider_submit_id')}"
+            if status == "provider_pending"
+            else "provider paid state cannot be replayed safely after timeout; resubmission blocked"
+            if status == "qa_blocked"
+            else f"timeout after {timeout_sec}s"
+        )
     except UnrunnableTask as exc:
         status = "fail"
         note = str(exc)
     except Exception as exc:  # pragma: no cover - defensive guard for worker
-        status = "fail"
-        note = f"{type(exc).__name__}: {exc}"
+        checkpoint = provider_recovery_checkpoint(root, task)
+        if (
+            str(task.get("stage_key") or "") == "video"
+            and checkpoint.get("state") == "provider_pending"
+            and checkpoint.get("provider_submit_id")
+        ):
+            status = "provider_pending"
+            task["_runner_provider_recovery"] = checkpoint
+            note = (
+                f"{type(exc).__name__}: {exc}; provider submit is durable, resume query-only "
+                f"submit_id={checkpoint.get('provider_submit_id')}"
+            )
+        elif (
+            str(task.get("stage_key") or "") == "video"
+            and checkpoint.get("state") in {"unknown_paid_state", "provider_terminal_failure"}
+        ):
+            status = "qa_blocked"
+            task["_runner_provider_recovery"] = checkpoint
+            note = f"{type(exc).__name__}: {exc}; provider state cannot be replayed safely"
+        else:
+            status = "fail"
+            note = f"{type(exc).__name__}: {exc}"
     duration = time.monotonic() - started
     error_class = queue_mod.classify_error(note, {"exit_code": exit_code, "stdout": stdout, "stderr": stderr, "note": note}) if status == "fail" else ""
     task["last_runner"] = {
@@ -2071,6 +2261,7 @@ def execute_task(
     paid_receipts = task.pop("_runner_paid_receipts", None)
     spend_consumption = task.pop("_runner_spend_consumption", None)
     spend_completion = task.pop("_runner_spend_completion", None)
+    provider_recovery = task.pop("_runner_provider_recovery", None)
     safe_local_execution = bool(task.pop("_runner_safe_local_execution", False))
     output_baseline = task.pop("_runner_output_baseline", None)
     verified_outputs = task.pop("_runner_verified_outputs", None)
@@ -2101,6 +2292,9 @@ def execute_task(
     )
     task["last_runner"]["completion"]["phase_spend_completion"] = (
         dict(spend_completion) if isinstance(spend_completion, Mapping) else {}
+    )
+    task["last_runner"]["completion"]["provider_recovery"] = (
+        dict(provider_recovery) if isinstance(provider_recovery, Mapping) else {}
     )
     task["last_runner"]["completion"]["safe_local_execution"] = safe_local_execution
     task.setdefault("history", []).append({
@@ -2407,6 +2601,10 @@ def run_once(
     lease_seconds: int = queue_mod.DEFAULT_LEASE_SECONDS,
     next_preflight: Optional[bool] = None,
     auto_gate: bool = True,
+    task_id: Optional[str] = None,
+    expected_plan_digest: Optional[str] = None,
+    episode: Optional[str] = None,
+    stage_key: Optional[str] = None,
 ) -> Dict[str, Any]:
     config = load_config(root, config_path)
     worker = worker or queue_mod.default_worker()
@@ -2415,6 +2613,8 @@ def run_once(
     # 安全默认：批处理默认也消费单集编排器的硬阻断，只有项目配置或 CLI 显式关闭才绕过。
     effective_next_preflight = bool(config.get("next_preflight", True)) if next_preflight is None else bool(next_preflight)
     if dry_run:
+        if task_id or expected_plan_digest or episode or stage_key:
+            raise ValueError("exact task binding is executable-only; omit --dry-run")
         return _preview_once(
             root,
             limit=limit,
@@ -2423,8 +2623,90 @@ def run_once(
             next_preflight=effective_next_preflight,
             worker=worker,
         )
-    # claim() 锁内：先回收过期租约（自动断点恢复）再认领，并打 worker+lease。
-    claimed = queue_mod.claim(root, limit=limit, worker=worker, lease_seconds=lease_seconds)
+    governance_issue = production_governance_interlock(root)
+    if governance_issue:
+        return {
+            "claimed": 0,
+            "processed": 0,
+            "results": [{
+                "id": str(task_id or ""),
+                "episode": str(episode or ""),
+                "stage_key": str(stage_key or ""),
+                "runner_status": "fail",
+                "queue_status": "blocked_governance",
+                "attempts": None,
+                "exit_code": None,
+                "note": governance_block_message(governance_issue),
+                "governance": governance_issue,
+            }],
+            "worker": worker,
+            "config": config.get("_path"),
+        }
+    exact_values = (task_id, expected_plan_digest, episode, stage_key)
+    if any(value is not None for value in exact_values) and not all(
+        str(value or "").strip() for value in exact_values
+    ):
+        raise ValueError(
+            "exact claim requires --task-id, --expected-plan-digest, --episode and --stage together"
+        )
+    # Both paths reclaim inside the same queue transaction.  Exact action cards never fall
+    # through to a different priority row if their task id or immutable plan digest changed.
+    if all(str(value or "").strip() for value in exact_values):
+        try:
+            claimed = queue_mod.claim_exact(
+                root,
+                task_id=str(task_id),
+                expected_plan_digest=str(expected_plan_digest),
+                episode=str(episode),
+                stage_key=str(stage_key),
+                worker=worker,
+                lease_seconds=lease_seconds,
+            )
+        except (FileNotFoundError, TimeoutError, ValueError, RuntimeError) as exc:
+            # A stale action card or a governance race is an expected fail-closed outcome,
+            # not an interpreter crash.  Keep the exact error visible in the machine result
+            # and never fall through to a generic queue claim.
+            return {
+                "claimed": 0,
+                "processed": 0,
+                "results": [{
+                    "id": str(task_id),
+                    "episode": str(episode),
+                    "stage_key": str(stage_key),
+                    "runner_status": "fail",
+                    "queue_status": "blocked_exact_claim",
+                    "attempts": None,
+                    "exit_code": None,
+                    "note": f"exact hash-bound claim blocked: {exc}",
+                    "error": {
+                        "type": type(exc).__name__,
+                        "message": str(exc),
+                    },
+                }],
+                "worker": worker,
+                "config": config.get("_path"),
+            }
+        if not claimed:
+            return {
+                "claimed": 0,
+                "processed": 0,
+                "results": [{
+                    "id": str(task_id),
+                    "episode": str(episode),
+                    "stage_key": str(stage_key),
+                    "runner_status": "fail",
+                    "queue_status": "not_claimable",
+                    "attempts": None,
+                    "exit_code": None,
+                    "note": "exact hash-bound task is not claimable; no fallback task was run",
+                }],
+                "worker": worker,
+                "config": config.get("_path"),
+            }
+    else:
+        claimed = queue_mod.claim(
+            root, limit=limit, worker=worker, lease_seconds=lease_seconds
+        )
     results = run_claimed(
         root,
         claimed,
@@ -2531,6 +2813,10 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("root")
     ap.add_argument("--limit", type=int, default=1, help="tasks to claim per cycle; concurrency cap still applies")
     ap.add_argument("--until-empty", action="store_true", help="keep claiming until no task is claimable")
+    ap.add_argument("--task-id", help="claim only this action-card task id")
+    ap.add_argument("--expected-plan-digest", help="required immutable plan digest for --task-id")
+    ap.add_argument("--episode", help="current episode bound by an exact action card")
+    ap.add_argument("--stage", dest="exact_stage", help="current stage bound by an exact action card")
     ap.add_argument("--max-tasks", type=int, help="hard cap when using --until-empty")
     ap.add_argument("--sleep-sec", type=float, default=0.0)
     ap.add_argument("--config", help="batch runner config; defaults to 生产数据/batch_runner.json")
@@ -2568,6 +2854,10 @@ def parser() -> argparse.ArgumentParser:
 
 def main(argv: Sequence[str]) -> int:
     ns = parser().parse_args(argv)
+    if ns.until_empty and any(
+        value for value in (ns.task_id, ns.expected_plan_digest, ns.episode, ns.exact_stage)
+    ):
+        raise SystemExit("--until-empty cannot be combined with exact action-card claim options")
     root = ns.root.rstrip("/")
     worker = ns.worker or queue_mod.default_worker()
     cli_next_preflight: Optional[bool]
@@ -2616,6 +2906,10 @@ def main(argv: Sequence[str]) -> int:
             lease_seconds=ns.lease_seconds,
             next_preflight=cli_next_preflight,
             auto_gate=not ns.no_gate,
+            task_id=ns.task_id,
+            expected_plan_digest=ns.expected_plan_digest,
+            episode=ns.episode,
+            stage_key=ns.exact_stage,
         )
     if ns.recheck and not ns.dry_run:
         try:

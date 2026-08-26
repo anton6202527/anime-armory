@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import json
 import os
-import subprocess
 import time
 from pathlib import Path
 
 import pytest
 
 import acceptance_contract
+from test_completion_evidence import write_test_master, write_valid_completion_receipts
 
 
 def _write_json(path: Path, payload: dict) -> None:
@@ -17,21 +17,7 @@ def _write_json(path: Path, payload: dict) -> None:
 
 
 def _write_test_mp4(path: Path, *, color: str = "black") -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    try:
-        proc = subprocess.run(
-            [
-                "ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i",
-                f"color=c={color}:s=16x16:d=0.2", "-an", "-c:v", "mpeg4", str(path),
-            ],
-            check=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            timeout=30,
-        )
-    except FileNotFoundError:
-        pytest.skip("ffmpeg unavailable")
-    assert proc.returncode == 0, proc.stderr.decode("utf-8", errors="replace")
+    write_test_master(path, color=color)
 
 
 def _refresh_operational_evidence(root: Path) -> None:
@@ -54,6 +40,12 @@ def _canonical_evidence(root: Path, episode: str = "第1集") -> Path:
     master = root / "合成" / episode / f"成片_{episode}_zh.mp4"
     _write_test_mp4(master)
     prod = root / "生产数据"
+    master_rel = master.relative_to(root).as_posix()
+    evidence = write_valid_completion_receipts(
+        root, episode, master, acceptance_contract, transaction_id="acceptance-contract-test"
+    )
+    master_sha = evidence["master_sha256"]
+    duration = evidence["duration_sec"]
     _write_json(prod / f"score_{episode}.json", {"kind": "n2d_episode_review_score", "version": 1, "status": "pass", "score": 91})
     _write_json(prod / f"consistency_ledger_{episode}.json", {"kind": "n2d_consistency_ledger", "version": 1, "status": "pass"})
     _write_json(prod / f"review_ui_{episode}.json", {"kind": "n2d_review_ui", "version": 1, "status": "pass"})
@@ -65,11 +57,11 @@ def _canonical_evidence(root: Path, episode: str = "第1集") -> Path:
         for name in sorted(acceptance_contract.REQUIRED_VERDICT_COMPONENTS)
     ]
     final_master = next(row for row in components if row["name"] == "final_master")
-    final_master["path"] = master.relative_to(root).as_posix()
+    final_master["path"] = master_rel
     final_master["details"] = {
-        "selected": master.relative_to(root).as_posix(),
-        "selected_sha256": acceptance_contract.sha256_file(master),
-        "duration_sec": acceptance_contract.probe_master_duration(master),
+        "selected": master_rel,
+        "selected_sha256": master_sha,
+        "duration_sec": duration,
     }
     _write_json(
         prod / f"release_verdict_{episode}.json",
@@ -165,6 +157,22 @@ def test_rejected_decision_can_never_issue_or_validate_receipt(tmp_path: Path) -
     assert any("approved or accepted" in item for item in result["issues"])
 
 
+def test_automated_identity_cannot_issue_or_validate_acceptance(tmp_path: Path) -> None:
+    _canonical_evidence(tmp_path)
+    for reviewer in ("Codex", "AI", "delegate:review", "system/reviewer", "制作代理:审片"):
+        with pytest.raises(acceptance_contract.AcceptanceContractError, match="reviewer is required explicitly"):
+            acceptance_contract.build_receipt(
+                tmp_path, "第1集", reviewer=reviewer, decision="approved"
+            )
+
+    payload = _approve(tmp_path)
+    payload["reviewer"] = "Codex"
+    acceptance_contract.write_receipt(tmp_path, "第1集", payload)
+    result = acceptance_contract.check_acceptance(tmp_path, "第1集")
+    assert result["status"] == "fail"
+    assert any("reviewer missing or placeholder" in item for item in result["issues"])
+
+
 def test_deleted_acceptance_receipt_fails_closed(tmp_path: Path) -> None:
     _canonical_evidence(tmp_path)
     _approve(tmp_path)
@@ -187,6 +195,72 @@ def test_receipt_becomes_stale_when_bound_evidence_changes(tmp_path: Path) -> No
     assert result["status"] == "fail"
     assert any("score" in item and "sha256 mismatch" in item for item in result["issues"])
     assert any("stale" in item for item in result["issues"])
+
+
+@pytest.mark.parametrize(
+    ("receipt_name", "expected_issue"),
+    [
+        ("media_artifact_receipt_第1集.json", "media_artifact_receipt"),
+        ("creative_watchdown_第1集.json", "creative_watchdown"),
+    ],
+)
+def test_completion_receipt_change_revokes_acceptance(
+    tmp_path: Path, receipt_name: str, expected_issue: str
+) -> None:
+    _canonical_evidence(tmp_path)
+    _approve(tmp_path)
+    path = tmp_path / "生产数据" / receipt_name
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data["tampered"] = True
+    _write_json(path, data)
+
+    result = acceptance_contract.check_acceptance(tmp_path, "第1集")
+
+    assert result["status"] == "fail"
+    assert any(expected_issue in item for item in result["issues"])
+
+
+def test_deleted_watchdown_revokes_acceptance(tmp_path: Path) -> None:
+    _canonical_evidence(tmp_path)
+    _approve(tmp_path)
+    (tmp_path / "生产数据" / "creative_watchdown_第1集.json").unlink()
+
+    result = acceptance_contract.check_acceptance(tmp_path, "第1集")
+
+    assert result["status"] == "fail"
+    assert any("creative_watchdown" in item for item in result["issues"])
+
+
+def test_hand_edited_green_summary_cannot_bypass_current_receipt_validation(tmp_path: Path) -> None:
+    episode = "第1集"
+    _canonical_evidence(tmp_path, episode)
+    media_path = tmp_path / "生产数据" / f"media_artifact_receipt_{episode}.json"
+    media = json.loads(media_path.read_text(encoding="utf-8"))
+    media["validation"]["status"] = "block"
+    _write_json(media_path, media)
+    _refresh_operational_evidence(tmp_path)
+
+    # Simulate an attacker making the verdict's summaries and hashes look
+    # current without actually obtaining a fresh, passing media receipt.
+    verdict_path = acceptance_contract.verdict_path(tmp_path, episode)
+    verdict = json.loads(verdict_path.read_text(encoding="utf-8"))
+    for row in verdict["components"]:
+        row["status"] = "pass"
+    verdict["status"] = "internal-only"
+    verdict["summary"] = {"block": 0, "warn": 0, "pass": len(verdict["components"])}
+    verdict["blocking_reasons"] = []
+    verdict["warnings"] = []
+    verdict["evidence_bindings"] = acceptance_contract.current_evidence_bindings(tmp_path, episode)
+    verdict["content_fingerprint"] = acceptance_contract.release_content_fingerprint(
+        tmp_path, episode, "internal"
+    )
+    _write_json(verdict_path, verdict)
+
+    with pytest.raises(
+        acceptance_contract.AcceptanceContractError,
+        match="current media_artifact_receipt invalid",
+    ):
+        _approve(tmp_path, episode)
 
 
 def test_legacy_signoff_is_migration_only_and_advisory_never_counts(tmp_path: Path) -> None:

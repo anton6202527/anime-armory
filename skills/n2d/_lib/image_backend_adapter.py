@@ -5,7 +5,7 @@
 This module normalizes image-generation backends into one capability model so
 stage scripts can ask for capabilities instead of branching on vendor names.
 
-采集日期：2026-07-24
+采集日期：2026-08-26
 """
 from __future__ import annotations
 
@@ -54,18 +54,15 @@ except Exception:  # pragma: no cover
 
 
 CATALOG_VERIFIED = {
-    "date": "2026-07-01",
+    "date": "2026-08-26",
     "sources": [
         {
-            "name": "OpenAI GPT Image / ChatGPT Images official docs",
-            "url": "https://developers.openai.com/api/docs/guides/image-generation",
+            "name": "OpenAI GPT Image 2 official model card",
+            "url": "https://developers.openai.com/api/docs/models/gpt-image-2",
             "facts": [
-                "official image generation is exposed through the Images API and Responses image-generation tool",
-                "official docs list GPT Image models including gpt-image-2 / gpt-image-1.5 / gpt-image-1 / gpt-image-1-mini",
-                "gpt-image-2 processes every image input at high fidelity automatically; input_fidelity is not configurable for this model",
-                "gpt-image-2 supports constrained arbitrary sizes including common 9:16 portrait sizes, but does not support transparent backgrounds",
-                "official image editing supports one or more source images where the selected model allows it",
-                "official limitations still include latency, precise text placement, recurring-character/brand consistency, and structured composition control",
+                "gpt-image-2 is the current default state-of-the-art OpenAI image generation and editing model",
+                "the exact alias is gpt-image-2 and the reproducible snapshot is gpt-image-2-2026-04-21",
+                "gpt-image-2 supports flexible image sizes and high-fidelity image inputs",
                 "Current official docs do not evidence a registerable server-side persistent subject-id/handle for OpenAI image generation; treat it as strong in-context multi-reference consistency, not native subject registration — see constitution B9.",
                 "current model names, sizes, quality parameters, and pricing must come from per-run official refresh evidence",
             ],
@@ -74,8 +71,9 @@ CATALOG_VERIFIED = {
             "name": "Google Gemini image generation guide",
             "url": "https://ai.google.dev/gemini-api/docs/image-generation",
             "facts": [
+                "current stable image endpoints include gemini-3.1-flash-image (Nano Banana 2) and gemini-3-pro-image (Nano Banana Pro)",
                 "Gemini native image generation uses generateContent-style multimodal parts",
-                "Nano Banana/Gemini image model names and reference budgets are model-specific",
+                "reference budgets and usage limits remain model-specific",
                 "current model names, reference budgets, and safety/usage limits must come from per-run official refresh evidence",
             ],
         },
@@ -127,8 +125,9 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
     "openai": {
         "label": "OpenAI Images API (访问入口) · 模型 GPT Image 2",
         "model": "GPT Image 2",  # C5: 生成者=具体模型
-        "model_precision": "normalized_family",
-        "exact_model_id": "",
+        "model_precision": "provider_model",
+        "exact_model_id": "gpt-image-2",
+        "recommended_snapshot_id": "gpt-image-2-2026-04-21",
         "exact_model_evidence_required": True,
         "channel": "OpenAI Images API",
         "adapter_kind": "openai_images",
@@ -137,7 +136,7 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
         "env_keys": ("OPENAI_API_KEY",),
         "probe_backend": "openai",
         "api_surface": "/v1/images/generations + /v1/images/edits + Responses image_generation tool",
-        "model_hint": "default GPT Image 2; confirm exact model id from per-run refresh evidence",
+        "model_hint": "use gpt-image-2 or pin gpt-image-2-2026-04-21; record the actual per-run model id",
         "transport": "multipart_or_sdk",
         "output": "b64_json",
         "generation_modes": ("text2image", "image_edit", "multi_turn_edit"),
@@ -158,7 +157,7 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
         "cost_tier": "usage_tokens",
         "best_for": ("character_consistency", "high_fidelity_edit", "text_rendering", "facial_expression_control", "prompt_iterate"),
         "limitations": ("no_registerable_subject_id", "transparent_background_not_for_gpt_image_2"),
-        "evidence": {"verified_at": "2026-06-23", "source": CATALOG_VERIFIED["sources"][0]["url"]},
+        "evidence": {"verified_at": "2026-08-26", "source": CATALOG_VERIFIED["sources"][0]["url"]},
     },
     "dreamina": {
         "label": "Dreamina/即梦官方 CLI (访问入口)",
@@ -239,8 +238,11 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
         "evidence": {"verified_at": "manual_required", "source": "refresh before paid use"},
     },
     "nano_banana": {
-        "label": "Nano Banana Pro = Gemini 3 Pro Image (访问入口 Gemini API)",
-        "model": "Nano Banana Pro (Gemini 3 Pro Image·版本以 per-run 证据为准)",
+        "label": "Nano Banana Pro = Gemini 3 Pro Image（访问入口 Gemini API）",
+        "model": "Nano Banana Pro (Gemini 3 Pro Image)",
+        "model_precision": "provider_model",
+        "exact_model_id": "gemini-3-pro-image",
+        "volume_model_id": "gemini-3.1-flash-image",
         "channel": "Gemini API",
         "adapter_kind": "gemini_generate_content",
         "official": True,
@@ -248,7 +250,7 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
         "env_keys": ("GEMINI_API_KEY", "GOOGLE_API_KEY"),
         "probe_backend": "gemini",
         "api_surface": "models.generateContent",
-        "model_hint": "use current Gemini/Nano Banana image model from per-run refresh evidence",
+        "model_hint": "studio default gemini-3-pro-image; high-volume candidate gemini-3.1-flash-image; record actual per-run model id",
         "transport": "generate_content_parts",
         "output": "inline_image_part",
         "generation_modes": ("text2image", "image_reference", "multimodal_reference"),
@@ -268,7 +270,7 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
         "cost_tier": "provider_pricing",
         "best_for": ("text_rendering", "object_fidelity", "multimodal_reference"),
         "limitations": ("no_persistent_subject_id", "reference_budget_model_specific"),
-        "evidence": {"verified_at": "2026-06-20", "source": CATALOG_VERIFIED["sources"][1]["url"]},
+        "evidence": {"verified_at": "2026-08-26", "source": CATALOG_VERIFIED["sources"][1]["url"]},
     },
     "sora": {
         "label": "Sora Character Cameo (legacy/manual)",

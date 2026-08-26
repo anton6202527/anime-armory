@@ -9,14 +9,25 @@
 授权闸门（克隆真人嗓需 VOICE_CLONE_AUTHORIZED=1）由 n2d-voice 执行。
 
 戳记：催 本线 _lib/refresh.py 按需核验后端是否新增/改名/改 env。
-采集日期：2026-06-13  来源：n2d-voice/render_voice.py 现行优先级 + 各后端官方文档（待逐条复核）
+采集日期：2026-08-26  来源：CosyVoice 3 官方发布、Fish Audio changelog、IndexTTS 官方仓库 + 本地执行合同
 """
 from __future__ import annotations
 
 from typing import Dict, List, Optional
 
 
-CATALOG_VERIFIED = {"date": "2026-06-13", "source": "n2d-voice 现行优先级 + 各后端官方文档(待复核)"}
+CATALOG_VERIFIED = {
+    "date": "2026-08-26",
+    "sources": (
+        "https://cosyvoice.org/blog/whats-new-in-cosyvoice-3",
+        "https://docs.fish.audio/developer-guide/getting-started/changelog",
+        "https://github.com/index-tts/index-tts",
+    ),
+    "note": (
+        "候选能力已按官方资料刷新；是否可执行仍只由本地 env/endpoint probe 决定，"
+        "不因新版发布自动切换已定妆角色的后端。"
+    ),
+}
 
 # tier: 后端档位，决定取用优先级。
 #   zero_shot 本地零样本克隆 > cloud_clone 云端 > placeholder 占位。
@@ -24,14 +35,24 @@ CATALOG_VERIFIED = {"date": "2026-06-13", "source": "n2d-voice 现行优先级 +
 # clone_capable: 是否能克隆指定嗓（→ 触发授权闸门，由 voice skill 执行，非本表）。
 # 同 tier 内按列出顺序取第一个 env 命中的。
 VOICE_BACKEND_SPECS: List[Dict[str, object]] = [
-    {"key": "cosyvoice", "label": "CosyVoice", "tier": "zero_shot",
-     "env": "COSYVOICE_URL", "ref_prefix": "COSY", "timeout": 120, "clone_capable": True},
-    {"key": "fishspeech", "label": "FishSpeech", "tier": "zero_shot",
-     "env": "FISHSPEECH_URL", "ref_prefix": "FISH", "timeout": 300, "clone_capable": True},
+    {"key": "cosyvoice", "label": "CosyVoice 3", "tier": "zero_shot",
+     "env": "COSYVOICE_URL", "ref_prefix": "COSY", "timeout": 120, "clone_capable": True,
+     "model_generation": "3", "languages": 9, "chinese_dialects": 18,
+     "controls": ("emotion", "style", "dialect", "speed", "emphasis", "breath"),
+     "execution_note": "endpoint 可能仍服务 CosyVoice 2；用实际 endpoint receipt 记录精确模型"},
+    {"key": "fishspeech", "label": "Fish Audio S2 / Fish Speech", "tier": "zero_shot",
+     "env": "FISHSPEECH_URL", "ref_prefix": "FISH", "timeout": 300, "clone_capable": True,
+     "model_generation": "S2", "api_model_id": "s2-pro", "languages": 80,
+     "controls": ("inline_emotion", "paralinguistic_cues", "multi_speaker_dialogue"),
+     "execution_note": "旧 Fish Speech endpoint 可继续存在；不假定已升级到 s2-pro"},
     {"key": "gptsovits", "label": "GPT-SoVITS", "tier": "zero_shot",
      "env": "GPTSOVITS_URL", "ref_prefix": "GSV", "timeout": 300, "clone_capable": True},
-    {"key": "indextts", "label": "IndexTTS-2", "tier": "zero_shot",
-     "env": "INDEXTTS_URL", "ref_prefix": "IDX", "timeout": 300, "clone_capable": True},
+    {"key": "indextts", "label": "IndexTTS-2.5", "tier": "zero_shot",
+     "env": "INDEXTTS_URL", "ref_prefix": "IDX", "timeout": 300, "clone_capable": True,
+     "model_generation": "2.5", "languages": ("zh", "en", "ja", "es", "ar"),
+     "duration_factor_range": (0.5, 2.0),
+     "controls": ("emotion", "speed", "pinyin", "cmu_phoneme", "kana"),
+     "execution_note": "endpoint receipt 必须记录 2/2.5 精确版本"},
     {"key": "voxcpm", "label": "VoxCPM2", "tier": "zero_shot",
      "env": "VOXCPM_URL", "ref_prefix": "VOX", "timeout": 300, "clone_capable": True},
     {"key": "minimax", "label": "MiniMax", "tier": "cloud_clone",
@@ -46,9 +67,11 @@ _TIER_ORDER = {"zero_shot": 0, "cloud_clone": 1, "placeholder": 2}
 
 # 别名 → canonical key（手输归一）
 _ALIASES = {
-    "cosyvoice": "cosyvoice", "cosy": "cosyvoice",
-    "fishspeech": "fishspeech", "fish-speech": "fishspeech", "fish": "fishspeech",
+    "cosyvoice 3": "cosyvoice", "cosyvoice3": "cosyvoice", "cosyvoice": "cosyvoice", "cosy": "cosyvoice",
+    "fish audio s2": "fishspeech", "fish s2": "fishspeech", "s2-pro": "fishspeech",
+    "fish audio": "fishspeech", "fishspeech": "fishspeech", "fish-speech": "fishspeech", "fish": "fishspeech",
     "gpt-sovits": "gptsovits", "gptsovits": "gptsovits", "sovits": "gptsovits",
+    "indextts-2.5": "indextts", "indextts2.5": "indextts", "index-tts-2.5": "indextts",
     "indextts": "indextts", "indextts-2": "indextts", "index-tts": "indextts",
     "voxcpm": "voxcpm", "voxcpm2": "voxcpm",
     "minimax": "minimax",

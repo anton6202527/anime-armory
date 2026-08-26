@@ -25,6 +25,8 @@ description: 画漫画嵌字与导出阶段。Use when lettering comic panels, p
 - `排版/第N话/长图/longstrip.webp` 或 `longstrip.png`；显式设置分段高度时输出 `part_001.webp/png` 等分段长图。
 - `排版/第N话/print/第N话.pdf`：`导出格式=pdf` 时由 Pillow 写真实多页 raster PDF，并登记在 manifest `documents[]`；不是 WebP 回退，也不自动宣称 PDF/X/印厂可收。
 - 可选 `排版/第N话/print_delivery_contract.json` 与 `生产数据/print_readiness_receipt_第N话.json`：trim/bleed/safe/DPI/页序装订/字体/ICC/透明度合同和当前 PDF SHA 人审签收。
+- 可选 `排版/第N话/print/第N话_PDF-X-4.pdf` 与 `生产数据/professional_print_receipt_第N话.json`：只由注册的 `comic_print_pdf_v1` 专业渲染/验证 adapter 生成，绑定真实 ICC、页面输入、合同、PDF 和 validator SHA。
+- 可选 `排版/第N话/accessible/第N话.epub` 与 `accessible_digital_contract.json`：原子生成的 EPUB 3 FXL，除逐页 alt 外可含有序分格、说话人对白、旁白、SFX 与扩展说明语义稿。
 - `_进度.md`：导出就绪后把 `嵌字合成` 标为 `✅`，并勾选本话页面图、长图和 `export_manifest.json` 导出清单。
 
 ## 怎么跑
@@ -68,7 +70,9 @@ python3 skills/comic/comic-compose/scripts/print_delivery.py "$ROOT" --chapter �
 
 `pdf` 缺 Pillow、未传 `--render` 或页面不可渲染时，manifest 会写 `format_fulfillment.verdict=block` / `pdf_export_error`，绝不把 PNG/WebP 冒充 PDF 成功。印刷合同与人审步骤见 `references/print_delivery_contract.md`。
 
-渲染时默认读取 `排版/第N话/lettering.json`，用系统中文字体做草稿嵌字，并在 `export_manifest.json` 里记录 `font_status=system_font_draft`、`text_language`、`target_platform`、`platform_profile`、`text_layout_qc`、`lettering_rendered=true`、`bilingual_lettering` 与空槽清理统计。正式发布前需要确认字体授权，或用 `--font path/to/font.ttf` 指定已授权字体。如目标平台限制图片高度，可传 `--max-height 12000` 或在 `_设置.md` 写对应高度来导出分段。`--formats webp+png` 会优先输出 WebP，遇到超高长图超过 WebP 单边限制时自动落 PNG 并写入 manifest。RTL 或需词典断行的文字会被 `text_layout_qc` 阻断当前 Pillow 草稿渲染，需改用人工/专业排版 renderer。长条图太高不便逐字检查时，加 `--qc-slots` 输出 `生产数据/qa_previews/第N话_lettering_slots.jpg`，manifest 会记录 `lettering_slot_qc` 路径和缺失槽位。
+若项目已配置专业印前 adapter，可在合同中选择 `--renderer-mode professional_external --pdf-standard PDF/X-4 --icc-profile-path ...`，再执行 `render-professional`。脚本只在内部结构证据和外部 validator receipt 同时通过后原子提升；失败保留旧 PDF。普通 Pillow PDF 始终只代表 readiness。详见 `references/print_delivery_contract.md`。
+
+渲染时默认读取 `排版/第N话/lettering.json`，用系统中文字体做草稿嵌字，并在 `export_manifest.json` 里记录 renderer selection、字体/文字 SHA、`text_language`、`target_platform`、`platform_profile`、`text_layout_qc`、`lettering_rendered=true`、`bilingual_lettering` 与空槽清理统计。正式发布前需要确认字体授权，或用 `--font path/to/font.ttf` 指定已授权字体。`text_renderer_adapter.py` 按语言、方向、书写模式选择能力；HarfBuzz 用实际 font SHA 做 glyph coverage，注册 adapter 必须返回可解码 PNG 与 render receipt。缺专业能力时 Pillow 只能标为 draft，RTL/复杂 shaping/CJK 竖排不能静默冒充正式像素。协议见 `references/text_renderer_adapters.md`。如目标平台限制图片高度，可传 `--max-height 12000` 或在 `_设置.md` 写对应高度来导出分段。`--formats webp+png` 会优先输出 WebP，遇到超高长图超过 WebP 单边限制时自动落 PNG 并写入 manifest。长条图太高不便逐字检查时，加 `--qc-slots` 输出 `生产数据/qa_previews/第N话_lettering_slots.jpg`，manifest 会记录 `lettering_slot_qc` 路径和缺失槽位。
 
 嵌字几何 QC（确定性坐标检查）：`scripts/lettering_qc.py <作品根> 第N话 [--json --write]` 从 layout 槽位与 lettering 条目做纯几何检查——槽位越界画布（block·渲染必然裁字）、贴左右安全边距、跑出所属格、同格槽位互压、单格对白/旁白 >3、字号低于最小可读（28px@1440 宽等比换算）均出发现；comic-review 的 compose gate 会自动跑并把越界升为阻断。这层查"坐标合同"，与 `--qc-slots` 的人眼预览、`text_layout_qc` 的可渲染性检查三层正交。
 
@@ -94,8 +98,8 @@ python3 skills/comic/comic-compose/scripts/print_delivery.py "$ROOT" --chapter �
 - 默认导出单张 `longstrip.webp`，便于 App 内审阅和直接交付；若单张高度超过 WebP 能力上限，则按 `导出格式` 自动改用 `longstrip.png`。
 - 只有显式设置 `单话分段高度` 为正数或传 `--max-height` 时，才切成多个 part，避免目标平台不接受超高图片；发布候选/商用导出还会按 `目标平台` profile 检查宽度、格式、文件大小和规格证据新鲜度。
 - 平台 profile 是逐字段 provenance；WEBTOON/Tapas 缩略图必须是实际文件并用 `--platform-asset NAME=PATH` 登记，缺件不会靠规格声明冒充已生成。实际平台后台 preview receipt 见 `references/platform_delivery.md`。
-- `epub_fxl` 可用 `scripts/build_epub_fxl.py` 从真实页面图生成 EPUB 3 fixed-layout：mimetype 首项未压缩、container/OPF/manifest/spine/nav/XHTML、包内 accessibility metadata 与逐页 `img alt` 都实际落包，并回填 `export_manifest.json.documents[]`。命令要求 `--alt-json --reviewer --reason`；机器只验结构，具名编辑复核替代文本语义，结论不冒充 WCAG/EPUB Accessibility 认证。
-- CJK 草稿渲染加入禁则换行；`lettering_qc.py` 另检查 speaker/slot/tail 归属、主体/避让区遮挡。`text_renderer_adapter.py` 真实探测 Pango/HarfBuzz，缺失时 Pillow 只标 `draft_only`，RTL/复杂 shaping 不可冒充正式排版。
+- `epub_fxl` 可用 `scripts/build_epub_fxl.py` 从真实页面图生成 EPUB 3 fixed-layout：mimetype 首项未压缩、container/OPF/manifest/spine/nav/XHTML、包内 accessibility metadata、逐页 `img alt` 和可选 panel/dialogue 语义稿都实际落包，并回填 `export_manifest.json.documents[]`。相同输入生成相同 EPUB 字节；临时包结构校验通过后才原子替换。命令要求 `--alt-json --reviewer --reason`；机器只验结构，具名编辑复核语义，结论不冒充 WCAG/EPUB Accessibility 认证。详见 `references/accessible_digital_contract.md`。
+- CJK 草稿渲染加入禁则换行；`lettering_qc.py` 另检查 speaker/slot/tail 归属、主体/避让区遮挡。专业文字 adapter 与 glyph coverage 见 `references/text_renderer_adapters.md`。
 - 每个导出物都要在 `export_manifest.json` 登记 panel 顺序和尺寸。
 - 缺 panel 图时也要写 manifest，并列出 `missing_panels`，方便继续生产。
 

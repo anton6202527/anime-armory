@@ -12,7 +12,7 @@
   "backend_capabilities": {
     "adapter_id": "manual_or_unknown",
     "reference_image_limit": 6,
-    "supports_image_inputs": true,
+    "supports_image_inputs": false,
     "persistent_subject": false
   },
   "text_language": "中文",
@@ -44,7 +44,19 @@
       "negative_prompt": "仅在 profile 支持独立负向字段时填写",
       "source_contract_sha256": "64位sha256",
       "submit_prompt_sha256": "64位sha256",
+      "execution_input": {
+        "submit_prompt_sha256": "64位sha256",
+        "identity_contracts_sha256": "64位sha256",
+        "identity_contracts": "逐主体 DNA/variant/form/outfit/expression/state/exact refs/locator/subject binding",
+        "execution_adapter": "adapter id/status/features/evidence"
+      },
       "execution_input_sha256": "提交prompt+画布+真实参考SHA+角色绑定+panel plan 的64位sha256",
+      "candidate_policy": {
+        "enabled": true,
+        "target_count": 2,
+        "generation_order": "sequential_same_stage_budget_envelope",
+        "each_candidate_requires_b14": true
+      },
       "consumed_contracts": {
         "reference_plan": {
           "plan_sha256": "64位sha256",
@@ -62,6 +74,19 @@
         "expression_id": "EXPR_NEUTRAL",
         "state_id": "STATE_BASE",
         "resolved_contracts": {}
+      }],
+      "identity_execution_contracts": [{
+        "character_id": "CHAR_MAIN",
+        "character_dna": "锁脸/眼/发/体型/标志物",
+        "variant_policy": "只改年龄比例与状态层，不换脸",
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE",
+        "subject_locator": {"bbox": [180, 90, 420, 700], "occlusion": "被 CHAR_B 右臂遮挡"},
+        "exact_references": [{"path": "出图/共享/图片/CHAR_MAIN_front.png", "sha256": "64位sha256"}],
+        "subject_binding": {},
+        "contract_sha256": "64位sha256"
       }],
       "continuity_contract": {
         "scene_anchor_id": "LOC_001",
@@ -122,9 +147,11 @@
 
 注意：`references[].path` 表示 job 已绑定共享参考图；`reference_input_count` 和 `reference_manifest` 表示生成时已经把这些参考图真实传给后端。已有面板如果只有 path、没有 manifest 或 `reference_input_count=0`，应由 `comic-identity` 标入重抽计划。
 
-`backend_capabilities` / `reference_budget` 来自 comic 自己的 `image_backend_adapter`，用于记录当前模型+渠道的参考图预算、是否支持真实图片输入、是否具备持久主体能力。它是 job 生成时的执行约束，不代表本机一定已安装对应 runner。
+`backend_capabilities` / `reference_budget` 是当前模型、渠道与真实 executable runner/registry features 的交集。`persistent_subject` 只能在 adapter 有真实 subject-id 参数、dated evidence，且资产登记的 subject ID 被 job 消费时为 true；模型名/营销名不构成能力证据。
 
 `character_bindings` 是具名角色逐格身份与状态真值。`characters` 只可作人读/检索列表，裸名字不能解析为资产，单独出现 `CHAR_` 也不能代替 binding。每个 binding 的四个子 ID 必须存在于 identity registry v2，且 `state_id` 声明的 form/outfit/expression 必须与本格绑定一致。
+
+`identity_execution_contracts` 是付费调用真正消费的主体快照；其 canonical SHA 必须进入 `execution_input`。多人同格每个主体必须有 bbox/mask/occlusion/review_region，逐主体 VLM/人工审查使用本格 exact refs 和这些区域，不能退回全图单分数。
 
 `reference_plan` 与 `consumed_contracts` 证明 job 消费的是当前处方，不是另行随意挑图。处方先给每个具名角色至少一个真实身份锚，再保留 `LOC_` 与常驻 `PROP_`；关键引用超过执行后端真实附件上限时必须拆格/分区合成，不能静默省略。任何输入、计划或已选参考内容变化都会使对应 hash 失效。
 

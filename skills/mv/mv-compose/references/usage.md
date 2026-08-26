@@ -28,6 +28,8 @@ bash <skill>/mv_compose.sh "创作区/制MV/我的歌" 16:9 --allow-fallback
 2. 无 libass，但有 `.ass`/`.lrc` → 本 skill `render_lyrics.py`（Pillow 渲染逐行 PNG → ffmpeg overlay，按 enable=between 计时）。
 3. 无任何字幕文件 → 纯歌 + 画面。
 
+项目内 ASS/LRC 是卡拉 OK 创作与逐字高亮事实源；若客户要求专业 timed-text 交换，另导出 W3C IMSC Text Profile 1.3（2026-05 Recommendation）并把 cue/歌词/歌曲 SHA、帧率与目标母版 SHA 写入交付收据。平台只收 SRT/WebVTT/TTML 时由本线 adapter 派生，不能把“格式可上传”冒充“歌词对齐与最终像素已验收”。
+
 > 查 libass：`ffmpeg -hide_banner -filters | grep ' subtitles '`。本机 Homebrew ffmpeg 常无。
 
 ## 时长与重定时

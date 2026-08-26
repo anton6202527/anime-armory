@@ -42,6 +42,8 @@ def make_tasks(root: Path) -> dict:
         "references": [ref_rel],
         "references_sha256": {ref_rel: vlm_judge.file_sha256(root / ref_rel)},
         "question": "同一角色吗",
+        "required_score_keys": list(vlm_judge.AXIS_SCORE_KEYS["character_identity"]),
+        "required_evidence": {"region_required": True},
     }
     task["task_sha256"] = vlm_judge.task_sha256(task)
     payload = {"schema_version": 2, "kind": "comic_vlm_judge_tasks", "chapter": "第1话", "tasks": [task]}
@@ -56,9 +58,10 @@ def good_record(task: dict) -> dict:
         "task_sha256": task["task_sha256"],
         "references_sha256": task["references_sha256"],
         "evaluator": {"model": "claude-fable-5", "version": "2026-07-20", "reviewed_at": "2026-07-20T00:00:00"},
-        "scores": {"face": 5, "outfit": 4, "build": 5},
+        "scores": {"face": 5, "outfit": 4, "build": 5, "form_expression_state": 5},
         "verdict": "pass",
         "notes": "脸型发型一致",
+        "evidence": [{"path": task["panel"]["path"], "sha256": task["panel"]["sha256"], "region": {"bbox": [0, 0, 1, 1]}}],
     }
 
 

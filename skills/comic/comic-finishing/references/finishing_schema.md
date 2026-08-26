@@ -20,7 +20,18 @@
       {"layer_id": "EFFECTS", "role": "effects", "required": true, "blend": "normal"}
     ],
     "text_separation": "dialogue/narration stay in post-lettering layers; only contracted drawn SFX may enter art layers",
-    "flatten_policy": "keep logical layer manifest even when a backend returns one flattened raster"
+    "editable_master_contract": {
+      "preferred_container": "layered master (ORA/PSD/KRA or provider-native equivalent)",
+      "required_groups": ["art_base", "line_or_detail", "tone_or_color", "effects", "lettering_sfx", "dialogue_and_narration"],
+      "immutable_provider_raw": true,
+      "active_master_is_atomic_derivative": true
+    },
+    "flat_fallback": {
+      "allowed": true,
+      "required_receipts": ["immutable_raw_sha256", "master_sha256", "color_space", "bit_depth", "icc_sha256", "alpha", "derivative_chain"],
+      "repair_policy": "source-master SHA + mask SHA + bbox + prompt transaction"
+    },
+    "flatten_policy": "flat backend output is compatibility fallback, not evidence of editable layers"
   },
   "page_value_plans": [
     {
@@ -90,7 +101,8 @@
 规则：
 
 - `delivery_mode` 优先读项目显式设置；否则按风格和稿层归一为 `monochrome_print`、`grayscale_digital` 或 `color_digital`。
-- `layer_contract` 是项目级有序图层合同；即使后端只返回扁平图，也必须保留逻辑图层清单和文字分离约束。
+- `layer_contract` 是项目级有序图层合同；优先保存 ORA/PSD/KRA 或后端等价可编辑母版。扁平图只是兼容降级，必须保留 immutable raw、master、色彩/位深/ICC/alpha 与 derivative chain 收据，不能把逻辑清单冒充真实图层。
+- 局部返修必须走 `local_repair_transaction.py`：绑定 source master SHA、mask SHA、bbox 与 edit prompt；只允许 mask 内像素改变，失败或 post-QC block 时回滚，不覆盖当前像素。
 - `page_value_plans` 必须逐一覆盖 layout 的所有 page/segment，记录焦点格与整页缩略价值检查。
 - `panels` 必须唯一并按原顺序完整覆盖 panel script、name 和 layout。
 - 每格必须同时具备稿层、墨线、黑场、tone、value、effects、SFX 和禁止烘焙正文合同；没有 SFX 时 `sfx_items=[]` 是合法显式值。

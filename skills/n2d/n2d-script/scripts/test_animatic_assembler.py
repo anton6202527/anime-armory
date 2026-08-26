@@ -27,5 +27,32 @@ def test_animatic_assembler_writes_timed_preview(tmp_path: Path) -> None:
 
     assert payload["status"] == "pass"
     assert payload["summary"]["total_duration_sec"] == 7
+    assert payload["reviewability"]["status"] == "unmeasured"
     assert (tmp_path / payload["preview_artifact"]).is_file()
     assert (tmp_path / "生产数据" / "animatic_第1集.json").is_file()
+
+
+def test_animatic_preview_consumes_guide_voice_and_subtitles(tmp_path: Path) -> None:
+    ep = "第1集"
+    ep_dir = tmp_path / "脚本" / ep
+    ep_dir.mkdir(parents=True)
+    (ep_dir / "storyboard.json").write_text(
+        json.dumps({"clips": [{"id": "Clip_01", "duration": 2, "dramatic_function": "钩子"}]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    (ep_dir / "镜头时长.json").write_text("{}", encoding="utf-8")
+    (ep_dir / "字幕_中文.srt").write_text(
+        "1\n00:00:00,000 --> 00:00:02,000\n别回头。\n", encoding="utf-8"
+    )
+    audio = tmp_path / "合成" / ep / "配音" / "voice_zh.wav"
+    audio.parent.mkdir(parents=True)
+    audio.write_bytes(b"RIFF-guide")
+
+    payload = aa.write_outputs(tmp_path, ep, aa.build_report(tmp_path, ep))
+    preview = (tmp_path / payload["preview_artifact"]).read_text(encoding="utf-8")
+
+    assert payload["reviewability"] == {
+        "status": "ready", "audio_backed": True, "subtitle_backed": True, "reasons": []
+    }
+    assert '<audio id="guide-audio"' in preview
+    assert "别回头" in preview

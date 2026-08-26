@@ -23,6 +23,7 @@ COMIC_LIB = Path(__file__).resolve().parents[2] / "_lib"
 if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
 from progress import update_stage as update_progress
+from contracts import fingerprint_files, stable_sha256, stage_input_paths
 from image_execution_adapter import resolve_execution_adapter
 from editorial_authorization import (
     DELEGATED_REVIEW_POLICY,
@@ -185,6 +186,114 @@ def load_json_file(path: Path) -> dict:
     except (OSError, json.JSONDecodeError):
         return {}
     return data if isinstance(data, dict) else {}
+
+
+def work_unit_input_revision(root: Path, chapter: str, stage: str) -> dict:
+    """Fingerprint only upstream inputs for one planner work unit.
+
+    Action-owned outputs (especially `_进度.md`, panel job statuses and the
+    current stage artifact) are excluded.  A crash after committing one of
+    those outputs therefore resolves to the same idempotency key, while a
+    later legitimate upstream edit creates a new input revision and may run
+    the same command again.
+    """
+    previous_stage = {
+        "源本/企划": "script",
+        "漫画脚本": "script",
+        "缩略分镜": "script",
+        "页面排版": "name",
+        "原稿收尾": "layout",
+        "出图包": "finishing",
+        "出图": "image_preflight",
+        "嵌字合成": "image",
+        "审查": "compose",
+        "完成": "review",
+    }.get(stage, "script")
+    paths = list(stage_input_paths(root, chapter, previous_stage))
+    excluded: set[Path] = set()
+    if stage == "源本/企划":
+        excluded.update({
+            root / "开发包" / "adaptation_strategy.json",
+            root / "开发包" / "season_arc.json",
+            root / "开发包" / "signoff.json",
+            root / "脚本" / "split_blueprint.json",
+            root / "脚本" / chapter / "source_semantics.json",
+            root / "脚本" / chapter / "panel_script.json",
+        })
+    elif stage == "漫画脚本":
+        excluded.update({
+            root / "脚本" / chapter / "source_semantics.json",
+            root / "脚本" / chapter / "panel_script.json",
+        })
+    elif stage == "出图":
+        # panel_jobs is both an execution contract and a mutable result/status
+        # surface.  Hash only its immutable compiled execution inputs below.
+        excluded.add(root / "出图" / chapter / "prompt" / "panel_jobs.json")
+    excluded_resolved = {path.resolve() for path in excluded}
+
+    def is_action_owned_output(path: Path) -> bool:
+        if stage != "出图":
+            return False
+        output_roots = (
+            root / "出图" / chapter / "panels",
+            root / "出图" / chapter / "candidates",
+            root / "生产数据" / "panel_qc" / chapter,
+            root / "生产数据" / "dreamina_reference_bundles" / chapter,
+            root / "生产数据" / "codex_reference_bundles" / chapter,
+        )
+        resolved = path.resolve()
+        for output_root in output_roots:
+            try:
+                resolved.relative_to(output_root.resolve())
+                return True
+            except ValueError:
+                continue
+        return False
+
+    inputs = fingerprint_files(
+        root,
+        (
+            path for path in paths
+            if path.resolve() not in excluded_resolved and not is_action_owned_output(path)
+        ),
+    )
+    material: dict = {
+        "schema_version": 1,
+        "kind": "comic_work_unit_input_revision",
+        "chapter": chapter,
+        "stage": stage,
+        "files": inputs.get("files") or [],
+    }
+    if stage == "出图":
+        jobs = load_json_file(root / "出图" / chapter / "prompt" / "panel_jobs.json")
+        material["compiled_panel_inputs"] = [
+            {
+                key: row.get(key)
+                for key in (
+                    "panel_id", "execution_input_sha256", "source_contract_sha256",
+                    "submit_prompt_sha256", "identity_execution_contracts_sha256",
+                )
+            }
+            for row in jobs.get("jobs") or []
+            if isinstance(row, dict)
+        ]
+        material["model"] = jobs.get("model")
+        material["channel"] = jobs.get("channel")
+    return {**material, "sha256": stable_sha256(material)}
+
+
+def bind_visual_work_unit(base: dict, packet: dict, panel_id: str) -> dict:
+    work_unit = dict(base.get("work_unit") or {})
+    material = {
+        "base_input_revision": work_unit.get("sha256"),
+        "panel_id": panel_id,
+        "contact_sheet_path": packet.get("contact_sheet_path"),
+        "contact_sheet_sha256": packet.get("contact_sheet_sha256"),
+        "required_axes": packet.get("required_axes") or [],
+    }
+    digest = stable_sha256(material)
+    work_unit.update({"sha256": digest, "visual_review_input": material})
+    return {**base, "work_unit": work_unit, "work_unit_input_digest": digest}
 
 
 def editorial_status(root: Path, chapter: str, stage: str) -> str:
@@ -448,12 +557,15 @@ def next_action(root: Path, chapter: str) -> dict:
     not execute, approve spend, inspect pixels or claim completion.
     """
     stage = read_stage(root, chapter)
+    work_unit = work_unit_input_revision(root, chapter, stage)
     base = {
         "schema_version": 1,
         "kind": "comic_next_action",
         "project_root": str(root),
         "chapter": chapter,
         "next_stage": stage,
+        "work_unit": work_unit,
+        "work_unit_input_digest": work_unit["sha256"],
     }
     if stage == "完成":
         return {**base, "status": "machine_frontier_complete", "action": "build_completion_verdict", "agent_role": "workflow_orchestrator"}
@@ -480,8 +592,9 @@ def next_action(root: Path, chapter: str) -> dict:
                 review_runner = image_runner_script(root)
             except RuntimeError:
                 review_runner = "skills/comic/comic-image/scripts/codex_panel_runner.py"
+            visual_base = bind_visual_work_unit(base, packet, panel_id)
             return {
-                **base, "status": "specialist_required", "action": "review_current_panel_pixels",
+                **visual_base, "status": "specialist_required", "action": "review_current_panel_pixels",
                 "agent_role": "visual_qc_agent", "hard_boundary": False, "panel_id": panel_id,
                 "visual_review_packet": {
                     "contact_sheet_path": packet.get("contact_sheet_path"),

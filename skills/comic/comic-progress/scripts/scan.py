@@ -18,6 +18,7 @@ COMIC_LIB = Path(__file__).resolve().parents[2] / "_lib"
 if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
 from contracts import stage_inputs_fingerprint  # noqa: E402
+from completion_contract import verify_stored_completion  # noqa: E402
 
 
 FINDING_DISPOSITIONS = (
@@ -1081,8 +1082,18 @@ def summarize_project(root: Path) -> dict:
                 )
                 continue
         completion = load_json(root / "生产数据" / f"completion_verdict_{chapter}.json") or {}
+        completion_check = verify_stored_completion(root, chapter, completion)
         stage_front_complete = next_stage is None
-        accepted = stage_front_complete and completion.get("status") == "accepted"
+        accepted = (
+            stage_front_complete
+            and completion_check.get("current") is True
+            and completion_check.get("status") == "accepted"
+        )
+        completion_status = (
+            str(completion_check.get("status") or "stale")
+            if completion
+            else "unverified"
+        )
         fronts.append(
             {
                 "chapter": chapter,
@@ -1090,9 +1101,17 @@ def summarize_project(root: Path) -> dict:
                 "next_skill": next_skill or ("comic-review" if accepted else "comic-supervisor"),
                 "complete": accepted,
                 "stage_front_complete": stage_front_complete,
-                "business_status": completion.get("status") or "unverified",
+                "business_status": completion_status,
                 "completion_verdict": f"生产数据/completion_verdict_{chapter}.json",
-                "blockers": [],
+                "completion_current": bool(completion_check.get("current")),
+                "completion_issues": completion_check.get("issues") or [],
+                "release_inputs_fingerprint": completion.get("release_inputs_fingerprint") or "",
+                "blockers": [] if completion_check.get("current") else [
+                    {
+                        "code": "stale_completion_verdict",
+                        "reason": "; ".join(completion_check.get("issues") or ["completion verdict requires recomputation"]),
+                    }
+                ],
             }
         )
     for front in fronts:

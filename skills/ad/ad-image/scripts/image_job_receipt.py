@@ -29,10 +29,20 @@ REQUIRED_VISUAL_CHECKS = (
 )
 RECEIPT_DIR = Path("生产数据") / "image_job_receipts"
 MANIFEST_REL = Path("出图") / "分镜" / "image_jobs_manifest.json"
+AUTOMATED_REVIEWER_RE = re.compile(
+    r"(?:^|[^a-z0-9])(agent|ai|assistant|automation|bot|chatgpt|claude|codex|delegate|listener|"
+    r"machine|model|producer|supervisor|system)(?:[^a-z0-9]|$)|"
+    r"^(?:代理|制作代理|自动化|机器人|模型|系统|系统代理|执行器)(?:$|[:：/#@])", re.I
+)
 
 
 class ReceiptBlocked(RuntimeError):
     """Raised after a fail-closed receipt has been written."""
+
+
+def is_human_reviewer(value: Any) -> bool:
+    name = str(value or "").strip()
+    return bool(name) and not AUTOMATED_REVIEWER_RE.search(name)
 
 
 def now_iso() -> str:
@@ -350,7 +360,7 @@ def postflight(root: Path, job: Dict[str, Any], qc_path: Optional[Path] = None) 
 
 
 def signoff(root: Path, manifest: Dict[str, Any], job: Dict[str, Any], review_file: Path) -> Dict[str, Any]:
-    """Apply an explicit human review bound to the current output pixel SHA."""
+    """Apply a current-pixel review without confusing delegated and final signoff."""
     root = root.resolve()
     receipt = load_json(receipt_path(root, job), {}) or {}
     if receipt.get("status") != "awaiting_human_signoff":
@@ -359,10 +369,49 @@ def signoff(root: Path, manifest: Dict[str, Any], job: Dict[str, Any], review_fi
     review = load_json(review_path, {}) or {}
     errors: List[str] = []
     reviewer = str(review.get("reviewer") or "").strip()
+    review_kind = str(review.get("review_kind") or "human_current_pixels").strip()
+    human_signoff = review.get("human_signoff", review_kind == "human_current_pixels")
     decision = str(review.get("decision") or "").strip().lower()
     notes = str(review.get("notes") or "").strip()
     if not reviewer:
         errors.append("reviewer is required")
+    authorization: Dict[str, Any] = {}
+    if review_kind == "executor_visual":
+        if human_signoff is not False:
+            errors.append("executor_visual must declare human_signoff=false")
+        raw_auth = review.get("authorization") if isinstance(review.get("authorization"), Mapping) else {}
+        settings_rel = str(raw_auth.get("settings_path") or "_设置.md")
+        try:
+            settings_path, canonical_settings_rel = _inside(root, settings_rel)
+        except ValueError:
+            settings_path, canonical_settings_rel = root / "_设置.md", settings_rel
+            errors.append("executor authorization settings_path must stay inside project root")
+        settings_sha = sha256_file(settings_path)
+        settings_text = settings_path.read_text(encoding="utf-8", errors="replace") if settings_path.is_file() else ""
+        approver = str(raw_auth.get("approved_by") or "").strip()
+        if canonical_settings_rel != "_设置.md" or raw_auth.get("settings_sha256") != settings_sha:
+            errors.append("executor authorization must bind current _设置.md SHA")
+        if "审阅策略" not in settings_text or "用户授权制作代理" not in settings_text:
+            errors.append("current _设置.md does not authorize the production delegate review policy")
+        if not is_human_reviewer(approver):
+            errors.append("executor authorization approved_by must identify a named human")
+        if not str(raw_auth.get("approval_reference") or "").strip() or not str(raw_auth.get("source_quote") or "").strip():
+            errors.append("executor authorization requires approval_reference and source_quote")
+        authorization = {
+            "policy": "用户授权制作代理",
+            "settings_path": "_设置.md",
+            "settings_sha256": settings_sha,
+            "approved_by": approver,
+            "approval_reference": str(raw_auth.get("approval_reference") or "").strip(),
+            "source_quote": str(raw_auth.get("source_quote") or "").strip(),
+        }
+    elif review_kind == "human_current_pixels":
+        if human_signoff is not True:
+            errors.append("human_current_pixels must declare human_signoff=true")
+        if not is_human_reviewer(reviewer):
+            errors.append("human current-pixel reviewer cannot be an automated identity")
+    else:
+        errors.append("review_kind must be human_current_pixels or executor_visual")
     if decision not in {"accepted", "rejected"}:
         errors.append("decision must be accepted or rejected")
     if not notes:
@@ -384,6 +433,9 @@ def signoff(root: Path, manifest: Dict[str, Any], job: Dict[str, Any], review_fi
         "status": decision,
         "visual_review": {
             "reviewer": reviewer,
+            "review_kind": review_kind,
+            "human_signoff": bool(human_signoff),
+            "authorization": authorization,
             "decision": decision,
             "notes": notes,
             "checks": dict(checks),

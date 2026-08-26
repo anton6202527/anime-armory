@@ -95,15 +95,41 @@ def validate_record(record: dict[str, Any], contract: dict[str, Any]) -> list[st
     evaluator = record.get("evaluator") if isinstance(record.get("evaluator"), dict) else {}
     if not str(evaluator.get("model") or "").strip() or not str(evaluator.get("version") or "").strip():
         errors.append("evaluator.model / evaluator.version 必填")
+    reviewed_at = str(evaluator.get("reviewed_at") or "").strip()
+    try:
+        datetime.fromisoformat(reviewed_at.replace("Z", "+00:00"))
+    except ValueError:
+        errors.append("evaluator.reviewed_at 必须是 ISO-8601")
     scores = record.get("scores")
     if not isinstance(scores, dict) or not scores:
         errors.append("scores 必须是非空对象")
     else:
+        required_keys = set(contract.get("required_score_keys") or [])
+        if set(scores) != required_keys:
+            errors.append("scores 必须精确覆盖本轴 required_score_keys=" + ",".join(sorted(required_keys)))
         for key, value in scores.items():
             if not isinstance(value, (int, float)) or not 1 <= float(value) <= 5:
                 errors.append(f"scores.{key} 必须是 1-5 数值")
     if str(record.get("verdict") or "").lower() not in {"pass", "suspect"}:
         errors.append("verdict 必须是 pass 或 suspect")
+    if not str(record.get("notes") or "").strip():
+        errors.append("notes 必填，必须说明可见证据")
+    evidence = record.get("evidence") if isinstance(record.get("evidence"), list) else []
+    if not evidence:
+        errors.append("evidence 必须至少绑定一个当前 panel/reference path+SHA")
+    allowed = contract.get("allowed_evidence") if isinstance(contract.get("allowed_evidence"), dict) else {}
+    for index, item in enumerate(evidence):
+        if not isinstance(item, dict):
+            errors.append(f"evidence[{index}] 必须是对象")
+            continue
+        path = str(item.get("path") or "")
+        sha = str(item.get("sha256") or "")
+        if not path or allowed.get(path) != sha:
+            errors.append(f"evidence[{index}] path/SHA 不属于当前任务")
+    if contract.get("region_required") and not any(
+        isinstance(item, dict) and item.get("region") not in (None, "", {}, []) for item in evidence
+    ):
+        errors.append("该主体任务要求 bbox/mask/occlusion region 证据")
     return errors
 
 
@@ -126,6 +152,16 @@ def cmd_submit(root: Path, chapter: str, submission_path: Path) -> int:
             "references_sha256": task.get("references_sha256")
             if isinstance(task.get("references_sha256"), dict)
             else {},
+            "required_score_keys": list(task.get("required_score_keys") or []),
+            "allowed_evidence": {
+                str((task.get("panel") or {}).get("path") or ""): str((task.get("panel") or {}).get("sha256") or ""),
+                **(
+                    task.get("references_sha256")
+                    if isinstance(task.get("references_sha256"), dict)
+                    else {}
+                ),
+            },
+            "region_required": bool((task.get("required_evidence") or {}).get("region_required")),
         }
         for task in (tasks_payload.get("tasks") or [])
         if isinstance(task, dict)

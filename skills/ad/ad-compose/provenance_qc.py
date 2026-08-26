@@ -20,7 +20,7 @@ from typing import Any, Mapping
 
 
 KIND = "ad_provenance_qc"
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 MARKER = re.compile(r"c2pa|content.?credential|contentauth|ai.?generated|generated.?ai|synthetic|aigc", re.I)
 PROVIDER_KEY = re.compile(r"service.?provider|provider|platform.?name|platform.?code", re.I)
 CONTENT_ID_KEY = re.compile(r"content.?id|asset.?id|instance.?id", re.I)
@@ -148,7 +148,21 @@ def _receipt(root: Path, brief: Mapping[str, Any], did: str, digest: str | None)
         valid = (str(row.get("status") or "").lower() == "verified" and row.get("asset_sha256") == digest and
                  bool(row.get("tool")) and valid_checked_at(row.get("checked_at")) and bool(row.get("approved_by")) and
                  evidence_exists(root, row.get("evidence_file")) and evidence_sha is not None)
-        return {**dict(row), "evidence_sha256_actual": evidence_sha, "valid": valid}
+        evidence_kind = str(row.get("evidence_kind") or "origin_label_probe")
+        cryptographic_valid = bool(
+            valid
+            and evidence_kind == "c2pa_validation"
+            and row.get("signature_valid") is True
+            and row.get("manifest_asset_sha256") == digest
+        )
+        return {
+            **dict(row),
+            "evidence_kind": evidence_kind,
+            "evidence_sha256_actual": evidence_sha,
+            "valid": valid,
+            "cryptographic_valid": cryptographic_valid,
+            "cryptographic_trusted": bool(cryptographic_valid and row.get("signer_trusted") is True),
+        }
     return None
 
 
@@ -173,17 +187,31 @@ def build(root: Path):
         c2pa = c2pa_probe(path)
         metadata = ffprobe_metadata(path)
         receipt = _receipt(root, brief, did, digest)
-        local_verified = bool(c2pa and c2pa.get("verified") and c2pa.get("ai_assertion")) or bool(
-            metadata and (metadata.get("china_assertions") or {}).get("complete"))
-        external_verified = bool(receipt and receipt.get("valid"))
-        verified = local_verified or external_verified or not uses_ai
+        local_c2pa_valid = bool(c2pa and c2pa.get("verified") and c2pa.get("ai_assertion"))
+        local_c2pa_trusted = bool(local_c2pa_valid and c2pa.get("signer_trusted") is True)
+        metadata_label = bool(metadata and (metadata.get("china_assertions") or {}).get("complete"))
+        external_assertions = ((receipt or {}).get("metadata_assertions")
+                               if isinstance((receipt or {}).get("metadata_assertions"), Mapping) else {})
+        external_label = bool(
+            receipt and receipt.get("valid")
+            and external_assertions.get("ai_generated")
+            and external_assertions.get("provider_or_platform")
+            and external_assertions.get("content_id")
+        )
+        origin_label_compliant = metadata_label or external_label or not uses_ai
+        cryptographic_valid = local_c2pa_valid or bool(receipt and receipt.get("cryptographic_valid"))
+        cryptographic_trusted = local_c2pa_trusted or bool(receipt and receipt.get("cryptographic_trusted"))
+        # Origin labels satisfy disclosure/identification duties; C2PA proves a
+        # cryptographically bound provenance chain.  They are reported
+        # separately and never upgrade one another's evidence class.
+        verified = origin_label_compliant or cryptographic_valid or not uses_ai
         if not digest:
             findings.append({"severity": "block", "code": "provenance_media_missing", "msg": f"{did} 最终媒体缺失/不可哈希"})
         elif uses_ai and not verified:
             findings.append({"severity": "block", "code": "provenance_not_verified",
                              "msg": f"{did} 当前文件未检出机器可读 AI provenance，且无绑定当前 SHA 的外部探测回执"})
         if uses_ai and "中国大陆" in regions:
-            assertions = (receipt or {}).get("metadata_assertions") if isinstance((receipt or {}).get("metadata_assertions"), Mapping) else {}
+            assertions = external_assertions
             china_ok = bool(metadata and (metadata.get("china_assertions") or {}).get("complete")) or bool(
                 assertions.get("ai_generated") and assertions.get("provider_or_platform") and assertions.get("content_id"))
             if not china_ok:
@@ -191,6 +219,9 @@ def build(root: Path):
                                  "msg": f"{did} 未验证中国 AI 标识所需的生成属性、服务/平台标识与内容编号"})
         items.append({"deliverable_id": did, "path": rel, "sha256": digest, "uses_ai": uses_ai,
                       "c2pa": c2pa, "container_metadata": metadata, "external_receipt": receipt,
+                      "origin_label_compliant": origin_label_compliant,
+                      "cryptographic_provenance_valid": cryptographic_valid,
+                      "cryptographic_provenance_trusted": cryptographic_trusted,
                       "verified": verified})
     if uses_ai and not plan.get("deliverables"):
         findings.append({"severity": "block", "code": "provenance_delivery_plan_missing", "msg": "缺 delivery plan，无法逐文件验证 AI provenance"})
@@ -201,8 +232,9 @@ def build(root: Path):
             {"authority": "official_regulation", "territory": "中国大陆",
              "title": "人工智能生成合成内容标识办法", "effective_date": "2025-09-01",
              "source": "https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm"},
-            {"authority": "open_technical_standard", "title": "C2PA Technical Specification 2.3",
-             "source": "https://spec.c2pa.org/specifications/specifications/2.3/specs/_attachments/C2PA_Specification.pdf"},
+            {"authority": "open_technical_standard", "title": "C2PA Technical Specification 2.4",
+             "source": "https://spec.c2pa.org/specifications/specifications/2.4/specs/C2PA_Specification.html",
+             "checked_at": "2026-08-26"},
         ],
         "items": items, "findings": findings,
         "summary": {"block": sum(f["severity"] == "block" for f in findings),

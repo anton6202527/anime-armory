@@ -26,6 +26,8 @@
       "segment_id": "PAGE_001",
       "page_side": "right",
       "spread_id": "SPREAD_001",
+      "spread_mode": "paired_pages",
+      "cross_page_art": false,
       "width": 1440,
       "height": 2036,
       "reading_order": ["P001", "P002"],
@@ -44,6 +46,9 @@
             "payoff": {"panel_id": "P003", "mode": "next_page_open"}
           },
           "subject_regions": [],
+          "speaker_anchors": {
+            "CHAR_01": {"bbox": {"x": 980, "y": 520, "w": 180, "h": 300}}
+          },
           "avoid_regions": [],
           "bubble_slots": [
             {
@@ -80,6 +85,12 @@
 - `longstrip_single_column`：按 name page/scroll grouping 排列；`thumbnail_rect` 的相对宽度和水平位置会映射到长条画布，`gutter_intent` 会转成实际 `gutter_after`。若设置最大分段高度，只在 panel 边界拆分。
 - `paged_grid_ltr` / `paged_grid_rtl`：一个 segment 对应一页，直接把缩略分镜矩形映射进原稿安全框；panel 数组保持阅读顺序，不能用坐标排序代替 RTL 顺序。
 - `yonkoma_four_rows`：一个 segment 对应一页，每页必须恰好四格，按四个纵向行格输出。
+
+候选预览与跨页语义：
+
+- `spread_id` 是面对页分组，不等于画面跨装订线；`spread_mode=paired_pages` 可自动选版，只有显式 `cross_page_art=true` / `spread_mode=cross_page_art` 才保护为复杂构图。
+- `layout_candidates.py` 为每个候选输出 `layout_previews/*_screen_beats.svg` 或 `*_page_turn_contact_sheet.svg`。selection receipt 绑定预览 SHA 和 advisory 几何指标，不能用这些指标冒充审美签收。
+- `speaker_anchors` / `character_regions` 映射到最终 panel 坐标后供 compose 的气泡尾消费；没有匹配锚点时 renderer 必须在收据中标明 fallback，不能声称尾尖已指向说话人。
 
 确定性 validator：
 

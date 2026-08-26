@@ -134,6 +134,15 @@ def test_codex_model_label_distinguishes_exact_model_evidence(tmp_path):
     assert fresh["capability_assertions"]["model_precision"]["value"] == "provider_model"
 
 
+def test_official_image_api_catalog_exposes_current_reproducible_ids():
+    openai = adapter.backend_adapter("OpenAI")
+    gemini = adapter.backend_adapter("Nano Banana Pro")
+    assert openai["exact_model_id"] == "gpt-image-2"
+    assert openai["recommended_snapshot_id"] == "gpt-image-2-2026-04-21"
+    assert gemini["exact_model_id"] == "gemini-3-pro-image"
+    assert gemini["volume_model_id"] == "gemini-3.1-flash-image"
+
+
 def test_image_backend_baseline_detects_project_switch(tmp_path):
     (tmp_path / "_设置.md").write_text("- 生图AI: Codex\n- 生图模型: GPT Image 2\n", encoding="utf-8")
     path = adapter.write_image_backend_baseline(str(tmp_path))

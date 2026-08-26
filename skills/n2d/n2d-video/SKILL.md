@@ -343,7 +343,7 @@ python3 skills/n2d/progress.py set <作品根> 第N集 视频prompt ✅
 1. **能力报盘**：运行 `python3 skills/n2d/n2d-video/scripts/backend_status.py <作品根>` 查看后端多帧能力与拆段策略。
 2. **自动化准备**：用 `scripts/video_runner.py` 写稳定 manifest。若后端不支持原生多帧，将自动执行 **Split Relay (拆段接力)**。
 3. **优先局部返修**：当前后端 adapter v2 若暴露 `edit / extend / replace_range / remix`，对局部穿帮先生成 hash-bound correction variant，不默认整镜重抽；后端不支持时再按最小范围回退 regen。
-4. **持久等待**：异步 provider 用 `video_runner.py wait` 指数退避查询，避免固定频率空轮询或每次把“继续查询”交给用户。
+4. **持久恢复**：队列执行用 `video_runner.py execute`；每个 physical Clip 仅首次 submit，之后只凭已落盘的原 `submit_id` 做 wait/query/download/QC。进程崩溃后继续同一 attempt；`submitted_at` 已存在却没有 submit_id、或 provider 状态不明时机器阻断自动重提。
 
 > **长镜/多关键帧**：不走拼贴板 segment 流程（已退役）。`video_runner prepare` 会自动从 `storyboard.json` 的 `continuity.anchors` 和后端能力档决定执行：Dreamina 原生 `multiframe2video` 一次吃首/中锚/尾；首尾帧后端拆段接力；first-frame-only 后端标记为未消费并要求 reroute/人工处理——见「中段锚帧」节。
 
@@ -354,6 +354,9 @@ python3 skills/n2d/n2d-video/scripts/video_runner.py prepare <作品根> 第N集
 
 # 2) 提交单条（会花费视频积分；提交前 manifest 先标 submitting；长 story_clip 会在 prepare 中展开为 Clip_XX_partN，逐个 part 提交）
 python3 skills/n2d/n2d-video/scripts/video_runner.py submit <作品根> <manifest.json> --clip Clip_06
+
+# 2a) batch/一键入口：首次提交后自动在同一 submit_id 上等待、下载、QC；重启仍只恢复原任务
+python3 skills/n2d/n2d-video/scripts/video_runner.py execute <作品根> <manifest.json> --clip Clip_06 --timeout 1800
 
 # 3) 查询并下载到 出视频/第N集/视频/ 原片
 python3 skills/n2d/n2d-video/scripts/video_runner.py query <作品根> <manifest.json> --clip Clip_06
@@ -399,7 +402,7 @@ python3 skills/n2d/n2d-video/scripts/multishot_runner.py accept <作品根> <mul
 
 **局部编辑返修合同**：`repair-plan` 把源视频路径与 SHA、operation、修改区间、mask（若有）、preserve regions、修复指令和原 manifest fingerprint 一并绑定；同一合同重复运行幂等返回同一 variant。源片、区间或指令变化会生成新 variant，不会覆盖原 accepted MP4。编辑结果必须重新过机器 QC 与当前像素验收；只有显式升级到时间线/canonical 选择后才替代源片。adapter 没有声明 correction operation、源片已漂移或 mask 不存在时 fail-closed，绝不偷偷改走全量重抽。
 
-**provider 等待/重试合同**：`wait` 只重复 query，同一 task id 上按指数退避 + jitter 轮询；`failed/cancelled` 立即返回，timeout 保留 `submitted/running` 和恢复证据。它绝不在 provider 状态不明时自动 submit 第二个任务，因此不会因网络抖动双扣费。
+**provider 等待/重试合同**：`execute`/`wait` 只在首次提交后重复 query，同一 submit id 上按指数退避 + jitter 轮询；`failed/cancelled` 立即阻断，timeout 保留 `submitted/running` 和恢复证据。未知付费状态、缺 submit id 或终态失败都绝不自动开第二个任务。
 
 **Split Relay 付费执行纪律（拆段接力）**：
 

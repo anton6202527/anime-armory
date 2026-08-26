@@ -17,12 +17,13 @@ from typing import Any, Dict, Mapping, Optional, Sequence
 # 这是「生视频模型/渠道」选择点的能力档快照；max_clip_seconds/native_av/frame_control、以及
 # 下方 MOTION_CONTROL_PROFILES（运镜/运动控制能力）和 lipsync_audio_ref（音频参考口型）都随后端迭代变，
 # 同属本快照、同一个戳记覆盖（freshness 注册 id=n2d-video-backends）。
-# 采集日期：2026-07-24  来源：Google Gemini API video/Omni/Veo docs + ByteDance Seedance 2.0/2.5 official launch（即梦体验中心 07-06 上线·API 随后）+ Kling VIDEO 3.0 official guide + PixVerse C1 official launch + cli_snapshots/
+# 采集日期：2026-08-26  来源：Google Gemini API video/models docs + ByteDance Seedance 2.5 official launch + 已有 Kling/PixVerse 官方档案 + cli_snapshots/
 CATALOG_VERIFIED = {
-    "date": "2026-07-11",
+    "date": "2026-08-26",
     "source": (
-        "Google Gemini API video overview/Omni Flash/Veo docs (last updated 2026-06-30) + "
-        "ByteDance Seedance 2.0 official launch + Kling VIDEO 3.0 official guide + "
+        "Google Gemini API video overview/models/Veo docs (checked 2026-08-26) + "
+        "ByteDance Seedance 2.5 official launch (2026-07-31; API access stated coming soon) + "
+        "Kling VIDEO 3.0 official guide + "
         "PixVerse C1 official launch (2026-04-07) + Dreamina CLI snapshots + Luma Ray docs + "
         "OpenAI Sora discontinuation notice; other entries are conservative fallbacks"
     ),
@@ -127,13 +128,22 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "capability_confidence": "conservative",
         "aliases": ("seedance", "Seedance 2.0", "seedance2.0", "seedance 2.0",
                     "Seedance 2.5", "seedance2.5", "seedance 2.5"),
-        # 2026 新鲜度（2026-07-24 实搜复核）：Seedance 2.5 已正式上线——即梦体验中心 ~2026-07-06、
-        # API 随后开放；官方发布口径为单段原生 30s + 最多 50 个全模态参考 + 音视频同 latent 联合生成
-        # （「原生 4K」多篇报道实际归属同场升级的 Seedance 2.0，2.5 是否 4K 仍存疑）。对 n2d 的意义：
-        # 30s 单段直接抬高 single_take_multishot 接力组的合并上限（更少 clip）。能力仍按
-        # multishot_native + 当前 max_clip_seconds 保守登记：执行渠道 per-run cli_snapshots 验到 2.5
-        # 且时长档确认前，家族上限不升到 30（防把未验数字写死进预算）。
+        # Seedance 2.5 官方发布（2026-07-31）确认：单次最长 30s、可多轮延展、最多
+        # 30 图 + 10 视频 + 10 音频参考、时间戳级编辑。同一发布页同时明确 BytePlus ModelArk API
+        # 仍是“coming soon”；因此 30s 只记为 advertised 能力，不能让未接通渠道自动付费路由。
+        # 只有当前执行渠道的 per-run receipt 证明精确 model id 与 30s 时长档时，才可把
+        # max_clip_seconds 从保守 15 提升到 30。
         "max_clip_seconds": 15,
+        "advertised_max_clip_seconds": 30,
+        "official_reference_limits": {"images": 30, "videos": 10, "audios": 10},
+        "supports_multi_round_extension": True,
+        "supports_timestamp_editing": True,
+        "availability": {
+            "status": "product_rollout_api_pending",
+            "current_model": "Seedance 2.5",
+            "source": "https://seed.bytedance.com/en/blog/one-take-creation-flexible-referencing-introducing-seedance-2-5",
+            "note": "Jimeng/Doubao product rollout is official; BytePlus ModelArk API was still coming soon on the official launch page. Require channel smoke before paid routing.",
+        },
         "default_mode": "image2video",
         "identity_mechanism": "face_lock",
         "native_av": True,
@@ -201,6 +211,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
             "Gemini Omni Flash",
             "gemini omni flash",
             "Gemini Omni",
+            "gemini-omni-flash",
             "gemini-omni-flash-preview",
             "omni flash",
             "Google Omni",
@@ -210,7 +221,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         # in the API adapter or project smoke evidence.
         "max_clip_seconds": 8,
         "default_mode": "interactions_video",
-        "default_model_version": "gemini-omni-flash-preview",
+        "default_model_version": "gemini-omni-flash",
         "identity_mechanism": "multi_input_reference",
         "native_av": True,
         "duration_control": {
@@ -222,7 +233,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "multishot_native": True,
         "availability": {
             "status": "preview",
-            "current_model": "gemini-omni-flash-preview",
+            "current_model": "gemini-omni-flash",
             "source": "Google Gemini API Omni Flash docs and video overview",
             "note": "Google recommends Omni Flash as the default Gemini API video model; n2d still requires first/last-frame contract evidence and backend smoke before paid batch routing.",
         },
@@ -234,7 +245,7 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
             "supports_last_frame": False,
             "supports_native_mid_anchors": False,
             "fallback": "Use as multimodal reference-to-video / conversational editing candidate. Do not assume n2d first-frame or last-frame exactness until adapter smoke verifies the contract.",
-            "verified": "2026-07-01 Google Gemini API video overview + Gemini Omni Flash docs (last updated 2026-06-30)",
+            "verified": "2026-08-26 Google Gemini API video overview + current models catalog",
         },
     },
     "sora": {

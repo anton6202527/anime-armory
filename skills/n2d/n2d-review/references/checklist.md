@@ -24,7 +24,7 @@
 | 气质/动作习惯偏离（表演层） | 判 | 对照 `设定库/角色圣经.md` 的气质/动作习惯：清冷角色是否忽然媚笑、低眉宫女是否变成威压主角姿态、帝王是否丢掉叩案/沉默压迫等；表演层偏离不改 `character_dna`，但会造成“不是这个角色在演”的观感 | 🟡 |
 | 道具漂移 | 判 | 反复入镜道具是否一致 | 🟢/🟡 |
 | 道具/背景结构在场恒存（object permanence） | 判 | 同场景内已确立的常驻物件（`scene_dna.常驻物件`）/已立 `PROP_xx` 与背景结构（门/窗/柱/陈设）是否跨镜持续在场——不凭空消失又凭空回来、不逐镜 pop in/out。**豁免**：近景把道具裁出画框=出框不算消失；剧情动作移除/取走需在 storyboard 状态/接力契约显式声明（声明了即合法）。见 n2d-image「在场恒存铁律」 | 凭空增减/结构跳变 🟡 / 关键道具该在却没了 🔴 |
-| 生图模型/渠道口径不一致 | 机+判 | 生产前：`_设置.md`、出图总览、逐镜 prompt 是否都统一到同一组官方/已登录 `生图模型 + 生图渠道/生图AI`（默认 Codex CLI 访问 OpenAI GPT Image 系列；非 Codex/OpenAI 后端如 Dreamina/即梦官方 CLI、Seedream、Kling/可灵主体库、Nano Banana、Sora Cameo 需用户签核例外）；不得一部分 Codex、一部分其它官方渠道，更不得写 `同视频AI` 含糊口径、第三方逆向/web 自动化出图。Sora Cameo 仅旧项目/manual。成片后：若画风/脸型跨镜跳变，追溯是否混用生图模型/渠道 | 生产前缺 🔴 / 成片后按结果 🔴/🟡 |
+| 生图模型/渠道口径不一致 | 机+判 | 生产前：`_设置.md`、出图总览、逐镜 prompt 是否都统一到同一组官方/已登录 `生图模型 + 生图渠道/生图AI`（默认 Codex CLI 访问 OpenAI GPT Image 系列；非 Codex/OpenAI 后端如 Dreamina/即梦官方 CLI、Seedream、Kling/可灵主体库、Nano Banana 2 / Pro（Gemini API）、Sora Cameo 需用户签核例外）；不得一部分 Codex、一部分其它官方渠道，更不得写 `同视频AI` 含糊口径、第三方逆向/web 自动化出图。Sora Cameo 仅旧项目/manual。成片后：若画风/脸型跨镜跳变，追溯是否混用生图模型/渠道 | 生产前缺 🔴 / 成片后按结果 🔴/🟡 |
 | 固定 seed 可复现性误报 | 机+判 | 读 `identity_registry.json.generation_control` 与 `production_events.jsonl`。若记录了 `requested_seed`，必须同时有 `seed_strategy/seed_support/seed_effective`；支持 seed 的后端应有 `effective_seed`，Codex/未暴露 seed 后端必须记 `seed_effective=false`，不得在报告里宣称 seed 可复现 | 误报可复现 🟡 / 记录缺失 🟡 |
 | 角色资产包缺口 | 机+判 | 所有入镜具名人物读 `identity_registry.json.characters[].asset_bundle` 与 `角色库/<CHAR_ID>__<slug>/manifest.json`：`library_tier`、reference/prompts/lora/voice/adapters/qc 是否可追溯，缺口是否显式记录。短线角色用 `named_minimal`，不是无包；资产包不得另写一套角色 DNA | 任一具名角色缺包 🔴 / 档位或缺口未记 🟡 / 资产包与 registry 冲突 🔴 |
 | 画风跳变 | 判 | 是否守 `global_style.md`；有无中途换生图模型/渠道的"一致性税"。同一作品/同一集原则上不换生图模型/渠道；必须换时需重做该集全部定妆与分镜，不允许混产 | 🟡 |
@@ -169,7 +169,7 @@
 | 进度表勾选 vs 实际产物一致 | 🟡 |
 | 跨模型锚定句对账（Q18）：生图模型/渠道 ≠ 生视频模型/渠道时，含角色的 image prompt 末尾是否都拼了目标生视频模型的风格锚定句（缺则 image2video 运动估计崩） | 缺 🔴 |
 | 产物快照（配音句/clip/成片 计数） | 🟢 信息 |
-| 生图模型/渠道一致性对账 | 🔴/🟡 | `_设置.md` 的 `生图模型` + `生图AI/生图渠道` 必须统一到同一组官方/已登录模型与入口；默认 Codex/OpenAI，非 Codex/OpenAI 后端如 Dreamina/即梦官方 CLI、Seedream、Kling/可灵主体库、Nano Banana、Sora Cameo 需用户签核例外；出图 prompt 不得标 `同视频AI`、第三方逆向/web 自动化生图，也不得混用多个模型/渠道。发现不一致时报告必须用用户可读话术提示：模型/渠道混用会造成角色脸、服装、画风漂移，本次停止出图，先统一后再继续 |
+| 生图模型/渠道一致性对账 | 🔴/🟡 | `_设置.md` 的 `生图模型` + `生图AI/生图渠道` 必须统一到同一组官方/已登录模型与入口；默认 Codex/OpenAI，非 Codex/OpenAI 后端如 Dreamina/即梦官方 CLI、Seedream、Kling/可灵主体库、Nano Banana 2 / Pro（Gemini API）、Sora Cameo 需用户签核例外；出图 prompt 不得标 `同视频AI`、第三方逆向/web 自动化生图，也不得混用多个模型/渠道。发现不一致时报告必须用用户可读话术提示：模型/渠道混用会造成角色脸、服装、画风漂移，本次停止出图，先统一后再继续 |
 
 ---
 

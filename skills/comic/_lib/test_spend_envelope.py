@@ -156,6 +156,42 @@ def test_crash_window_same_consumption_id_never_resubmits(tmp_path: Path) -> Non
     assert list(entry["reservations"]) == ["ambiguous-call"]
 
 
+def test_provider_submit_id_is_durable_and_transition_is_monotonic(tmp_path: Path) -> None:
+    data = jobs("P001", "P002")
+    path, _ = issued(tmp_path, data)
+    reserve(path, tmp_path, data, "recoverable-call")
+    submitted = spend.mark_provider_state(
+        path, tmp_path, consumption_id="recoverable-call",
+        state="submitted", provider_submit_id="dreamina-42",
+    )
+    assert submitted["status"] == "submitted"
+    assert submitted["provider_submit_id"] == "dreamina-42"
+    polling = spend.mark_provider_state(
+        path, tmp_path, consumption_id="recoverable-call",
+        state="polling", provider_submit_id="dreamina-42",
+    )
+    assert polling["status"] == "polling"
+    assert spend.submission_record(path, tmp_path, consumption_id="recoverable-call")["provider_submit_id"] == "dreamina-42"
+    with pytest.raises(spend.SpendAuthorizationError) as duplicate:
+        reserve(path, tmp_path, data, "recoverable-call")
+    assert duplicate.value.code == "submission_state_unknown"
+    with pytest.raises(spend.SpendAuthorizationError) as backwards:
+        spend.mark_provider_state(
+            path, tmp_path, consumption_id="recoverable-call",
+            state="submitted", provider_submit_id="dreamina-42",
+        )
+    assert backwards.value.code == "invalid_provider_transition"
+    spend.mark_provider_state(
+        path, tmp_path, consumption_id="recoverable-call",
+        state="downloaded", provider_submit_id="dreamina-42",
+    )
+    settled = spend.settle_submission(
+        path, tmp_path, consumption_id="recoverable-call", actual_cost="7"
+    )
+    assert settled["status"] == "settled"
+    assert settled["provider_state"] == "downloaded"
+
+
 def test_unknown_cost_never_consumes_or_creates_ledger(tmp_path: Path) -> None:
     data = jobs("P001", "P002")
     path, envelope = issued(tmp_path, data)

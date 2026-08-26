@@ -44,6 +44,8 @@ def test_external_actual_probe_receipt_must_bind_current_file_sha(tmp_path, monk
     report = pq.build(root)
     assert report["summary"]["verified"] is True
     assert report["items"][0]["external_receipt"]["valid"] is True
+    assert report["items"][0]["origin_label_compliant"] is True
+    assert report["items"][0]["cryptographic_provenance_valid"] is False
 
     (root / "合成" / "成片_主片.mp4").write_bytes(b"re-encoded")
     stale = pq.build(root)
@@ -85,3 +87,18 @@ def test_c2pa_probe_requires_active_manifest_and_no_validation_failure(tmp_path,
                         SimpleNamespace(returncode=0, stdout=json.dumps(invalid), stderr=""))
     result = pq.c2pa_probe(media)
     assert result["verified"] is False and result["validation_errors"]
+
+
+def test_plain_metadata_never_claims_cryptographic_provenance(tmp_path, monkeypatch):
+    root = _project(tmp_path)
+    monkeypatch.setattr(pq, "c2pa_probe", lambda path: None)
+    monkeypatch.setattr(pq, "ffprobe_metadata", lambda path: {
+        "payload": {}, "ai_markers": ["ai-generated"],
+        "china_assertions": {"ai_generated": True, "provider_or_platform": True,
+                             "content_id": True, "complete": True},
+    })
+    report = pq.build(root)
+    item = report["items"][0]
+    assert item["origin_label_compliant"] is True
+    assert item["cryptographic_provenance_valid"] is False
+    assert item["cryptographic_provenance_trusted"] is False

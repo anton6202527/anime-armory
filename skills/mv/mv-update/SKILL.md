@@ -34,6 +34,7 @@ python3 skills/mv/mv-update/scripts/update_plan.py check "<MV项目根>" --json
 
 - **不默认整支 MV 重做**：只回放到项目已经到达的阶段；尚未开始的未来阶段只提示后续使用新 skill。
 - **默认保留旧产物**：计划默认以新版本/新路径回放并保留当前素材；若出图/出视频的后端、规格和成本仍在有效阶段预算包内，不逐调用确认。只有覆盖已验收素材、预算缺失/扩大/过期或合同变化才停。
+- **安全回放是机器动作**：计划 JSON 的 `machine_actions` 先要求 `snapshot_current_outputs`，再执行 `replay_reversible_stage_range`；当前合同与有效阶段预算包内 `requires_user_confirmation=false`，只在 `stop_before` 登记的预算、权利、不可逆覆盖/发布或最终验收边界停下。
 - **控制面变化不触发返工**：`mv-progress`、`mv-update` 本身变化只提示刷新进度/更新基线。
 - **后配歌曲路线不越级**：最终音频未入库时，不得把未来正式卡点、正式 timeline、正式出图/出视频当作当前应返工范围。
 

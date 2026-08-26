@@ -654,17 +654,46 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
     #    （G9 轻量闭环：alerts 是观测面不是闸门，但 critical 告警必须在花钱决策点被看到）
     if stage_key in GENERATION_STAGES:
         phase_authorization = probes.spend_envelope or {}
-        if phase_authorization.get("status") == "authorized":
+        if phase_authorization.get("status") in {"authorized", "authorized_recovery"}:
+            exact_task_id = str(phase_authorization.get("task_id") or "").strip()
+            exact_plan_digest = str(
+                phase_authorization.get("current_plan_digest") or ""
+            ).strip()
+            if not exact_task_id or not exact_plan_digest:
+                return na("needs_payment_confirm", {
+                    "headline": f"{ep} {frontier['label']}：授权探针缺少精确执行绑定",
+                    "to_user": (
+                        "阶段预算包本身仍有效，但只读探针没有返回 task_id + current_plan_digest；"
+                        "为避免 runner 误领另一任务，本次不进入自动执行。请先刷新探针/队列实现。"
+                    ),
+                    "exact_command": cmd,
+                    "phase_spend_envelope": phase_authorization,
+                })
             runner_command = (
                 "python3 skills/n2d/n2d-batch/scripts/runner.py "
-                f"{shlex.quote(str(root))} --limit 1 --stop-on-fail"
+                f"{shlex.quote(str(root))} --limit 1 --stop-on-fail "
+                f"--task-id {shlex.quote(exact_task_id)} "
+                f"--expected-plan-digest {shlex.quote(exact_plan_digest)} "
+                f"--episode {shlex.quote(str(ep))} "
+                f"--stage {shlex.quote(stage_key)}"
             )
             return na("needs_stage_execution", {
-                "headline": f"{ep} {frontier['label']}：阶段预算包仍有效，可继续执行",
+                "headline": (
+                    f"{ep} {frontier['label']}：恢复既有 provider 任务"
+                    if phase_authorization.get("status") == "authorized_recovery"
+                    else f"{ep} {frontier['label']}：阶段预算包仍有效，可继续执行"
+                ),
                 "to_user": (
-                    "当前 stage/input/model/channel 与 v2 阶段预算包完全匹配且仍有调用、"
-                    "重试轮次和费用余量；无需重复询问。只允许由 batch runner 在 provider 前"
-                    "原子消费，supervisor/探针本身不消费也不得扩大授权。"
+                    (
+                        "已存在 hash-bound submit_id；本次只恢复 query/download/QC/finalize，"
+                        "禁止再次 submit 或再次消费预算。"
+                    )
+                    if phase_authorization.get("status") == "authorized_recovery"
+                    else (
+                        "当前 stage/input/model/channel 与 v2 阶段预算包完全匹配且仍有调用、"
+                        "重试轮次和费用余量；无需重复询问。只允许由 batch runner 在 provider 前"
+                        "原子消费，supervisor/探针本身不消费也不得扩大授权。"
+                    )
                 ),
                 "exact_command": runner_command,
                 "stage_command": cmd,

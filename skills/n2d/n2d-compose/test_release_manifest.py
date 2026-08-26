@@ -6,6 +6,7 @@ import subprocess
 from pathlib import Path
 
 import pytest
+import media_artifact
 
 
 SCRIPT = Path(__file__).with_name("release_manifest.py")
@@ -23,7 +24,13 @@ def _write_test_mp4(path: Path, *, color: str = "black") -> None:
         proc = subprocess.run(
             [
                 "ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i",
-                f"color=c={color}:s=16x16:d=0.2", "-an", "-c:v", "mpeg4", str(path),
+                f"color=c={color}:s=16x16:r=24:d=0.6",
+                "-f", "lavfi", "-i", "sine=frequency=440:sample_rate=48000:duration=0.6",
+                "-map", "0:v", "-map", "1:a", "-c:v", "libx264", "-pix_fmt", "yuv420p",
+                "-x264-params", "colorprim=bt709:transfer=bt709:colormatrix=bt709:range=limited",
+                "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709",
+                "-color_range", "tv", "-c:a", "aac", "-ar", "48000", "-ac", "2",
+                "-movflags", "+faststart", str(path),
             ],
             check=False,
             stdout=subprocess.PIPE,
@@ -33,6 +40,56 @@ def _write_test_mp4(path: Path, *, color: str = "black") -> None:
     except FileNotFoundError:
         pytest.skip("ffmpeg unavailable")
     assert proc.returncode == 0, proc.stderr.decode("utf-8", errors="replace")
+
+
+def _write_completion_receipts(root: Path, episode: str, master: Path, contract) -> None:
+    prod = root / "生产数据"
+    master_rel = master.relative_to(root).as_posix()
+    master_sha = contract.sha256_file(master)
+    duration = contract.probe_master_duration(master)
+    assert duration is not None
+    recipe = prod / "timelines" / episode / "render_recipe.json"
+    recipe.parent.mkdir(parents=True, exist_ok=True)
+    recipe_payload = {
+        "kind": media_artifact.RECIPE_KIND,
+        "version": media_artifact.RECIPE_VERSION,
+        "episode": episode,
+        "generated_at": "2026-08-20T00:00:00+00:00",
+        "picture": {"duration_sec": duration},
+        "ordered_sources": [{
+            "clip": "Clip_01", "source_sha256": master_sha, "edit_duration_sec": duration,
+        }],
+        "duration_sec": duration,
+    }
+    hash_scope = dict(recipe_payload)
+    hash_scope.pop("generated_at")
+    recipe_payload["recipe_sha256"] = media_artifact.canonical_json_sha(hash_scope)
+    recipe.write_text(json.dumps(recipe_payload), encoding="utf-8")
+    loudness = media_artifact.measure_loudness(master)
+    assert loudness["available"] is True, loudness
+    media_receipt = media_artifact.build_receipt(
+        root,
+        episode,
+        master,
+        media_artifact.default_master_spec(
+            width=16, height=16, fps="24", target_lufs=float(loudness["integrated_lufs"]),
+        ),
+        recipe_path=recipe,
+        transaction_id="release-manifest-test",
+    )
+    assert media_receipt["status"] == "pass", media_receipt
+    media_artifact.write_receipt(root, episode, media_receipt)
+    (prod / f"creative_watchdown_{episode}.json").write_text(json.dumps({
+        "kind": "n2d_creative_watchdown", "version": 1, "episode": episode,
+        "status": "pass", "reviewer_kind": "executor_visual_audio",
+        "reviewed_at": "2026-08-20T00:00:00+00:00",
+        "master": {"path": master_rel, "sha256": master_sha, "duration_sec": duration},
+        "watched_duration_sec": duration, "coverage": 1.0,
+        "dimensions_reviewed": ["story_performance", "visual_continuity", "audio_dialogue", "pacing"],
+        "timecode_findings": [], "review_notes": ["完整听看当前测试母版。"],
+        "scope": "creative_preflight_only", "final_user_acceptance": False,
+        "release_completion_verdict": False,
+    }, ensure_ascii=False), encoding="utf-8")
 
 
 def _write_internal_compliance(root: Path, episode: str) -> None:
@@ -105,6 +162,15 @@ def _write_canonical_acceptance(root: Path, episode: str, *, decision: str = "ap
     ]
     master = contract.resolve_final_master(root, episode)
     assert master is not None
+    _write_completion_receipts(root, episode, master, contract)
+    (root / "生产数据" / "production_events.jsonl").touch(exist_ok=True)
+    contract._event_ledger_module().audit(str(root), write=True, strict_trace=True)
+    validation = contract.n2d_schema_registry.scan_artifacts(
+        str(root), strict_unknown=True,
+        scope=contract.n2d_schema_registry.SCAN_SCOPE_RELEASE,
+        completion_inputs_only=True,
+    )
+    contract.n2d_schema_registry.write_validation(str(root), validation)
     master_rel = master.relative_to(root).as_posix()
     final_master = next(row for row in components if row["name"] == "final_master")
     final_master.update({

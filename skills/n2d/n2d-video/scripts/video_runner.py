@@ -11,6 +11,8 @@ immediately before invoking the backend.
 from __future__ import annotations
 
 import argparse
+import contextlib
+import fcntl
 import hashlib
 import importlib.util
 import json
@@ -129,6 +131,51 @@ VIDEO_SHOT_TARGET_SEC = 6.0
 
 def production_dir(root: Path) -> Path:
     return root / "生产数据"
+
+
+def _submit_lock_identity(root: Path, manifest_file: Path, clip: str) -> Dict[str, str]:
+    project = root.expanduser().resolve()
+    manifest_path = manifest_file.expanduser().resolve(strict=False)
+    try:
+        manifest_name = manifest_path.relative_to(project).as_posix()
+    except ValueError:
+        manifest_name = manifest_path.as_posix()
+    return {"manifest": manifest_name, "clip": str(clip).strip()}
+
+
+@contextlib.contextmanager
+def exclusive_submit_lock(
+    root: Path, manifest_file: Path, clip: str, submit_request_sha256: str
+):
+    """Cross-process exclusive lock for one canonical manifest/physical clip.
+
+    The filename is clip-scoped so a changed request SHA cannot bypass an in-flight submit.  The
+    full `(manifest, clip, submit_request_sha256)` binding is written inside the locked file for
+    audit/debugging.  `flock` is released by the kernel on process crash.
+    """
+    identity = _submit_lock_identity(root, manifest_file, clip)
+    lock_key = canonical_sha256(identity).split(":", 1)[-1]
+    lock_dir = production_dir(root) / ".video_submit_locks"
+    lock_dir.mkdir(parents=True, exist_ok=True)
+    path = lock_dir / f"{lock_key}.lock"
+    with path.open("a+", encoding="utf-8") as handle:
+        fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+        try:
+            handle.seek(0)
+            handle.truncate()
+            handle.write(json.dumps({
+                "kind": "n2d_video_submit_lock",
+                "version": 1,
+                **identity,
+                "submit_request_sha256": str(submit_request_sha256),
+                "holder_pid": os.getpid(),
+                "locked_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+            }, ensure_ascii=False, sort_keys=True) + "\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+            yield path
+        finally:
+            fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
 
 
 def formal_video_dir(root: Path, episode: str) -> Path:
@@ -2093,6 +2140,34 @@ GENERATED_NOT_ACCEPTED_STATUSES = {
 }
 
 
+def paid_submit_replay_issue(item: Mapping[str, Any]) -> str:
+    """Explain why this manifest row must resume/reconcile instead of submitting again.
+
+    ``submitted_at`` is a paid-boundary write-ahead marker.  Once it exists, absence of a
+    provider id is *uncertain paid state*, never evidence that no request was created.
+    Likewise, any known submit id belongs to one durable provider job even when its latest
+    query result says failed/rejected; a new paid attempt needs a newly prepared contract,
+    not another direct call against this row.
+    """
+    submit_id = str(item.get("submit_id") or "").strip()
+    status = str(item.get("status") or "").strip().lower()
+    clip = str(item.get("clip") or "physical clip")
+    if submit_id:
+        return (
+            f"{clip} already owns durable submit_id={submit_id}; resume/query/download/accept "
+            "that same provider job. Never create a second paid submit from this manifest row."
+        )
+    if str(item.get("submitted_at") or "").strip() or status in {
+        "submitting", "submitted", "submitted_unknown_id", "submit_failed",
+    }:
+        return (
+            f"{clip} is an unknown paid state (status={status or 'unknown'}, submitted_at="
+            f"{item.get('submitted_at') or 'missing'}, submit_id missing); reconcile the original "
+            "provider request. Never retry by creating a new paid submit."
+        )
+    return ""
+
+
 def _resolved_evidence_path(root: Path, raw: Any) -> Optional[Path]:
     text = str(raw or "").strip()
     if not text:
@@ -2151,14 +2226,16 @@ def sequential_qc_blockers(
 ) -> List[str]:
     """Return episode-wide physical clips that forbid another paid submission.
 
-    Prepared/failed/cancelled rows have no delivered video to inspect. Any paid job
-    still in flight, downloaded-but-unaccepted video, or legacy ``accepted`` row
-    without a current-pixel visual receipt blocks the next distinct physical clip.
+    A row is not safe merely because its status enum says ``failed`` or because a
+    different manifest has a prepared duplicate.  Paid-boundary evidence wins:
+    ``submitted_at`` without an id is unknown paid state, while a known id is one
+    durable job that must be resumed through accept.  Downloaded-but-unaccepted video
+    and legacy ``accepted`` rows without a current-pixel visual receipt also block.
     """
     episode = str(manifest.get("episode") or "")
-    current_clip = str(current_item.get("clip") or "")
     manifests: List[Tuple[Path, Mapping[str, Any]]] = [(manifest_file, manifest)]
-    seen_paths = {manifest_file.expanduser().resolve()}
+    current_manifest_path = manifest_file.expanduser().resolve()
+    seen_paths = {current_manifest_path}
     for path in sorted(production_dir(root).glob(f"video_batch_{episode}_*.json")):
         resolved = path.resolve()
         if resolved in seen_paths:
@@ -2168,21 +2245,34 @@ def sequential_qc_blockers(
         if isinstance(data, Mapping):
             manifests.append((path, data))
     blockers: List[str] = []
-    seen_rows: Set[Tuple[str, str, str]] = set()
     for path, data in manifests:
         for row in data.get("items") or []:
             if not isinstance(row, Mapping):
                 continue
             row_clip = str(row.get("clip") or "")
-            if not row_clip or row_clip == current_clip:
+            # Skip only the exact current row.  A same-named clip in another manifest may
+            # own a paid provider job and must never be hidden by this comparison.
+            if path.expanduser().resolve() == current_manifest_path and row is current_item:
                 continue
-            row_key = (row_clip, str(row.get("target") or ""), str(row.get("submit_id") or ""))
-            if row_key in seen_rows:
+            if not row_clip:
                 continue
-            seen_rows.add(row_key)
             status = str(row.get("status") or "").strip().lower()
+            submit_id = str(row.get("submit_id") or "").strip()
+            submitted_at = str(row.get("submitted_at") or "").strip()
             label = f"{row_clip}@{path.name}"
-            if status in GENERATED_NOT_ACCEPTED_STATUSES:
+            if submit_id and status != "accepted":
+                blockers.append(
+                    f"{label}: durable submit_id={submit_id} 尚未 accepted；必须恢复/查询同一 job，禁止新建 retry"
+                )
+            elif submitted_at and not submit_id:
+                blockers.append(
+                    f"{label}: submitted_at={submitted_at} 但无 submit_id，属于未知付费状态；必须先对账，禁止新建 retry"
+                )
+            elif status in {"submitted_unknown_id", "submit_failed"}:
+                blockers.append(
+                    f"{label}: status={status} 属于未知付费状态；必须先对账原请求，禁止新建 retry"
+                )
+            elif status in GENERATED_NOT_ACCEPTED_STATUSES:
                 blockers.append(f"{label}: status={status}，上一物理视频尚未严格 QC/实际查看并 accept")
             elif status == "accepted":
                 issues = accepted_video_receipt_issues(root, episode, row)
@@ -2317,13 +2407,8 @@ def submit_snapshot_issues(root: Path, manifest: Mapping[str, Any], item: Mappin
     return list(dict.fromkeys(issues))
 
 
-def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = False,
-                skip_preflight: bool = False) -> Dict[str, Any]:
-    manifest = load_json(manifest_file)
-    episode = manifest["episode"]
-    item = find_item(manifest, clip)
-    if item.get("submit_id") and item.get("status") not in {"failed", "rejected"}:
-        raise RuntimeError(f"{item['clip']} already has submit_id={item['submit_id']}; query or reject before resubmitting")
+def enforce_submit_item_contract(item: Mapping[str, Any]) -> None:
+    """Fail closed on item-level conditions that make a paid request invalid."""
     unresolved = (
         item.get("frame_strategy_issue")
         or item.get("duration_segment_issue")
@@ -2350,6 +2435,17 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
             "Run n2d-script shot_split_decision/anchor_planner and video_runner prepare again so it expands "
             f"into ~{plan.get('recommended_parts')} explicit physical takes within the backend window, then submit those part clips."
         )
+
+
+def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = False,
+                skip_preflight: bool = False) -> Dict[str, Any]:
+    manifest = load_json(manifest_file)
+    episode = manifest["episode"]
+    item = find_item(manifest, clip)
+    replay_issue = paid_submit_replay_issue(item)
+    if replay_issue:
+        raise RuntimeError(replay_issue)
+    enforce_submit_item_contract(item)
     if not dry_run:
         enforce_sequential_qc_interlock(root, manifest_file, manifest, item)
     freshness = video_manifest_fingerprint_issues(root, manifest)
@@ -2364,9 +2460,9 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
     if requested_operation not in {"submit", *execution_adapter_v2.CORRECTION_OPERATIONS}:
         raise RuntimeError(f"unsupported requested_operation={requested_operation}")
     args, request_path = _adapter_invocation(root, manifest, item, adapter, requested_operation)
-    command = args[1] if len(args) > 1 else "submit"
+    command = requested_operation if request_path else (args[1] if len(args) > 1 else "submit")
     safe_args = (
-        [args[0], command, "--request", str(request_path)]
+        list(args)
         if request_path else [args[0], command, "…(args elided)…"]
     )
     preview_snapshot = build_submit_snapshot(root, manifest, item, adapter, args, request_path)
@@ -2389,77 +2485,106 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
         # （face-lock guard 上面已硬跑不可跳；此处仅放行更广的 preflight，且让这次松动可审计）。
         record_waiver(root, episode, "video_preflight", "skip-preflight",
                       "submit_clip --skip-preflight bypassed video_preflight consistency gate")
-    # Recheck immediately before the paid boundary: preflight must not authorize
-    # an input set different from the one frozen into this request.
-    freshness = video_manifest_fingerprint_issues(root, manifest)
-    if freshness:
-        raise RuntimeError(
-            "paid video submission blocked: canonical input changed during preflight "
-            f"({','.join(freshness)}); prepare and preflight again"
+    # A clip-scoped cross-process lock spans the write-ahead marker and the provider call.
+    # The second caller may have built the same preview while the first was in preflight;
+    # only the lock-holder may reload, revalidate, and cross the paid boundary.
+    with exclusive_submit_lock(root, manifest_file, clip, preview_snapshot["sha256"]):
+        manifest = load_json(manifest_file)
+        episode = manifest["episode"]
+        item = find_item(manifest, clip)
+        replay_issue = paid_submit_replay_issue(item)
+        if replay_issue:
+            raise RuntimeError(replay_issue)
+        enforce_submit_item_contract(item)
+        enforce_sequential_qc_interlock(root, manifest_file, manifest, item)
+
+        freshness = video_manifest_fingerprint_issues(root, manifest)
+        if freshness:
+            raise RuntimeError(
+                "paid video submission blocked: canonical input changed during preflight/lock wait "
+                f"({','.join(freshness)}); prepare and preflight again"
+            )
+        backend_key, adapter = resolve_video_backend({**manifest, "_root": str(root)})
+        item["cost_provider"] = adapter["provider"]
+        requested_operation = str(item.get("requested_operation") or "submit").strip().lower()
+        if requested_operation not in {"submit", *execution_adapter_v2.CORRECTION_OPERATIONS}:
+            raise RuntimeError(f"unsupported requested_operation={requested_operation}")
+        args, request_path = _adapter_invocation(root, manifest, item, adapter, requested_operation)
+        command = requested_operation if request_path else (args[1] if len(args) > 1 else "submit")
+        safe_args = (
+            list(args)
+            if request_path else [args[0], command, "…(args elided)…"]
         )
-    item["submit_snapshot"] = build_submit_snapshot(root, manifest, item, adapter, args, request_path)
-    item["submit_request_sha256"] = item["submit_snapshot"]["sha256"]
-    current_batch_fingerprint = current_video_manifest_input_fingerprint(root, manifest)
-    enforce_expected_paid_request(
-        stage="video",
-        identity=str(item.get("clip") or ""),
-        target=str(item.get("target") or ""),
-        input_fingerprint=str(current_batch_fingerprint.get("sha256") or ""),
-        submit_request_sha256=str(item["submit_request_sha256"] or ""),
-    )
-    item.update({"status": "submitting", "submitted_at": time.strftime("%Y-%m-%dT%H:%M:%S%z")})
-    item.pop("fail_reason", None)
-    update_manifest(manifest_file, manifest)
-    started = time.time()
-    proc = subprocess.run(args, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
-    elapsed = time.time() - started
-    normalized = _normalized_adapter_result(adapter, proc.stdout or "", proc.stderr or "")
-    parsed = normalized.get("raw") if isinstance(normalized.get("raw"), dict) else {}
-    failure = execution_adapter_v2.classify_failure(proc.returncode, normalized, proc.stderr or "")
-    row = {
-        "clip": item["clip"],
-        "cmd_argv": safe_args,
-        "image": item["image"],
-        "duration": item["submit_duration"],
-        "returncode": proc.returncode,
-        "elapsed_sec": elapsed,
-        "stdout": proc.stdout,
-        "stderr": proc.stderr,
-        "adapter_id": adapter.get("adapter_id"),
-        "adapter_version": adapter.get("version", 2),
-        "request_path": str(request_path) if request_path else "",
-        "failure": failure,
-        "recorded_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
-    }
-    append_submission_log(root, episode, row)
-    item["last_submit_returncode"] = proc.returncode
-    item["last_submit_elapsed_sec"] = elapsed
-    item["last_submit_failure"] = failure
-    item["last_submit_stdout_path"] = str(production_dir(root) / f"video_submissions_{episode}.jsonl")
-    if proc.returncode != 0:
-        item["status"] = "submit_failed"
-        item["fail_reason"] = proc.stderr.strip() or f"exit {proc.returncode}"
-    else:
-        item["submit_id"] = normalized.get("submit_id") or item.get("submit_id")
-        item["gen_status"] = normalized.get("status") or parsed.get("gen_status")
-        item["credit_count"] = parsed.get("credit_count")
-        item["logid"] = parsed.get("logid")
-        if str(normalized.get("status") or "").lower() in {"fail", "failed", "error", "rejected"}:
-            item["status"] = "failed"
-            item["fail_reason"] = normalized.get("error") or parsed.get("fail_reason") or "generation failed"
+        _ensure_adapter_command_ready(adapter, args)
+        locked_snapshot = build_submit_snapshot(root, manifest, item, adapter, args, request_path)
+        if str(locked_snapshot.get("sha256") or "") != str(preview_snapshot.get("sha256") or ""):
+            raise RuntimeError(
+                "paid video submission blocked: submit request changed while waiting for the clip lock; "
+                "prepare/preflight the current canonical request again"
+            )
+        item["submit_snapshot"] = locked_snapshot
+        item["submit_request_sha256"] = locked_snapshot["sha256"]
+        current_batch_fingerprint = current_video_manifest_input_fingerprint(root, manifest)
+        enforce_expected_paid_request(
+            stage="video",
+            identity=str(item.get("clip") or ""),
+            target=str(item.get("target") or ""),
+            input_fingerprint=str(current_batch_fingerprint.get("sha256") or ""),
+            submit_request_sha256=str(item["submit_request_sha256"] or ""),
+        )
+        item.update({"status": "submitting", "submitted_at": time.strftime("%Y-%m-%dT%H:%M:%S%z")})
+        item.pop("fail_reason", None)
+        update_manifest(manifest_file, manifest)
+        started = time.time()
+        proc = subprocess.run(args, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+        elapsed = time.time() - started
+        normalized = _normalized_adapter_result(adapter, proc.stdout or "", proc.stderr or "")
+        parsed = normalized.get("raw") if isinstance(normalized.get("raw"), dict) else {}
+        failure = execution_adapter_v2.classify_failure(proc.returncode, normalized, proc.stderr or "")
+        row = {
+            "clip": item["clip"],
+            "cmd_argv": safe_args,
+            "image": item["image"],
+            "duration": item["submit_duration"],
+            "returncode": proc.returncode,
+            "elapsed_sec": elapsed,
+            "stdout": proc.stdout,
+            "stderr": proc.stderr,
+            "adapter_id": adapter.get("adapter_id"),
+            "adapter_version": adapter.get("version", 2),
+            "request_path": str(request_path) if request_path else "",
+            "failure": failure,
+            "recorded_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+        }
+        append_submission_log(root, episode, row)
+        item["last_submit_returncode"] = proc.returncode
+        item["last_submit_elapsed_sec"] = elapsed
+        item["last_submit_failure"] = failure
+        item["last_submit_stdout_path"] = str(production_dir(root) / f"video_submissions_{episode}.jsonl")
+        if proc.returncode != 0:
+            item["status"] = "submit_failed"
+            item["fail_reason"] = proc.stderr.strip() or f"exit {proc.returncode}"
         else:
-            item["status"] = "submitted" if item.get("submit_id") else "submitted_unknown_id"
-            item.pop("fail_reason", None)
-    update_manifest(manifest_file, manifest)
-    _record_flow_milestone(
-        root, episode,
-        "video_submitted" if item.get("status") in {"submitted", "submitted_unknown_id"} else "video_submit_failed",
-        clip=item.get("clip"), adapter_id=adapter.get("adapter_id"), provider=adapter.get("provider"),
-        status=item.get("status"), returncode=proc.returncode, elapsed_sec=elapsed,
-        failure_class=failure.get("class"), retryable=failure.get("retryable"),
-        paid_state_uncertain=failure.get("paid_state_uncertain"),
-    )
-    return item
+            item["submit_id"] = normalized.get("submit_id") or item.get("submit_id")
+            item["gen_status"] = normalized.get("status") or parsed.get("gen_status")
+            item["credit_count"] = parsed.get("credit_count")
+            item["logid"] = parsed.get("logid")
+            if str(normalized.get("status") or "").lower() in {"fail", "failed", "error", "rejected"}:
+                item["status"] = "failed"
+                item["fail_reason"] = normalized.get("error") or parsed.get("fail_reason") or "generation failed"
+            else:
+                item["status"] = "submitted" if item.get("submit_id") else "submitted_unknown_id"
+                item.pop("fail_reason", None)
+        update_manifest(manifest_file, manifest)
+        _record_flow_milestone(
+            root, episode,
+            "video_submitted" if item.get("status") in {"submitted", "submitted_unknown_id"} else "video_submit_failed",
+            clip=item.get("clip"), adapter_id=adapter.get("adapter_id"), provider=adapter.get("provider"),
+            status=item.get("status"), returncode=proc.returncode, elapsed_sec=elapsed,
+            failure_class=failure.get("class"), retryable=failure.get("retryable"),
+            paid_state_uncertain=failure.get("paid_state_uncertain"),
+        )
+        return item
 
 
 def _file_snapshot(path: Path) -> Optional[Tuple[int, int, str]]:
@@ -2880,6 +3005,66 @@ def wait_for_clip(
         jitter = bounded * max(0.0, float(jitter_ratio)) * ((random.random() * 2.0) - 1.0)
         sleep_fn(max(0.1, bounded + jitter))
         delay = min(max_delay_sec, delay * 2.0)
+
+
+def execute_clip(
+    root: Path,
+    manifest_file: Path,
+    clip: str,
+    *,
+    timeout_sec: float = 1800.0,
+    initial_delay_sec: float = 3.0,
+    max_delay_sec: float = 30.0,
+) -> Dict[str, Any]:
+    """Submit once, then durably resume/query/download and run machine QC.
+
+    The manifest is the provider checkpoint.  A prior ``submit_id`` always takes the query path;
+    ``submitted_at`` without an id is treated as an unknown paid state and is never replayed.
+    Human current-pixel acceptance remains a later hard boundary handled by ``accept``.
+    """
+    manifest = load_json(manifest_file)
+    item = find_item(manifest, clip)
+    submit_id = str(item.get("submit_id") or "").strip()
+    if not submit_id:
+        status = str(item.get("status") or "").strip().lower()
+        if item.get("submitted_at") or status in {"submitting", "submitted_unknown_id"}:
+            raise RuntimeError(
+                f"{clip} has unknown paid provider state without submit_id; "
+                "automatic resubmission is blocked pending provider reconciliation"
+            )
+        item = submit_clip(root, manifest_file, clip)
+        submit_id = str(item.get("submit_id") or "").strip()
+        if not submit_id:
+            raise RuntimeError(
+                f"{clip} provider submit returned no submit_id; paid state is unknown and replay is blocked"
+            )
+    # On every recovery path wait_for_clip queries the original durable submit id.  It never
+    # invokes submit_clip and query_clip rejects a mismatched id in the provider response.
+    item = wait_for_clip(
+        root,
+        manifest_file,
+        clip,
+        timeout_sec=timeout_sec,
+        initial_delay_sec=initial_delay_sec,
+        max_delay_sec=max_delay_sec,
+        download=True,
+    )
+    status = str(item.get("status") or "").strip().lower()
+    if status not in {"downloaded", "downloaded_existing_target", "accepted"}:
+        raise RuntimeError(
+            f"{clip} provider reached non-success terminal state {status or 'unknown'}; "
+            f"submit_id={submit_id} was not replayed"
+        )
+    qc = run_batch_qc(root, manifest_file)
+    item = find_item(load_json(manifest_file), clip)
+    item["durable_execution"] = {
+        "status": "machine_qc_complete",
+        "provider_submit_id": submit_id,
+        "provider_status": str((item.get("last_query") or {}).get("gen_status") or status),
+        "qc_json": str(qc.get("json_path") or ""),
+        "qc_markdown": str(qc.get("markdown_path") or ""),
+    }
+    return item
 
 
 def cancel_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = False) -> Dict[str, Any]:
@@ -3667,7 +3852,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                    help="auto reads _设置.md: ordinary=seedance2.0fast, high/budget-sufficient=seedance2.0_vip")
     p.add_argument("--force", action="store_true")
 
-    for name in ("submit", "query", "cancel", "accept"):
+    for name in ("submit", "query", "cancel", "accept", "execute"):
         p = sub.add_parser(name)
         p.add_argument("root")
         p.add_argument("manifest")
@@ -3692,6 +3877,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                            help="实际查看结论，至少说明身份/人体/动作/接缝等检查结果")
             p.add_argument("--confirm-current-pixels", action="store_true",
                            help="确认查看的是当前磁盘 MP4，而非旧预览/缩略图")
+        if name == "execute":
+            p.add_argument("--timeout", type=float, default=1800.0)
+            p.add_argument("--initial-delay", type=float, default=3.0)
+            p.add_argument("--max-delay", type=float, default=30.0)
 
     p = sub.add_parser("repair-plan")
     p.add_argument("root")
@@ -3765,6 +3954,16 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if ns.cmd == "submit":
         print(json.dumps(submit_clip(root, manifest_file, ns.clip, dry_run=ns.dry_run,
                                      skip_preflight=ns.skip_preflight), ensure_ascii=False, indent=2, sort_keys=True))
+        return 0
+    if ns.cmd == "execute":
+        print(json.dumps(execute_clip(
+            root,
+            manifest_file,
+            ns.clip,
+            timeout_sec=ns.timeout,
+            initial_delay_sec=ns.initial_delay,
+            max_delay_sec=ns.max_delay,
+        ), ensure_ascii=False, indent=2, sort_keys=True))
         return 0
     if ns.cmd == "query":
         print(json.dumps(query_clip(root, manifest_file, ns.clip, download=not ns.no_download, force=ns.force), ensure_ascii=False, indent=2, sort_keys=True))

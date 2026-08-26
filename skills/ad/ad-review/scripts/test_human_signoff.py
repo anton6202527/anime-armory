@@ -70,3 +70,19 @@ def test_high_risk_human_approval_requires_evidence_reference(tmp_path):
     payload = hs.build(root, "审片人甲", hs.CHECKS)
     assert payload["summary"]["approved"] is False
     assert any(f["code"] == "human_evidence_missing" for f in payload["findings"])
+
+
+def test_final_signoff_rejects_automated_reviewer_tokens(tmp_path):
+    root = _project(tmp_path)
+    evidence = {key: f"审片记录/{key}.md" for key in hs.EVIDENCE_REQUIRED}
+    for rel in evidence.values():
+        path = root / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("review evidence", encoding="utf-8")
+    for reviewer in (
+        "agent", "review-automation", "system", "qa_delegate", "listener",
+        "Codex", "AI", "制作代理:审片", "机器人/审片",
+    ):
+        payload = hs.build(root, reviewer, hs.CHECKS, evidence=evidence)
+        assert payload["summary"]["approved"] is False
+        assert "reviewer_automated" in {row["code"] for row in payload["findings"]}

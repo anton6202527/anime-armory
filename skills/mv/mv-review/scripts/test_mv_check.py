@@ -674,6 +674,12 @@ def test_write_receipt_requires_named_human_and_notes():
         shutil.rmtree(tmp)
 
 
+def test_final_reviewer_rejects_cross_line_automated_identity_vocabulary():
+    for reviewer in ("AI", "system/reviewer", "delegate:review", "制作代理:审片", "机器人/审片"):
+        _, _, errors = mc.validate_human_signoff(reviewer, "已完成当前成片复核。")
+        assert errors, reviewer
+
+
 def test_explicit_current_chain_writes_hash_bound_review_receipt():
     tmp = tempfile.mkdtemp()
     try:

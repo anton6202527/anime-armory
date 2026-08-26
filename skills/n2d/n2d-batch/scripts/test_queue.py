@@ -193,6 +193,221 @@ def test_stage_filter_and_episode_selector(tmp_path: Path) -> None:
     assert tasks[0]["owner"] == "n2d-video"
 
 
+def test_exact_claim_materializes_only_hash_bound_current_task(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    planned = queue.route_tasks(
+        str(tmp_path),
+        episodes={"第1集"},
+        stage_filters={"voice"},
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)),
+        max_retries=1,
+    )[0]
+    unrelated = queue.task_from_spec(
+        str(tmp_path),
+        "第2集",
+        queue.find_stage("image"),
+        reason="rerun",
+        priority=1,
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)),
+        max_retries=1,
+    )
+    ledger = queue.make_queue(
+        str(tmp_path), [unrelated], max_concurrency=1, max_retries=1,
+        budget=queue.apply_budget([unrelated], None, None),
+    )
+    queue.save_queue(str(tmp_path), ledger)
+
+    claimed = queue.claim_exact(
+        str(tmp_path),
+        task_id=planned["id"],
+        expected_plan_digest=queue.task_plan_digest(planned),
+        episode="第1集",
+        stage_key="voice",
+        worker="exact-worker",
+        lease_seconds=60,
+    )
+
+    assert [task["id"] for task in claimed] == [planned["id"]]
+    persisted = queue.load_queue(str(tmp_path))
+    states = {task["id"]: task["status"] for task in persisted["tasks"]}
+    assert states[planned["id"]] == "running"
+    assert states[unrelated["id"]] == "queued"
+
+
+def test_exact_claim_rejects_stale_action_card_digest(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    planned = queue.route_tasks(
+        str(tmp_path),
+        episodes={"第1集"},
+        stage_filters={"voice"},
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)),
+        max_retries=1,
+    )[0]
+
+    with pytest.raises(ValueError, match="current plan unavailable or changed"):
+        queue.claim_exact(
+            str(tmp_path),
+            task_id=planned["id"],
+            expected_plan_digest="sha256:" + "0" * 64,
+            episode="第1集",
+            stage_key="voice",
+            worker="exact-worker",
+            lease_seconds=60,
+        )
+
+
+def test_claim_exact_direct_call_blocks_critical_governance_before_materialize(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    planned = queue.route_tasks(
+        str(tmp_path),
+        episodes={"第1集"},
+        stage_filters={"voice"},
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)),
+        max_retries=1,
+    )[0]
+    dead = queue.task_from_spec(
+        str(tmp_path), "第2集", queue.find_stage("image"), reason="failed fixture",
+        priority=1, cost_estimates=queue.load_cost_estimates(str(tmp_path)), max_retries=1,
+    )
+    dead.update({"status": "failed", "dead_letter": True})
+    ledger = queue.make_queue(
+        str(tmp_path), [dead], max_concurrency=1, max_retries=1,
+        budget=queue.apply_budget([dead], None, None),
+    )
+    queue.save_queue(str(tmp_path), ledger)
+
+    with pytest.raises(RuntimeError, match="critical production governance interlock"):
+        queue.claim_exact(
+            str(tmp_path),
+            task_id=planned["id"],
+            expected_plan_digest=queue.task_plan_digest(planned),
+            episode="第1集",
+            stage_key="voice",
+            worker="must-not-claim",
+            lease_seconds=60,
+        )
+
+    persisted = queue.load_queue(str(tmp_path))
+    assert [task["id"] for task in persisted["tasks"]] == [dead["id"]]
+    assert persisted["tasks"][0]["status"] == "failed"
+
+
+def test_claim_cli_reports_critical_interlock_as_single_json_without_traceback(
+    tmp_path: Path, capsys
+) -> None:
+    write_progress(tmp_path)
+    dead = queue.task_from_spec(
+        str(tmp_path), "第2集", queue.find_stage("image"), reason="failed fixture",
+        priority=1, cost_estimates=queue.load_cost_estimates(str(tmp_path)), max_retries=1,
+    )
+    dead.update({"status": "failed", "dead_letter": True})
+    ledger = queue.make_queue(
+        str(tmp_path), [dead], max_concurrency=1, max_retries=1,
+        budget=queue.apply_budget([dead], None, None),
+    )
+    queue.save_queue(str(tmp_path), ledger)
+
+    rc = queue.main(["claim", str(tmp_path), "--worker", "cli-worker"])
+
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+    assert rc == 2
+    assert payload["status"] == "blocked"
+    assert payload["fail_closed"] is True
+    assert payload["error"]["type"] == "RuntimeError"
+    assert "critical production governance interlock" in payload["error"]["message"]
+    assert "Traceback" not in captured.err
+
+
+def test_route_video_binds_one_unique_task_per_physical_clip(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    manifest = tmp_path / "生产数据" / "video_batch_第3集_01-02.json"
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    manifest.write_text(json.dumps({
+        "episode": "第3集",
+        "items": [
+            {"clip": "Clip_01", "target": "Clip_01.mp4"},
+            {"clip": "Clip_02", "target": "Clip_02.mp4"},
+        ],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    tasks = queue.route_tasks(
+        str(tmp_path),
+        episodes={"第3集"},
+        stage_filters={"video"},
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)),
+        max_retries=1,
+    )
+
+    assert [task["physical_clips"] for task in tasks] == [["Clip_01"], ["Clip_02"]]
+    assert len({task["id"] for task in tasks}) == 2
+    assert all(task["producer_manifest"].endswith("video_batch_第3集_01-02.json") for task in tasks)
+    assert all("video_runner.py execute" in task["runner_command"] for task in tasks)
+
+
+def _claimed_video_fixture(tmp_path: Path, *, submit_id: str, status: str, submitted_at: str = ""):
+    write_progress(tmp_path)
+    manifest = tmp_path / "生产数据" / "video_batch_第3集_01-01.json"
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    item = {"clip": "Clip_01", "target": "Clip_01.mp4", "status": status}
+    if submit_id:
+        item["submit_id"] = submit_id
+    if submitted_at:
+        item["submitted_at"] = submitted_at
+    manifest.write_text(json.dumps({"episode": "第3集", "items": [item]}), encoding="utf-8")
+    task = queue.route_tasks(
+        str(tmp_path), episodes={"第3集"}, stage_filters={"video"},
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)), max_retries=1,
+    )[0]
+    ledger = queue.make_queue(
+        str(tmp_path), [task], max_concurrency=1, max_retries=1,
+        budget=queue.apply_budget([task], None, None),
+    )
+    claimed = queue.claim_tasks(ledger, limit=1, worker="crashed", lease_seconds=1)[0]
+    return ledger, claimed, task
+
+
+def test_reclaim_video_submit_id_preserves_attempt_and_budget_for_query_only_resume(tmp_path: Path) -> None:
+    ledger, claimed, planned = _claimed_video_fixture(
+        tmp_path, submit_id="provider-job-1", status="submitted"
+    )
+    queue.reclaim_expired(ledger, now=float(claimed["lease_until"]) + 1)
+    row = ledger["tasks"][0]
+    assert row["status"] == "provider_pending"
+    assert row["attempts"] == 1
+    assert row["budget_reservation"]["status"] == "reserved"
+    resumed = queue.claim_task_exact(
+        ledger,
+        task_id_value=row["id"],
+        expected_plan_digest=queue.task_plan_digest(planned),
+        worker="recovery",
+        lease_seconds=60,
+    )[0]
+    assert resumed["attempts"] == 1
+    assert resumed["provider_job"]["provider_submit_id"] == "provider-job-1"
+
+
+def test_reclaim_unknown_paid_video_state_blocks_resubmit(tmp_path: Path) -> None:
+    ledger, claimed, planned = _claimed_video_fixture(
+        tmp_path,
+        submit_id="",
+        status="submitting",
+        submitted_at="2026-08-26T00:00:00+0000",
+    )
+    queue.reclaim_expired(ledger, now=float(claimed["lease_until"]) + 1)
+    row = ledger["tasks"][0]
+    assert row["status"] == "blocked_provider_unknown"
+    assert row["last_error_class"] == "provider_paid_state_unknown"
+    assert row["budget_reservation"]["status"] == "settled"
+    assert queue.claim_task_exact(
+        ledger,
+        task_id_value=row["id"],
+        expected_plan_digest=queue.task_plan_digest(planned),
+        worker="must-not-run",
+        lease_seconds=60,
+    ) == []
+
+
 def test_route_image_task_freezes_all_prompt_physical_shots(tmp_path: Path) -> None:
     write_progress(tmp_path)
     prompt = tmp_path / "出图" / "第2集" / "prompt" / "01_分镜出图.md"
@@ -730,6 +945,23 @@ def _saved_queue(tmp_path: Path, max_concurrency: int = 2):
                               budget=queue.apply_budget(tasks, None, None))
     queue.save_queue(str(tmp_path), ledger)
     return ledger
+
+
+@pytest.mark.parametrize("backend", ["local_file", "sqlite"])
+def test_claim_direct_call_blocks_critical_governance_inside_claim_boundary(
+    tmp_path: Path, monkeypatch, backend: str,
+) -> None:
+    ledger = _saved_queue(tmp_path)
+    ledger["tasks"][0].update({"status": "failed", "dead_letter": True})
+    queue.save_queue(str(tmp_path), ledger)
+    monkeypatch.setenv("N2D_COORDINATION_BACKEND", backend)
+
+    with pytest.raises(RuntimeError, match="critical production governance interlock"):
+        queue.claim(str(tmp_path), limit=1, worker="must-not-claim", lease_seconds=60)
+
+    persisted = queue.load_queue(str(tmp_path))
+    assert all(task.get("worker") != "must-not-claim" for task in persisted["tasks"])
+    assert all(task.get("status") != "running" for task in persisted["tasks"])
 
 
 def test_claim_sets_worker_and_lease_then_mark_clears(tmp_path: Path) -> None:
@@ -1461,6 +1693,10 @@ class _FakeBackend:
     def claim(self, *, limit, worker, lease_seconds):
         self.calls.append("claim")
         return [{"id": "fake-1", "_via": "fake"}]
+
+    def claim_exact(self, *, task_id, expected_plan_digest, episode, stage_key, worker, lease_seconds):
+        self.calls.append("claim_exact")
+        return [{"id": task_id, "_via": "fake"}]
 
     def mark(self, task_id_value, status, note="", **kwargs):
         self.calls.append("mark")

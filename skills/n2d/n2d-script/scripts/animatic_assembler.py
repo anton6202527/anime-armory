@@ -25,7 +25,7 @@ if str(N2D_LIB) not in sys.path:
 from editorial_timeline import build_editorial_timeline, write_editorial_timeline  # noqa: E402
 
 
-VERSION = 1
+VERSION = 2
 KIND = "n2d_animatic_preview"
 
 
@@ -170,14 +170,46 @@ def storyboard_clips(root: Path, ep: str) -> List[Mapping[str, Any]]:
     return [c for c in clips or [] if isinstance(c, Mapping)]
 
 
+def parse_srt(path: Path) -> List[Dict[str, Any]]:
+    """Parse the small SRT subset needed by the browser preview."""
+    if not path.is_file():
+        return []
+
+    def seconds(raw: str) -> float:
+        hh, mm, tail = raw.strip().replace(".", ",").split(":")
+        ss, ms = tail.split(",")
+        return int(hh) * 3600 + int(mm) * 60 + int(ss) + int(ms) / 1000.0
+
+    cues: List[Dict[str, Any]] = []
+    for block in re.split(r"\r?\n\s*\r?\n", path.read_text(encoding="utf-8", errors="ignore").strip()):
+        lines = [line.strip() for line in block.splitlines() if line.strip()]
+        timing_idx = next((i for i, line in enumerate(lines) if "-->" in line), -1)
+        if timing_idx < 0 or timing_idx + 1 >= len(lines):
+            continue
+        try:
+            start, end = [seconds(item) for item in lines[timing_idx].split("-->", 1)]
+        except Exception:
+            continue
+        text = " ".join(lines[timing_idx + 1:]).strip()
+        if text and end > start:
+            cues.append({"start_sec": round(start, 3), "end_sec": round(end, 3), "text": text})
+    return cues
+
+
 def build_report(root: Path, ep: str) -> Dict[str, Any]:
     root = root.resolve()
     ep = episode_label(ep)
     input_rels = [
         f"脚本/{ep}/storyboard.json",
         f"脚本/{ep}/镜头时长.json",
+        f"脚本/{ep}/字幕_中文.srt",
+        f"合成/{ep}/配音/voice_zh.wav",
         f"出图/{ep}/图片",
     ]
+    subtitle_rel = f"脚本/{ep}/字幕_中文.srt"
+    audio_rel = f"合成/{ep}/配音/voice_zh.wav"
+    subtitles = parse_srt(root / subtitle_rel)
+    audio_ready = (root / audio_rel).is_file() and (root / audio_rel).stat().st_size > 0
     clips = storyboard_clips(root, ep)
     durations = load_json(root / "脚本" / ep / "镜头时长.json")
     durations = durations if isinstance(durations, Mapping) else {}
@@ -212,6 +244,11 @@ def build_report(root: Path, ep: str) -> Dict[str, Any]:
     if not clips:
         findings.append({"severity": "block", "code": "missing_storyboard_clips", "message": "storyboard.json 缺 clips[]，无法生成 timed animatic。"})
     image_count = sum(1 for row in timeline if row.get("image"))
+    reviewability_reasons: List[str] = []
+    if not audio_ready:
+        reviewability_reasons.append("缺 guide voice，无法实际听辨对白节奏")
+    if not subtitles:
+        reviewability_reasons.append("缺可解析中文字幕，无法核对声画/字幕时序")
     status = "block" if any(f["severity"] == "block" for f in findings) else "pass"
     return {
         "kind": KIND,
@@ -223,6 +260,8 @@ def build_report(root: Path, ep: str) -> Dict[str, Any]:
             "storyboard": f"脚本/{ep}/storyboard.json",
             "shot_durations": f"脚本/{ep}/镜头时长.json",
             "episode_images": f"出图/{ep}/图片",
+            "guide_audio": audio_rel,
+            "subtitle_zh": subtitle_rel,
         },
         "inputs_fingerprint": artifact_fingerprint(root, input_rels),
         "summary": {
@@ -232,10 +271,17 @@ def build_report(root: Path, ep: str) -> Dict[str, Any]:
             "total_duration_sec": round(cursor, 3),
         },
         "timeline": timeline,
+        "subtitles": subtitles,
+        "reviewability": {
+            "status": "ready" if not reviewability_reasons else "unmeasured",
+            "audio_backed": audio_ready,
+            "subtitle_backed": bool(subtitles),
+            "reasons": reviewability_reasons,
+        },
         "findings": findings,
         "notes": [
-            "HTML 预览按 storyboard 时长播放；缺图片时使用文字 slate，仍可检查节奏和信息可读性。",
-            "正式出图前 animatic_packet 仍需人工/agent confirmed 签收。",
+            "HTML 预览按 guide voice 的 currentTime 同步 storyboard 与中文字幕；缺图片时使用文字 slate。",
+            "guide voice 或字幕缺失时 reviewability=unmeasured，不得把无声文字预览当成已完成 animatic 审阅。",
         ],
     }
 
@@ -243,6 +289,10 @@ def build_report(root: Path, ep: str) -> Dict[str, Any]:
 def render_html(root: Path, payload: Mapping[str, Any]) -> str:
     ep = str(payload.get("episode") or "")
     timeline = payload.get("timeline") if isinstance(payload.get("timeline"), list) else []
+    subtitles = payload.get("subtitles") if isinstance(payload.get("subtitles"), list) else []
+    inputs = payload.get("inputs") if isinstance(payload.get("inputs"), Mapping) else {}
+    audio_rel = str(inputs.get("guide_audio") or "")
+    audio_src = f'../{html.escape(audio_rel)}' if audio_rel else ""
     cards: List[str] = []
     for row in timeline:
         if not isinstance(row, Mapping):
@@ -269,6 +319,7 @@ def render_html(root: Path, payload: Mapping[str, Any]) -> str:
             f'<p>{text}</p></section>'
         )
     payload_json = html.escape(json.dumps(timeline, ensure_ascii=False))
+    subtitle_json = html.escape(json.dumps(subtitles, ensure_ascii=False))
     return f"""<!doctype html>
 <html lang="zh-CN">
 <head>
@@ -289,6 +340,8 @@ h1{{font-size:24px;margin:0 0 16px}}
 .meta{{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.72);display:flex;gap:16px;align-items:center;padding:10px 14px;font-size:14px}}
 .clip p{{position:absolute;left:14px;right:14px;top:12px;margin:0;padding:10px 12px;background:rgba(0,0,0,.62);line-height:1.5}}
 .controls{{display:flex;gap:10px;align-items:center;margin:14px 0}}
+.caption{{min-height:2.8em;padding:10px 14px;text-align:center;font-size:22px;background:#050505}}
+audio{{width:100%;margin:12px 0}}
 button{{font:inherit;padding:8px 12px;border:1px solid #555;background:#222;color:#fff}}
 progress{{width:100%;height:10px}}
 pre{{white-space:pre-wrap;background:#1c1c1c;padding:12px;overflow:auto}}
@@ -298,21 +351,38 @@ pre{{white-space:pre-wrap;background:#1c1c1c;padding:12px;overflow:auto}}
 <main>
 <h1>{html.escape(ep)} Animatic</h1>
 <div class="player">{''.join(cards)}</div>
+<div id="caption" class="caption"></div>
+<audio id="guide-audio" controls preload="metadata" src="{audio_src}"></audio>
 <div class="controls"><button id="play">Play</button><button id="pause">Pause</button><button id="prev">Prev</button><button id="next">Next</button><span id="label"></span></div>
 <progress id="bar" value="0" max="1"></progress>
 <script type="application/json" id="timeline">{payload_json}</script>
+<script type="application/json" id="subtitles">{subtitle_json}</script>
 <script>
 const clips=[...document.querySelectorAll('.clip')];
-let i=0,timer=null,start=0,elapsed=0;
-function show(n){{clips.forEach(c=>c.classList.remove('active'));i=(n+clips.length)%clips.length;if(clips[i])clips[i].classList.add('active');elapsed=0;start=performance.now();tick();}}
-function dur(){{return Math.max(0.1,Number(clips[i]?.dataset.duration||1))*1000;}}
-function tick(){{document.getElementById('label').textContent=`${{i+1}}/${{clips.length}}`;document.getElementById('bar').value=Math.min(1,elapsed/dur());}}
-function loop(){{elapsed=performance.now()-start;if(elapsed>=dur()){{show(i+1);start=performance.now();}}tick();timer=requestAnimationFrame(loop);}}
-document.getElementById('play').onclick=()=>{{if(!timer){{start=performance.now()-elapsed;timer=requestAnimationFrame(loop);}}}};
-document.getElementById('pause').onclick=()=>{{if(timer)cancelAnimationFrame(timer);timer=null;}};
-document.getElementById('prev').onclick=()=>show(i-1);
-document.getElementById('next').onclick=()=>show(i+1);
-show(0);
+const audio=document.getElementById('guide-audio');
+const cues=JSON.parse(document.getElementById('subtitles').textContent||'[]');
+const starts=[];let cursor=0;clips.forEach(c=>{{starts.push(cursor);cursor+=Math.max(.1,Number(c.dataset.duration||1));}});
+let i=0,timer=null,manualTime=0,last=performance.now();
+function show(n){{clips.forEach(c=>c.classList.remove('active'));i=Math.max(0,Math.min(clips.length-1,n));if(clips[i])clips[i].classList.add('active');}}
+function currentTime(){{return Number.isFinite(audio.duration)&&audio.currentSrc ? audio.currentTime : manualTime;}}
+function tick(){{
+ const now=performance.now();if((!audio.currentSrc||audio.paused)&&timer)manualTime+=(now-last)/1000;last=now;
+ const t=currentTime();let idx=starts.findIndex((s,j)=>t>=s&&t<(starts[j+1]??cursor));if(idx<0)idx=Math.max(0,clips.length-1);show(idx);
+ const local=t-(starts[idx]||0),dur=Math.max(.1,Number(clips[idx]?.dataset.duration||1));
+ document.getElementById('label').textContent=`${{idx+1}}/${{clips.length}} · ${{t.toFixed(1)}}s`;
+ document.getElementById('bar').value=Math.min(1,local/dur);
+ document.getElementById('caption').textContent=(cues.find(c=>t>=c.start_sec&&t<c.end_sec)||{{}}).text||'';
+ if(t>=cursor){{pause();return;}}timer=requestAnimationFrame(tick);
+}}
+function play(){{if(timer)return;last=performance.now();if(audio.currentSrc)audio.play().catch(()=>{{}});timer=requestAnimationFrame(tick);}}
+function pause(){{if(timer)cancelAnimationFrame(timer);timer=null;if(audio.currentSrc)audio.pause();}}
+function seek(n){{const target=Math.max(0,Math.min(clips.length-1,n));manualTime=starts[target]||0;if(audio.currentSrc)audio.currentTime=manualTime;show(target);}}
+document.getElementById('play').onclick=play;
+document.getElementById('pause').onclick=pause;
+document.getElementById('prev').onclick=()=>seek(i-1);
+document.getElementById('next').onclick=()=>seek(i+1);
+audio.ontimeupdate=()=>{{if(!timer)tick();}};
+show(0);tick();
 </script>
 </main>
 </body>

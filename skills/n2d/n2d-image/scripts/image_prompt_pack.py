@@ -59,6 +59,11 @@ SCRIPT_CONTRACT_APPLICATION_KIND = "n2d_script_contract_application"
 SCRIPT_QUALITY_CONTRACT_KIND = "n2d_script_quality_contract"
 CONSUMED_CONTRACTS_KIND = "n2d_prompt_consumed_contracts"
 CONSUMED_CONTRACTS_VERSION = 1
+
+
+class PromptPackContractError(ValueError):
+    """The storyboard names an entity whose visual truth is not project-defined."""
+
 SCRIPT_CONTRACT_REQUIRED_FIELDS = [
     "core_attraction",
     "first_3s_visual_hook",
@@ -1568,6 +1573,19 @@ CORE_SCOPE_HINTS_BY_ID = {
     "CHAR_01": "核心主角/全篇长线",
 }
 
+# Production compilation is project-scoped.  The large dictionaries above are
+# retained only while old projects migrate, but must never participate in a new
+# prompt pack: a coincidentally reused CHAR_01/PROP_* id is not an identity.
+# Demonstration records live in scripts/fixtures/demo_project_defs.json and are
+# loaded explicitly by tests/examples instead of silently becoming production
+# truth.
+ASSET_ID_HINTS = {}
+ASSET_ID_ALIASES = {}
+CHARACTER_DEFS = {}
+ASSET_DEFS = {}
+FALLBACK_CHARACTER_VISUALS = {}
+CORE_SCOPE_HINTS_BY_ID = {}
+
 
 def human_name_from_id(cid: str, fallback: str = "") -> str:
     cfg = FALLBACK_CHARACTER_VISUALS.get(cid)
@@ -1596,10 +1614,10 @@ def fallback_character_visual(cid: str, name: str, key: str, default: str = "") 
     display = human_name_from_id(cid, name)
     generic: Dict[str, str] = {
         "scope": "本集入镜角色",
-        "age_context": "成年古装角色，年龄感按剧情身份保守处理",
-        "face": f"{display} 的脸型、年龄感、肤色和五官比例必须稳定；五官清楚耐看，不使用同质化网红脸。",
-        "hair": f"{display} 使用古装束发或布巾束发，发型轮廓跨镜保持。",
-        "outfit": f"{display} 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。",
+        "age_context": "年龄阶段必须由当前项目角色卡或素材清单明确，跨镜保持一致",
+        "face": f"{display} 的脸型、年龄感、肤色和五官比例必须按当前项目定义稳定；不自行补写时代、族裔或审美类型。",
+        "hair": f"{display} 的发型、发色与发饰必须按当前项目定义跨镜保持，不自行补写未声明的时代造型。",
+        "outfit": f"{display} 的服装轮廓、材质、配色和时代必须按当前项目定义稳定，不自行套用未声明的类型模板。",
         "accessories": "无固定配饰；若本镜另有道具，以分镜 prompt 为准。",
         "relative_scale": "按 storyboard 中同框体量关系保持。",
         "performance_signature": "表演按剧情身份保持，眼神和动作服务当前戏剧功能，不看镜头摆拍。",
@@ -1625,16 +1643,11 @@ def narrative_scope_for(cid: str, base_scope: str, visual_tier: str) -> Tuple[st
     `visual_tier=core` means a full makeup/reference pack, not necessarily a
     long-running story role.  Long-running backend gates read character-level
     scope/tier, so only add core/longline markers when there is a narrative
-    signal or a stable project convention such as CHAR_01.
+    signal explicitly authored by the current project.
     """
     if visual_tier == "restricted_partial" or cid.startswith(("CROWD_", "GROUP_")):
         return str(base_scope or "").strip(), "局部参考"
     scope = str(base_scope or "").strip()
-    fallback_scope = str((FALLBACK_CHARACTER_VISUALS.get(cid) or {}).get("scope") or "")
-    if CORE_SCOPE_RE.search(fallback_scope):
-        scope = merge_scope(scope, fallback_scope)
-    if cid in CORE_SCOPE_HINTS_BY_ID:
-        scope = merge_scope(scope, CORE_SCOPE_HINTS_BY_ID[cid])
     positive_scope = NEGATED_CORE_SCOPE_RE.sub("", scope)
     narrative_tier = "核心长线" if CORE_SCOPE_RE.search(positive_scope) else "单集角色"
     return scope, narrative_tier
@@ -1755,9 +1768,6 @@ def apply_scope_visual_hints(
         tiger_marks = "吊睛白额、粗壮利爪、胸前贯穿旧伤与黑妖血是身份标记；无首饰与人类发冠。"
         if "吊睛白额" not in accessories:
             accessories = f"{tiger_marks}；{accessories}".strip("；")
-    if "青衫" in scope_text and "青" not in outfit:
-        outfit = f"青衫/深青灰古装衣袍按剧情身份保持；{outfit}"
-
     out_drift = list(drift)
     if explicit_canid_demon or explicit_tiger_demon or any(token in scope_text for token in ("妖", "半妖", "妖化", "兽化")):
         scope_drift = (
@@ -1777,6 +1787,8 @@ def apply_scope_visual_hints(
 
 def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
     needed = required_character_ids(story)
+    if not needed:
+        return {}
     card_dir = root / "设定库" / "characters"
     by_id: Dict[str, Tuple[Path, str, str]] = {}
     asset_index = character_asset_index(root)
@@ -1793,8 +1805,16 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
         name, cid = parse_character_card_identity(text, path.stem)
         if cid:
             by_id[cid] = (path, name, text)
-    if not by_id and not needed:
-        return CHARACTER_DEFS
+    missing = [
+        cid for cid in needed
+        if cid not in by_id
+        and not str((materials.get(cid) or {}).get("profile") or "").strip()
+    ]
+    if missing:
+        raise PromptPackContractError(
+            "缺少当前项目角色定义：" + ", ".join(missing)
+            + "。请在设定库角色卡、角色资产 manifest 或本集素材清单中定义后再编译。"
+        )
 
     defs: Dict[str, Dict[str, Any]] = {}
     # A storyboard may use a compact machine id while an older authored card
@@ -1819,10 +1839,6 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
 
     used: List[str] = []
     for cid in needed:
-        add_unique(used, cid)
-    for cid, (_path, name, _text) in by_id.items():
-        if cid not in needed and preferred_name_to_id.get(name):
-            continue
         add_unique(used, cid)
     style = project_style_name(root)
     vc_text = flatten(visual_contract(story))
@@ -1867,21 +1883,19 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
         if cid.startswith("BEAST_"):
             injury = md_first_bullet(text, ("持续伤势", "伤势"))
             beast_shape = md_bullet(text, "形态")
-            # BEAST_* 没有独立角色卡时，人物 fallback 会先注入“成年古装角色 / 古装衣袍”。
-            # 这些词不仅把真兽误导成人形古装角色，也会在多人镜中被服装绑定 lint 错派给人物。
-            # 物种真值必须在任何 prompt 编译、identity registry 落档之前覆盖人物 fallback。
+            # BEAST_* uses species truth instead of a human identity scaffold.
             age_context = md_bullet(text, "年龄/阶段") or "成年猛兽阶段；按剧情保持同一头猛虎的体量与伤势连续。"
             if beast_shape:
                 face = f"{age_context}；{beast_shape}" if age_context not in beast_shape else beast_shape
             elif (
                 not face
-                or "成年古装角色" in face
                 or "的脸型、年龄感、肤色和五官比例" in face
                 or not any(token in face for token in ("猛虎", "虎首", "虎头", "兽首", "非人"))
             ):
                 face = "成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。"
             hair = md_first_bullet(text, ("毛发", "发型")) or "非人兽首与粗硬毛发按形态真值保持，不生成人类束发或发饰。"
-            outfit = md_first_bullet(text, ("服装", "甲胄")) or "全身以黑黄粗硬虎毛、天然皮毛轮廓、宽大虎掌与持续伤势为视觉主体，身体无人物衣装。"
+            outfit = md_first_bullet(text, ("服装", "甲胄")) or "全身以天然皮毛、四足兽类骨架与持续伤势为视觉主体，身体无人物衣装。"
+            scale = md_first_bullet(text, ("相对身量", "体型", "身形")) or "保持当前项目声明的真实四足兽类体量与解剖比例。"
             if injury:
                 accessory = f"持续伤势：{injury}；{accessory}".strip("；")
         form = str(manifest.get("form") or first_form_from_card(text) or "常态")
@@ -1901,19 +1915,9 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
         for aid in required_asset_ids(story):
             if aid.startswith("WEAPON_") and name and name in vc_text and aid not in equipment:
                 equipment.append(aid)
-        if cid == "CHAR_01":
-            for aid in required_asset_ids(story):
-                if aid.startswith("VFX_") and ("系统" in aid or "面板" in aid or "百妖" in flatten(story.get("asset_requirements") or [])):
-                    if aid not in equipment:
-                        equipment.append(aid)
-        if cid == "CHAR_03":
-            for aid in required_asset_ids(story):
-                if aid.startswith("VFX_") and ("虎" in aid or "妖气" in aid):
-                    if aid not in equipment:
-                        equipment.append(aid)
         drift = [
             f"不要把{name}换成其他脸",
-            "不要现代服饰",
+            "不要偏离当前项目定义的时代与服装",
             "不要高饱和页游光效",
             "不要丢失本角色锚点句",
         ]
@@ -1979,32 +1983,8 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
                 "package_dir": bundle_package,
             } if bundle_manifest else None,
         }
-        form_probe = f"{material_profile} {flatten(story.get('asset_requirements') or [])} {flatten(story.get('clips') or [])}"
-        zhenmosi_form = next(
-            (candidate for candidate in ("镇魔司制服态", "镇魔司伪装态") if candidate in form_probe),
-            "",
-        )
-        if cid == "CHAR_01" and zhenmosi_form:
-            disguise_form = zhenmosi_form
-            disguise_outfit = "镇魔司黑衣赤纹劲装，黑衣交领窄袖，衣襟和袖口有克制赤纹图案，束腰，横刀挂腰，布料沾血尘；赤纹是服装纹样不是可读文字。"
-            row["extra_forms"] = [
-                {
-                    "form": disguise_form,
-                    "asset_key": character_asset_stem(root, cid, name or cid, disguise_form),
-                    "anchor": f"{name}·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神",
-                    "face": row["face"],
-                    "hair": "黑色长发利落束起，碎发少，动作中保持东方少女脸锚不变。",
-                    "outfit": disguise_outfit,
-                    "accessories": "横刀、黑衣赤纹束腰、血尘；不得新增现代徽章或可读文字。",
-                    "texture": row["texture"],
-                    "relative_scale": row["relative_scale"],
-                    "performance_signature": "冷面官威压住慌乱，眼神不看镜头，视线锁戏内求救者或官道深处。",
-                    "drift": merge_unique_terms(row["drift"], ["不要套回囚衣", "不要丢失黑衣赤纹", "不要把赤纹画成文字", "不要把横刀变成长剑"]),
-                    "signature_equipment": merge_unique_terms(row["signature_equipment"], ["WEAPON_01", "PROP_镇魔司黑衣赤纹"]),
-                }
-            ]
         defs[cid] = row
-    return defs or CHARACTER_DEFS
+    return defs
 
 
 def asset_req_map(story: Mapping[str, Any]) -> Dict[str, Mapping[str, Any]]:
@@ -2055,19 +2035,25 @@ def material_asset_map(root: Path, story: Mapping[str, Any]) -> Dict[str, Mappin
     prompts degrade into "PROP GREEN WATER" placeholders, which is too weak for
     paid generation.
     """
+    inline = story.get("asset_materials")
+    inline_map: Dict[str, Mapping[str, Any]] = {
+        str(aid): dict(value)
+        for aid, value in (inline.items() if isinstance(inline, Mapping) else [])
+        if isinstance(value, Mapping)
+    }
     ep = normalize_ep(str(story.get("episode_label") or story.get("episode") or ""))
     if not ep:
-        return {}
+        return inline_map
     path = root / "脚本" / ep / "素材清单.md"
     if not path.is_file():
-        return {}
+        return inline_map
     try:
         text = path.read_text(encoding="utf-8")
     except OSError:
-        return {}
+        return inline_map
     header_re = re.compile(r"^###\s+([^\n]+)$", re.M)
     headers = list(header_re.finditer(text))
-    out: Dict[str, Mapping[str, Any]] = {}
+    out: Dict[str, Mapping[str, Any]] = dict(inline_map)
     for index, match in enumerate(headers):
         heading = match.group(1).strip()
         heading_ids = [
@@ -2156,23 +2142,29 @@ def material_asset_map(root: Path, story: Mapping[str, Any]) -> Dict[str, Mappin
 
 def material_character_map(root: Path, story: Mapping[str, Any]) -> Dict[str, Mapping[str, Any]]:
     """Read episode material-list character names and descriptions."""
+    inline = story.get("character_materials")
+    inline_map: Dict[str, Mapping[str, Any]] = {
+        str(cid): dict(value)
+        for cid, value in (inline.items() if isinstance(inline, Mapping) else [])
+        if isinstance(value, Mapping)
+    }
     ep = normalize_ep(str(story.get("episode_label") or story.get("episode") or ""))
     if not ep:
-        return {}
+        return inline_map
     path = root / "脚本" / ep / "素材清单.md"
     if not path.is_file():
-        return {}
+        return inline_map
     try:
         text = path.read_text(encoding="utf-8")
     except OSError:
-        return {}
-    out: Dict[str, Mapping[str, Any]] = {}
+        return inline_map
+    out: Dict[str, Mapping[str, Any]] = dict(inline_map)
     # Stage-2 material lists commonly use heading sections, not bullets:
     # ``### GROUP_01 杂役背景组`` followed by ``中文 Prompt：...``.
     # Missing this form turns a faceless crowd layer into a single generic
     # handsome character reference.
     header_re = re.compile(
-        r"^###\s+((?:CHAR|CROWD|GROUP)_[A-Za-z0-9_\u4e00-\u9fff]+)\s*([^\n]*)$",
+        r"^###\s+((?:CHAR|BEAST|CROWD|GROUP)_[A-Za-z0-9_\u4e00-\u9fff]+)\s*([^\n]*)$",
         re.M,
     )
     headers = list(header_re.finditer(text))
@@ -2190,7 +2182,7 @@ def material_character_map(root: Path, story: Mapping[str, Any]) -> Dict[str, Ma
             "source": str(path.relative_to(root)),
         }
     line_re = re.compile(
-        r"^\s*-\s*((?:CHAR|CROWD|GROUP)_[A-Za-z0-9_\u4e00-\u9fff]+)(?:\s+([^：:\n]+?))?\s*[：:]\s*(.+?)\s*$",
+        r"^\s*-\s*((?:CHAR|BEAST|CROWD|GROUP)_[A-Za-z0-9_\u4e00-\u9fff]+)(?:\s+([^：:\n]+?))?\s*[：:]\s*(.+?)\s*$",
         re.M,
     )
     for match in line_re.finditer(text):
@@ -2357,7 +2349,7 @@ def scene_card_map(root: Path) -> Dict[str, Tuple[str, str]]:
 def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
     ids = required_asset_ids(story)
     if not ids:
-        return ASSET_DEFS
+        return {}
     reqs = asset_req_map(story)
     materials = material_asset_map(root, story)
     scenes = scene_card_map(root)
@@ -2369,6 +2361,18 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
         material = materials.get(aid, {})
         base_hint = ASSET_ID_HINTS.get(aid, {})
         registry_hint = asset_hint_from_registry_asset(existing_assets.get(aid, {}))
+        scene_defined = aid in scenes
+        if "raw" in req:
+            raw_req = str(req.get("raw") or "").strip().strip("`")
+            requirement_defined = raw_req not in {"", aid}
+        else:
+            requirement_defined = bool(req) and bool(
+                str(req.get("profile") or req.get("description") or "").strip()
+            )
+        if not (material or registry_hint or scene_defined or requirement_defined):
+            raise PromptPackContractError(
+                f"缺少当前项目资产定义：{aid}。请在场景卡、资产 registry 或本集素材清单中定义后再编译。"
+            )
         material_name = clean_asset_display_name(aid, str(material.get("name") or "")) if material.get("name") else ""
         registry_name = clean_asset_display_name(aid, str(registry_hint.get("name") or "")) if registry_hint.get("name") else ""
         if material_name and registry_name and material_name != registry_name:
@@ -2421,7 +2425,7 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
             hint_drift = hint.get("drift") if isinstance(hint.get("drift"), list) else []
             drift_terms = [str(x) for x in hint_drift if str(x).strip()] or [
                 "不要丢失本场景地标、空间轴线、光位和常驻物件",
-                "不要把本场景随机改成仙宫、现代空间或无关地点",
+                "不要把本场景随机改成未声明时代、类型或无关地点",
             ]
             defs[aid] = {
                 "type": "scene",
@@ -2514,12 +2518,6 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
             constraints["blade_topology"] = canonical_single_edge_topology(
                 constraints.get("blade_topology")
             )
-        if aid == "VFX_系统面板":
-            constraints.update({
-                "structure": "金色古卷空光幕，符纹边框固定，内部文字区留空，数值由 compose overlay 叠加。",
-                "face_policy": "none",
-                "must_not_have": ["AI生成可读文字", "现代手机UI", "随机蓝色科幻屏", "乱码文字"],
-            })
         hint_drift = hint.get("drift") if isinstance(hint.get("drift"), list) else []
         hint_drift = [
             str(item) for item in hint_drift
@@ -2574,7 +2572,7 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
                 "scale": "按角色手部比例，竖屏可读但不夸张。",
                 "material": "暗银金属、低反光、战损血尘克制呈现。",
                 "palette": "暗银、黑柄、冷灰血尘",
-                "ornament_motif": "镇魔司制式，低调克制。",
+                "ornament_motif": "只使用当前项目资产定义中的纹样，不自行补写阵营或时代。",
                 "carry_modes": ["手持", "落地", "近景局部"],
                 "combat_usage": "本集关键动作道具；实体刀刃数量和握持点必须唯一，只允许一把实体武器；副手/后手不得补出短刃、匕首、副刀或第二把刀，不可变成长剑/仙剑/现代军刀，不可多把复制。",
                 "vfx_signature": flatten_contract_value(constraints.get("vfx_boundary")) or "不主动发光；只继承场景光位。刀光/爪光/VFX 只能是半透明光效，不得被渲染成第二把实体刀刃。",
@@ -2609,7 +2607,7 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
             defs[aid]["weapon_profile"] = dict(hint["weapon_profile"])
         if isinstance(hint.get("weapon_like_role"), str) and hint.get("weapon_like_role"):
             defs[aid]["weapon_like_role"] = str(hint["weapon_like_role"])
-    return defs or ASSET_DEFS
+    return defs
 
 
 def configure_project_defs(root: Path, story: Mapping[str, Any]) -> None:
@@ -3048,13 +3046,13 @@ def build_identity_registry(root: Path) -> Dict[str, Any]:
                 "physical_scale": {"relative_scale": merged_cfg["relative_scale"]},
                 "wardrobe_profile": {
                     "silhouette": merged_cfg["outfit"],
-                    "palette": "冷灰、深青、玄黑、低饱和旧金属",
-                    "layers": "古装内外层明确",
-                    "collar": "古装交领/束领，不现代圆领",
-                    "sleeve": "窄袖或布袖按角色身份",
-                    "waist": "束腰/旧腰带",
-                    "hem": "竖屏下摆完整但不拖成仙侠飘带",
-                    "fabric": "低饱和布料/皮革/旧金属",
+                    "palette": str(merged_cfg.get("palette") or "继承当前项目角色定义的固定配色"),
+                    "layers": "服装内外层、开合方式与轮廓按当前项目角色定义保持",
+                    "collar": "领口结构按当前项目角色定义保持",
+                    "sleeve": "袖型或上肢服装结构按当前项目角色定义保持",
+                    "waist": "腰部结构按当前项目角色定义保持",
+                    "hem": "下摆或下装结构按当前项目角色定义保持",
+                    "fabric": "材质与磨损状态按当前项目角色定义保持",
                     "forbidden_drift": merged_cfg["drift"],
                 },
                 "reference_group": rg,
@@ -3493,7 +3491,7 @@ def clip_assets(clip: Mapping[str, Any]) -> List[str]:
     ids: List[str] = []
     for key in ("location_id",):
         add_unique(ids, canonical_asset_id(clip.get(key)))
-    for key in ("object_ids", "asset_ids", "vfx_ids"):
+    for key in ("object_ids", "asset_ids", "weapon_ids", "vfx_ids"):
         for aid in asset_ids_from_value(clip.get(key) or []):
             add_unique(ids, aid)
     schedule = clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), Mapping) else {}
@@ -4106,32 +4104,16 @@ def visual_contract(story: Mapping[str, Any]) -> Mapping[str, Any]:
 
 
 def clip_visual_tone(vc: Mapping[str, Any], idx: int) -> str:
-    tone = str(vc.get("色调基线") or "")
-    if idx < 3:
-        tone = re.sub(r"[；;]?\s*镇魔司黑衣赤纹[^。；;]*[。；;]?", "；", tone)
-        tone = re.sub(r"[；;]{2,}", "；", tone).strip("；; ")
-    return tone
+    return str(vc.get("色调基线") or "")
 
 
 def character_anchor_for_clip(cid: str, idx: int) -> str:
     cfg = active_character_form_cfg(cid, idx)
-    anchor = str(cfg.get("anchor") or "")
-    if cid == "CHAR_PI_DEMON_CHENGUI" and idx >= 6:
-        return "陈贵皮相中年商户，干净皂靴端茶不动，皮相错位，短暂显露青灰鳞翳竖瞳"
-    return anchor
+    return str(cfg.get("anchor") or "")
 
 
 def sanitize_state_lock(text: str, cid: str, idx: int) -> str:
-    value = text
-    if cid == "CHAR_PI_DEMON_CHENGUI" and idx < 11:
-        value = value.replace("，最后被符火钉墙", "")
-        value = value.replace("最后被符火钉墙", "")
-    if cid == "CHAR_SHEN_YAN" and idx < 11:
-        value = value.replace("右眼残金逐渐熄灭", "右眼金光断续压暗")
-        value = value.replace("右眼金光熄灭", "右眼金光断续压暗")
-        value = value.replace("被裴决救下后趴低，", "")
-        value = value.replace("秘密暴露", "秘密尚未公开")
-    return value.strip("，。 ") + "。"
+    return str(text or "").strip("，。 ") + "。"
 
 
 def clip_entity_state_hint(story: Mapping[str, Any], cid: str, idx: int) -> str:
@@ -4229,7 +4211,7 @@ def sanitize_future_state_text(value: Any, idx: int) -> Any:
     text = text.replace("完整定妆正脸", "完整定妆头像")
     text = text.replace("完整狼妖正脸", "完整狼妖头像")
     camera_gaze_replacements = {
-        "半身侧对镜头": "半身侧身面向百妖谱面板，视线不看镜头",
+        "半身侧对镜头": "半身侧身面向戏内目标，视线不看镜头",
         "侧对镜头": "侧身面向戏内目标，视线不看镜头",
         "正对镜头": "正对戏内目标，视线不看镜头",
         "面对镜头": "面对戏内目标，视线不看镜头",
@@ -4239,32 +4221,6 @@ def sanitize_future_state_text(value: Any, idx: int) -> Any:
     }
     for old, new in camera_gaze_replacements.items():
         text = text.replace(old, new)
-    if idx < 3:
-        early_loot_replacements = {
-            "黑衣边角": "镇魔卫衣物边角",
-            "黑衣碎片": "镇魔卫衣物碎片",
-        }
-        for old, new in early_loot_replacements.items():
-            text = text.replace(old, new)
-    if idx < 6:
-        replacements = {
-            "人皮湿纸般卷起露青灰鳞翳竖瞳": "皮相僵硬、动作过静",
-            "短暂显露青灰鳞翳竖瞳": "短暂露出异常凝视",
-            "青灰鳞翳竖瞳": "异常凝视",
-            "鳞翳竖瞳": "异常凝视",
-            "皮相错位": "皮相过静",
-        }
-        for old, new in replacements.items():
-            text = text.replace(old, new)
-    if idx < 11:
-        replacements = {
-            "右眼残金逐渐熄灭": "右眼金光断续压暗",
-            "右眼金光熄灭": "右眼金光断续压暗",
-            "被裴决救下后趴低": "被危机压低身位",
-            "秘密暴露": "秘密尚未公开",
-        }
-        for old, new in replacements.items():
-            text = text.replace(old, new)
     return text
 
 
@@ -4276,8 +4232,9 @@ def active_character_form_cfg(cid: str, idx: Optional[int] = None, assets: Seque
     if extras:
         asset_text = " ".join(str(a) for a in assets)
         for extra in extras:
-            marker = f"{extra.get('form', '')} {extra.get('outfit', '')} {asset_text}"
-            if "镇魔司" in marker and ((idx is not None and idx >= 3) or "PROP_镇魔司黑衣赤纹" in asset_text):
+            form = str(extra.get("form") or "").strip()
+            trigger_assets = [str(x) for x in (extra.get("trigger_assets") or [])]
+            if form and (form in asset_text or any(token and token in asset_text for token in trigger_assets)):
                 return {
                     **cfg,
                     **dict(extra),
@@ -4933,38 +4890,7 @@ def clip_has_screen_surface(clip: Mapping[str, Any], assets: Sequence[str], desc
 
 
 def compact_director_fallback(clip: Mapping[str, Any], desc: str) -> Tuple[str, str]:
-    template = str(clip.get("template") or "").strip()
     label = str(clip.get("label") or "")
-    if template == "task_order":
-        return (
-            "为「道具插入镜 + 压迫反打」预留前景压线和反应空间；扁担/水缸先读清，人物不要顶边。",
-            "任务下达镜以道具压迫和角色反应为第一目标：先让水缸/扁担可读，再落到贺平生接令的低位反应。",
-        )
-    if template == "compressed_flashback":
-        return (
-            "为「物件快闪压缩叙事」预留清晰插入镜空间；每帧只突出一个物件或一个背影/手部，不展开新支线。",
-            "背景压缩镜只交代身世和杂役处境，不拉成长回忆；物件证据比人物表演优先。",
-        )
-    if template == "night_route_choice":
-        return (
-            "为「夜路跟随 + 侧脸停顿」预留行进方向 lead room；先读路，再读少年压下犹豫继续走。",
-            "主动选择镜要拍出少年在黑暗山路里仍往前走的意志，不英雄化、不提前给觉醒光效。",
-        )
-    if template == "labor_montage":
-        return (
-            "为「肩部/水桶/脚步三连剪」预留局部特写空间；每个痛点只拍一处，疲惫递增但不混成慢风景。",
-            "挑水蒙太奇以身体代价为第一目标：肩压、水溢、脚滑和第五趟到水边要短促可读。",
-        )
-    if template == "object_discovery":
-        return (
-            "为「水底道具发现 + 末尾微光硬断」预留道具 ECU 空间；观众先看见异常，主角后反应。",
-            "核心道具入场镜要克制神异：破盆仍像破旧日用品，只用盆底一线微光留下追更钩。",
-        )
-    if "挑水" in desc or "水桶" in desc or "扁担" in desc:
-        return (
-            "为劳动动作预留肩线、桶绳和脚步空间；道具接触点清楚，动作方向留 15%-25% 余量。",
-            "劳动压迫镜以身体负担和道具重量为第一目标，不拍成慢生活风景。",
-        )
     return (
         "为本镜主体动作/视线方向预留 15%-25% 运动余量；主体不要顶边，首帧抓起幅不抓顶点。",
         f"导演意图服务本镜戏剧功能：{label or desc or '按 storyboard 戏剧功能聚焦主体和信息'}。",

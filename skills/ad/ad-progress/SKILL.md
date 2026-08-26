@@ -11,8 +11,8 @@ description: 拍广告(ad)「当前进度仪表盘 + 下一步建议」（只读
 
 ## 输入 / 输出 / 读写边界
 
-- **输入**：`创作区/拍广告/<项目>/_进度.md`、`需求/brief.json`，以及可选 `生产数据/producer_pack.json`、`评分/ad_score.json`、`出图/分镜/image_jobs_manifest.json`、`出图/分镜/product_qc.json`、`出视频/分镜/video_qc.json`。
-- **输出**：终端摘要：阶段完成度、交付件完成度、brief gate 提示、横切门禁摘要、当前前沿、后续待办。
+- **输入**：`创作区/拍广告/<项目>/_进度.md`、`需求/brief.json`，以及可选 `生产数据/producer_pack.json`、`评分/ad_score.json`、`出图/分镜/image_jobs_manifest.json`、`出图/分镜/product_qc.json`、`出视频/分镜/video_qc.json` 和发布裁决所需当前媒体/清单/签收。
+- **输出**：终端摘要：阶段完成度、交付件完成度、brief gate 提示、横切门禁摘要、当前前沿、后续待办，以及只读重算的唯一 release verdict status/digest/blockers。
 - **读写边界**：严格只读；不写 `_进度.md`、不写生产数据、不启动花钱或不可逆阶段。
 - **契约关系**：解析只引用广告线自己的 `ad-craft/scripts/contract.py` 和 `ad/_lib/progress_md.py`；不引用其它系列实现。
 
@@ -30,6 +30,8 @@ python3 skills/ad/ad-progress/scan.py --root <仓库根>      # 从其它目录�
 ## 输出怎么转述
 
 优先转述当前前沿和阻断。扫描会做「✅ 阶段行 ↔ `生产数据/stage_acceptance/<stage>.json` 凭证」对账：标 ✅ 却无凭证/凭证仍有 block → 报「✅ 无验收凭证」（疑似手改 `_进度.md`；这里只报不拦，硬拦在 `ad-review` M0）。若 `producer_pack` / `ad_score` / `product_qc` / `video_qc` 有 block，先转述这些横切门禁；下一步是 `ad-image`/`ad-video` 时，交实际 runner 核验 exact 阶段预算包，已有有效余量不重复确认，缺包、过期、超额、未知成本或 binding 变化才停；`ad-compose` 的不可逆覆盖仍是硬边界。三者进入前都先过广告线 gate；brief 的必填项缺失时，先回 `ad-concept` 访谈补齐。
+
+阶段表全绿仍不能自行宣告完成；只在当前 `release_verdict.complete=true` 时报告最终完成。扫描器不写 `生产数据/release_verdict.json`，需要固化证据时显式运行 `python3 skills/ad/scripts/release_verdict.py "<广告项目根>" --write`。
 
 ## 不做什么
 

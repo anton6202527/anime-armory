@@ -20,6 +20,7 @@ import argparse
 import importlib.util
 import json
 import os
+import shlex
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -46,7 +47,7 @@ state_contract = _load("mv_run_state_contract", os.path.join(CRAFT_SCRIPTS, "sta
 
 # ── 停因登记制枚举（单一真值；na() 拒绝未登记停因，消费端 switch 不会静默漏分支）──
 STOP_REASONS = frozenset({
-    "missing_progress",        # 无 _进度.md/阶段表 → 先 init_project
+    "needs_project_bootstrap", # 无 _进度.md/阶段表 → 结构化 init_project argv
     "state_inconsistent",      # _设置/_meta/_进度 三者不一致或阶段契约不完整
     "all_stages_done",         # 全部阶段 done → 收尾/发布
     "stale_receipts",          # 已 done 的付费阶段 hash 链失效（假 done）→ 先按 receipt_health 回流
@@ -59,7 +60,9 @@ STOP_REASONS = frozenset({
 
 # stage key → (停因, exact_command 模板或裸 skill 名, 是否付费/不可逆)
 STAGE_ACTIONS = {
-    "setup": ("ready_to_run", 'python3 skills/mv/scripts/init_project.py "{root}"', False),
+    # setup 的 argv 由 project_bootstrap_card() 生成；init_project.py 要求 --title，
+    # 不能把作品根当作无名位置参数。
+    "setup": ("ready_to_run", "", False),
     "song_ingest": ("needs_user_files", "", False),
     "beat": ("ready_to_run",
              'conda run -n cosyvoice python skills/mv/mv-beat/scripts/beat_detect.py "{root}" '
@@ -133,6 +136,33 @@ def na(payload):
     return payload
 
 
+def project_bootstrap_card(root):
+    """Return a shell-safe command and its machine-readable argv.
+
+    ``init_project.py`` has no positional project-root argument.  The title and
+    output root are therefore always explicit, so a consumer can execute argv
+    directly without reparsing display text.
+    """
+    absolute_root = os.path.abspath(os.path.expanduser(str(root)))
+    title = os.path.basename(os.path.normpath(absolute_root)) or "未命名MV"
+    argv = [
+        sys.executable,
+        "skills/mv/scripts/init_project.py",
+        "--title",
+        title,
+        "--out",
+        absolute_root,
+    ]
+    return {
+        "headline": "项目未初始化或 _进度.md 缺阶段表",
+        "action": "bootstrap_project",
+        "argv": argv,
+        "exact_command": shlex.join(argv),
+        "to_user": "按当前作品根和推导标题初始化 MV；其余可逆选择点沿用本线默认值。",
+        "paid_or_irreversible": False,
+    }
+
+
 def stage_states(root):
     """_进度.md 阶段表 → [(contract_key|None, label, owner, state)]。"""
     try:
@@ -189,15 +219,10 @@ def build_next_action(root):
         return na({
             "root": root,
             "frontier": None,
-            "stop_reason": "missing_progress",
+            "stop_reason": "needs_project_bootstrap",
             "gate": None,
             "receipt_health": [],
-            "action_card": {
-                "headline": "项目未初始化或 _进度.md 缺阶段表",
-                "exact_command": STAGE_ACTIONS["setup"][1].format(root=root),
-                "to_user": "先用 mv 总调度立项（会问 歌曲输入时序 / MV视觉风格 等选择点）。",
-                "paid_or_irreversible": False,
-            },
+            "action_card": project_bootstrap_card(root),
             "stages": [],
         })
     state_audit = state_contract.audit(root, STAGE_ACTIONS)
