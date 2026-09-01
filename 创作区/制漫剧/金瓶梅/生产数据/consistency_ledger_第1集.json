@@ -1,12 +1,12 @@
 {
   "counts": {
-    "block": 2,
+    "block": 4,
     "high": 0,
-    "medium": 37
+    "medium": 35
   },
   "delivery_surface": {
     "blocking_counts": {
-      "block": 2,
+      "block": 4,
       "high": 0
     },
     "required_domains": [
@@ -35,16 +35,16 @@
     }
   },
   "domain_counts": {
-    "block": 2,
+    "block": 3,
     "high": 0,
-    "medium": 6
+    "medium": 5
   },
   "domains": [
     {
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 5
+        "medium": 6
       },
       "findings": [
         {
@@ -58,6 +58,13 @@
           "dimension": "节奏密度(Rhythm)",
           "loc": "",
           "message": " 节奏密度(Rhythm)   连续 10 个长镜聚集（EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "视线状态回读(X2)",
+          "loc": "",
+          "message": " 视线状态回读(X2)   15 个视线/状态高风险镜当前 image_qc 精度为 degraded；需要 full QC 或人审签收，不能把降级绿灯当作像素一致已验证。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -94,32 +101,11 @@
     },
     {
       "counts": {
-        "block": 0,
+        "block": 132,
         "high": 0,
-        "medium": 92
+        "medium": 101
       },
       "findings": [
-        {
-          "dimension": "脸(G1)",
-          "loc": "",
-          "message": "CHAR_WUSONG__28岁打虎态 脸(G1)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "脸(G1)",
-          "loc": "",
-          "message": "CHAR_WUDA__日常卖饼态 脸(G1)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "脸(G1)",
-          "loc": "",
-          "message": "CHAR_WUSONG__28岁打虎态 脸(G1)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
         {
           "dimension": "服装配色(N1)",
           "loc": "",
@@ -154,11 +140,32 @@
           "message": " 表情连续(EXP1)   Clip_09：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
           "severity": "warn",
           "source": "detect"
+        },
+        {
+          "dimension": "表情连续(EXP1)",
+          "loc": "",
+          "message": " 表情连续(EXP1)   Clip_15：角色 CHAR_WUSONG 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "表情连续(EXP1)",
+          "loc": "",
+          "message": " 表情连续(EXP1)   Clip_15：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "真值源(TRUTH)",
+          "loc": "",
+          "message": " 真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。 ",
+          "severity": "warn",
+          "source": "detect"
         }
       ],
       "key": "character",
       "label": "角色",
-      "overall": "warn",
+      "overall": "block",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -170,7 +177,7 @@
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 82
+        "medium": 86
       },
       "findings": [
         {
@@ -242,9 +249,9 @@
     },
     {
       "counts": {
-        "block": 1,
+        "block": 3,
         "high": 0,
-        "medium": 98
+        "medium": 77
       },
       "findings": [
         {
@@ -440,7 +447,7 @@
         },
         {
           "dimension": "合规前置",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/合规/compliance_manifest.json",
+          "loc": "创作区/制漫剧/金瓶梅/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -475,44 +482,9 @@
       "counts": {
         "block": 3,
         "high": 0,
-        "medium": 37
+        "medium": 39
       },
       "findings": [
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "",
-          "message": "CHAR_MAGISTRATE__常态 锚点门(N3)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "",
-          "message": "CHAR_PANJINLIAN__25岁武大家常态 锚点门(N3)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "",
-          "message": "CHAR_WUDA__日常卖饼态 锚点门(N3)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "",
-          "message": "CHAR_WUSONG__28岁打虎态 锚点门(N3)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "",
-          "message": "CHAR_XIMENQING__常态 锚点门(N3)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
         {
           "dimension": "风格(S1)",
           "loc": "",
@@ -531,6 +503,41 @@
           "dimension": "糊/低质(N4)",
           "loc": "",
           "message": " 糊/低质(N4)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "糊/低质(N4)",
+          "loc": "",
+          "message": " 糊/低质(N4)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "物理事件图(PHY)",
+          "loc": "",
+          "message": " 物理事件图(PHY)   本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/object/frame/violation。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": "",
+          "message": " 成本路由(K1)   出图/共享/图片/风格锚_北宋市井写实电影感.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": "",
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": "",
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
           "severity": "warn",
           "source": "detect"
         }
@@ -549,9 +556,9 @@
     }
   ],
   "entity_counts": {
-    "block": 0,
+    "block": 1,
     "high": 0,
-    "medium": 31
+    "medium": 30
   },
   "intentional_discontinuity": {
     "available": true,
@@ -567,58 +574,1854 @@
   "kind": "n2d_consistency_ledger",
   "root_causes": [
     {
+      "anchor": "Clip01_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip01_end.png",
+          "message": "character_consistency  图片/Clip01_end.png 降级精度多人同框：图片/Clip01_end.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-ar",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip01_end.png",
+          "message": "character_consistency 降级精度多人同框：图片/Clip01_end.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip01_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip01_first.png",
+          "message": "character_consistency  图片/Clip01_first.png 降级精度多人同框：图片/Clip01_first.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anim",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip01_first.png",
+          "message": "character_consistency 降级精度多人同框：图片/Clip01_first.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip02_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip02_end.png",
+          "message": "character_consistency  图片/Clip02_end.png 降级精度多人同框：图片/Clip02_end.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-ar",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip02_end.png",
+          "message": "character_consistency 降级精度多人同框：图片/Clip02_end.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip02_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip02_first.png",
+          "message": "character_consistency  图片/Clip02_first.png 降级精度多人同框：图片/Clip02_first.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anim",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip02_first.png",
+          "message": "character_consistency 降级精度多人同框：图片/Clip02_first.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip03_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip03_first.png",
+          "message": "character_consistency  图片/Clip03_first.png 降级精度多人同框：图片/Clip03_first.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anim",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip03_first.png",
+          "message": "character_consistency  图片/Clip03_first.png 角色脸定妆比对覆盖缺口：镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking） 图片/Clip03_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip03_first.png",
+          "message": "character_consistency 降级精度多人同框：图片/Clip03_first.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip03_first.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking） 图片/Clip03_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip04_end.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip04_end.png",
+          "message": "image_artifact_presence  图片/Clip04_end.png 出图目标尚未生成：图片/Clip04_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip04_end.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip04_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip04_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip04_first.png",
+          "message": "character_consistency  图片/Clip04_first.png 降级精度多人同框：图片/Clip04_first.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anim",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip04_first.png",
+          "message": "character_consistency  图片/Clip04_first.png 角色脸定妆比对覆盖缺口：镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking） 图片/Clip04_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip04_first.png",
+          "message": "character_consistency 降级精度多人同框：图片/Clip04_first.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip04_first.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking） 图片/Clip04_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip05_end.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip05_end.png",
+          "message": "image_artifact_presence  图片/Clip05_end.png 出图目标尚未生成：图片/Clip05_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip05_end.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip05_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip05_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip05_first.png",
+          "message": "character_consistency  图片/Clip05_first.png 降级精度多人同框：图片/Clip05_first.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anim",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip05_first.png",
+          "message": "character_consistency  图片/Clip05_first.png 角色脸定妆比对覆盖缺口：镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame） 图片/Clip05_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip05_first.png",
+          "message": "character_consistency 降级精度多人同框：图片/Clip05_first.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip05_first.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame） 图片/Clip05_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 ",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip05_first_a3.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip05_first_a3.png",
+          "message": "image_artifact_presence  图片/Clip05_first_a3.png 出图目标尚未生成：图片/Clip05_first_a3.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip05_first_a3.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip05_first_a3.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip06_first.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip06_first.png",
+          "message": "image_artifact_presence  图片/Clip06_first.png 出图目标尚未生成：图片/Clip06_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip06_first.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip06_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip07_end.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip07_end.png",
+          "message": "image_artifact_presence  图片/Clip07_end.png 出图目标尚未生成：图片/Clip07_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip07_end.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip07_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip07_first.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip07_first.png",
+          "message": "image_artifact_presence  图片/Clip07_first.png 出图目标尚未生成：图片/Clip07_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip07_first.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip07_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip07_first_a3.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip07_first_a3.png",
+          "message": "image_artifact_presence  图片/Clip07_first_a3.png 出图目标尚未生成：图片/Clip07_first_a3.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip07_first_a3.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip07_first_a3.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip08_end.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip08_end.png",
+          "message": "image_artifact_presence  图片/Clip08_end.png 出图目标尚未生成：图片/Clip08_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip08_end.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip08_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip08_first.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip08_first.png",
+          "message": "image_artifact_presence  图片/Clip08_first.png 出图目标尚未生成：图片/Clip08_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip08_first.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip08_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip08_first_a2.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip08_first_a2.png",
+          "message": "image_artifact_presence  图片/Clip08_first_a2.png 出图目标尚未生成：图片/Clip08_first_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip08_first_a2.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip08_first_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip09_end.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip09_end.png",
+          "message": "image_artifact_presence  图片/Clip09_end.png 出图目标尚未生成：图片/Clip09_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip09_end.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip09_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip09_first.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip09_first.png",
+          "message": "image_artifact_presence  图片/Clip09_first.png 出图目标尚未生成：图片/Clip09_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip09_first.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip09_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip10_end.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip10_end.png",
+          "message": "image_artifact_presence  图片/Clip10_end.png 出图目标尚未生成：图片/Clip10_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip10_end.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip10_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip10_first.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip10_first.png",
+          "message": "image_artifact_presence  图片/Clip10_first.png 出图目标尚未生成：图片/Clip10_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip10_first.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip10_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip11_end.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip11_end.png",
+          "message": "image_artifact_presence  图片/Clip11_end.png 出图目标尚未生成：图片/Clip11_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip11_end.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip11_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip11_first.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip11_first.png",
+          "message": "image_artifact_presence  图片/Clip11_first.png 出图目标尚未生成：图片/Clip11_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip11_first.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip11_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip12_end.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip12_end.png",
+          "message": "image_artifact_presence  图片/Clip12_end.png 出图目标尚未生成：图片/Clip12_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip12_end.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip12_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip12_first.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip12_first.png",
+          "message": "image_artifact_presence  图片/Clip12_first.png 出图目标尚未生成：图片/Clip12_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip12_first.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip12_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip13_end.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip13_end.png",
+          "message": "image_artifact_presence  图片/Clip13_end.png 出图目标尚未生成：图片/Clip13_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip13_end.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip13_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip13_first.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip13_first.png",
+          "message": "image_artifact_presence  图片/Clip13_first.png 出图目标尚未生成：图片/Clip13_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip13_first.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip13_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip13_first_a3.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip13_first_a3.png",
+          "message": "image_artifact_presence  图片/Clip13_first_a3.png 出图目标尚未生成：图片/Clip13_first_a3.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip13_first_a3.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip13_first_a3.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip14_first.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip14_first.png",
+          "message": "image_artifact_presence  图片/Clip14_first.png 出图目标尚未生成：图片/Clip14_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip14_first.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip14_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip15_end.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip15_end.png",
+          "message": "image_artifact_presence  图片/Clip15_end.png 出图目标尚未生成：图片/Clip15_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip15_end.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip15_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip15_first.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip15_first.png",
+          "message": "image_artifact_presence  图片/Clip15_first.png 出图目标尚未生成：图片/Clip15_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/Clip15_first.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/Clip15_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP01_a1.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP01_a1.png",
+          "message": "character_consistency  图片/EP01_CLIP01_a1.png 降级精度多人同框：图片/EP01_CLIP01_a1.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP01_a1.png",
+          "message": "character_consistency 降级精度多人同框：图片/EP01_CLIP01_a1.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP02_a1.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP02_a1.png",
+          "message": "character_consistency  图片/EP01_CLIP02_a1.png 降级精度多人同框：图片/EP01_CLIP02_a1.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP02_a1.png",
+          "message": "character_consistency 降级精度多人同框：图片/EP01_CLIP02_a1.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP02_a2.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP02_a2.png",
+          "message": "character_consistency  图片/EP01_CLIP02_a2.png 降级精度多人同框：图片/EP01_CLIP02_a2.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP02_a2.png",
+          "message": "character_consistency 降级精度多人同框：图片/EP01_CLIP02_a2.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP02_a3.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP02_a3.png",
+          "message": "character_consistency  图片/EP01_CLIP02_a3.png 降级精度多人同框：图片/EP01_CLIP02_a3.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP02_a3.png",
+          "message": "character_consistency 降级精度多人同框：图片/EP01_CLIP02_a3.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP03_a1.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03_a1.png",
+          "message": "character_consistency  图片/EP01_CLIP03_a1.png 降级精度多人同框：图片/EP01_CLIP03_a1.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03_a1.png",
+          "message": "character_consistency  图片/EP01_CLIP03_a1.png 角色脸定妆比对覆盖缺口：镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking） 图片/EP01_CLIP03_a1.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 f",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03_a1.png",
+          "message": "character_consistency 降级精度多人同框：图片/EP01_CLIP03_a1.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03_a1.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking） 图片/EP01_CLIP03_a1.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP03_a2.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03_a2.png",
+          "message": "character_consistency  图片/EP01_CLIP03_a2.png 降级精度多人同框：图片/EP01_CLIP03_a2.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03_a2.png",
+          "message": "character_consistency  图片/EP01_CLIP03_a2.png 角色脸定妆比对覆盖缺口：镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking） 图片/EP01_CLIP03_a2.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 f",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03_a2.png",
+          "message": "character_consistency 降级精度多人同框：图片/EP01_CLIP03_a2.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03_a2.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking） 图片/EP01_CLIP03_a2.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP03_a3.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03_a3.png",
+          "message": "character_consistency  图片/EP01_CLIP03_a3.png 降级精度多人同框：图片/EP01_CLIP03_a3.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03_a3.png",
+          "message": "character_consistency  图片/EP01_CLIP03_a3.png 角色脸定妆比对覆盖缺口：镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking） 图片/EP01_CLIP03_a3.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 f",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03_a3.png",
+          "message": "character_consistency 降级精度多人同框：图片/EP01_CLIP03_a3.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP03_a3.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking） 图片/EP01_CLIP03_a3.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP04_a1.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP04_a1.png",
+          "message": "character_consistency  图片/EP01_CLIP04_a1.png 降级精度多人同框：图片/EP01_CLIP04_a1.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP04_a1.png",
+          "message": "character_consistency  图片/EP01_CLIP04_a1.png 角色脸定妆比对覆盖缺口：镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking） 图片/EP01_CLIP04_a1.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 f",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP04_a1.png",
+          "message": "character_consistency 降级精度多人同框：图片/EP01_CLIP04_a1.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP04_a1.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking） 图片/EP01_CLIP04_a1.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP05_a1.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP05_a1.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP05_a1.png 出图目标尚未生成：图片/EP01_CLIP05_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP05_a1.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP05_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP05_a2.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP05_a2.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP05_a2.png 出图目标尚未生成：图片/EP01_CLIP05_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP05_a2.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP05_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP06_a1.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP06_a1.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP06_a1.png 出图目标尚未生成：图片/EP01_CLIP06_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP06_a1.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP06_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP06_a2.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP06_a2.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP06_a2.png 出图目标尚未生成：图片/EP01_CLIP06_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP06_a2.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP06_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP07_a1.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP07_a1.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP07_a1.png 出图目标尚未生成：图片/EP01_CLIP07_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP07_a1.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP07_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP07_a2.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP07_a2.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP07_a2.png 出图目标尚未生成：图片/EP01_CLIP07_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP07_a2.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP07_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP08_a1.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP08_a1.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP08_a1.png 出图目标尚未生成：图片/EP01_CLIP08_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP08_a1.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP08_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP09_a1.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP09_a1.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP09_a1.png 出图目标尚未生成：图片/EP01_CLIP09_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP09_a1.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP09_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP09_a2.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP09_a2.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP09_a2.png 出图目标尚未生成：图片/EP01_CLIP09_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP09_a2.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP09_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP09_a3.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP09_a3.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP09_a3.png 出图目标尚未生成：图片/EP01_CLIP09_a3.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP09_a3.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP09_a3.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP10_a1.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP10_a1.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP10_a1.png 出图目标尚未生成：图片/EP01_CLIP10_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP10_a1.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP10_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP10_a2.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP10_a2.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP10_a2.png 出图目标尚未生成：图片/EP01_CLIP10_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP10_a2.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP10_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP11_a1.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP11_a1.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP11_a1.png 出图目标尚未生成：图片/EP01_CLIP11_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP11_a1.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP11_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP11_a2.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP11_a2.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP11_a2.png 出图目标尚未生成：图片/EP01_CLIP11_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP11_a2.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP11_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP12_a1.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP12_a1.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP12_a1.png 出图目标尚未生成：图片/EP01_CLIP12_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP12_a1.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP12_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP13_a1.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP13_a1.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP13_a1.png 出图目标尚未生成：图片/EP01_CLIP13_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP13_a1.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP13_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP13_a2.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP13_a2.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP13_a2.png 出图目标尚未生成：图片/EP01_CLIP13_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP13_a2.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP13_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP14_a1.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP14_a1.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP14_a1.png 出图目标尚未生成：图片/EP01_CLIP14_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP14_a1.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP14_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP15_a1.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP15_a1.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP15_a1.png 出图目标尚未生成：图片/EP01_CLIP15_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP15_a1.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP15_a1.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP15_a2.png",
+      "dimensions": [
+        "image_artifact_presence"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP15_a2.png",
+          "message": "image_artifact_presence  图片/EP01_CLIP15_a2.png 出图目标尚未生成：图片/EP01_CLIP15_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_artifact_presence",
+          "loc": "图片/EP01_CLIP15_a2.png",
+          "message": "image_artifact_presence 出图目标尚未生成：图片/EP01_CLIP15_a2.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "image_qc_第1集.json",
+      "dimensions": [
+        "出图落档QC"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "出图落档QC",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/image_qc_第1集.json",
+          "message": "出图落档QC 输入首帧 image_qc 的 `inputs_fingerprint` 与当前文件失配（prompt、registry 或 PNG 已变）。当前结论作废；出视频前先重跑 image_qc。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
       "anchor": "ops",
       "dimensions": [
-        "锚点门(N3)",
         "风格(S1)",
         "糊/低质(N4)",
         "物理事件图(PHY)",
         "成本路由(K1)",
         "人审校准集(CAL)",
-        "一致性探针包(PROBE)"
+        "一致性探针包(PROBE)",
+        "image_prompt_lint"
       ],
       "domain": "ops",
       "severity": "block",
       "sources": [
-        "detect"
+        "detect",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "锚点门(N3)",
-          "loc": null,
-          "message": "CHAR_MAGISTRATE__常态 锚点门(N3)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": null,
-          "message": "CHAR_PANJINLIAN__25岁武大家常态 锚点门(N3)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": null,
-          "message": "CHAR_WUDA__日常卖饼态 锚点门(N3)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": null,
-          "message": "CHAR_WUSONG__28岁打虎态 锚点门(N3)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": null,
-          "message": "CHAR_XIMENQING__常态 锚点门(N3)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
         {
           "dimension": "风格(S1)",
           "loc": null,
@@ -639,35 +2442,41 @@
           "message": " 糊/低质(N4)    ",
           "severity": "warn",
           "source": "detect"
-        }
-      ]
-    },
-    {
-      "anchor": "production_events.jsonl:line 504",
-      "dimensions": [
-        "固定 Seed",
-        "生成配方证据"
-      ],
-      "domain": "ops",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "固定 Seed",
-          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl:line 504",
-          "message": "固定 Seed image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
-          "severity": "warn",
-          "source": "gate:image"
         },
         {
-          "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl:line 504",
-          "message": "生成配方证据 出图/第1集/图片/Clip05_first.png 生成事件缺必填配方证据：route_hash。每个最终媒体必须记录 provider/model/channel/route_hash/capability_evidence_id/recipe_hash/prompt_sha256/reference_bundle_sha256/backe",
-          "severity": "block",
-          "source": "gate:image"
+          "dimension": "糊/低质(N4)",
+          "loc": null,
+          "message": " 糊/低质(N4)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "物理事件图(PHY)",
+          "loc": null,
+          "message": " 物理事件图(PHY)   本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/object/frame/violation。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/风格锚_北宋市井写实电影感.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_CHAR_WUSONG__28岁打虎态.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
         }
       ]
     },
@@ -693,9 +2502,88 @@
       ]
     },
     {
+      "anchor": "shot",
+      "dimensions": [
+        "场景(O2)",
+        "色温调色(GRADE1)",
+        "实体记忆(EMB)",
+        "视频证据完整性(EVID)",
+        "成本路由(K1)",
+        "image_qc_precision",
+        "multimodal_continuity",
+        "style_consistency"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景(O2)",
+          "loc": null,
+          "message": " 场景(O2)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip01_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.015 vs 场景中位 -0.203）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip01_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 -0.006 vs 场景中位 -0.203）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip02_end.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.389 vs 场景中位 -0.203）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/EP01_CLIP02_a3.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.383 vs 场景中位 -0.203）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "实体记忆(EMB)",
+          "loc": null,
+          "message": " 实体记忆(EMB)   本集有重复/核心实体（BEAST_TIGER/扑击态, CHAR_MAGISTRATE, CHAR_PANJINLIAN, CHAR_PANJINLIAN__, CHAR_PANJINLIAN__25岁武大家常态, CHAR_WUDA）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "视频证据完整性(EVID)",
+          "loc": null,
+          "message": " 视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_景阳冈夜间空地.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
       "anchor": "图片",
       "dimensions": [
-        "糊/低质(N4)"
+        "糊/低质(N4)",
+        "场景(O2)"
       ],
       "domain": "shot",
       "severity": "block",
@@ -710,6 +2598,27 @@
           "message": "糊/低质(N4) 一致性审计发现问题",
           "severity": "block",
           "source": "gate:image"
+        },
+        {
+          "dimension": "场景(O2)",
+          "loc": "出图/第1集/图片",
+          "message": "场景(O2) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "糊/低质(N4)",
+          "loc": "出图/第1集/图片",
+          "message": "糊/低质(N4) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "糊/低质(N4)",
+          "loc": "出图/第1集/图片",
+          "message": "糊/低质(N4) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -720,12 +2629,14 @@
         "持有账本(POS)",
         "结构化交互图谱(I2)",
         "成本路由(K1)",
-        "系统面板(UI1)"
+        "系统面板(UI1)",
+        "human_anatomy_continuity"
       ],
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "detect"
+        "detect",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -788,6 +2699,34 @@
       ]
     },
     {
+      "anchor": "storyboard.json",
+      "dimensions": [
+        "打斗撞点(SPEC-APEX)"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "打斗撞点(SPEC-APEX)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "打斗撞点(SPEC-APEX) Clip_01（fight_exchange）：impact 剪辑峰值（hit_stop/screen_shake/impact_sfx/闪白…）的 when 取不到秒数——template_contract.impact_frame/collision_or_apex_frame 需写成带 `<秒>s` 的命中帧（如「命中 ",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "打斗撞点(SPEC-APEX)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "打斗撞点(SPEC-APEX) Clip_02（fight_exchange）：impact 剪辑峰值（hit_stop/screen_shake/impact_sfx/闪白…）的 when 取不到秒数——template_contract.impact_frame/collision_or_apex_frame 需写成带 `<秒>s` 的命中帧（如「命中 ",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
       "anchor": "场景定妆.md ## 县衙案厅（`LOC_COUNTY_YAMEN`）",
       "dimensions": [
         "image prompt compiler"
@@ -802,7 +2741,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 县衙案厅（`LOC_COUNTY_YAMEN`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 县衙案厅（`LOC_COUNTY_YAMEN`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -831,7 +2770,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 景阳冈夜间空地（`LOC_JINGYANGGANG`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 景阳冈夜间空地（`LOC_JINGYANGGANG`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:32>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -860,7 +2799,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 武大家楼屋雪夜（`LOC_WUDA_HOME`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 武大家楼屋雪夜（`LOC_WUDA_HOME`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:34>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -889,7 +2828,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 阳谷城门清晨（`LOC_CITY_GATE`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 阳谷城门清晨（`LOC_CITY_GATE`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -918,7 +2857,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 阳谷街面与武大家楼窗（`LOC_YANGGU_STREET`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/场景定妆.md ## 阳谷街面与武大家楼窗（`LOC_YANGGU_STREET`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -947,7 +2886,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## DINING TABLE（`PROP_DINING_TABLE`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## DINING TABLE（`PROP_DINING_TABLE`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:24>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -976,7 +2915,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## DOORFRAME（`PROP_DOORFRAME`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## DOORFRAME（`PROP_DOORFRAME`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:25>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1005,7 +2944,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## REWARD SILVER（`PROP_REWARD_SILVER`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## REWARD SILVER（`PROP_REWARD_SILVER`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:25>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1034,7 +2973,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## SPILLED WINE（`PROP_SPILLED_WINE`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## SPILLED WINE（`PROP_SPILLED_WINE`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1063,7 +3002,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## STAIR RAIL（`PROP_STAIR_RAIL`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## STAIR RAIL（`PROP_STAIR_RAIL`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:23>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1092,7 +3031,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## TEA CUP（`PROP_TEA_CUP`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## TEA CUP（`PROP_TEA_CUP`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:24>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1121,7 +3060,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## WINDOW CURTAIN（`PROP_WINDOW_CURTAIN`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## WINDOW CURTAIN（`PROP_WINDOW_CURTAIN`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1150,7 +3089,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## WINDOW LATTICE（`PROP_WINDOW_LATTICE`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## WINDOW LATTICE（`PROP_WINDOW_LATTICE`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:25>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1179,7 +3118,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 东京礼担（`PROP_GIFT_LOAD`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 东京礼担（`PROP_GIFT_LOAD`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1208,7 +3147,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 公文（`PROP_OFFICIAL_DOC`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 公文（`PROP_OFFICIAL_DOC`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:28>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1237,7 +3176,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 半杯酒（`PROP_WINE_CUP`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 半杯酒（`PROP_WINE_CUP`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1266,7 +3205,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 叉竿（`PROP_CURTAIN_FORK`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 叉竿（`PROP_CURTAIN_FORK`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1295,7 +3234,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 梢棒（`PROP_QUARTERSTAFF`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 梢棒（`PROP_QUARTERSTAFF`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1324,7 +3263,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 武大家木门（`PROP_DOOR`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 武大家木门（`PROP_DOOR`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:31>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1353,7 +3292,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 炊饼担（`PROP_CAKE_POLE`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 炊饼担（`PROP_CAKE_POLE`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1382,7 +3321,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 炭盆（`PROP_BRAZIER`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 炭盆（`PROP_BRAZIER`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1411,7 +3350,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 素布行李（`PROP_LUGGAGE`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 素布行李（`PROP_LUGGAGE`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1440,7 +3379,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 都头腰牌（`PROP_BADGE`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 都头腰牌（`PROP_BADGE`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1469,7 +3408,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 门闩（`PROP_DOOR_LATCH`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/道具定妆.md ## 门闩（`PROP_DOOR_LATCH`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:31>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1607,29 +3546,29 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1750>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:59>16",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1808>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
           "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1750>1500",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:60>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1808>1500",
           "severity": "warn",
           "source": "gate:image"
         },
         {
           "dimension": "image prompt compiler",
           "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 虎爪贴脸 · fight_exchange）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:59>16",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:60>16",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -1650,14 +3589,14 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1724>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 兄弟重逢，楼上第一次看见 · multi_character_same_frame）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:62>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1693,7 +3632,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 潘金莲（`CHAR_PANJINLIAN/25岁武大家常态`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 潘金莲（`CHAR_PANJINLIAN/25岁武大家常态`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:41>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1722,7 +3661,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 武松（`CHAR_WUSONG/28岁打虎态`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 武松（`CHAR_WUSONG/28岁打虎态`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1731,209 +3670,6 @@
           "dimension": "image prompt compiler",
           "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 武松（`CHAR_WUSONG/28岁打虎态`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "CHAR_MAGISTRATE__常态",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "detect",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "CHAR_MAGISTRATE__常态",
-          "message": "character_consistency  CHAR_MAGISTRATE__常态 锚点门 N3：CHAR_MAGISTRATE__常态 主参考非单张清晰正脸（非阻断） ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "CHAR_MAGISTRATE__常态",
-          "message": "character_consistency 锚点门 N3：CHAR_MAGISTRATE__常态 主参考非单张清晰正脸（非阻断）",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "CHAR_PANJINLIAN__25岁武大家常态",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "detect",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "CHAR_PANJINLIAN__25岁武大家常态",
-          "message": "character_consistency  CHAR_PANJINLIAN__25岁武大家常态 锚点门 N3：CHAR_PANJINLIAN__25岁武大家常态 主参考非单张清晰正脸（非阻断） ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "CHAR_PANJINLIAN__25岁武大家常态",
-          "message": "character_consistency 锚点门 N3：CHAR_PANJINLIAN__25岁武大家常态 主参考非单张清晰正脸（非阻断）",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "CHAR_WUDA__日常卖饼态",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "detect",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "CHAR_WUDA__日常卖饼态",
-          "message": "character_consistency  CHAR_WUDA__日常卖饼态 锚点门 N3：CHAR_WUDA__日常卖饼态 主参考非单张清晰正脸（非阻断） ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "CHAR_WUDA__日常卖饼态",
-          "message": "character_consistency 锚点门 N3：CHAR_WUDA__日常卖饼态 主参考非单张清晰正脸（非阻断）",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "CHAR_WUSONG__28岁打虎态",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "detect",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "CHAR_WUSONG__28岁打虎态",
-          "message": "character_consistency  CHAR_WUSONG__28岁打虎态 锚点门 N3：CHAR_WUSONG__28岁打虎态 主参考非单张清晰正脸（非阻断） ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "CHAR_WUSONG__28岁打虎态",
-          "message": "character_consistency 锚点门 N3：CHAR_WUSONG__28岁打虎态 主参考非单张清晰正脸（非阻断）",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "CHAR_XIMENQING__常态",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "detect",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "CHAR_XIMENQING__常态",
-          "message": "character_consistency  CHAR_XIMENQING__常态 锚点门 N3：CHAR_XIMENQING__常态 主参考非单张清晰正脸（非阻断） ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "CHAR_XIMENQING__常态",
-          "message": "character_consistency 锚点门 N3：CHAR_XIMENQING__常态 主参考非单张清晰正脸（非阻断）",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip01_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "detect",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip01_end.png",
-          "message": "character_consistency  图片/Clip01_end.png 疑似漏分类角色镜：图片/Clip01_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip01_end.png",
-          "message": "character_consistency 疑似漏分类角色镜：图片/Clip01_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip02_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "detect",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip02_end.png",
-          "message": "character_consistency  图片/Clip02_end.png 疑似漏分类角色镜：图片/Clip02_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip02_end.png",
-          "message": "character_consistency 疑似漏分类角色镜：图片/Clip02_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -1953,14 +3689,14 @@
       "symptoms": [
         {
           "dimension": "生图后端适配",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/_设置.md",
+          "loc": "创作区/制漫剧/金瓶梅/_设置.md",
           "message": "生图后端适配 统一标准已按「Codex」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "生图后端适配",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/_设置.md",
+          "loc": "创作区/制漫剧/金瓶梅/_设置.md",
           "message": "生图后端适配 适配层评分建议升档：当前「Codex」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统一 `_",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1970,11 +3706,11 @@
     {
       "anchor": "character",
       "dimensions": [
-        "脸(G1)",
         "服装配色(N1)",
         "发型(H1)",
         "表情连续(EXP1)",
         "真值源(TRUTH)",
+        "character_consistency",
         "image_prompt_lint"
       ],
       "domain": "character",
@@ -1985,27 +3721,6 @@
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "脸(G1)",
-          "loc": null,
-          "message": "CHAR_WUSONG__28岁打虎态 脸(G1)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "脸(G1)",
-          "loc": null,
-          "message": "CHAR_WUDA__日常卖饼态 脸(G1)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "脸(G1)",
-          "loc": null,
-          "message": "CHAR_WUSONG__28岁打虎态 脸(G1)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
         {
           "dimension": "服装配色(N1)",
           "loc": null,
@@ -2040,6 +3755,48 @@
           "message": " 表情连续(EXP1)   Clip_09：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
           "severity": "warn",
           "source": "detect"
+        },
+        {
+          "dimension": "表情连续(EXP1)",
+          "loc": null,
+          "message": " 表情连续(EXP1)   Clip_15：角色 CHAR_WUSONG 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "表情连续(EXP1)",
+          "loc": null,
+          "message": " 表情连续(EXP1)   Clip_15：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "真值源(TRUTH)",
+          "loc": null,
+          "message": " 真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "consistency_findings_第1集.json",
+      "dimensions": [
+        "一致性总审"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "一致性总审",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/consistency_findings_第1集.json",
+          "message": "一致性总审 一致性审计精度为 degraded；机检通过不等于脸部/像素一致性已完整验证，正式定稿前应在 full 环境复跑。（已通过项目设置 internal_only + demo放行）",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -2088,8 +3845,8 @@
     {
       "anchor": "图片",
       "dimensions": [
-        "脸(G1)",
-        "锚点门(N3)"
+        "服装配色(N1)",
+        "发型(H1)"
       ],
       "domain": "character",
       "severity": "warn",
@@ -2099,58 +3856,23 @@
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "脸(G1)",
+          "dimension": "服装配色(N1)",
           "loc": "出图/第1集/图片",
-          "message": "脸(G1) 一致性审计发现问题",
+          "message": "服装配色(N1) 一致性审计发现问题",
           "severity": "warn",
           "source": "gate:image"
         },
         {
-          "dimension": "脸(G1)",
+          "dimension": "服装配色(N1)",
           "loc": "出图/第1集/图片",
-          "message": "脸(G1) 一致性审计发现问题",
+          "message": "服装配色(N1) 一致性审计发现问题",
           "severity": "warn",
           "source": "gate:image"
         },
         {
-          "dimension": "脸(G1)",
+          "dimension": "发型(H1)",
           "loc": "出图/第1集/图片",
-          "message": "脸(G1) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "出图/共享/图片",
-          "message": "锚点门(N3) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "出图/共享/图片",
-          "message": "锚点门(N3) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "出图/共享/图片",
-          "message": "锚点门(N3) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "出图/共享/图片",
-          "message": "锚点门(N3) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "出图/共享/图片",
-          "message": "锚点门(N3) 一致性审计发现问题",
+          "message": "发型(H1) 一致性审计发现问题",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -2171,7 +3893,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写.png",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_BEAST_TIGER__常态_脸部特写.png",
           "message": "定妆对账 定妆图 定妆_BEAST_TIGER__常态_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2200,7 +3922,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写.png",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_MAGISTRATE__常态_脸部特写.png",
           "message": "定妆对账 定妆图 定妆_CHAR_MAGISTRATE__常态_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2229,7 +3951,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写.png",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/图片/定妆_CHAR_XIMENQING__常态_脸部特写.png",
           "message": "定妆对账 定妆图 定妆_CHAR_XIMENQING__常态_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2258,57 +3980,57 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## BEAST_TIGER（`BEAST_TIGER/常态`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:38>16",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 景阳冈猛虎（`BEAST_TIGER/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:43>16",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## Hunters（`CROWD_HUNTERS/常态`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:34>16",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 猎户群像（`CROWD_HUNTERS/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 知县（`CHAR_MAGISTRATE/常态`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 知县（`CHAR_MAGISTRATE/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:41>16",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 西门庆（`CHAR_XIMENQING/常态`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:38>16",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 西门庆（`CHAR_XIMENQING/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:37>16",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## BEAST_TIGER（`BEAST_TIGER/常态`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:38>16",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 景阳冈猛虎（`BEAST_TIGER/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:43>16",
           "severity": "warn",
           "source": "gate:image"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## Hunters（`CROWD_HUNTERS/常态`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:34>16",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 猎户群像（`CROWD_HUNTERS/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
           "severity": "warn",
           "source": "gate:image"
         },
         {
           "dimension": "image prompt compiler",
           "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 知县（`CHAR_MAGISTRATE/常态`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:41>16",
           "severity": "warn",
           "source": "gate:image"
         },
         {
           "dimension": "image prompt compiler",
           "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 西门庆（`CHAR_XIMENQING/常态`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:38>16",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:37>16",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -2329,7 +4051,7 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 武大（`CHAR_WUDA/日常卖饼态`）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/共享/prompt/角色定妆.md ## 武大（`CHAR_WUDA/日常卖饼态`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:41>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2491,7 +4213,7 @@
       "symptoms": [
         {
           "dimension": "合规前置",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/合规/compliance_manifest.json",
+          "loc": "创作区/制漫剧/金瓶梅/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2619,27 +4341,93 @@
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/金瓶梅/生产数据/consistency_findings_第1集.json",
-          "message": "一致性总审 另有 47 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 39 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:image"
         }
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 662",
+      "anchor": "production_events.jsonl:line 397",
       "dimensions": [
         "固定 Seed"
       ],
       "domain": "ops",
       "severity": "warn",
       "sources": [
+        "gate:image_preflight",
         "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "固定 Seed",
-          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl:line 662",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl:line 397",
+          "message": "固定 Seed image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "固定 Seed",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl:line 397",
+          "message": "固定 Seed image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "production_events.jsonl:line 399",
+      "dimensions": [
+        "固定 Seed"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "固定 Seed",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl:line 399",
+          "message": "固定 Seed image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "固定 Seed",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl:line 399",
+          "message": "固定 Seed image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "production_events.jsonl:line 401",
+      "dimensions": [
+        "固定 Seed"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "固定 Seed",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl:line 401",
+          "message": "固定 Seed image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "固定 Seed",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl:line 401",
           "message": "固定 Seed image 生成事件记录了 requested_seed，但缺少 seed_strategy；支持 seed 时要记 effective_seed/seed_effective=true，不支持时要记 seed_effective=false + seed_support=unsupported_or_unknown。",
           "severity": "warn",
           "source": "gate:image"
@@ -2668,6 +4456,27 @@
       ]
     },
     {
+      "anchor": "第1集",
+      "dimensions": [
+        "一致性满档账"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "一致性满档账",
+          "loc": "第1集",
+          "message": "一致性满档账 本集本次 gate 凭 1 条降级 QC waiver 放行：维度 一致性总审。这些维度未在满档(full)精度下验证，全靠 N2D_ALLOW_DEGRADED_QC 显式放行——已记账 `full_grade=false`，装齐依赖复跑可消账。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
       "anchor": "01_分镜出图.md",
       "dimensions": [
         "物理尺寸对账"
@@ -2682,7 +4491,7 @@
       "symptoms": [
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（武大、武松、潘金莲）中 武大「三人中最矮；潘金莲高于他，武松高出约一个头以上；同框镜头避免俯视羞辱构图。」；武松「三人中最高、肩最宽；明显高于武大，比潘金莲高约一个头。」；潘金莲「高于武大、比武松矮约一个头；与武松同框时保持明确身量差但不做威压式情色构图。」 在 registry 声明了相对身量(relative_scale)，但",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2711,14 +4520,14 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1637>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 先红眼的人改写真相 · reveal_reaction_chain）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:59>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2754,14 +4563,14 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1757>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 不争，系好行李离门 · relationship_turn）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:61>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2797,14 +4606,14 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 一扇门把兄弟分开 · relationship_turn）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 一扇门把兄弟分开 · relationship_turn）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1735>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 一扇门把兄弟分开 · relationship_turn）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 一扇门把兄弟分开 · relationship_turn）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:61>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2840,29 +4649,29 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1820>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:65>16",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1828>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
           "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1820>1500",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:64>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1828>1500",
           "severity": "warn",
           "source": "gate:image"
         },
         {
           "dimension": "image prompt compiler",
           "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 东京差遣 · dialogue_shot_reverse）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:65>16",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:64>16",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -2883,14 +4692,14 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 14（`EP01_CLIP14` · 早闭门户，我会回来 · dialogue_shot_reverse）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 14（`EP01_CLIP14` · 早闭门户，我会回来 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1619>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 14（`EP01_CLIP14` · 早闭门户，我会回来 · dialogue_shot_reverse）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 14（`EP01_CLIP14` · 早闭门户，我会回来 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:58>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2926,29 +4735,29 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1816>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:67>16",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1823>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
           "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1816>1500",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:66>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1823>1500",
           "severity": "warn",
           "source": "gate:image"
         },
         {
           "dimension": "image prompt compiler",
           "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 15（`EP01_CLIP15` · 帘后目送，另一双眼走近 · reveal_reaction_chain）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:67>16",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:66>16",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -2969,29 +4778,29 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1796>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:62>16",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1854>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
           "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1796>1500",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:63>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1854>1500",
           "severity": "warn",
           "source": "gate:image"
         },
         {
           "dimension": "image prompt compiler",
           "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 三扑、断棒、赤手 · fight_exchange）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:62>16",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:63>16",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -3012,29 +4821,29 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1900>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:70>16",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1844>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
           "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1900>1500",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:68>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1844>1500",
           "severity": "warn",
           "source": "gate:image"
         },
         {
           "dimension": "image prompt compiler",
           "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 打虎成名，家门转冷 · ensemble_blocking）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:70>16",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:68>16",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -3055,14 +4864,14 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1627>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 一担炊饼与一扇楼窗 · ensemble_blocking）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:56>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3098,14 +4907,14 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 留住叔叔，一个月越坐越近 · relationship_turn）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 留住叔叔，一个月越坐越近 · relationship_turn）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1781>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 留住叔叔，一个月越坐越近 · relationship_turn）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 留住叔叔，一个月越坐越近 · relationship_turn）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:61>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3141,14 +4950,14 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1632>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 雪夜落闩，炭火邀饮 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:61>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3184,14 +4993,14 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 拿武大作筹码，武松守界 · dialogue_shot_reverse）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 拿武大作筹码，武松守界 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1614>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 拿武大作筹码，武松守界 · dialogue_shot_reverse）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 拿武大作筹码，武松守界 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:60>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3227,14 +5036,14 @@
       "symptoms": [
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1657>1500",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "image prompt compiler",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
+          "loc": "创作区/制漫剧/金瓶梅/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 半杯越线，摔杯拒诱 · dialogue_shot_reverse）",
           "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:60>16",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3285,83 +5094,6 @@
       ]
     },
     {
-      "anchor": "shot",
-      "dimensions": [
-        "场景(O2)",
-        "色温调色(GRADE1)",
-        "实体记忆(EMB)",
-        "视频证据完整性(EVID)",
-        "成本路由(K1)",
-        "multimodal_continuity",
-        "style_consistency"
-      ],
-      "domain": "shot",
-      "severity": "warn",
-      "sources": [
-        "detect",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "场景(O2)",
-          "loc": null,
-          "message": " 场景(O2)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "色温调色(GRADE1)",
-          "loc": null,
-          "message": " 色温调色(GRADE1)   图片/Clip01_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.015 vs 场景中位 -0.203）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "色温调色(GRADE1)",
-          "loc": null,
-          "message": " 色温调色(GRADE1)   图片/Clip01_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 -0.006 vs 场景中位 -0.203）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "色温调色(GRADE1)",
-          "loc": null,
-          "message": " 色温调色(GRADE1)   图片/Clip02_end.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.389 vs 场景中位 -0.203）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "色温调色(GRADE1)",
-          "loc": null,
-          "message": " 色温调色(GRADE1)   图片/EP01_CLIP02_a3.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.383 vs 场景中位 -0.203）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "实体记忆(EMB)",
-          "loc": null,
-          "message": " 实体记忆(EMB)   本集有重复/核心实体（BEAST_TIGER/扑击态, CHAR_MAGISTRATE, CHAR_PANJINLIAN, CHAR_PANJINLIAN__, CHAR_PANJINLIAN__25岁武大家常态, CHAR_WUDA）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "视频证据完整性(EVID)",
-          "loc": null,
-          "message": " 视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_景阳冈夜间空地.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        }
-      ]
-    },
-    {
       "anchor": "武大家楼屋雪夜（LOC_WUDA_HOME）",
       "dimensions": [
         "物料漂移预案"
@@ -3403,6 +5135,7 @@
       "dimensions": [
         "语义谱系(P0)",
         "节奏密度(Rhythm)",
+        "视线状态回读(X2)",
         "状态转场视频证据(ST1)"
       ],
       "domain": "story",
@@ -3423,6 +5156,13 @@
           "dimension": "节奏密度(Rhythm)",
           "loc": null,
           "message": " 节奏密度(Rhythm)   连续 10 个长镜聚集（EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "视线状态回读(X2)",
+          "loc": null,
+          "message": " 视线状态回读(X2)   15 个视线/状态高风险镜当前 image_qc 精度为 degraded；需要 full QC 或人审签收，不能把降级绿灯当作像素一致已验证。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -3504,11 +5244,25 @@
   "rows": [
     {
       "contract": "ok",
+      "detect": "block",
+      "hits": [
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_场景_景阳冈夜间空地.png 生成事件缺 cost/provider 记账；无法计算重试性价",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png 生成事件缺 cost/provider 记账；无法计算重",
+        "[block] multimodal_continuity  None 关键场景/道具/服装/VFX 已进入 scene/multimodal QC，但 D"
+      ],
+      "id": "LOC_JINGYANGGANG",
+      "kind": "scene",
+      "name": "景阳冈夜间空地",
+      "overall": "block",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
       "detect": "warn",
       "hits": [
-        "[warn] CHAR_WUSONG__28岁打虎态 锚点门(N3)    ",
-        "[warn] CHAR_WUSONG__28岁打虎态 脸(G1)    ",
-        "[warn] CHAR_WUSONG__28岁打虎态 脸(G1)    "
+        "[warn]  配音情绪弧(VEA)   镜头29·武松：台词含强情绪但配音标注「克制」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 ",
+        "[warn]  表情连续(EXP1)   Clip_09：角色 CHAR_WUSONG 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，否则表演",
+        "[warn]  表情连续(EXP1)   Clip_15：角色 CHAR_WUSONG 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演 OOC"
       ],
       "id": "CHAR_WUSONG",
       "kind": "character",
@@ -3526,7 +5280,7 @@
       ],
       "id": "BEAST_TIGER",
       "kind": "character",
-      "name": "BEAST_TIGER",
+      "name": "景阳冈猛虎",
       "overall": "warn",
       "prevent": "ok"
     },
@@ -3538,7 +5292,7 @@
       ],
       "id": "CROWD_HUNTERS",
       "kind": "character",
-      "name": "Hunters",
+      "name": "猎户群像",
       "overall": "warn",
       "prevent": "ok"
     },
@@ -3546,9 +5300,9 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
-        "[warn] CHAR_PANJINLIAN__25岁武大家常态 锚点门(N3)    ",
-        "[warn] CHAR_WUDA__日常卖饼态 锚点门(N3)    ",
-        "[warn] CHAR_WUDA__日常卖饼态 脸(G1)    "
+        "[warn] CHAR_WUDA__日常卖饼态 服装配色(N1)    ",
+        "[warn] CHAR_PANJINLIAN__25岁武大家常态 服装配色(N1)    ",
+        "[warn] CHAR_WUDA__日常卖饼态 发型(H1)    "
       ],
       "id": "CHAR_WUDA",
       "kind": "character",
@@ -3560,9 +5314,9 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
-        "[warn] CHAR_PANJINLIAN__25岁武大家常态 锚点门(N3)    ",
         "[warn] CHAR_PANJINLIAN__25岁武大家常态 服装配色(N1)    ",
-        "[warn]  表情连续(EXP1)   Clip_09：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，"
+        "[warn]  表情连续(EXP1)   Clip_09：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（喜→怒/悲/惊）——确认有节拍/事件依据，",
+        "[warn]  表情连续(EXP1)   Clip_15：角色 CHAR_PANJINLIAN 相邻镜情绪硬跳（悲→怒）——确认有节拍/事件依据，否则表演"
       ],
       "id": "CHAR_PANJINLIAN",
       "kind": "character",
@@ -3574,8 +5328,8 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
-        "[warn] CHAR_MAGISTRATE__常态 锚点门(N3)    ",
         "[warn]  实体记忆(EMB)   本集有重复/核心实体（BEAST_TIGER/扑击态, CHAR_MAGISTRATE, CHAR_PANJINL",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png 生成事件缺 cost/provider 记账",
         "[warn]  成本路由(K1)   出图/共享/图片/定妆_CHAR_MAGISTRATE__常态.png 生成事件缺 cost/provider 记账"
       ],
       "id": "CHAR_MAGISTRATE",
@@ -3588,7 +5342,6 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
-        "[warn] CHAR_XIMENQING__常态 锚点门(N3)    ",
         "[warn]  成本路由(K1)   出图/共享/图片/定妆_CHAR_XIMENQING__常态.png 生成事件缺 cost/provider 记账；",
         "[warn]  成本路由(K1)   出图/共享/图片/定妆_CHAR_XIMENQING__常态.png 生成事件缺 cost/provider 记账；"
       ],
@@ -3597,19 +5350,6 @@
       "name": "西门庆",
       "overall": "warn",
       "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "warn",
-      "hits": [
-        "[warn]  成本路由(K1)   出图/共享/图片/定妆_场景_景阳冈夜间空地.png 生成事件缺 cost/provider 记账；无法计算重试性价",
-        "[warn]  成本路由(K1)   出图/共享/图片/定妆_场景_景阳冈夜间空地_反打.png 生成事件缺 cost/provider 记账；无法计算重"
-      ],
-      "id": "LOC_JINGYANGGANG",
-      "kind": "scene",
-      "name": "景阳冈夜间空地",
-      "overall": "medium",
-      "prevent": "medium"
     },
     {
       "contract": "ok",
@@ -3641,8 +5381,10 @@
     },
     {
       "contract": "ok",
-      "detect": "ok",
-      "hits": [],
+      "detect": "warn",
+      "hits": [
+        "[warn] image_prompt_lint  None 资产 PROP_REWARD_SILVER：出图/共享/图片/定妆_道具_REWARD_SI"
+      ],
       "id": "PROP_REWARD_SILVER",
       "kind": "prop",
       "name": "REWARD SILVER",
@@ -3654,7 +5396,8 @@
       "detect": "warn",
       "hits": [
         "[warn]  成本路由(K1)   出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗.png 生成事件缺 cost/provider 记账；无法计算重",
-        "[warn]  成本路由(K1)   出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png 生成事件缺 cost/provider 记账；无法"
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗_反打.png 生成事件缺 cost/provider 记账；无法",
+        "[warn] image_prompt_lint  None 资产 LOC_YANGGU_STREET：出图/共享/图片/定妆_场景_阳谷街面与武大家楼窗"
       ],
       "id": "LOC_YANGGU_STREET",
       "kind": "scene",
@@ -3678,8 +5421,10 @@
     },
     {
       "contract": "ok",
-      "detect": "ok",
-      "hits": [],
+      "detect": "warn",
+      "hits": [
+        "[warn] image_prompt_lint  None 资产 PROP_WINDOW_LATTICE：出图/共享/图片/定妆_道具_WINDOW_L"
+      ],
       "id": "PROP_WINDOW_LATTICE",
       "kind": "prop",
       "name": "WINDOW LATTICE",
@@ -3708,8 +5453,10 @@
     },
     {
       "contract": "ok",
-      "detect": "ok",
-      "hits": [],
+      "detect": "warn",
+      "hits": [
+        "[warn] image_prompt_lint  None 资产 PROP_DINING_TABLE：出图/共享/图片/定妆_道具_DINING_TAB"
+      ],
       "id": "PROP_DINING_TABLE",
       "kind": "prop",
       "name": "DINING TABLE",
@@ -3728,8 +5475,10 @@
     },
     {
       "contract": "ok",
-      "detect": "ok",
-      "hits": [],
+      "detect": "warn",
+      "hits": [
+        "[warn] image_prompt_lint  None 资产 PROP_DOORFRAME：出图/共享/图片/定妆_道具_DOORFRAME_反面."
+      ],
       "id": "PROP_DOORFRAME",
       "kind": "prop",
       "name": "DOORFRAME",
@@ -3768,8 +5517,10 @@
     },
     {
       "contract": "ok",
-      "detect": "ok",
-      "hits": [],
+      "detect": "warn",
+      "hits": [
+        "[warn] image_prompt_lint  None 资产 PROP_SPILLED_WINE：出图/共享/图片/定妆_道具_SPILLED_WI"
+      ],
       "id": "PROP_SPILLED_WINE",
       "kind": "prop",
       "name": "SPILLED WINE",
@@ -3778,8 +5529,11 @@
     },
     {
       "contract": "ok",
-      "detect": "ok",
-      "hits": [],
+      "detect": "warn",
+      "hits": [
+        "[warn] image_prompt_lint  None 资产 PROP_LUGGAGE：出图/共享/图片/定妆_道具_素布行李_比例.png fac",
+        "[warn] image_prompt_lint  None 资产 PROP_LUGGAGE：出图/共享/图片/定妆_道具_素布行李_手持.png fac"
+      ],
       "id": "PROP_LUGGAGE",
       "kind": "prop",
       "name": "素布行李",
@@ -3788,8 +5542,12 @@
     },
     {
       "contract": "ok",
-      "detect": "ok",
-      "hits": [],
+      "detect": "warn",
+      "hits": [
+        "[warn] image_prompt_lint  None 资产 PROP_DOORFRAME：出图/共享/图片/定妆_道具_DOORFRAME_反面.",
+        "[warn] image_prompt_lint  None 资产 PROP_DOOR：出图/共享/图片/定妆_道具_武大家木门.png faceless",
+        "[warn] image_prompt_lint  None 资产 PROP_DOOR：出图/共享/图片/定妆_道具_武大家木门_比例.png facel"
+      ],
       "id": "PROP_DOOR",
       "kind": "prop",
       "name": "武大家木门",
@@ -3808,8 +5566,11 @@
     },
     {
       "contract": "ok",
-      "detect": "ok",
-      "hits": [],
+      "detect": "warn",
+      "hits": [
+        "[warn] image_prompt_lint  None 资产 PROP_OFFICIAL_DOC：出图/共享/图片/定妆_道具_公文_比例.png ",
+        "[warn] image_prompt_lint  None 资产 PROP_OFFICIAL_DOC：出图/共享/图片/定妆_道具_公文_手持.png "
+      ],
       "id": "PROP_OFFICIAL_DOC",
       "kind": "prop",
       "name": "公文",
@@ -3818,8 +5579,11 @@
     },
     {
       "contract": "ok",
-      "detect": "ok",
-      "hits": [],
+      "detect": "warn",
+      "hits": [
+        "[warn] image_prompt_lint  None 资产 PROP_GIFT_LOAD：出图/共享/图片/定妆_道具_东京礼担_比例.png f",
+        "[warn] image_prompt_lint  None 资产 PROP_GIFT_LOAD：出图/共享/图片/定妆_道具_东京礼担_手持.png f"
+      ],
       "id": "PROP_GIFT_LOAD",
       "kind": "prop",
       "name": "东京礼担",
@@ -3838,8 +5602,11 @@
     },
     {
       "contract": "ok",
-      "detect": "ok",
-      "hits": [],
+      "detect": "warn",
+      "hits": [
+        "[warn] image_prompt_lint  None 资产 PROP_WINDOW_CURTAIN：出图/共享/图片/定妆_道具_WINDOW_C",
+        "[warn] image_prompt_lint  None 资产 PROP_WINDOW_CURTAIN：出图/共享/图片/定妆_道具_WINDOW_C"
+      ],
       "id": "PROP_WINDOW_CURTAIN",
       "kind": "prop",
       "name": "WINDOW CURTAIN",
@@ -3848,8 +5615,11 @@
     },
     {
       "contract": "ok",
-      "detect": "ok",
-      "hits": [],
+      "detect": "warn",
+      "hits": [
+        "[warn] image_prompt_lint  None 资产 PROP_CURTAIN_FORK：出图/共享/图片/定妆_道具_叉竿_比例.png ",
+        "[warn] image_prompt_lint  None 资产 PROP_CURTAIN_FORK：出图/共享/图片/定妆_道具_叉竿_手持.png "
+      ],
       "id": "PROP_CURTAIN_FORK",
       "kind": "prop",
       "name": "叉竿",
@@ -3905,6 +5675,7 @@
     "[warn]  语义谱系(P0)   `钩子` 留存标记未进入 storyboard 节奏/导演意图。 ",
     "[warn]  节奏密度(Rhythm)   连续 10 个长镜聚集（EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_C",
     "[warn]  真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / s",
+    "[warn]  视线状态回读(X2)   15 个视线/状态高风险镜当前 image_qc 精度为 degraded；需要 full QC 或人审签收，不",
     "[warn]  状态转场视频证据(ST1)   检测到 15 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 ",
     "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
     "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
@@ -3942,9 +5713,77 @@
     "[warn]  环境声(AMB)   本集涉 7 个场景但缺 设定库/ambient_map.json——reverb_profile 只管每场混响，环境",
     "[warn]  文字渲染(OCR1)   Clip_04 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
     "[warn]  文字渲染(OCR1)   Clip_11 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
+    "[warn] image_qc_precision  None image_qc 精度为 degraded：正式进 video 前需补依赖重跑到 full",
+    "[warn] character_consistency  None 崩脸 G1 未执行：未装 insightface——已降级为 Pillow 基础机检",
+    "[warn] human_anatomy_continuity  None 人体解剖 N5 未执行：手部畸形机检已跳过（未装 cv2）——多指/粘连暂由人",
+    "[warn] character_consistency  None 锚点门 N3 未执行：锚点质量门已跳过（未装 insightface/cv2）——主",
+    "[block] image_artifact_presence  图片/Clip04_end.png 出图目标尚未生成：图片/Clip04_end.png；",
+    "[block] image_artifact_presence  图片/Clip05_end.png 出图目标尚未生成：图片/Clip05_end.png；",
+    "[block] image_artifact_presence  图片/Clip05_first_a3.png 出图目标尚未生成：图片/Clip05_fir",
+    "[block] image_artifact_presence  图片/Clip06_first.png 出图目标尚未生成：图片/Clip06_first.",
+    "[block] image_artifact_presence  图片/Clip07_end.png 出图目标尚未生成：图片/Clip07_end.png；",
+    "[block] image_artifact_presence  图片/Clip07_first.png 出图目标尚未生成：图片/Clip07_first.",
+    "[block] image_artifact_presence  图片/Clip07_first_a3.png 出图目标尚未生成：图片/Clip07_fir",
+    "[block] image_artifact_presence  图片/Clip08_end.png 出图目标尚未生成：图片/Clip08_end.png；",
+    "[block] image_artifact_presence  图片/Clip08_first.png 出图目标尚未生成：图片/Clip08_first.",
+    "[block] image_artifact_presence  图片/Clip08_first_a2.png 出图目标尚未生成：图片/Clip08_fir",
+    "[block] image_artifact_presence  图片/Clip09_end.png 出图目标尚未生成：图片/Clip09_end.png；",
+    "[block] image_artifact_presence  图片/Clip09_first.png 出图目标尚未生成：图片/Clip09_first.",
+    "[block] image_artifact_presence  图片/Clip10_end.png 出图目标尚未生成：图片/Clip10_end.png；",
+    "[block] image_artifact_presence  图片/Clip10_first.png 出图目标尚未生成：图片/Clip10_first.",
+    "[block] image_artifact_presence  图片/Clip11_end.png 出图目标尚未生成：图片/Clip11_end.png；",
+    "[block] image_artifact_presence  图片/Clip11_first.png 出图目标尚未生成：图片/Clip11_first.",
+    "[block] image_artifact_presence  图片/Clip12_end.png 出图目标尚未生成：图片/Clip12_end.png；",
+    "[block] image_artifact_presence  图片/Clip12_first.png 出图目标尚未生成：图片/Clip12_first.",
+    "[block] image_artifact_presence  图片/Clip13_end.png 出图目标尚未生成：图片/Clip13_end.png；",
+    "[block] image_artifact_presence  图片/Clip13_first.png 出图目标尚未生成：图片/Clip13_first.",
+    "[block] image_artifact_presence  图片/Clip13_first_a3.png 出图目标尚未生成：图片/Clip13_fir",
+    "[block] image_artifact_presence  图片/Clip14_first.png 出图目标尚未生成：图片/Clip14_first.",
+    "[block] image_artifact_presence  图片/Clip15_end.png 出图目标尚未生成：图片/Clip15_end.png；",
+    "[block] image_artifact_presence  图片/Clip15_first.png 出图目标尚未生成：图片/Clip15_first.",
+    "[block] image_artifact_presence  图片/EP01_CLIP05_a1.png 出图目标尚未生成：图片/EP01_CLIP05",
+    "[block] image_artifact_presence  图片/EP01_CLIP05_a2.png 出图目标尚未生成：图片/EP01_CLIP05",
+    "[block] image_artifact_presence  图片/EP01_CLIP06_a1.png 出图目标尚未生成：图片/EP01_CLIP06",
+    "[block] image_artifact_presence  图片/EP01_CLIP06_a2.png 出图目标尚未生成：图片/EP01_CLIP06",
+    "[block] image_artifact_presence  图片/EP01_CLIP07_a1.png 出图目标尚未生成：图片/EP01_CLIP07",
+    "[block] image_artifact_presence  图片/EP01_CLIP07_a2.png 出图目标尚未生成：图片/EP01_CLIP07",
+    "[block] image_artifact_presence  图片/EP01_CLIP08_a1.png 出图目标尚未生成：图片/EP01_CLIP08",
+    "[block] image_artifact_presence  图片/EP01_CLIP09_a1.png 出图目标尚未生成：图片/EP01_CLIP09",
+    "[block] image_artifact_presence  图片/EP01_CLIP09_a2.png 出图目标尚未生成：图片/EP01_CLIP09",
+    "[block] image_artifact_presence  图片/EP01_CLIP09_a3.png 出图目标尚未生成：图片/EP01_CLIP09",
+    "[block] image_artifact_presence  图片/EP01_CLIP10_a1.png 出图目标尚未生成：图片/EP01_CLIP10",
+    "[block] image_artifact_presence  图片/EP01_CLIP10_a2.png 出图目标尚未生成：图片/EP01_CLIP10",
+    "[block] image_artifact_presence  图片/EP01_CLIP11_a1.png 出图目标尚未生成：图片/EP01_CLIP11",
+    "[block] image_artifact_presence  图片/EP01_CLIP11_a2.png 出图目标尚未生成：图片/EP01_CLIP11",
+    "[block] image_artifact_presence  图片/EP01_CLIP12_a1.png 出图目标尚未生成：图片/EP01_CLIP12",
+    "[block] image_artifact_presence  图片/EP01_CLIP13_a1.png 出图目标尚未生成：图片/EP01_CLIP13",
+    "[block] image_artifact_presence  图片/EP01_CLIP13_a2.png 出图目标尚未生成：图片/EP01_CLIP13",
+    "[block] image_artifact_presence  图片/EP01_CLIP14_a1.png 出图目标尚未生成：图片/EP01_CLIP14",
+    "[block] image_artifact_presence  图片/EP01_CLIP15_a1.png 出图目标尚未生成：图片/EP01_CLIP15",
+    "[block] image_artifact_presence  图片/EP01_CLIP15_a2.png 出图目标尚未生成：图片/EP01_CLIP15",
+    "[block] character_consistency  图片/Clip01_end.png 降级精度多人同框：图片/Clip01_end.png 在 ",
+    "[block] character_consistency  图片/Clip01_first.png 降级精度多人同框：图片/Clip01_first.pn",
+    "[block] character_consistency  图片/Clip02_end.png 降级精度多人同框：图片/Clip02_end.png 在 ",
+    "[block] character_consistency  图片/Clip02_first.png 降级精度多人同框：图片/Clip02_first.pn",
+    "[block] character_consistency  图片/Clip03_first.png 降级精度多人同框：图片/Clip03_first.pn",
+    "[block] character_consistency  图片/Clip04_first.png 降级精度多人同框：图片/Clip04_first.pn",
+    "[block] character_consistency  图片/Clip05_first.png 降级精度多人同框：图片/Clip05_first.pn",
+    "[block] character_consistency  图片/EP01_CLIP01_a1.png 降级精度多人同框：图片/EP01_CLIP01_a",
+    "[block] character_consistency  图片/EP01_CLIP02_a1.png 降级精度多人同框：图片/EP01_CLIP02_a",
+    "[block] character_consistency  图片/EP01_CLIP02_a2.png 降级精度多人同框：图片/EP01_CLIP02_a",
+    "[block] character_consistency  图片/EP01_CLIP02_a3.png 降级精度多人同框：图片/EP01_CLIP02_a",
+    "[block] character_consistency  图片/EP01_CLIP03_a1.png 降级精度多人同框：图片/EP01_CLIP03_a",
+    "[block] character_consistency  图片/EP01_CLIP03_a2.png 降级精度多人同框：图片/EP01_CLIP03_a",
+    "[block] character_consistency  图片/EP01_CLIP03_a3.png 降级精度多人同框：图片/EP01_CLIP03_a",
+    "[block] character_consistency  图片/EP01_CLIP04_a1.png 降级精度多人同框：图片/EP01_CLIP04_a",
     "[warn] style_consistency  None 风格归属佐证：本集 15 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 2.02 ≥",
-    "[warn] character_consistency  图片/Clip01_end.png 疑似漏分类角色镜：图片/Clip01_end.png 检出",
-    "[warn] character_consistency  图片/Clip02_end.png 疑似漏分类角色镜：图片/Clip02_end.png 检出",
+    "[block] character_consistency  图片/Clip03_first.png 角色脸定妆比对覆盖缺口：镜头 3（`EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP03_a1.png 角色脸定妆比对覆盖缺口：镜头 3（`EP01_CL",
+    "[block] character_consistency  图片/EP01_CLIP03_a2.png 角色脸定妆比对覆盖缺口：镜头 3（`EP01_CL",
+    "[block] character_consistency  图片/EP01_CLIP03_a3.png 角色脸定妆比对覆盖缺口：镜头 3（`EP01_CL",
+    "[block] character_consistency  图片/Clip04_first.png 角色脸定妆比对覆盖缺口：镜头 4（`EP01_CLIP",
+    "[block] character_consistency  图片/EP01_CLIP04_a1.png 角色脸定妆比对覆盖缺口：镜头 4（`EP01_CL",
+    "[block] character_consistency  图片/Clip05_first.png 角色脸定妆比对覆盖缺口：镜头 5（`EP01_CLIP",
     "[warn] scene_consistency  图片/EP01_CLIP03_a2.png 场景 O2 初筛：图片/EP01_CLIP03_a2.pn",
     "[warn] image_prompt_lint  None VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反"
   ],

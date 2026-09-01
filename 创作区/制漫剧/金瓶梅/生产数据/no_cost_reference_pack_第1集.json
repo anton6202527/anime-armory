@@ -919,7 +919,7 @@
     },
     {
       "owner": "PROP_DOOR",
-      "path": "出图/共享/图片/定妆_道具_场景木门.png",
+      "path": "出图/共享/图片/定妆_道具_武大家木门.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
@@ -927,7 +927,7 @@
     },
     {
       "owner": "PROP_DOOR",
-      "path": "出图/共享/图片/定妆_道具_场景木门_比例.png",
+      "path": "出图/共享/图片/定妆_道具_武大家木门_比例.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "scale_reference",

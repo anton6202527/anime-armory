@@ -1,0 +1,54 @@
+{
+  "approval_reference": "conversation-user-confirmation-2026-09-01T11:00+08:00",
+  "approver": "user:workspace_owner",
+  "attempt_id_semantics": "phase_retry_round",
+  "authorization_digest": "sha256:dc77e1fa15aed46fb8de9f60aaaca56e2f294c19a67baf119b7cda8b4a11ec94",
+  "ceiling": {
+    "amount": 24.0,
+    "currency": "work_units"
+  },
+  "channel": "Codex CLI",
+  "decision": "approved",
+  "envelope_id": "n2d-image-7fa771962a79475b",
+  "expires_at": "2026-09-02T03:48:14+00:00",
+  "input_sha256": "sha256:02fef9167ced44350eff34ff95619026cefb16ffdfe36b5754409396891fe168",
+  "issued_at": "2026-09-01T03:48:14+00:00",
+  "kind": "n2d_phase_spend_envelope",
+  "limits": {
+    "cost_ceiling": {
+      "amount": 24.0,
+      "currency": "work_units"
+    },
+    "max_attempts": 3,
+    "max_calls": 24
+  },
+  "line": "n2d",
+  "model": "GPT Image 2",
+  "project_id": "sha256:4626aefca587d1fecf8a5b1188a9880a3f55e3e6fa2212707af15f138fffbd31",
+  "scope": {
+    "affected_artifacts": [
+      "出图/第1集/图片/Clip04_end.png",
+      "出图/第1集/图片/Clip05_end.png",
+      "出图/第1集/图片/Clip05_first_a3.png",
+      "出图/第1集/图片/Clip06_first.png",
+      "出图/第1集/图片/EP01_CLIP05_a1.png",
+      "出图/第1集/图片/EP01_CLIP05_a2.png",
+      "出图/第1集/图片/EP01_CLIP06_a1.png",
+      "出图/第1集/图片/EP01_CLIP06_a2.png"
+    ],
+    "affected_shots": [
+      "Clip_04_end",
+      "Clip_05_a1",
+      "Clip_05_a2",
+      "Clip_05_a3",
+      "Clip_05_end",
+      "Clip_06_a1",
+      "Clip_06_a2",
+      "Clip_06_first"
+    ],
+    "rerun_scope": "2026-09-01 user-confirmed exact rerender of eight PNGs missing generation lineage"
+  },
+  "source_quote": "确认",
+  "stage": "image",
+  "version": 2
+}

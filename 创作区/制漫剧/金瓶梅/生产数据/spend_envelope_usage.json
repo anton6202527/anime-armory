@@ -1,0 +1,433 @@
+{
+  "envelopes": {
+    "n2d-image-6bcca890dc034661": {
+      "authorization_digest": "sha256:e0373db99dc4ad2b1f90e82768745c87fa1612173fb4ff54394c40a17c6efb8c",
+      "consumptions": [
+        {
+          "attempt_id": "ep01-clip05-a1-attempt1",
+          "calls": 1,
+          "channel": "Codex",
+          "completion": {
+            "completed_at": "2026-08-28T02:49:47+00:00",
+            "evidence": {
+              "kind": "n2d_provider_completion_evidence",
+              "paid_execution_receipts": {
+                "records": [
+                  {
+                    "consumption_id": "ep01-clip05-a1-attempt1",
+                    "output_sha256": "ebb2918c7ff6c52b6e29690b14256973481a312536f5ad9a90bd8daec08a1c89",
+                    "provider": "OpenAI imagegen",
+                    "provider_status": "completed"
+                  }
+                ],
+                "status": "pass"
+              },
+              "producer_output_bindings": [
+                {
+                  "exists": true,
+                  "issue": null,
+                  "path": "出图/第1集/图片/EP01_CLIP05_a1.png",
+                  "sha256": "ebb2918c7ff6c52b6e29690b14256973481a312536f5ad9a90bd8daec08a1c89"
+                }
+              ]
+            },
+            "evidence_digest": "sha256:f2c91d2daae3c46be44c55d728de4ff05cd683fdfaa78730c8c4395862008c23",
+            "outcome": "provider_execution_completed"
+          },
+          "consumed_at": "2026-08-28T02:45:54+00:00",
+          "consumption_id": "ep01-clip05-a1-attempt1",
+          "cost": {
+            "amount": 0.0,
+            "currency": "CNY"
+          },
+          "input_sha256": "sha256:9b5684cf369ca737566004ba7c0086982e45be1dc5ed6360cfb197fc0ac5b4fd",
+          "model": "GPT Image 2",
+          "scope": {
+            "episode": "第1集",
+            "planned_frames": 59,
+            "purpose": "新版合同必要图片及重试"
+          },
+          "stage": "image",
+          "state": "completed"
+        },
+        {
+          "attempt_id": "ep01-clip05-a1-attempt2",
+          "calls": 1,
+          "channel": "Codex",
+          "completion": {
+            "completed_at": "2026-08-28T02:55:56+00:00",
+            "evidence": {
+              "kind": "n2d_provider_completion_evidence",
+              "paid_execution_receipts": {
+                "records": [
+                  {
+                    "consumption_id": "ep01-clip05-a1-attempt2",
+                    "creative_verdict": "rejected_wrong_blocking",
+                    "output_sha256": "5655986c2f0c5c118006699f416bf73b5d22f434b5f0583e4782478a91ac3a64",
+                    "provider": "OpenAI imagegen",
+                    "provider_status": "completed"
+                  }
+                ],
+                "status": "pass"
+              },
+              "producer_output_bindings": [
+                {
+                  "exists": true,
+                  "issue": null,
+                  "path": "废料/第1集/图片/EP01_CLIP05_a1_attempt2.png",
+                  "sha256": "5655986c2f0c5c118006699f416bf73b5d22f434b5f0583e4782478a91ac3a64"
+                }
+              ]
+            },
+            "evidence_digest": "sha256:1531f488eb699b2fb1bea2f7655d7887a996de0495919f93d55fcae0cba7c6f9",
+            "outcome": "provider_execution_completed"
+          },
+          "consumed_at": "2026-08-28T02:52:00+00:00",
+          "consumption_id": "ep01-clip05-a1-attempt2",
+          "cost": {
+            "amount": 0.0,
+            "currency": "CNY"
+          },
+          "input_sha256": "sha256:9b5684cf369ca737566004ba7c0086982e45be1dc5ed6360cfb197fc0ac5b4fd",
+          "model": "GPT Image 2",
+          "scope": {
+            "episode": "第1集",
+            "planned_frames": 59,
+            "purpose": "新版合同必要图片及重试"
+          },
+          "stage": "image",
+          "state": "completed"
+        },
+        {
+          "attempt_id": "ep01-clip05-a1-regional-repair1",
+          "calls": 1,
+          "channel": "Codex",
+          "completion": {
+            "completed_at": "2026-08-28T03:13:06+00:00",
+            "evidence": {
+              "kind": "n2d_provider_completion_evidence",
+              "paid_execution_receipts": {
+                "records": [
+                  {
+                    "consumption_id": "ep01-clip05-a1-regional-repair1",
+                    "output_sha256": "91b62885c2ddee9d4a430404b878f96d0e76036e3dca63d0f00d957be6914823",
+                    "provider": "OpenAI imagegen",
+                    "provider_status": "completed"
+                  }
+                ],
+                "status": "pass"
+              },
+              "producer_output_bindings": [
+                {
+                  "exists": true,
+                  "issue": null,
+                  "path": "出图/第1集/图片/EP01_CLIP05_a1.png",
+                  "sha256": "91b62885c2ddee9d4a430404b878f96d0e76036e3dca63d0f00d957be6914823"
+                }
+              ]
+            },
+            "evidence_digest": "sha256:9569ad0701a5ecd9c2fb7bb4e9eaf0bf20843ee44cbb315221375eed1c891d28",
+            "outcome": "provider_execution_completed"
+          },
+          "consumed_at": "2026-08-28T03:09:10+00:00",
+          "consumption_id": "ep01-clip05-a1-regional-repair1",
+          "cost": {
+            "amount": 0.0,
+            "currency": "CNY"
+          },
+          "input_sha256": "sha256:9b5684cf369ca737566004ba7c0086982e45be1dc5ed6360cfb197fc0ac5b4fd",
+          "model": "GPT Image 2",
+          "scope": {
+            "episode": "第1集",
+            "planned_frames": 59,
+            "purpose": "新版合同必要图片及重试"
+          },
+          "stage": "image",
+          "state": "completed"
+        },
+        {
+          "attempt_id": "EP01_CLIP05_a2_attempt1",
+          "calls": 1,
+          "channel": "Codex",
+          "completion": {
+            "completed_at": "2026-08-28T03:19:46+00:00",
+            "evidence": {
+              "kind": "n2d_provider_completion_evidence",
+              "paid_execution_receipts": {
+                "records": [
+                  {
+                    "consumption_id": "ep01-clip05-a2-attempt1",
+                    "provider": "openai_imagegen",
+                    "result": "succeeded"
+                  }
+                ],
+                "status": "pass"
+              },
+              "producer_output_bindings": [
+                {
+                  "exists": true,
+                  "path": "出图/第1集/图片/EP01_CLIP05_a2.png",
+                  "sha256": "sha256:b9df5bcd2590ae88ebbc04320181e543e0d4d4a1e297883236064b32165fb1d3"
+                }
+              ]
+            },
+            "evidence_digest": "sha256:5a0819fd8a789e45682bad59eed8734f448c554997f9d2a7980f3f8122483ba9",
+            "outcome": "provider_execution_completed"
+          },
+          "consumed_at": "2026-08-28T03:17:22+00:00",
+          "consumption_id": "ep01-clip05-a2-attempt1",
+          "cost": {
+            "amount": 0.0,
+            "currency": "CNY"
+          },
+          "input_sha256": "sha256:9b5684cf369ca737566004ba7c0086982e45be1dc5ed6360cfb197fc0ac5b4fd",
+          "model": "GPT Image 2",
+          "scope": {
+            "episode": "第1集",
+            "planned_frames": 59,
+            "purpose": "新版合同必要图片及重试"
+          },
+          "stage": "image",
+          "state": "completed"
+        },
+        {
+          "attempt_id": "Clip05_first_a3_attempt1",
+          "calls": 1,
+          "channel": "Codex",
+          "completion": {
+            "completed_at": "2026-08-28T03:24:07+00:00",
+            "evidence": {
+              "kind": "n2d_provider_completion_evidence",
+              "paid_execution_receipts": {
+                "records": [
+                  {
+                    "consumption_id": "ep01-clip05-a3-attempt1",
+                    "provider": "openai_imagegen",
+                    "result": "succeeded_after_transport_retry"
+                  }
+                ],
+                "status": "pass"
+              },
+              "producer_output_bindings": [
+                {
+                  "exists": true,
+                  "path": "出图/第1集/图片/Clip05_first_a3.png",
+                  "sha256": "sha256:013b66b03cee4042fb945db0de42fa33218e1fcd900aa0d3b071213594ac77cc"
+                },
+                {
+                  "exists": true,
+                  "path": "出图/第1集/图片/Clip05_end.png",
+                  "sha256": "sha256:013b66b03cee4042fb945db0de42fa33218e1fcd900aa0d3b071213594ac77cc"
+                }
+              ]
+            },
+            "evidence_digest": "sha256:7f295dfb9982439adfeeb111aeb426cd3d31d76b4009ac3b51358e7af4fc5238",
+            "outcome": "provider_execution_completed"
+          },
+          "consumed_at": "2026-08-28T03:21:11+00:00",
+          "consumption_id": "ep01-clip05-a3-attempt1",
+          "cost": {
+            "amount": 0.0,
+            "currency": "CNY"
+          },
+          "input_sha256": "sha256:9b5684cf369ca737566004ba7c0086982e45be1dc5ed6360cfb197fc0ac5b4fd",
+          "model": "GPT Image 2",
+          "scope": {
+            "episode": "第1集",
+            "planned_frames": 59,
+            "purpose": "新版合同必要图片及重试"
+          },
+          "stage": "image",
+          "state": "completed"
+        },
+        {
+          "attempt_id": "Clip04_end_attempt1",
+          "calls": 1,
+          "channel": "Codex",
+          "completion": {
+            "completed_at": "2026-08-28T04:20:06+00:00",
+            "evidence": {
+              "kind": "n2d_provider_completion_evidence",
+              "paid_execution_receipts": {
+                "records": [
+                  {
+                    "consumption_id": "ep01-clip04-end-attempt1",
+                    "provider": "openai_imagegen",
+                    "result": "succeeded"
+                  }
+                ],
+                "status": "pass"
+              },
+              "producer_output_bindings": [
+                {
+                  "exists": true,
+                  "path": "出图/第1集/图片/Clip04_end.png",
+                  "sha256": "sha256:846c6308f9f8bfb2fc5885d9ff950d74b52a303faa78868a8949ced21c1813b5"
+                }
+              ]
+            },
+            "evidence_digest": "sha256:ff18c51a4719c50837bc2620bf307a5befd6f8e8582591b01716b46edd8c3669",
+            "outcome": "provider_execution_completed"
+          },
+          "consumed_at": "2026-08-28T04:16:55+00:00",
+          "consumption_id": "ep01-clip04-end-attempt1",
+          "cost": {
+            "amount": 0.0,
+            "currency": "CNY"
+          },
+          "input_sha256": "sha256:9b5684cf369ca737566004ba7c0086982e45be1dc5ed6360cfb197fc0ac5b4fd",
+          "model": "GPT Image 2",
+          "scope": {
+            "episode": "第1集",
+            "planned_frames": 59,
+            "purpose": "新版合同必要图片及重试"
+          },
+          "stage": "image",
+          "state": "completed"
+        },
+        {
+          "attempt_id": "Clip06_first_attempt1",
+          "calls": 1,
+          "channel": "Codex",
+          "completion": {
+            "completed_at": "2026-08-28T06:16:38+00:00",
+            "evidence": {
+              "kind": "n2d_provider_completion_evidence",
+              "paid_execution_receipts": {
+                "records": [
+                  {
+                    "consumption_id": "ep01-clip06-first-attempt1",
+                    "provider": "openai_imagegen",
+                    "result": "succeeded"
+                  }
+                ],
+                "status": "pass"
+              },
+              "producer_output_bindings": [
+                {
+                  "exists": true,
+                  "path": "出图/第1集/图片/Clip06_first.png",
+                  "sha256": "sha256:d45043ba87272e178ed06cfd848628543b0109ed31d478794c73741a4cbb16af"
+                }
+              ]
+            },
+            "evidence_digest": "sha256:5d087210f9086de98362cccde9930758eda977e665a89b69797d2330533621a1",
+            "outcome": "provider_execution_completed"
+          },
+          "consumed_at": "2026-08-28T06:16:38+00:00",
+          "consumption_id": "ep01-clip06-first-attempt1",
+          "cost": {
+            "amount": 0.0,
+            "currency": "CNY"
+          },
+          "input_sha256": "sha256:9b5684cf369ca737566004ba7c0086982e45be1dc5ed6360cfb197fc0ac5b4fd",
+          "model": "GPT Image 2",
+          "scope": {
+            "episode": "第1集",
+            "planned_frames": 59,
+            "purpose": "新版合同必要图片及重试"
+          },
+          "stage": "image",
+          "state": "completed"
+        },
+        {
+          "attempt_id": "EP01_CLIP06_a1_attempt1",
+          "calls": 1,
+          "channel": "Codex",
+          "completion": {
+            "completed_at": "2026-08-28T06:42:22+00:00",
+            "evidence": {
+              "kind": "n2d_provider_completion_evidence",
+              "paid_execution_receipts": {
+                "records": [
+                  {
+                    "consumption_id": "ep01-clip06-a1-attempt1",
+                    "provider": "openai_imagegen",
+                    "result": "succeeded_after_reference_path_retry"
+                  }
+                ],
+                "status": "pass"
+              },
+              "producer_output_bindings": [
+                {
+                  "exists": true,
+                  "path": "出图/第1集/图片/EP01_CLIP06_a1.png",
+                  "sha256": "sha256:1a8fc79dc63fdea27fe1324497779952ac3efa0e43595c1958e97fe28bc548ab"
+                }
+              ]
+            },
+            "evidence_digest": "sha256:d88d3045b58cc638f29d2712239666b63903b7dfc043603e866bdcc6af13421f",
+            "outcome": "provider_execution_completed"
+          },
+          "consumed_at": "2026-08-28T06:38:17+00:00",
+          "consumption_id": "ep01-clip06-a1-attempt1",
+          "cost": {
+            "amount": 0.0,
+            "currency": "CNY"
+          },
+          "input_sha256": "sha256:9b5684cf369ca737566004ba7c0086982e45be1dc5ed6360cfb197fc0ac5b4fd",
+          "model": "GPT Image 2",
+          "scope": {
+            "episode": "第1集",
+            "planned_frames": 59,
+            "purpose": "新版合同必要图片及重试"
+          },
+          "stage": "image",
+          "state": "completed"
+        },
+        {
+          "attempt_id": "EP01_CLIP06_a2_attempt1",
+          "calls": 1,
+          "channel": "Codex",
+          "completion": {
+            "completed_at": "2026-08-28T07:46:31+00:00",
+            "evidence": {
+              "kind": "n2d_provider_completion_evidence",
+              "paid_execution_receipts": {
+                "records": [
+                  {
+                    "consumption_id": "ep01-clip06-a2-attempt1",
+                    "provider": "openai_imagegen",
+                    "result": "succeeded"
+                  }
+                ],
+                "status": "pass"
+              },
+              "producer_output_bindings": [
+                {
+                  "exists": true,
+                  "path": "出图/第1集/图片/EP01_CLIP06_a2.png",
+                  "sha256": "sha256:d2bab16c5035b911b09c0d750f8ef038d00ff761f44d11015971b4069415b4e8"
+                }
+              ]
+            },
+            "evidence_digest": "sha256:c3045fd1ba1ae58ae014cd0d34ee21b4de9b71c64905c54c866f042000826966",
+            "outcome": "provider_execution_completed"
+          },
+          "consumed_at": "2026-08-28T07:42:14+00:00",
+          "consumption_id": "ep01-clip06-a2-attempt1",
+          "cost": {
+            "amount": 0.0,
+            "currency": "CNY"
+          },
+          "input_sha256": "sha256:9b5684cf369ca737566004ba7c0086982e45be1dc5ed6360cfb197fc0ac5b4fd",
+          "model": "GPT Image 2",
+          "scope": {
+            "episode": "第1集",
+            "planned_frames": 59,
+            "purpose": "新版合同必要图片及重试"
+          },
+          "stage": "image",
+          "state": "completed"
+        }
+      ],
+      "updated_at": "2026-08-28T07:46:31+00:00"
+    }
+  },
+  "kind": "n2d_phase_spend_usage_ledger",
+  "ledger_digest": "sha256:db4ea0a78e16031318872bf46ba602cfa3a29f12a2bb5c5bc6e80124d63cc3b5",
+  "line": "n2d",
+  "project_id": "sha256:4626aefca587d1fecf8a5b1188a9880a3f55e3e6fa2212707af15f138fffbd31",
+  "updated_at": "2026-08-28T07:46:31+00:00",
+  "version": 1
+}

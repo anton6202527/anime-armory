@@ -1,15 +1,5 @@
 {
   "kind": "n2d_dead_letter_queue",
-  "tasks": [
-    {
-      "attempts": 5,
-      "episode": "第1集",
-      "error_class": "command_failed",
-      "id": "001-image-rerun",
-      "idempotency_key": "01a031a5b284fece",
-      "note": "exit_code=1",
-      "stage_key": "image"
-    }
-  ],
+  "tasks": [],
   "version": 1
 }

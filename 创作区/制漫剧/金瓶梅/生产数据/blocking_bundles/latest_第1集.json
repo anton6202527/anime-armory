@@ -10,7 +10,7 @@
   "category": "contract_or_gate",
   "episode": "第1集",
   "episode_graph": {
-    "graph_hash": "2bf3a00d2475ec817b5f956dfba5391ac6253fcdfde670fad873e2d8bc97f6f4",
+    "graph_hash": "9efe22e13e33a89768e21fa43570ff4d1cc122b34e0222a8d38241c6d99a16eb",
     "lineage_gaps": 0,
     "status": "pass"
   },
@@ -27,7 +27,7 @@
     "return_to_stage": "image_prompt",
     "stage": "image"
   },
-  "generated_at": "2026-08-24T17:54:53+0800",
+  "generated_at": "2026-09-01T11:53:14+0800",
   "headline": "第1集 出图：gate「image」阻断",
   "kind": "n2d_blocking_bundle",
   "owner": "n2d-image",

@@ -11,7 +11,133 @@
     "default_midframe": false,
     "midframe_exempt_below": 3.0
   },
-  "planned": [],
+  "planned": [
+    {
+      "clip_index": 5,
+      "clip_id": "EP01_CLIP05",
+      "duration": 8.67,
+      "rule": "E1 storyboard 多镜位硬切边界",
+      "anchors": [
+        {
+          "anchor_png": "出图/第1集/图片/Clip05_first_a1.png",
+          "at_sec": 3.2,
+          "use": "edit_cut",
+          "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+          "source_duration": 8.67
+        },
+        {
+          "anchor_png": "出图/第1集/图片/Clip05_first_a2.png",
+          "at_sec": 5.7,
+          "use": "edit_cut",
+          "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+          "source_duration": 8.67
+        },
+        {
+          "anchor_png": "出图/第1集/图片/Clip05_first_a3.png",
+          "at_sec": 8.37,
+          "use": "edit_cut",
+          "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+          "source_duration": 8.67
+        }
+      ],
+      "added_cost": {
+        "images": 3,
+        "video_segments": 3
+      }
+    },
+    {
+      "clip_index": 7,
+      "clip_id": "EP01_CLIP07",
+      "duration": 12.677,
+      "rule": "E1 storyboard 多镜位硬切边界",
+      "anchors": [
+        {
+          "anchor_png": "出图/第1集/图片/Clip07_first_a1.png",
+          "at_sec": 3.6,
+          "use": "edit_cut",
+          "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+          "source_duration": 12.677
+        },
+        {
+          "anchor_png": "出图/第1集/图片/Clip07_first_a2.png",
+          "at_sec": 8.4,
+          "use": "edit_cut",
+          "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+          "source_duration": 12.677
+        },
+        {
+          "anchor_png": "出图/第1集/图片/Clip07_first_a3.png",
+          "at_sec": 12.58,
+          "use": "edit_cut",
+          "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+          "source_duration": 12.677
+        }
+      ],
+      "added_cost": {
+        "images": 3,
+        "video_segments": 3
+      }
+    },
+    {
+      "clip_index": 8,
+      "clip_id": "EP01_CLIP08",
+      "duration": 10.228,
+      "rule": "E1 storyboard 多镜位硬切边界",
+      "anchors": [
+        {
+          "anchor_png": "出图/第1集/图片/Clip08_first_a1.png",
+          "at_sec": 4.9,
+          "use": "edit_cut",
+          "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+          "source_duration": 10.228
+        },
+        {
+          "anchor_png": "出图/第1集/图片/Clip08_first_a2.png",
+          "at_sec": 9.48,
+          "use": "edit_cut",
+          "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+          "source_duration": 10.228
+        }
+      ],
+      "added_cost": {
+        "images": 2,
+        "video_segments": 2
+      }
+    },
+    {
+      "clip_index": 13,
+      "clip_id": "EP01_CLIP13",
+      "duration": 7.946,
+      "rule": "E1 storyboard 多镜位硬切边界",
+      "anchors": [
+        {
+          "anchor_png": "出图/第1集/图片/Clip13_first_a1.png",
+          "at_sec": 2.2,
+          "use": "edit_cut",
+          "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+          "source_duration": 7.946
+        },
+        {
+          "anchor_png": "出图/第1集/图片/Clip13_first_a2.png",
+          "at_sec": 5.0,
+          "use": "edit_cut",
+          "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+          "source_duration": 7.946
+        },
+        {
+          "anchor_png": "出图/第1集/图片/Clip13_first_a3.png",
+          "at_sec": 7.75,
+          "use": "edit_cut",
+          "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+          "source_duration": 7.946
+        }
+      ],
+      "added_cost": {
+        "images": 3,
+        "video_segments": 3
+      }
+    }
+  ],
   "skipped": [
     {
       "clip": "EP01_CLIP01",
@@ -31,7 +157,7 @@
     },
     {
       "clip": "EP01_CLIP05",
-      "why": "已手动声明 anchors，人工优先"
+      "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"
     },
     {
       "clip": "EP01_CLIP06",
@@ -39,11 +165,11 @@
     },
     {
       "clip": "EP01_CLIP07",
-      "why": "已手动声明 anchors，人工优先"
+      "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"
     },
     {
       "clip": "EP01_CLIP08",
-      "why": "已手动声明 anchors，人工优先"
+      "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"
     },
     {
       "clip": "EP01_CLIP09",
@@ -63,7 +189,7 @@
     },
     {
       "clip": "EP01_CLIP13",
-      "why": "已手动声明 anchors，人工优先"
+      "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"
     },
     {
       "clip": "EP01_CLIP14",
@@ -76,10 +202,10 @@
   ],
   "exempted": [],
   "summary": {
-    "clips_planned": 0,
-    "total_anchors": 0,
-    "added_images": 0,
-    "added_video_segments": 0,
+    "clips_planned": 4,
+    "total_anchors": 11,
+    "added_images": 11,
+    "added_video_segments": 11,
     "exempted_clips": 0
   },
   "backend_selection": {

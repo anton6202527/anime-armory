@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "BEAST_TIGER",
+  "name": "景阳冈猛虎",
+  "scope": "成年华南虎体型与真实肌肉骨架，冬夜冷月侧逆光，毛发沾尘与枯叶，不怪兽化、不萌宠化；扑击、掀身、尾扫与战败状态保持同一花纹、体型和伤势，不夸张血浆。",
+  "library_tier": "named_minimal",
+  "planned_episode_count": 0,
+  "directories": {
+    "reference": "角色库/BEAST_TIGER__景阳冈猛虎/reference",
+    "prompts": "角色库/BEAST_TIGER__景阳冈猛虎/prompts",
+    "lora": "角色库/BEAST_TIGER__景阳冈猛虎/lora",
+    "voice": "角色库/BEAST_TIGER__景阳冈猛虎/voice",
+    "adapters": "角色库/BEAST_TIGER__景阳冈猛虎/adapters",
+    "qc": "角色库/BEAST_TIGER__景阳冈猛虎/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/景阳冈猛虎.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-09-01T02:08:43+00:00"
+}

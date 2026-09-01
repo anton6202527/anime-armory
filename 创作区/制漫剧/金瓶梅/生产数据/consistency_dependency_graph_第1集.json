@@ -1097,7 +1097,7 @@
     {
       "id": "entity:BEAST_TIGER",
       "kind": "character",
-      "label": "BEAST_TIGER",
+      "label": "景阳冈猛虎",
       "source": "identity_registry"
     },
     {
@@ -1133,7 +1133,7 @@
     {
       "id": "entity:CROWD_HUNTERS",
       "kind": "character",
-      "label": "Hunters",
+      "label": "猎户群像",
       "source": "identity_registry"
     },
     {

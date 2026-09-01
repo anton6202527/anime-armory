@@ -3,9 +3,11 @@
   "files": [
     {
       "file": "创作区/制漫剧/金瓶梅/脚本/第1集/table_read_packet.json",
-      "issues": [],
+      "issues": [
+        "inputs_fingerprint 已过期，上游输入变更后需重新签收"
+      ],
       "packet": "table_read",
-      "status": "pass"
+      "status": "block"
     },
     {
       "file": "创作区/制漫剧/金瓶梅/脚本/第1集/table_read_packet.md",
@@ -14,21 +16,29 @@
       "status": "pass"
     },
     {
+      "file": "创作区/制漫剧/金瓶梅/脚本/第1集/table_read_execution.json",
+      "issues": [
+        "缺真实围读/听看 execution receipt"
+      ],
+      "packet": "table_read_execution",
+      "status": "block"
+    },
+    {
       "file": "创作区/制漫剧/金瓶梅/脚本/第1集/table_read_signoff.json",
       "issues": [],
       "packet": "table_read",
       "status": "pass"
     }
   ],
-  "generated_at": "2026-08-11T04:02:07+00:00",
+  "generated_at": "2026-08-28T02:17:40+00:00",
   "kind": "n2d_story_acceptance_packets_check",
-  "next_when_blocked": "补齐围读/animatic 内容与 timed preview，把内容 status 改为 confirmed，再用 signoff.py 由明确角色签收当前输入与证据哈希。",
+  "next_when_blocked": "实际完成围读/音画字幕 Animatic 听看并记录 hash-bound execution receipt，再确认 packet，并用 signoff.py 由明确角色签收当前输入与证据哈希。",
   "packet_kind": "table_read",
-  "status": "pass",
+  "status": "block",
   "summary": {
-    "block": 0,
-    "pass": 3,
-    "required": 3
+    "block": 2,
+    "pass": 2,
+    "required": 4
   },
-  "version": 1
+  "version": 2
 }

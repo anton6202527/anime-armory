@@ -4,61 +4,64 @@
   "changed_skills": [],
   "commands": [],
   "contract_inheritance": null,
-  "created_at": "2026-08-24T09:54:15+00:00",
+  "created_at": "2026-09-01T03:52:32+00:00",
   "current_stage": "image",
   "current_todo": {
     "column": "出图",
     "command": "n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅 第1集",
-    "label": "出图",
-    "note": "",
+    "label": "出图返修",
+    "note": "image_qc=block，hard_blocks=67；先修复报告阻断并重跑 image_qc：/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/image_qc_第1集.md",
     "skill": "n2d-image",
     "stage_key": "image",
-    "status": "139/179"
+    "status": "147/183"
   },
   "episode": "第1集",
   "execution_steps": [],
   "gate_refresh_needed": false,
   "gate_refresh_stages": [],
   "image_consistency": {
-    "advisory": 25,
-    "consistent": true,
-    "degraded": false,
+    "advisory": 24,
+    "consistent": false,
+    "degraded": true,
     "freshness": "fresh",
-    "hard_blocks": 0,
-    "precision_level": "full",
+    "hard_blocks": 67,
+    "precision_level": "degraded",
     "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/image_qc_第1集.md",
     "samples": [
-      "糊/低质(N4): Clip03_first.png",
-      "服装配色(N1): 图片/Clip04_first.png"
+      "脸部覆盖缺失: 图片/Clip03_first.png",
+      "脸部覆盖缺失: 图片/EP01_CLIP03_a1.png",
+      "脸部覆盖缺失: 图片/EP01_CLIP03_a2.png"
     ],
     "status": "ok",
-    "verdict": "review"
+    "verdict": "block"
   },
   "image_qc_environment": {
-    "advisory": 25,
-    "degraded": false,
+    "advisory": 24,
+    "degraded": true,
     "finding_samples": [
-      "糊/低质(N4): Clip03_first.png",
-      "服装配色(N1): 图片/Clip04_first.png"
+      "脸部覆盖缺失: 图片/Clip03_first.png",
+      "脸部覆盖缺失: 图片/EP01_CLIP03_a1.png",
+      "脸部覆盖缺失: 图片/EP01_CLIP03_a2.png"
     ],
     "freshness": "fresh",
-    "hard_blocks": 0,
-    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
-    "jump_to_stage": "video",
-    "precision_level": "full",
-    "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
-    "recommended_install": "",
+    "hard_blocks": 67,
+    "jump_reason": "视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度",
+    "jump_to_stage": "image",
+    "precision_level": "degraded",
+    "python": "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "recommended_install": "优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。",
     "report_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/image_qc_第1集.json",
     "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/image_qc_第1集.md",
     "status": "ok",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
-    "verdict": "review"
+    "user_notice": "图片质检环境：degraded；当前解释器：/opt/homebrew/opt/python@3.14/bin/python3.14；建议安装：优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。；当前应停在/回退：image；原因：视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度",
+    "verdict": "block"
   },
   "kind": "n2d_skill_update_plan",
   "needs_record": false,
   "newly_relevant_skills": [],
   "notes": [
-    "帧策略合同未达标：必需执行锚缺失 0 个 Clip，缺尾帧声明 0 个 Clip，已声明但 PNG 不存在 20 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。回 n2d-script 跑 `anchor_planner.py <作品根> 第1集 --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。；缺文件样例：出图/第1集/图片/EP01_CLIP05_a1.png, 出图/第1集/图片/EP01_CLIP05_a2.png, 出图/第1集/图片/EP01_CLIP06_a1.png, 出图/第1集/图片/EP01_CLIP06_a2.png"
+    "帧策略合同未达标：必需执行锚缺失 0 个 Clip，缺尾帧声明 0 个 Clip，已声明但 PNG 不存在 24 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。回 n2d-script 跑 `anchor_planner.py <作品根> 第1集 --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。；缺文件样例：出图/第1集/图片/EP01_CLIP05_a1.png, 出图/第1集/图片/EP01_CLIP05_a2.png, 出图/第1集/图片/Clip05_first_a3.png, 出图/第1集/图片/EP01_CLIP06_a1.png",
+    "图片一致性存在硬阻断（image_qc verdict=block，hard_blocks=67）：见 `/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/image_qc_第1集.md`，崩脸/服装/场景/接缝需重出受影响镜。"
   ],
   "plan_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/skill_update_plan_第1集.json",
   "plan_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/skill_update_plan_第1集.md",
@@ -104,6 +107,11 @@
         "role": "midframe"
       },
       {
+        "clip_id": "EP01_CLIP05",
+        "path": "出图/第1集/图片/Clip05_first_a3.png",
+        "role": "midframe"
+      },
+      {
         "clip_id": "EP01_CLIP06",
         "path": "出图/第1集/图片/EP01_CLIP06_a1.png",
         "role": "midframe"
@@ -124,8 +132,18 @@
         "role": "midframe"
       },
       {
+        "clip_id": "EP01_CLIP07",
+        "path": "出图/第1集/图片/Clip07_first_a3.png",
+        "role": "midframe"
+      },
+      {
         "clip_id": "EP01_CLIP08",
         "path": "出图/第1集/图片/EP01_CLIP08_a1.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP01_CLIP08",
+        "path": "出图/第1集/图片/Clip08_first_a2.png",
         "role": "midframe"
       },
       {
@@ -176,6 +194,11 @@
       {
         "clip_id": "EP01_CLIP13",
         "path": "出图/第1集/图片/EP01_CLIP13_a2.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP01_CLIP13",
+        "path": "出图/第1集/图片/Clip13_first_a3.png",
         "role": "midframe"
       },
       {

@@ -103,8 +103,8 @@
     }
   ],
   "episode": "第1集",
-  "generated_at": "2026-08-24T17:54:53+0800",
-  "graph_hash": "2bf3a00d2475ec817b5f956dfba5391ac6253fcdfde670fad873e2d8bc97f6f4",
+  "generated_at": "2026-09-01T11:53:14+0800",
+  "graph_hash": "9efe22e13e33a89768e21fa43570ff4d1cc122b34e0222a8d38241c6d99a16eb",
   "kind": "n2d_episode_graph",
   "lineage_gaps": [],
   "nodes": [
@@ -255,10 +255,10 @@
   "root_sha256": "0f0c685b8edd524694c6220975b36a1a454e48a724c03cf64291b68ed02674f1",
   "source_files": [
     {
-      "bytes": 126496,
+      "bytes": 129083,
       "path": "脚本/第1集/storyboard.json",
       "role": "storyboard",
-      "sha256": "56e9b58b49fdca6aee3859d35eac32aa4c6096c05a984ce2baaca079be67f7b0"
+      "sha256": "d5c94af8cf849708ce70111e043f4badd941184cb5e064a523e92ae088dd1e05"
     }
   ],
   "status": "pass",

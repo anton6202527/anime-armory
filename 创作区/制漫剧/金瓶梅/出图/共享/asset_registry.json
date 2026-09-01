@@ -1,7 +1,7 @@
 {
   "kind": "n2d_asset_reference_registry",
   "version": 1,
-  "generated_at": "2026-08-15T02:37:49+00:00",
+  "generated_at": "2026-09-01T02:08:43+00:00",
   "assets": [
     {
       "id": "LOC_JINGYANGGANG",
@@ -2309,33 +2309,33 @@
       "name": "武大家木门",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_道具_场景木门.png",
+          "path": "出图/共享/图片/定妆_道具_武大家木门.png",
           "status": "ready",
           "human_review": {
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-08-14T09:09:33.199150+00:00"
+            "reviewed_at": "2026-09-01T02:08:42.967144+00:00"
           }
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_场景木门_比例.png",
+          "path": "出图/共享/图片/定妆_道具_武大家木门_比例.png",
           "status": "ready",
           "human_review": {
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared scale_ref reference passed finalized review",
-            "reviewed_at": "2026-08-14T09:09:33.199312+00:00"
+            "reviewed_at": "2026-09-01T02:08:42.967284+00:00"
           }
         },
         "reverse": {
-          "path": "出图/共享/图片/定妆_道具_场景木门_反面.png",
+          "path": "出图/共享/图片/定妆_道具_武大家木门_反面.png",
           "status": "ready",
           "human_review": {
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared reverse reference passed finalized review",
-            "reviewed_at": "2026-08-14T09:09:33.199327+00:00"
+            "reviewed_at": "2026-09-01T02:08:42.967298+00:00"
           }
         }
       },
@@ -2344,11 +2344,11 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/PROP_DOOR_武大家木门.md",
           "status": "ready",
-          "sha256": "d800c19ae38dcb73b5daaeb6ac8a3c755d3cdced21eb28033c72e7aa6b2fea11"
+          "sha256": "c484e52ef44dd10699f6ac34398263a2153c11110b7d5593186db7b1f7b6eb0b"
         },
         {
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_道具_场景木门.png",
+          "path": "出图/共享/图片/定妆_道具_武大家木门.png",
           "status": "ready",
           "sha256": "4f3944a3ff9ed7f7405a614484adcd0dcdb63377846ee439c758d02c822367a5",
           "human_review": {
@@ -2400,7 +2400,7 @@
         ]
       },
       "self_check_passed": true,
-      "self_check_note": "existing shared PNG reused by prompt pack",
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
       "current_state": "北宋小民楼屋的旧木板门，竖向门板、粗木门框与横向木闩同源；合门后不自动落闩。",
       "lifecycle": {
@@ -2411,7 +2411,7 @@
         ],
         "status": "active"
       },
-      "self_check_at": "2026-08-14T09:09:33+00:00",
+      "self_check_at": "2026-09-01T02:08:42+00:00",
       "self_check_by": "image_qc.mark_finalized",
       "artifact_sha256": "4f3944a3ff9ed7f7405a614484adcd0dcdb63377846ee439c758d02c822367a5",
       "face_consistency": {

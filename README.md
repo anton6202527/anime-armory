@@ -26,20 +26,22 @@
 
 ## 下载安装
 
-开箱即用的安装包，点击直接下载（链接始终指向最新发布版本）：
+公开安装包与历史版本见下表。当前可核验的 Electron 桌面包仍使用重命名前的文件名：
 
 | 安装包 | 平台 | 下载 |
 |---|---|---|
-| 🖥️ 桌面端 App | macOS Apple Silicon（M 系列，`.dmg`） | [**LabuTV_electron_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/LabuTV_electron_macos_arm64.dmg) |
-| 🖥️ 桌面端 App | Windows（`.exe` 安装程序） | [**LabuTV_electron_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/LabuTV_electron_windows.exe) |
-| 🧩 VS Code 插件 | 跨平台（`.vsix`） | [**anime-armory.vsix**](https://github.com/anton6202527/anime-armory/releases/latest/download/anime-armory.vsix) |
+| 🖥️ 桌面端 App | macOS Apple Silicon（M 系列，`.dmg`） | [**AnimeArmory_electron_macos_arm64.dmg**（`electron-v0.1.0`）](https://github.com/anton6202527/anime-armory/releases/download/electron-v0.1.0/AnimeArmory_electron_macos_arm64.dmg) |
+| 🖥️ 桌面端 App | Windows | 当前 Electron 安装包尚未公开；关注 [Releases 页](https://github.com/anton6202527/anime-armory/releases) |
+| 🧩 VS Code 插件 | 跨平台（`.vsix`） | [**anime-armory.vsix**（`electron-v0.1.0`）](https://github.com/anton6202527/anime-armory/releases/download/electron-v0.1.0/anime-armory.vsix) |
 
-- **桌面端 App**：macOS Apple Silicon（M 系列）下载 `.dmg` 拖入 `/Applications`；Windows 下载 `.exe` 安装程序。打开即用，内置全部 skill。macOS 隐私权限不会在安装阶段预授权，访问受保护目录时由系统按需提示。
+- **桌面端 App**：macOS Apple Silicon（M 系列）下载 `.dmg` 拖入 `/Applications`。安装包包含打包时的 skill 快照；macOS 隐私权限不会在安装阶段预授权，访问受保护目录时由系统按需提示。
 - **VS Code 插件**：下载 `.vsix` 后，在 VS Code 命令面板执行 `Extensions: Install from VSIX…` 选中该文件安装。
 
-> 下载链接由维护者发布时更新，指向 anime-armory Release 中对应安装包；桌面端 App 内置当前全部 skill。历史版本与校验和见 [Releases 页](https://github.com/anton6202527/anime-armory/releases)。macOS 桌面端现为 Electron 版（`tools/e2a` 打包）；Windows `.exe` 为旧版 Tauri 构建产物，Electron 版 Windows 包待发布。维护者出新版见下方“自行打包发布”。
+> 截至 2026-08-28，公开 latest Electron Release 发布于 2026-07-23，仍使用 `AnimeArmory` 历史品牌名；当前开发版截图和功能不应视为已经包含在该公开包中。历史版本、SHA-256 与后续 LabuTV 新版见 [Releases 页](https://github.com/anton6202527/anime-armory/releases)。Windows 历史 `.exe` 为旧版 Tauri 构建产物，Electron 版 Windows 包待发布。维护者出新版见下方“自行打包发布”。
 
 ## 桌面端 App 能做什么
+
+完整的逐页界面、按钮、n2d 制作流程、下载与版本边界说明见 [《LabuTV Desktop（Electron）产品与使用指南》](docs/LabuTV-Electron-App.md)。
 
 桌面端 App 是 LabuTV 的本地制作中控台：打开后先选择工作区，再按生产线进入 `制漫剧`、`画漫画`、`拍广告`、`制MV`、`写歌`、`写小说` 等作品目录。它把原本散在文件夹、终端和 skill 文档里的信息收拢到一个界面里，让制作团队能直观看到每条线有多少作品、每个项目走到哪一步、下一步该调用哪个 skill。
 
@@ -341,18 +343,20 @@ Both clients follow the semantic rule of one authoritative production state per 
 
 ## Download And Install
 
-Ready-to-use packages are available from the latest release:
+Public packages and historical versions are listed below. The currently verifiable Electron desktop asset still uses the pre-LabuTV filename:
 
 | Package | Platform | Download |
 |---|---|---|
-| Desktop App | macOS Apple Silicon (`.dmg`) | [**LabuTV_electron_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/LabuTV_electron_macos_arm64.dmg) |
-| Desktop App | Windows (`.exe` installer) | [**LabuTV_electron_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/LabuTV_electron_windows.exe) |
-| VS Code Extension | Cross-platform `.vsix` | [**anime-armory.vsix**](https://github.com/anton6202527/anime-armory/releases/latest/download/anime-armory.vsix) |
+| Desktop App | macOS Apple Silicon (`.dmg`) | [**AnimeArmory_electron_macos_arm64.dmg** (`electron-v0.1.0`)](https://github.com/anton6202527/anime-armory/releases/download/electron-v0.1.0/AnimeArmory_electron_macos_arm64.dmg) |
+| Desktop App | Windows | A current Electron installer has not been published; follow the [Releases page](https://github.com/anton6202527/anime-armory/releases) |
+| VS Code Extension | Cross-platform `.vsix` | [**anime-armory.vsix** (`electron-v0.1.0`)](https://github.com/anton6202527/anime-armory/releases/download/electron-v0.1.0/anime-armory.vsix) |
 
-- **Desktop App**: download the macOS Apple Silicon `.dmg` for drag-to-Applications install, or the Windows `.exe` installer. The app includes all current skills. macOS privacy permissions are not pre-granted during installation; the system asks when a protected folder is actually accessed.
+- **Desktop App**: download the macOS Apple Silicon `.dmg` and drag the app into Applications. The installer contains the skill snapshot from its build; macOS privacy permissions are not pre-granted during installation and are requested when a protected folder is accessed.
 - **VS Code Extension**: download the `.vsix`, then run `Extensions: Install from VSIX...` in the VS Code command palette.
 
-Download links are updated by maintainers during release and point to the corresponding installer assets on the `anime-armory` Releases page. Historical versions and checksums are available on the [Releases page](https://github.com/anton6202527/anime-armory/releases).
+As of 2026-08-28, the public latest Electron Release was published on 2026-07-23 and still uses the historical `AnimeArmory` brand. Screenshots and features from the current development version should not be treated as already included in that package. Historical versions, checksums, and future LabuTV releases are available on the [Releases page](https://github.com/anton6202527/anime-armory/releases). The historical Windows EXE is the retired Tauri build, not the current Electron app.
+
+The full Chinese interface, button, n2d workflow, download, and version guide is [LabuTV Desktop (Electron) 产品与使用指南](docs/LabuTV-Electron-App.md).
 
 ### Skills Are The Core Asset
 

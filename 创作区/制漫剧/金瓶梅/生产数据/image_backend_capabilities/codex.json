@@ -85,99 +85,99 @@
   "capability_assertions": {
     "auto_runnable": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": true
     },
     "channel": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "Codex CLI"
     },
     "exact_model_evidence_required": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": false
     },
     "exact_model_id": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "gpt-image-2"
     },
     "max_reference_images": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": 24
     },
     "model": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "GPT Image 2"
     },
     "model_precision": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "provider_model"
     },
     "negative_strategy": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "inline_constraints"
     },
     "official": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": true
     },
     "output": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "png_file"
     },
     "persistent_subject": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": false
     },
     "prompt_language": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "zh"
     },
     "prompt_profile": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "codex_gpt_image_agent_brief"
     },
     "prompt_request_fields": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": [
         "aspect_ratio",
@@ -187,43 +187,43 @@
     },
     "reference_mode": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "multi_image_flags"
     },
     "supports_edit": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": false
     },
     "supports_high_fidelity_reference": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": true
     },
     "supports_image_reference": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": true
     },
     "supports_mask": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": false
     },
     "supports_text2image": {
       "evidence_kind": "official_docs",
-      "observed_text": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
-      "source": "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema",
+      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": true
     }
@@ -236,12 +236,12 @@
     "policy": "Do not log final generation events as exact provider model id unless this field is populated from per-run evidence.",
     "precision": "provider_model"
   },
-  "note": "官方模型页确认 GPT Image 2 支持高质量图片生成与编辑，并通过 v1/images/edits 接受图片输入；OpenAI SDK 生成类型列出 gpt-image-2 与多图编辑输入。当前项目继续使用 Codex 官方入口的 GPT Image 2 多参考编辑；未发现可注册持久主体 ID，因此继续依赖项目 identity registry、多参考附件和逐图 full QC。价格/额度由实际账户入口约束，不作静态臆测。",
+  "note": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
   "source_urls": [
     "https://developers.openai.com/api/docs/models/gpt-image-2"
   ],
   "sources": [
-    "OpenAI official GPT Image 2 model documentation and OpenAI-generated SDK schema"
+    "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)"
   ],
-  "verified_at": "2026-08-24"
+  "verified_at": "2026-09-01"
 }

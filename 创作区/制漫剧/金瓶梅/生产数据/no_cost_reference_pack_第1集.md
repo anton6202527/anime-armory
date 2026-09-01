@@ -117,8 +117,8 @@
 | asset | PROP_LUGGAGE | primary | ready | 出图/共享/图片/定妆_道具_素布行李.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_LUGGAGE | scale_reference | ready | 出图/共享/图片/定妆_道具_素布行李_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_LUGGAGE | detail_closeup | planned | 出图/共享/图片/定妆_PROP_LUGGAGE_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_DOOR | primary | ready | 出图/共享/图片/定妆_道具_场景木门.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
-| asset | PROP_DOOR | scale_reference | ready | 出图/共享/图片/定妆_道具_场景木门_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_DOOR | primary | ready | 出图/共享/图片/定妆_道具_武大家木门.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | PROP_DOOR | scale_reference | ready | 出图/共享/图片/定妆_道具_武大家木门_比例.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | PROP_DOOR | detail_closeup | planned | 出图/共享/图片/定妆_PROP_DOOR_detail_closeup.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | asset | LOC_COUNTY_YAMEN | wide_plate | ready | 出图/共享/图片/定妆_场景_县衙案厅.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
 | asset | LOC_COUNTY_YAMEN | reverse_angle | ready | 出图/共享/图片/定妆_场景_县衙案厅_反打.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |

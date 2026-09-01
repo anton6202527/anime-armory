@@ -6,7 +6,7 @@
   "accepted": true,
   "reviewer": "Codex n2d-image prompt pack",
   "generated_by": "skills/n2d/n2d-image/scripts/image_prompt_pack.py",
-  "generated_at": "2026-08-24T07:20:39+00:00",
+  "generated_at": "2026-09-01T02:08:43+00:00",
   "input_fingerprint": {
     "kind": "n2d_content_fingerprint",
     "version": 1,
@@ -43,8 +43,8 @@
         "pattern": "脚本/第1集/storyboard.json",
         "path": "脚本/第1集/storyboard.json",
         "exists": true,
-        "sha256": "56e9b58b49fdca6aee3859d35eac32aa4c6096c05a984ce2baaca079be67f7b0",
-        "size": 126496
+        "sha256": "d5c94af8cf849708ce70111e043f4badd941184cb5e064a523e92ae088dd1e05",
+        "size": 129083
       },
       {
         "pattern": "脚本/第1集/continuity_chain.json",
@@ -78,8 +78,8 @@
         "pattern": "生产数据/reference_plan_第1集.json",
         "path": "生产数据/reference_plan_第1集.json",
         "exists": true,
-        "sha256": "22fe29c0ee2c6009352b3fc1c7a45ae6aa1b6c6b7364820470b448920d5fc9c4",
-        "size": 236357
+        "sha256": "ab73800a2dc57c85da4fb2219eb1e3cc5ad2310a86a6c1d4f20d992beca2212a",
+        "size": 237962
       },
       {
         "pattern": "_设置.md",
@@ -152,6 +152,13 @@
         "size": 5813
       },
       {
+        "pattern": "设定库/characters/**/*",
+        "path": "设定库/characters/猎户群像.md",
+        "exists": true,
+        "sha256": "0d535f25d059753a61e5a6156790103db28543973f4642b5418aa9fda8b6bb41",
+        "size": 3088
+      },
+      {
         "pattern": "设定库/locations/**/*",
         "path": "设定库/locations/_场景总表.md",
         "exists": true,
@@ -188,16 +195,23 @@
       },
       {
         "pattern": "角色库/**/*",
+        "path": "角色库/BEAST_TIGER__景阳冈猛虎/manifest.json",
+        "exists": true,
+        "sha256": "7db87fbaf4ea300f2af9ed5c732c6e17149d9dfd7efd4b43ab306bf01ab004ed",
+        "size": 1077
+      },
+      {
+        "pattern": "角色库/**/*",
         "path": "角色库/CHAR_MAGISTRATE__知县/manifest.json",
         "exists": true,
-        "sha256": "852f9131b7cbb968e4220e4551050b729567daddca9424c1d907a4fbcdd6fc45",
+        "sha256": "e8439b52529662c58e522fd82564c001787a2b72191142893a1c0a2f3a270ab3",
         "size": 973
       },
       {
         "pattern": "角色库/**/*",
         "path": "角色库/CHAR_PANJINLIAN__潘金莲/manifest.json",
         "exists": true,
-        "sha256": "a9667b6289ddc75de125f47277fa6397f0fc94445efb082697c2103830bb722a",
+        "sha256": "129c93adf814e7ff9721138cba278568fa66b0000c3c5b8fc5042d18b2d2c05f",
         "size": 946
       },
       {
@@ -211,14 +225,14 @@
         "pattern": "角色库/**/*",
         "path": "角色库/CHAR_WUDA__武大/manifest.json",
         "exists": true,
-        "sha256": "94b035e0e22e0d4c86592d5a92731bd24f2f706aad7b12018046607070e420f7",
+        "sha256": "7fd367266e6fd8bae9f65b61d8306673c612939e97fdab333656d01a94d0f10f",
         "size": 846
       },
       {
         "pattern": "角色库/**/*",
         "path": "角色库/CHAR_WUSONG__武松/manifest.json",
         "exists": true,
-        "sha256": "3905e25f656465a1927e2480bd4c2a7f5ca438b9cfc0115e128837f143298ce7",
+        "sha256": "dc4bb7e4f80be4b75199c3e242f6f005b0f700ca9d3cb7ce5d7fbb606576870c",
         "size": 858
       },
       {
@@ -239,7 +253,7 @@
         "pattern": "角色库/**/*",
         "path": "角色库/CHAR_XIMENQING__西门庆/manifest.json",
         "exists": true,
-        "sha256": "81ce83e9d8b7dac84db8a8e01f00a53f67a4fb291061a52b8f3ed34f9298481f",
+        "sha256": "82b1b8ce7adb6112a06640434fe2e5b5a923cda579e803a7a2b4777a9979247a",
         "size": 1014
       },
       {
@@ -248,6 +262,13 @@
         "exists": true,
         "sha256": "cb83b7f9d8b9e9ae9483bf9688cb6450ee840916f223c77b67650396ed9abbcb",
         "size": 831
+      },
+      {
+        "pattern": "角色库/**/*",
+        "path": "角色库/CROWD_HUNTERS__猎户群像/manifest.json",
+        "exists": true,
+        "sha256": "e4cd88ac2e18587f153ad72773313aa0a725372c5771d7ae3efbf8ba977c0cac",
+        "size": 973
       },
       {
         "pattern": "角色库/**/*",
@@ -260,15 +281,15 @@
         "pattern": "出图/共享/identity_registry.json",
         "path": "出图/共享/identity_registry.json",
         "exists": true,
-        "sha256": "73ebc1fd240c519a26e5766bd87800989fc80d1f9cb5c73ed4fcd9bf9660bf0d",
-        "size": 418379
+        "sha256": "9bcee167fbb4a989c5a948954a2d32bc3e74930c14f61eb6bb9db0ebcb679c9b",
+        "size": 421243
       },
       {
         "pattern": "出图/共享/asset_registry.json",
         "path": "出图/共享/asset_registry.json",
         "exists": true,
-        "sha256": "4e6eb5ec6c47ba7c8e60eea25891369b5e198226e9dc90e0060c9849f2f5c811",
-        "size": 127476
+        "sha256": "1eb4d20ae2bea4bda845adaab5564d26c5b0ed800c90f638d0c7dea4d95b5703",
+        "size": 127503
       },
       {
         "pattern": "出图/共享/style_anchor_registry.json",
@@ -1084,6 +1105,27 @@
       },
       {
         "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_武大家木门.png",
+        "exists": true,
+        "sha256": "4f3944a3ff9ed7f7405a614484adcd0dcdb63377846ee439c758d02c822367a5",
+        "size": 2047286
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_武大家木门_反面.png",
+        "exists": true,
+        "sha256": "71ac6742fa9f833a3006f2921ad2feec03230d587635491daf123a21bd007438",
+        "size": 2328523
+      },
+      {
+        "pattern": "出图/共享/图片/*",
+        "path": "出图/共享/图片/定妆_道具_武大家木门_比例.png",
+        "exists": true,
+        "sha256": "75830ae39f242d64bab7c0086566d868cfbafe48823872e29c2c139b8541feae",
+        "size": 2265614
+      },
+      {
+        "pattern": "出图/共享/图片/*",
         "path": "出图/共享/图片/定妆_道具_炊饼担.png",
         "exists": true,
         "sha256": "6e292727e693ec3e00d8061ed495ad6ced378b084a2e28cd5a7706218040ffea",
@@ -1198,25 +1240,25 @@
         "pattern": "出图/第1集/prompt/00_总览.md",
         "path": "出图/第1集/prompt/00_总览.md",
         "exists": true,
-        "sha256": "30107c542631447917fa38bdfe0592dcfa648f24714100adbab6ac55673ecad4",
-        "size": 13519
+        "sha256": "775391434c749f95f244fc8749b7bc0f1438da24fe458174ebc68b5cd1eb8d94",
+        "size": 13949
       },
       {
         "pattern": "出图/第1集/prompt/01_分镜出图.md",
         "path": "出图/第1集/prompt/01_分镜出图.md",
         "exists": true,
-        "sha256": "ece602994247f74a4f10f6caa0b2f470ebb4a98f99a91f9c025543183e86ef37",
-        "size": 507403
+        "sha256": "9b5684cf369ca737566004ba7c0086982e45be1dc5ed6360cfb197fc0ac5b4fd",
+        "size": 515676
       }
     ],
-    "sha256": "084625664962cd05092ffb3c18f17a4e1f46a67368faf4423995c48a41052dc0"
+    "sha256": "c15e262694cbbab37151b7d5533d6b473a24c97f7e7e76e7ce4869f316692551"
   },
   "contracts": [
     {
       "name": "storyboard",
       "path": "脚本/第1集/storyboard.json",
       "exists": true,
-      "sha256": "56e9b58b49fdca6aee3859d35eac32aa4c6096c05a984ce2baaca079be67f7b0"
+      "sha256": "d5c94af8cf849708ce70111e043f4badd941184cb5e064a523e92ae088dd1e05"
     },
     {
       "name": "continuity_chain",
@@ -1246,19 +1288,19 @@
       "name": "reference_plan",
       "path": "生产数据/reference_plan_第1集.json",
       "exists": true,
-      "sha256": "22fe29c0ee2c6009352b3fc1c7a45ae6aa1b6c6b7364820470b448920d5fc9c4"
+      "sha256": "ab73800a2dc57c85da4fb2219eb1e3cc5ad2310a86a6c1d4f20d992beca2212a"
     }
   ],
   "prompt_files": [
     {
       "path": "出图/第1集/prompt/00_总览.md",
       "exists": true,
-      "sha256": "30107c542631447917fa38bdfe0592dcfa648f24714100adbab6ac55673ecad4"
+      "sha256": "775391434c749f95f244fc8749b7bc0f1438da24fe458174ebc68b5cd1eb8d94"
     },
     {
       "path": "出图/第1集/prompt/01_分镜出图.md",
       "exists": true,
-      "sha256": "ece602994247f74a4f10f6caa0b2f470ebb4a98f99a91f9c025543183e86ef37"
+      "sha256": "9b5684cf369ca737566004ba7c0086982e45be1dc5ed6360cfb197fc0ac5b4fd"
     }
   ]
 }

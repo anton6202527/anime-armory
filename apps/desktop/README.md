@@ -4,6 +4,9 @@ LabuTV 桌面创作 IDE 的 **Electron 版**(自原 Tauri 版重构而来,
 Tauri 版已于 2026-07 退役删除)。长期重度使用定位:类 VSCode 的多进程结构、类型化
 IPC 契约、worker 化媒体解码、虚拟化文件树、按 chunk 拆分的懒加载面板。
 
+面向使用者的完整界面、按钮、制漫剧流程、下载与版本说明见
+[`docs/LabuTV-Electron-App.md`](../../docs/LabuTV-Electron-App.md)。
+
 ## 运行
 
 ```bash

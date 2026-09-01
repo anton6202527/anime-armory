@@ -5,10 +5,12 @@
   "env": {
     "NO_PROXY": "127.0.0.1,localhost",
     "no_proxy": "127.0.0.1,localhost",
-    "N2D_IMAGE_COMMAND": "python3 skills/n2d/n2d-image/scripts/codex_image_runner.py \"$N2D_ROOT\" \"$N2D_EPISODE\" --shots \"$N2D_AFFECTED_SHOTS\" --max-shots 1 --stop-on-fail"
+    "N2D_IMAGE_COMMAND": "python3 skills/n2d/n2d-image/scripts/codex_image_runner.py \"$N2D_ROOT\" \"$N2D_EPISODE\" --shots \"$N2D_AFFECTED_SHOTS\" --max-shots 8 --stop-on-fail --force"
   },
   "production_authorizations": {},
-  "phase_spend_envelopes": {},
+  "phase_spend_envelopes": {
+    "image": "生产数据/spend_envelopes/image.json"
+  },
   "auto_gate": true,
   "next_preflight": true
 }

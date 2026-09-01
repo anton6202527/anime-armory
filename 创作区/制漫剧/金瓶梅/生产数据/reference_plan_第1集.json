@@ -92,7 +92,7 @@
         },
         {
           "char_id": "BEAST_TIGER",
-          "name": "BEAST_TIGER",
+          "name": "景阳冈猛虎",
           "form": "常态",
           "tier": "multi_reference",
           "library_tier": "named_minimal",
@@ -217,16 +217,16 @@
             },
             {
               "char_id": "BEAST_TIGER",
-              "hair_bucket": null,
+              "hair_bucket": "黑",
               "outfit_bucket": "黑",
-              "anchor_phrase": "BEAST_TIGER·BEAST_TIGER 的剧情视觉真值必须入画：本集入镜角色；成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。·全身以黑黄粗硬虎毛、天然皮毛轮廓、宽大虎掌与持续伤势为视觉主体，身体无人物衣装。"
+              "anchor_phrase": "景阳冈猛虎·非人虎妖真身必须清晰：吊睛白额虎首、人形强肩背、粗壮前臂与利爪；不得洗成人类五官或普通四足老虎。；非人狼妖特征必须清晰：兽瞳、狼耳/狼鬃发际、尖犬齿、长指爪甲，不得洗成人类五官模板。；景阳冈猛虎 的剧情视觉真值必须入画：成年华南虎体型与真实肌肉骨架，冬夜冷月侧逆光，毛发沾尘与枯叶，不怪兽化、不萌宠化；扑击、掀身、尾扫与战败状态保持同一花纹、体型和伤势，不夸张血浆。；成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。·完整虎头人身妖物真身，以天然灰黄黑纹毛发、利爪和胸前贯穿旧伤为主体，身体保持无人物衣装的原生轮廓。"
             }
           ],
           "collision": true,
           "collisions": [
             {
               "pair": "CHAR_WUSONG↔BEAST_TIGER",
-              "layer": "服装主色同为「黑」、发色未区分",
+              "layer": "服装主色同为「黑」、发色同为「黑」",
               "embedding_confusable": false
             }
           ],
@@ -235,7 +235,7 @@
         },
         "relative_scale": {
           "CHAR_WUSONG": "三人中最高、肩最宽；明显高于武大，比潘金莲高约一个头。",
-          "BEAST_TIGER": "按 storyboard 中同框体量关系保持。"
+          "BEAST_TIGER": "保持当前项目声明的真实四足兽类体量与解剖比例。"
         },
         "shot_scheduling": {
           "verdict": "split_or_layer_required",
@@ -334,7 +334,7 @@
         },
         {
           "char_id": "BEAST_TIGER",
-          "name": "BEAST_TIGER",
+          "name": "景阳冈猛虎",
           "form": "常态",
           "tier": "multi_reference",
           "library_tier": "named_minimal",
@@ -465,16 +465,16 @@
             },
             {
               "char_id": "BEAST_TIGER",
-              "hair_bucket": null,
+              "hair_bucket": "黑",
               "outfit_bucket": "黑",
-              "anchor_phrase": "BEAST_TIGER·BEAST_TIGER 的剧情视觉真值必须入画：本集入镜角色；成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。·全身以黑黄粗硬虎毛、天然皮毛轮廓、宽大虎掌与持续伤势为视觉主体，身体无人物衣装。"
+              "anchor_phrase": "景阳冈猛虎·非人虎妖真身必须清晰：吊睛白额虎首、人形强肩背、粗壮前臂与利爪；不得洗成人类五官或普通四足老虎。；非人狼妖特征必须清晰：兽瞳、狼耳/狼鬃发际、尖犬齿、长指爪甲，不得洗成人类五官模板。；景阳冈猛虎 的剧情视觉真值必须入画：成年华南虎体型与真实肌肉骨架，冬夜冷月侧逆光，毛发沾尘与枯叶，不怪兽化、不萌宠化；扑击、掀身、尾扫与战败状态保持同一花纹、体型和伤势，不夸张血浆。；成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。·完整虎头人身妖物真身，以天然灰黄黑纹毛发、利爪和胸前贯穿旧伤为主体，身体保持无人物衣装的原生轮廓。"
             }
           ],
           "collision": true,
           "collisions": [
             {
               "pair": "CHAR_WUSONG↔BEAST_TIGER",
-              "layer": "服装主色同为「黑」、发色未区分",
+              "layer": "服装主色同为「黑」、发色同为「黑」",
               "embedding_confusable": false
             }
           ],
@@ -483,7 +483,7 @@
         },
         "relative_scale": {
           "CHAR_WUSONG": "三人中最高、肩最宽；明显高于武大，比潘金莲高约一个头。",
-          "BEAST_TIGER": "按 storyboard 中同框体量关系保持。"
+          "BEAST_TIGER": "保持当前项目声明的真实四足兽类体量与解剖比例。"
         },
         "shot_scheduling": {
           "verdict": "split_or_layer_required",
@@ -579,7 +579,7 @@
         },
         {
           "char_id": "BEAST_TIGER",
-          "name": "BEAST_TIGER",
+          "name": "景阳冈猛虎",
           "form": "常态",
           "tier": "multi_reference",
           "library_tier": "named_minimal",
@@ -653,7 +653,7 @@
         },
         {
           "char_id": "CROWD_HUNTERS",
-          "name": "Hunters",
+          "name": "猎户群像",
           "form": "常态",
           "tier": "multi_reference",
           "library_tier": "restricted_partial",
@@ -759,22 +759,22 @@
             },
             {
               "char_id": "BEAST_TIGER",
-              "hair_bucket": null,
+              "hair_bucket": "黑",
               "outfit_bucket": "黑",
-              "anchor_phrase": "BEAST_TIGER·BEAST_TIGER 的剧情视觉真值必须入画：本集入镜角色；成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。·全身以黑黄粗硬虎毛、天然皮毛轮廓、宽大虎掌与持续伤势为视觉主体，身体无人物衣装。"
+              "anchor_phrase": "景阳冈猛虎·非人虎妖真身必须清晰：吊睛白额虎首、人形强肩背、粗壮前臂与利爪；不得洗成人类五官或普通四足老虎。；非人狼妖特征必须清晰：兽瞳、狼耳/狼鬃发际、尖犬齿、长指爪甲，不得洗成人类五官模板。；景阳冈猛虎 的剧情视觉真值必须入画：成年华南虎体型与真实肌肉骨架，冬夜冷月侧逆光，毛发沾尘与枯叶，不怪兽化、不萌宠化；扑击、掀身、尾扫与战败状态保持同一花纹、体型和伤势，不夸张血浆。；成年猛虎真身；吊睛白额虎首、黑黄粗硬毛纹、宽大虎掌与真实兽类骨相稳定。·完整虎头人身妖物真身，以天然灰黄黑纹毛发、利爪和胸前贯穿旧伤为主体，身体保持无人物衣装的原生轮廓。"
             },
             {
               "char_id": "CROWD_HUNTERS",
               "hair_bucket": null,
               "outfit_bucket": null,
-              "anchor_phrase": "Hunters·Hunters 的剧情视觉真值必须入画：本集入镜角色；三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。·三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。"
+              "anchor_phrase": "`三至五名粗布成年背景人群·低饱和灰褐·侧后轮廓·不建立清晰正脸`"
             }
           ],
           "collision": true,
           "collisions": [
             {
               "pair": "CHAR_WUSONG↔BEAST_TIGER",
-              "layer": "服装主色同为「黑」、发色未区分",
+              "layer": "服装主色同为「黑」、发色同为「黑」",
               "embedding_confusable": false
             }
           ],
@@ -783,8 +783,8 @@
         },
         "relative_scale": {
           "CHAR_WUSONG": "三人中最高、肩最宽；明显高于武大，比潘金莲高约一个头。",
-          "BEAST_TIGER": "按 storyboard 中同框体量关系保持。",
-          "CROWD_HUNTERS": "按 storyboard 中同框体量关系保持。"
+          "BEAST_TIGER": "保持当前项目声明的真实四足兽类体量与解剖比例。",
+          "CROWD_HUNTERS": "长期山野劳作的朴实体态，站位松散，避免整齐列队或英雄式造型。"
         },
         "shot_scheduling": {
           "verdict": "slots_required",
@@ -3316,7 +3316,7 @@
               "char_id": "CHAR_MAGISTRATE",
               "hair_bucket": null,
               "outfit_bucket": null,
-              "anchor_phrase": "知县·知县 的剧情视觉真值必须入画：成年男性县官，北宋地方官常服，案后端坐，克制威严，非清宫补服与官帽；只作为本集公务角色，不抢主角视觉重心。；成年古装角色，年龄感按剧情身份保守处理；知县 的脸型、年龄感、肤色和五官比例必须稳定；五官清楚耐看，不使用同质化网红脸。·知县 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。"
+              "anchor_phrase": "知县·知县 的剧情视觉真值必须入画：成年男性县官，北宋地方官常服，案后端坐，克制威严，非清宫补服与官帽；只作为本集公务角色，不抢主角视觉重心。；年龄阶段必须由当前项目角色卡或素材清单明确，跨镜保持一致；知县 的脸型、年龄感、肤色和五官比例必须按当前项目定义稳定；不自行补写时代、族裔或审美类型。·知县 的服装轮廓、材质、配色和时代必须按当前项目定义稳定，不自行套用未声明的类型模板。"
             }
           ],
           "collision": false,
@@ -3861,7 +3861,7 @@
               "char_id": "CHAR_XIMENQING",
               "hair_bucket": null,
               "outfit_bucket": null,
-              "anchor_phrase": "西门庆·成年古装角色，年龄感按剧情身份保守处理；西门庆 的脸型、年龄感、肤色和五官比例必须稳定；五官清楚耐看，不使用同质化网红脸。·西门庆 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。"
+              "anchor_phrase": "西门庆·年龄阶段必须由当前项目角色卡或素材清单明确，跨镜保持一致；西门庆 的脸型、年龄感、肤色和五官比例必须按当前项目定义稳定；不自行补写时代、族裔或审美类型。·西门庆 的服装轮廓、材质、配色和时代必须按当前项目定义稳定，不自行套用未声明的类型模板。"
             }
           ],
           "collision": false,
@@ -5123,7 +5123,7 @@
       "status": "ready",
       "available": true,
       "path": "生产数据/memory_anchor_plan_第1集.json",
-      "sha256": "2c31ee6473c2941b10eb60558b54d8ea506723f63e24a415ba1082fa35ab91e7",
+      "sha256": "d4e5c8446428b8ef6c4a29b52911c6ccbf41615c28e354922e04cb00e73956d8",
       "required_rows": 0,
       "required_char_keys": [],
       "consumed_char_keys": [],
@@ -5134,13 +5134,13 @@
       "errors": [],
       "source_fingerprint": {
         "identity_drift_report_sha256": "6e782c1da5bdfeeafa733ed751e2ab949c170f875cded2e22a938737e58cff48",
-        "identity_registry_sha256": "73ebc1fd240c519a26e5766bd87800989fc80d1f9cb5c73ed4fcd9bf9660bf0d",
-        "storyboard_sha256": "56e9b58b49fdca6aee3859d35eac32aa4c6096c05a984ce2baaca079be67f7b0"
+        "identity_registry_sha256": "9bcee167fbb4a989c5a948954a2d32bc3e74930c14f61eb6bb9db0ebcb679c9b",
+        "storyboard_sha256": "d5c94af8cf849708ce70111e043f4badd941184cb5e064a523e92ae088dd1e05"
       },
       "current_source_fingerprint": {
-        "identity_registry_sha256": "73ebc1fd240c519a26e5766bd87800989fc80d1f9cb5c73ed4fcd9bf9660bf0d",
+        "identity_registry_sha256": "9bcee167fbb4a989c5a948954a2d32bc3e74930c14f61eb6bb9db0ebcb679c9b",
         "identity_drift_report_sha256": "6e782c1da5bdfeeafa733ed751e2ab949c170f875cded2e22a938737e58cff48",
-        "storyboard_sha256": "56e9b58b49fdca6aee3859d35eac32aa4c6096c05a984ce2baaca079be67f7b0"
+        "storyboard_sha256": "d5c94af8cf849708ce70111e043f4badd941184cb5e064a523e92ae088dd1e05"
       },
       "unconsumed_char_keys": []
     },

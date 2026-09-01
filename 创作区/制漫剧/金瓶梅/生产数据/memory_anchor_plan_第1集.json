@@ -8,8 +8,8 @@
   "rows": [],
   "source_fingerprint": {
     "identity_drift_report_sha256": "6e782c1da5bdfeeafa733ed751e2ab949c170f875cded2e22a938737e58cff48",
-    "identity_registry_sha256": "73ebc1fd240c519a26e5766bd87800989fc80d1f9cb5c73ed4fcd9bf9660bf0d",
-    "storyboard_sha256": "56e9b58b49fdca6aee3859d35eac32aa4c6096c05a984ce2baaca079be67f7b0"
+    "identity_registry_sha256": "9bcee167fbb4a989c5a948954a2d32bc3e74930c14f61eb6bb9db0ebcb679c9b",
+    "storyboard_sha256": "d5c94af8cf849708ce70111e043f4badd941184cb5e064a523e92ae088dd1e05"
   },
   "status": "ready",
   "target_appearances": [

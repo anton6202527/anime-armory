@@ -34,4 +34,38 @@ module.exports = async function afterPack(context) {
     throw new Error(`Packaged node-pty smoke test failed${detail ? `:\n${detail}` : ''}`);
   }
   console.log('[after-pack] packaged node-pty PTY spawn passed');
+
+  // Electron's main Mach-O arrives with a linker-generated ad-hoc signature.
+  // When no Developer ID is installed electron-builder skips bundle signing,
+  // leaving that executable signature without an app-level CodeResources seal.
+  // Gatekeeper then reports: "code has no resources but signature indicates
+  // they must be present". Seal the complete bundle ad-hoc here. If a real
+  // signing identity is configured, electron-builder signs again after this
+  // hook and replaces the ad-hoc signature with the Developer ID signature.
+  const signResult = spawnSync(
+    'codesign',
+    ['--force', '--deep', '--sign', '-', '--timestamp=none', appPath],
+    { encoding: 'utf8', timeout: 120000 },
+  );
+  if (signResult.status !== 0) {
+    const detail = [signResult.stdout, signResult.stderr, signResult.error?.message]
+      .filter(Boolean)
+      .join('\n')
+      .trim();
+    throw new Error(`Ad-hoc bundle signing failed${detail ? `:\n${detail}` : ''}`);
+  }
+
+  const verifyResult = spawnSync(
+    'codesign',
+    ['--verify', '--deep', '--strict', '--verbose=2', appPath],
+    { encoding: 'utf8', timeout: 120000 },
+  );
+  if (verifyResult.status !== 0) {
+    const detail = [verifyResult.stdout, verifyResult.stderr, verifyResult.error?.message]
+      .filter(Boolean)
+      .join('\n')
+      .trim();
+    throw new Error(`Ad-hoc bundle verification failed${detail ? `:\n${detail}` : ''}`);
+  }
+  console.log('[after-pack] macOS app bundle ad-hoc signature verified');
 };

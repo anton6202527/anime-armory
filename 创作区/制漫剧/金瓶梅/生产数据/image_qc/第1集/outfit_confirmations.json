@@ -18,6 +18,23 @@
       "verdict": "ok"
     },
     {
+      "char": "CHAR_PANJINLIAN__25岁武大家常态",
+      "confirmed_at": "2026-09-01T02:06:18+00:00",
+      "floor": 0.85,
+      "human_signoff": false,
+      "original_verdict": "block",
+      "png": "图片/EP01_CLIP05_a1.png",
+      "png_sha256": "91b62885c2ddee9d4a430404b878f96d0e76036e3dca63d0f00d957be6914823",
+      "reason": "已实际查看当前原始像素：本定时子镜为武大在前、武松在后上楼，潘金莲按分镜尚未入画；该服装比对项由 clip 级角色清单误套，不是潘金莲衣装漂移。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.3783,
+      "shot": "Clip_05",
+      "source": "image_qc:executor_visual_outfit_confirm",
+      "verdict": "ok"
+    },
+    {
       "char": "CHAR_WUDA__日常卖饼态",
       "confirmed_at": "2026-08-18T09:43:52+00:00",
       "floor": 0.9907,
@@ -104,6 +121,6 @@
     }
   ],
   "kind": "n2d_outfit_confirmations",
-  "updated_at": "2026-08-24T08:17:24+00:00",
+  "updated_at": "2026-09-01T02:06:18+00:00",
   "version": 1
 }

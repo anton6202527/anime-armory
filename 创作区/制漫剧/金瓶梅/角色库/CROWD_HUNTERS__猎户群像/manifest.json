@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CROWD_HUNTERS",
+  "name": "猎户群像",
+  "scope": "发现并迎接打虎武松的地方猎户、乡役与围观者；仅承担环境尺度、社会反应和功绩见证。",
+  "library_tier": "restricted_partial",
+  "planned_episode_count": 0,
+  "directories": {
+    "reference": "角色库/CROWD_HUNTERS__猎户群像/reference",
+    "prompts": "角色库/CROWD_HUNTERS__猎户群像/prompts",
+    "lora": "角色库/CROWD_HUNTERS__猎户群像/lora",
+    "voice": "角色库/CROWD_HUNTERS__猎户群像/voice",
+    "adapters": "角色库/CROWD_HUNTERS__猎户群像/adapters",
+    "qc": "角色库/CROWD_HUNTERS__猎户群像/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/猎户群像.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-09-01T02:08:43+00:00"
+}
