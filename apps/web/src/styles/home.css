@@ -188,6 +188,20 @@
 .segmented-tabs button:hover { color: #d8d8dd; }
 .segmented-tabs button.active { color: #f5f5f6; background: #5a5b60; box-shadow: none; }
 .model-section-label { padding: 0 16px 7px; color: #777982; font-size: 12px; }
+.model-executor-tabs { display: grid; grid-template-columns: 1fr 1.45fr; gap: 5px; margin: 0 10px 8px; padding: 4px; border: 1px solid rgba(255,255,255,.07); border-radius: 9px; background: rgba(255,255,255,.025); }
+.model-executor-tabs button { min-width: 0; height: 32px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 0 8px; border: 0; border-radius: 7px; color: #8c8e97; background: transparent; cursor: pointer; font-size: 11px; }
+.model-executor-tabs button:hover { color: #d8d8dd; }
+.model-executor-tabs button.active { color: #f3f3f5; background: #3a3b42; }
+.model-executor-tabs button > i { width: 6px; height: 6px; flex: none; border-radius: 50%; background: #777982; }
+.model-executor-tabs button > i.state-ready { background: #57c78a; box-shadow: 0 0 0 3px rgba(87,199,138,.12); }
+.model-executor-tabs button > i.state-loading { background: #d8ad62; animation: model-runtime-pulse .8s ease-in-out infinite alternate; }
+.model-runtime-status { display: flex; align-items: center; gap: 7px; margin: 0 14px 7px; padding: 7px 9px; border: 1px solid rgba(255,255,255,.07); border-radius: 8px; color: #92949c; background: rgba(255,255,255,.025); font-size: 11px; }
+.model-runtime-status > i { width: 6px; height: 6px; flex: none; border-radius: 50%; background: #777982; }
+.model-runtime-status.state-ready > i { background: #57c78a; box-shadow: 0 0 0 3px rgba(87,199,138,.12); }
+.model-runtime-status.state-loading > i { background: #d8ad62; animation: model-runtime-pulse .8s ease-in-out infinite alternate; }
+@keyframes model-runtime-pulse { to { opacity: .35; } }
+.model-runtime-note { margin: 0 16px 8px; color: #777982; font-size: 11px; line-height: 1.45; }
+.model-runtime-empty { margin: 8px; padding: 12px; color: #777982; font-size: 12px; text-align: center; }
 .model-list { max-height: 365px; overflow-y: auto; padding: 0 8px 9px; scrollbar-width: thin; scrollbar-color: #555761 transparent; }
 .model-row { position: relative; width: 100%; min-height: 59px; display: flex; align-items: center; border-radius: 9px; color: #dedee3; background: transparent; }
 .model-row:hover { background: #33343b; }
@@ -198,6 +212,9 @@
 .model-row:nth-child(3n) .model-mark { background: linear-gradient(145deg, #5e6068, #303138); }
 .model-copy { min-width: 0; display: flex; flex: 1; flex-direction: column; gap: 4px; }
 .model-name { min-width: 0; display: flex; align-items: center; gap: 3px; }
+.model-local-badge { flex: none; padding: 2px 5px; border-radius: 5px; color: #a9abb3; background: rgba(255,255,255,.08); font-size: 9px; font-style: normal; font-weight: 550; }
+.model-local-badge.state-ready { color: #7bd8a6; background: rgba(72,189,126,.12); }
+.model-local-badge.state-loading { color: #e2bb76; background: rgba(216,173,98,.12); }
 .model-copy b { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 500; }
 .model-copy small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #7f8189; font-size: 12px; }
 .model-row-main > svg { position: absolute; right: 12px; width: 17px; height: 17px; flex: none; padding: 2px; border: 1px solid #565861; border-radius: 50%; color: #8a8c96; }
@@ -650,7 +667,7 @@
   font-weight: 430;
 }
 .auth-entry:hover { color: #090a0c !important; background: #fff !important; }
-.auth-entry.loading { width: 36px; padding: 0 !important; color: #a9abb3 !important; background: #25262b !important; }
+.auth-entry.loading { width: auto; padding: 0 14px !important; color: #a9abb3 !important; background: #25262b !important; }
 .site-header nav .account-menu-wrap .avatar-button {
   width: 24px;
   height: 24px;
@@ -961,9 +978,15 @@
 .dialog-error,
 .dialog-hint,
 .auth-feedback { display: flex; align-items: flex-start; gap: 9px; padding: 11px; border: 1px solid #454750; border-radius: 10px; color: #a4a6af; background: #292a30; font-size: 12px; line-height: 1.5; }
-.auth-config-note span { display: flex; flex-direction: column; gap: 3px; }
+.auth-config-note span { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: 5px; }
 .auth-config-note b { color: #d1d2d8; }
 .auth-config-note small { color: #858791; }
+.auth-diagnostics { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
+.auth-diagnostics code { max-width: 100%; overflow-wrap: anywhere; padding: 2px 5px; border-radius: 5px; color: #aeb0ba; background: rgba(255, 255, 255, .06); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10px; }
+.auth-retry { width: fit-content; height: 30px; display: inline-flex; align-items: center; gap: 6px; margin-top: 5px; padding: 0 10px; border: 1px solid #555762; border-radius: 8px; color: #d0d1d7; background: #34353c; cursor: pointer; font-size: 11px; }
+.auth-retry:hover:not(:disabled) { border-color: #70727d; background: #3d3e46; }
+.auth-retry:disabled { opacity: .55; cursor: wait; }
+.auth-feedback.error { flex-direction: column; gap: 5px; }
 .auth-feedback.error,
 .dialog-error { border-color: rgba(226, 100, 118, .3); color: #efa1ad; background: rgba(194, 68, 87, .1); }
 .auth-feedback.success,
@@ -1107,6 +1130,11 @@
 [data-theme="light"] .skill-picker-main em,
 [data-theme="light"] .mode-picker > button small { color: #777984; }
 [data-theme="light"] .model-section-label { color: #777984; }
+[data-theme="light"] .model-executor-tabs { border-color: #e4e5e9; background: #f8f8fa; }
+[data-theme="light"] .model-executor-tabs button.active { color: #303137; background: #e8e9ed; }
+[data-theme="light"] .model-runtime-status { border-color: #e4e5e9; color: #777982; background: #f8f8fa; }
+[data-theme="light"] .model-local-badge { color: #686a74; background: #ececf1; }
+[data-theme="light"] .model-local-badge.state-ready { color: #278456; background: #e4f5eb; }
 [data-theme="light"] .picker-skill-icon { color: #565862; background: #ececf0; }
 [data-theme="light"] .model-row > svg { border-color: #c5c7ce; color: #777984; }
 [data-theme="light"] .model-row-main { color: #303137; }

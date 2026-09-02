@@ -85,99 +85,99 @@
   "capability_assertions": {
     "auto_runnable": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": true
     },
     "channel": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "Codex CLI"
     },
     "exact_model_evidence_required": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": false
     },
     "exact_model_id": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "gpt-image-2"
     },
     "max_reference_images": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": 24
     },
     "model": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "GPT Image 2"
     },
     "model_precision": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "provider_model"
     },
     "negative_strategy": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "inline_constraints"
     },
     "official": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": true
     },
     "output": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "png_file"
     },
     "persistent_subject": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": false
     },
     "prompt_language": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "zh"
     },
     "prompt_profile": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "codex_gpt_image_agent_brief"
     },
     "prompt_request_fields": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": [
         "aspect_ratio",
@@ -187,43 +187,43 @@
     },
     "reference_mode": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": "multi_image_flags"
     },
     "supports_edit": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": false
     },
     "supports_high_fidelity_reference": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": true
     },
     "supports_image_reference": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": true
     },
     "supports_mask": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": false
     },
     "supports_text2image": {
       "evidence_kind": "official_docs",
-      "observed_text": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
-      "source": "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)",
+      "observed_text": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
+      "source": "OpenAI official GPT-Image-2 model documentation and OpenAI status page",
       "source_url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "value": true
     }
@@ -236,12 +236,12 @@
     "policy": "Do not log final generation events as exact provider model id unless this field is populated from per-run evidence.",
     "precision": "provider_model"
   },
-  "note": "2026-09-01 verified: GPT-Image-2 supports generation and editing; OpenAI image edit API returns base64 PNG-capable output metadata; local Codex exec exposes repeatable --image attachments. No persistent subject ID capability claimed.",
+  "note": "2026-09-02 verification: OpenAI status fully operational; GPT-Image-2 remains the exact image generation model. Codex is the access channel; multi-reference/edit execution continues through the project compiler and runner; no persistent subject ID is claimed.",
   "source_urls": [
     "https://developers.openai.com/api/docs/models/gpt-image-2"
   ],
   "sources": [
-    "OpenAI official GPT-Image-2 model docs + local codex exec --help (supports repeatable --image inputs)"
+    "OpenAI official GPT-Image-2 model documentation and OpenAI status page"
   ],
-  "verified_at": "2026-09-01"
+  "verified_at": "2026-09-02"
 }

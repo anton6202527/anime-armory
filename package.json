@@ -9,6 +9,8 @@
   ],
   "scripts": {
     "dev:backend": "npm run dev --workspace @anime-armory/backend",
+    "dev:backend:local": "node scripts/dev-backend-local-supabase.mjs",
+    "test:dev-backend:local": "node --test scripts/test-dev-backend-local-supabase.mjs",
     "start:backend": "npm run start --workspace @anime-armory/backend",
     "test:backend": "npm run test --workspace @anime-armory/backend",
     "dev:desktop": "npm run dev --workspace @anime-armory/desktop",

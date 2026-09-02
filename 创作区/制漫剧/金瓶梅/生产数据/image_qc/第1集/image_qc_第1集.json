@@ -101,7 +101,7 @@
           "raw_intra_floor": 0.4558
         },
         "CHAR_PANJINLIAN__25岁武大家常态": {
-          "ep_mean_score": 0.38,
+          "ep_mean_score": 0.3824,
           "ep_n_shots": 6,
           "floor": 0.5,
           "floor_calibrated": true,
@@ -111,7 +111,7 @@
           "raw_intra_floor": 0.3325
         },
         "CHAR_WUDA__日常卖饼态": {
-          "ep_mean_score": 0.427,
+          "ep_mean_score": 0.4262,
           "ep_n_shots": 6,
           "floor": 0.5052,
           "floor_calibrated": true,
@@ -223,12 +223,12 @@
           "floor_calibrated": true,
           "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/face_confirmations.json",
           "manual_confirmed": true,
-          "manual_confirmed_at": "2026-09-01T02:06:17+00:00",
+          "manual_confirmed_at": "2026-09-02T04:17:04+00:00",
           "manual_original_verdict": "block",
-          "manual_reason": "已实际查看当前原始像素：本帧焦点为楼窗内潘金莲，武大仅作为街面远景背身挑担离去，脸部不可辨是镜头设计，不是崩脸；身形、头巾、双筐担结构与上一镜连续。",
+          "manual_reason": "已实际查看当前 SHA=f54a08f246e3dc695e22950fd0672853d9723253ec157cb1ec119e62bb3d7be1 原始像素：潘金莲为清晰主主体，鹅蛋脸、细弯眉、杏眼、低髻木簪与源帧同一身份；武大处于街下远景背身，脸部本就不具备 embedding 核验尺度，棕头巾、自然矮身量、褐衣和炊饼担身份线索明确。低分来自远景小脸/背身与 clip 级双角色清单，不是换脸或串脸。",
           "manual_reviewer": "Codex视觉执行者",
           "png": "图片/Clip04_end.png",
-          "score": 0.2053,
+          "score": 0.2005,
           "verdict": "ok"
         },
         {
@@ -657,7 +657,7 @@
           "floor": 0.9795,
           "note": "分数比 floor 低≥0.6：更像头部区几何裁切没裁到头（大远景/群像裁到景物），非发型漂移——请并排人判；若确为裁切失真可忽略。",
           "png": "图片/Clip04_end.png",
-          "score": 0.3591,
+          "score": 0.3025,
           "verdict": "warn"
         },
         {
@@ -1185,11 +1185,16 @@
           "verdict": "ok"
         },
         {
-          "abs_verdict": "block",
           "char": "CHAR_WUDA__日常卖饼态",
           "floor": 0.9907,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/outfit_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-09-02T04:17:04+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "已实际查看当前 SHA=f54a08f246e3dc695e22950fd0672853d9723253ec157cb1ec119e62bb3d7be1 原始像素：潘金莲深青蓝窄袖上衣与枣红裙、武大棕头巾和褐色旧衣均与定妆连续；自动调色板低分由雪街冷光、远景尺度和背身构图造成，不是换装。",
+          "manual_reviewer": "Codex视觉执行者",
           "png": "图片/Clip04_end.png",
-          "score": 0.4081,
+          "score": 0.3591,
           "verdict": "ok"
         },
         {
@@ -1411,7 +1416,7 @@
               "空间轴线随机跳变"
             ]
           },
-          "median_dist": 32.4,
+          "median_dist": 32.7,
           "registered_id": "LOC_YANGGU_STREET",
           "shots": 8
         }
@@ -1490,12 +1495,12 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.11,
+          "action_shift": 0.122,
           "action_verdict": null,
-          "color_dist": 0.0383,
+          "color_dist": 0.0539,
           "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 33,
+          "dist": 35,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip05_first.png",
@@ -1580,9 +1585,9 @@
         "char": "CHAR_WUDA__日常卖饼态",
         "original_verdict": "block",
         "png": "图片/Clip04_end.png",
-        "reason": "已实际查看当前原始像素：本帧焦点为楼窗内潘金莲，武大仅作为街面远景背身挑担离去，脸部不可辨是镜头设计，不是崩脸；身形、头巾、双筐担结构与上一镜连续。",
+        "reason": "已实际查看当前 SHA=f54a08f246e3dc695e22950fd0672853d9723253ec157cb1ec119e62bb3d7be1 原始像素：潘金莲为清晰主主体，鹅蛋脸、细弯眉、杏眼、低髻木簪与源帧同一身份；武大处于街下远景背身，脸部本就不具备 embedding 核验尺度，棕头巾、自然矮身量、褐衣和炊饼担身份线索明确。低分来自远景小脸/背身与 clip 级双角色清单，不是换脸或串脸。",
         "reviewer": "Codex视觉执行者",
-        "score": 0.2053
+        "score": 0.2005
       },
       {
         "char": "CHAR_PANJINLIAN__25岁武大家常态",
@@ -2166,7 +2171,7 @@
       "出图/第1集/图片/Clip02_end.png": "e0cbd3a6ee0a725f1999de4aa047ec76e266fe33dedf431337433d6847d86038",
       "出图/第1集/图片/Clip02_first.png": "6a46a11e4585555022b3d16980a6544b265ef6e7696cb21274b5c4840128a56b",
       "出图/第1集/图片/Clip03_first.png": "47b01053eb2e1db79901d5bf785552d099883f5ce4ed71feb8488fa3e58ee3e7",
-      "出图/第1集/图片/Clip04_end.png": "846c6308f9f8bfb2fc5885d9ff950d74b52a303faa78868a8949ced21c1813b5",
+      "出图/第1集/图片/Clip04_end.png": "f54a08f246e3dc695e22950fd0672853d9723253ec157cb1ec119e62bb3d7be1",
       "出图/第1集/图片/Clip04_first.png": "c3bf9b0eba924861d2c679a4377181ace41736276885385a573ac7b676995cfb",
       "出图/第1集/图片/Clip05_end.png": "013b66b03cee4042fb945db0de42fa33218e1fcd900aa0d3b071213594ac77cc",
       "出图/第1集/图片/Clip05_first.png": "5fb7657cfda296f9d52cc560c3354572afaa011748fa977d255ca0af70319d32",
@@ -2184,14 +2189,14 @@
       "出图/第1集/图片/EP01_CLIP05_a2.png": "b9df5bcd2590ae88ebbc04320181e543e0d4d4a1e297883236064b32165fb1d3",
       "出图/第1集/图片/EP01_CLIP06_a1.png": "1a8fc79dc63fdea27fe1324497779952ac3efa0e43595c1958e97fe28bc548ab",
       "出图/第1集/图片/EP01_CLIP06_a2.png": "d2bab16c5035b911b09c0d750f8ef038d00ff761f44d11015971b4069415b4e8",
-      "生产数据/image_qc/第1集/face_confirmations.json": "942b876f6f5a39b80bb8b449d5a190246283701a34c650197c1f5b8f3fe5fffc",
+      "生产数据/image_qc/第1集/face_confirmations.json": "b7498de9e40743fc7c28d6bd0aff330a1353d7830f976769faf68fd3ad3509a0",
       "生产数据/image_qc/第1集/hair_confirmations.json": "618f2709d10e9301eb97f5e71a9c4a02aecf891f70809ba3e9c5aec80ee8652f",
       "生产数据/image_qc/第1集/human_image_review.json": null,
-      "生产数据/image_qc/第1集/outfit_confirmations.json": "f4df743dd1e06d5afa3749fd577e9c5ca332be38a8a4f3df4d8daa1bebdd1718",
+      "生产数据/image_qc/第1集/outfit_confirmations.json": "d470b630aca53f7c32b016a8696e5f42f6665a3cae27eed24c00e3b530b76b71",
       "生产数据/image_qc/第1集/prop_shape_confirmations.json": "7bbdeafcf5201fd7623b627ca3fbc398f6612ffa44a247027d69326cb8ec1a87",
       "脚本/第1集/storyboard.json": "d5c94af8cf849708ce70111e043f4badd941184cb5e064a523e92ae088dd1e05"
     },
-    "sha": "2b86034490713f167dd6de4fa03fd97837fca04be426cc46a4a5f6e249d1408e"
+    "sha": "e8bbabc0190b774b51dd38aae7ae4852b0014369985888e58ba63edaf6c37683"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -2842,9 +2847,9 @@
     "shots_linted": 15
   },
   "outfit_manual_confirmations": {
-    "applied": 3,
+    "applied": 4,
     "available": true,
-    "configured": 7,
+    "configured": 8,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/outfit_confirmations.json",
     "rows": [
       {
@@ -2854,6 +2859,14 @@
         "reason": "已查看当前原像素并与武松半身定妆并排核对：深褐交领短袖粗布衣、腰带、深色裤靴与护腕均同源；冷月暗光与泥地反光导致调色板分数偏低，不是换装。",
         "reviewer": "Codex视觉执行者",
         "score": 0.0656
+      },
+      {
+        "char": "CHAR_WUDA__日常卖饼态",
+        "original_verdict": "block",
+        "png": "图片/Clip04_end.png",
+        "reason": "已实际查看当前 SHA=f54a08f246e3dc695e22950fd0672853d9723253ec157cb1ec119e62bb3d7be1 原始像素：潘金莲深青蓝窄袖上衣与枣红裙、武大棕头巾和褐色旧衣均与定妆连续；自动调色板低分由雪街冷光、远景尺度和背身构图造成，不是换装。",
+        "reviewer": "Codex视觉执行者",
+        "score": 0.3591
       },
       {
         "char": "CHAR_WUSONG__28岁打虎态",
@@ -4670,11 +4683,6 @@
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUDA__日常卖饼态」↔ 本镜 图片/Clip04_end.png DINO/CLIP cosine=0.32 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
         "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_WUDA__日常卖饼态」↔ 本镜 图片/Clip04_first.png DINO/CLIP cosine=0.44 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
@@ -4816,7 +4824,7 @@
     }
   },
   "summary": {
-    "advisory": 38,
+    "advisory": 37,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -4888,7 +4896,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 20
+        "warn": 19
       },
       "style_attribution": {
         "block": 0,

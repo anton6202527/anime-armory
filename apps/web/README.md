@@ -1,9 +1,11 @@
 # LabuTV Web
 
-LabuTV Web is the browser UI for the Skill Hub and multimodal production canvas. Its AI/Skill path has one server boundary: every AI generation, Skill execution, Skill source read, and Skill work-file upload goes to the LabuTV backend REST API. It never calls cliproxy, an Electron bridge, a local Agent CLI, or a model provider API directly.
+LabuTV Web is the browser UI for the Skill Hub and multimodal production canvas. The LabuTV backend REST API is the default boundary for model discovery, generation, Skill execution, Skill source reads, and work-file uploads. The only opt-in exception is **本机 Codex Agent**: after the user selects that executor and approves the native LabuTV Desktop prompt, the browser may connect to the loopback desktop bridge. The browser never receives ChatGPT/Codex credentials and cannot choose commands, working directories, or filesystem paths.
 
 ```text
 Browser  ->  VITE_API_BASE_URL (/api)  ->  LabuTV backend (:43118)  ->  cliproxy (:8317)
+
+Explicit opt-in only: Browser  ->  Desktop loopback bridge (:43117)  ->  signed-in Codex CLI
 ```
 
 Provider keys, unrestricted filesystem paths, model routing, billing rules, and execution privileges remain in the backend process. No model or infrastructure secret may use a `VITE_` environment variable.
@@ -30,6 +32,12 @@ curl http://127.0.0.1:43118/api/v1/health/ready
 
 If the readiness check fails, the UI enters a clearly labelled demo/unavailable mode and does not create a fake queued task.
 
+### Optional local Codex Agent
+
+Start LabuTV Desktop alongside Web and sign the local CLI in with `codex login`. In the model picker choose **本机 Codex（订阅）**, then choose one of the real model slugs discovered from the current account. Opening the picker performs only a read-only readiness/catalog probe; the first submission shows a native Desktop authorization dialog and starts nothing until the user approves it. The authorization is short-lived and scoped to one work.
+
+This path runs complete Skill/text Agent tasks through the installed Codex CLI. It is an executor/access path, not an image or video model API; direct image and video generation still uses the BFF and its configured provider. For a non-local Web origin, add the exact HTTPS origin to `ANIME_ARMORY_WEB_ORIGINS` before starting Desktop. Wildcards are not accepted.
+
 The client can be configured with a deployed API prefix, for example:
 
 ```dotenv
@@ -46,7 +54,7 @@ The current Web model implements `app-script-workbench/v3` with one `state`, one
 
 ## REST boundary
 
-The Web client currently consumes these backend routes relative to `VITE_API_BASE_URL`:
+By default, the Web client consumes these backend routes relative to `VITE_API_BASE_URL`:
 
 - `GET /v1/health/ready`
 - `GET /v1/auth/session`
@@ -61,6 +69,8 @@ The Web client currently consumes these backend routes relative to `VITE_API_BAS
 - `GET /v1/skills/:skillId/source?path=...`
 
 Each Skill submission includes an explicit `skillId`, work identity, selected model, execution mode, Skill definition when applicable, contextual IDs, attachment IDs, and a per-submission idempotency key. Polling reads the existing run and never resubmits it.
+
+The explicitly selected local Codex executor uses an isolated Desktop contract (`/v1/status`, `/v1/agent/pair`, `/v1/work-files`, and `/v1/agent/jobs/*`) with a separate, work-scoped in-memory token. All other tasks continue to use the BFF routes above.
 
 Successful runs may return normalized artifacts as `{ id, kind, name, mimeType?, size?, text?, url?, base64?, assetId? }`, where `kind` is `text`, `image`, `video`, or `audio`. The canvas converts these machine outputs into result nodes; a successful run does not make them human-accepted or complete. Large binary outputs should normally use an authenticated `assetId` or short-lived URL rather than inline base64.
 

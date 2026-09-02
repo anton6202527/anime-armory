@@ -7,7 +7,7 @@ import path from 'node:path'
 import { pipeline } from 'node:stream/promises'
 import { dialog } from 'electron'
 import type { AgentInfo, LineKey } from '@shared/types'
-import { detectAgents } from './agents'
+import { detectAgents, detectCodexModels } from './agents'
 import { CliProxyError, CliProxyService } from './cliProxy'
 import { LINES, type WorkspaceService } from './workspace'
 
@@ -23,6 +23,11 @@ const MAX_ARTIFACT_SCAN_FILES = 20_000
 const MAX_INLINE_TEXT_BYTES = 256 * 1024
 const MAX_ARTIFACT_BYTES = 512 * 1024 * 1024
 const TOKEN_TTL_MS = 12 * 60 * 60 * 1000
+const AGENT_TOKEN_TTL_MS = 2 * 60 * 60 * 1000
+const MAX_AGENT_SESSION_UPLOAD_BYTES = 4 * 1024 * 1024 * 1024
+const MAX_GLOBAL_AGENT_JOBS = 2
+const MAX_WORK_AGENT_JOBS = 1
+const JOB_RETENTION_MS = 24 * 60 * 60 * 1000
 const MAX_GLOBAL_CANVAS_GENERATIONS = 3
 const MAX_SESSION_CANVAS_GENERATIONS = 2
 const MAX_CANVAS_GENERATIONS_PER_MINUTE = 12
@@ -34,6 +39,11 @@ type JobState = 'running' | 'succeeded' | 'failed' | 'cancelled'
 interface BridgeSession {
   origin: string
   expiresAt: number
+  workId?: string
+  workName?: string
+  line?: LineKey
+  agentId?: string
+  uploadedBytes?: number
 }
 
 interface BridgeJob {
@@ -79,6 +89,13 @@ interface FileHeaders {
   line: LineKey
   fileId: string
   fileName: string
+}
+
+interface AgentPairRequest {
+  workId: string
+  workName: string
+  line: LineKey
+  agentId: 'codex'
 }
 
 class BridgeHttpError extends Error {
@@ -166,13 +183,30 @@ function parseJobRequest(value: unknown): JobRequest {
   return { workId, workName, line, prompt, ...(agentId ? { agentId } : {}), ...(creationConfig ? { creationConfig } : {}) }
 }
 
-function invocation(agent: AgentInfo, prompt: string): { args: string[]; stdin?: string } {
+function parseAgentPairRequest(value: unknown): AgentPairRequest {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new BridgeHttpError(400, 'Agent 授权格式无效')
+  const input = value as Record<string, unknown>
+  const agentId = String(input.agentId ?? '')
+  if (agentId !== 'codex') throw new BridgeHttpError(400, 'Web 本地订阅模式只允许 Codex')
+  return {
+    workId: uuid(String(input.workId ?? ''), 'workId'),
+    workName: cleanWorkName(String(input.workName ?? '')),
+    line: lineKey(String(input.line ?? '')),
+    agentId,
+  }
+}
+
+function invocation(agent: AgentInfo, prompt: string, modelId?: string): { args: string[]; stdin?: string } {
   switch (agent.id) {
-    case 'codex':
+    case 'codex': {
+      if (!modelId) throw new BridgeHttpError(400, '本机 Codex 任务必须选择具体模型')
       return {
         args: [
+          '--sandbox', 'workspace-write',
+          '--ask-for-approval', 'never',
+          '--model', modelId,
           'exec',
-          '--approve-for-me',
+          '--ignore-user-config',
           '--skip-git-repo-check',
           '--ephemeral',
           '--color', 'never',
@@ -180,6 +214,7 @@ function invocation(agent: AgentInfo, prompt: string): { args: string[]; stdin?:
         ],
         stdin: prompt,
       }
+    }
     case 'claude':
       return {
         args: ['--print', '--permission-mode', 'acceptEdits', '--no-session-persistence', prompt],
@@ -192,10 +227,16 @@ function invocation(agent: AgentInfo, prompt: string): { args: string[]; stdin?:
 }
 
 function agentEnvironment(): NodeJS.ProcessEnv {
-  const env: NodeJS.ProcessEnv = { ...process.env, TERM: 'dumb', NO_COLOR: '1' }
-  for (const key of Object.keys(env)) {
-    const normalizedKey = key.toUpperCase()
-    if (normalizedKey === 'CLI_PROXY_API_KEY' || normalizedKey.startsWith('CUSTOM_OPENAI_')) delete env[key]
+  const env: NodeJS.ProcessEnv = { TERM: 'dumb', NO_COLOR: '1' }
+  const allowed = [
+    'PATH', 'SHELL', 'HOME', 'USER', 'LOGNAME', 'TMPDIR', 'TMP', 'TEMP',
+    'LANG', 'LC_ALL', 'LC_CTYPE', 'CODEX_HOME',
+    'SSL_CERT_FILE', 'SSL_CERT_DIR', 'NODE_EXTRA_CA_CERTS',
+    'USERPROFILE', 'HOMEDRIVE', 'HOMEPATH', 'APPDATA', 'LOCALAPPDATA',
+    'SystemRoot', 'WINDIR', 'ComSpec', 'PATHEXT',
+  ]
+  for (const key of allowed) {
+    if (process.env[key]) env[key] = process.env[key]
   }
   return env
 }
@@ -211,7 +252,8 @@ export class LocalBridgeService {
   private canvasGenerationTimes = new Map<string, number[]>()
   private canvasGenerationControllers = new Set<AbortController>()
   private readonly cliProxy = new CliProxyService()
-  private readonly headlessAgentAuthorization = process.env.ANIME_ARMORY_ALLOW_LOCAL_AGENT === '1'
+  private readonly headlessAgentAuthorization = process.env.NODE_ENV === 'test'
+    && process.env.ANIME_ARMORY_ALLOW_LOCAL_AGENT === '1'
 
   constructor(private readonly workspace: WorkspaceService) {}
 
@@ -268,6 +310,19 @@ export class LocalBridgeService {
     return token!
   }
 
+  private authorizeAgent(req: IncomingMessage, origin: string): { token: string; session: BridgeSession } {
+    const token = this.authorize(req, origin, this.agentSessions)
+    const session = this.agentSessions.get(token)
+    if (!session?.workId || session.agentId !== 'codex') throw new BridgeHttpError(403, '本地 Codex 授权范围无效')
+    return { token, session }
+  }
+
+  private assertAgentWorkScope(session: BridgeSession, workId: string, line?: LineKey): void {
+    if (session.workId !== workId || (line && session.line !== line)) {
+      throw new BridgeHttpError(403, '本地 Codex 授权不属于当前作品')
+    }
+  }
+
   private async pair(origin: string): Promise<{ token: string; expiresAt: string }> {
     const previous = this.pairingAt.get(origin) ?? 0
     if (Date.now() - previous < 5000) throw new BridgeHttpError(429, '配对请求过于频繁')
@@ -289,7 +344,7 @@ export class LocalBridgeService {
     return { token, expiresAt: new Date(expiresAt).toISOString() }
   }
 
-  private async pairAgent(origin: string): Promise<{ token: string; expiresAt: string }> {
+  private async pairAgent(origin: string, request: AgentPairRequest): Promise<{ token: string; expiresAt: string }> {
     const previous = this.agentPairingAt.get(origin) ?? 0
     if (Date.now() - previous < 5000) throw new BridgeHttpError(429, 'Agent 授权请求过于频繁')
     this.agentPairingAt.set(origin, Date.now())
@@ -299,16 +354,16 @@ export class LocalBridgeService {
         buttons: ['允许本次创作', '拒绝'],
         defaultId: 0,
         cancelId: 1,
-        title: '允许 LabuTV Web 运行本地 Agent',
-        message: '允许当前网页调用本机 AI Agent 执行 Skill？',
-        detail: `${origin}\n\nAgent 会接收本次选择的素材，在“创作区”当前作品目录中读写文件，并调用已安装的 Codex/Claude/OpenCode CLI。不会向网页暴露 Shell、任意文件路径或模型 API Key。授权 12 小时内有效。`,
+        title: '允许 LabuTV Web 运行本机 Codex',
+        message: `允许 Codex 执行作品“${request.workName}”的 Skill？`,
+        detail: `${origin}\n\nCodex 会接收本次选择的素材，只在该作品目录中读写文件，并使用本机当前登录的 ChatGPT 账号及其可用额度。网页不能指定 Shell、工作目录或任意文件路径，也不会读取 Codex 登录令牌。授权 2 小时内仅对这个作品有效。`,
         noLink: true,
       })
       if (result.response !== 0) throw new BridgeHttpError(403, '用户拒绝了本地 Agent 授权')
     }
     const token = randomBytes(32).toString('base64url')
-    const expiresAt = Date.now() + TOKEN_TTL_MS
-    this.agentSessions.set(token, { origin, expiresAt })
+    const expiresAt = Date.now() + AGENT_TOKEN_TTL_MS
+    this.agentSessions.set(token, { origin, expiresAt, ...request, uploadedBytes: 0 })
     return { token, expiresAt: new Date(expiresAt).toISOString() }
   }
 
@@ -330,12 +385,16 @@ export class LocalBridgeService {
     return workDir
   }
 
-  private async saveFile(req: IncomingMessage, headers: FileHeaders): Promise<{ relativePath: string }> {
+  private async saveFile(req: IncomingMessage, headers: FileHeaders, session: BridgeSession): Promise<{ relativePath: string }> {
     const declaredSize = Number(req.headers['content-length'] ?? NaN)
     if (!Number.isSafeInteger(declaredSize) || declaredSize < 0 || declaredSize > MAX_FILE_BYTES) {
       throw new BridgeHttpError(413, '附件大小无效或超过 2GB')
     }
-    const workDir = await this.workDirectory(headers.workId, headers.workName, headers.line)
+    this.assertAgentWorkScope(session, headers.workId, headers.line)
+    if ((session.uploadedBytes ?? 0) + declaredSize > MAX_AGENT_SESSION_UPLOAD_BYTES) {
+      throw new BridgeHttpError(413, '本次本地 Codex 授权的附件总量超过 4GB')
+    }
+    const workDir = await this.workDirectory(headers.workId, session.workName ?? headers.workName, headers.line)
     const relativePath = path.join('源本', headers.fileId, headers.fileName)
     const destination = path.join(workDir, relativePath)
     await fsp.mkdir(path.dirname(destination), { recursive: true })
@@ -349,6 +408,7 @@ export class LocalBridgeService {
       await pipeline(req, createWriteStream(temporary, { flags: 'wx' }))
       if (received !== declaredSize) throw new BridgeHttpError(400, '附件内容长度不一致')
       await fsp.rename(temporary, destination)
+      session.uploadedBytes = (session.uploadedBytes ?? 0) + received
     } catch (error) {
       await fsp.rm(temporary, { force: true }).catch(() => undefined)
       throw error
@@ -443,12 +503,55 @@ export class LocalBridgeService {
     job.artifacts = artifacts
   }
 
+  private pruneJobs(now = Date.now()): void {
+    for (const [jobId, job] of this.jobs) {
+      if (job.state === 'running') continue
+      const finishedAt = job.finishedAt ? Date.parse(job.finishedAt) : NaN
+      if (Number.isFinite(finishedAt) && now - finishedAt > JOB_RETENTION_MS) this.jobs.delete(jobId)
+    }
+  }
+
+  private stopJobProcess(job: BridgeJob): void {
+    const child = job.process
+    if (!child) return
+    if (process.platform !== 'win32' && child.pid) {
+      try {
+        process.kill(-child.pid, 'SIGTERM')
+        return
+      } catch {
+        // Fall back to the direct child when the process group already exited.
+      }
+    }
+    child.kill('SIGTERM')
+  }
+
   private async startJob(request: JobRequest): Promise<BridgeJob> {
-    const agents = (await detectAgents()).filter((agent) => agent.found && SUPPORTED_AGENTS.has(agent.id))
+    this.pruneJobs()
+    const running = [...this.jobs.values()].filter((job) => job.state === 'running')
+    if (running.length >= MAX_GLOBAL_AGENT_JOBS) throw new BridgeHttpError(429, '本机 Agent 任务较多，请等待已有任务完成')
+    if (running.filter((job) => job.workId === request.workId).length >= MAX_WORK_AGENT_JOBS) {
+      throw new BridgeHttpError(429, '当前作品已有本机 Codex 任务正在执行')
+    }
+    const agents = (await detectAgents()).filter((agent) => (
+      agent.found
+      && SUPPORTED_AGENTS.has(agent.id)
+      && (agent.id !== 'codex' || agent.auth === 'chatgpt')
+    ))
     const agent = request.agentId
       ? agents.find((candidate) => candidate.id === request.agentId)
       : agents.find((candidate) => candidate.id === 'codex') ?? agents[0]
     if (!agent) throw new BridgeHttpError(503, '未检测到支持的本地 AI Agent CLI')
+
+    let selectedCodexModel: string | undefined
+    if (agent.id === 'codex') {
+      if (request.creationConfig?.model.modality !== 'text' || request.creationConfig.model.providerSpec) {
+        throw new BridgeHttpError(400, '本机 Codex 仅接受已发现的文字模型')
+      }
+      const requestedModel = request.creationConfig.model.modelId
+      const visibleModels = await detectCodexModels()
+      selectedCodexModel = visibleModels.find((model) => model.id === requestedModel)?.id
+      if (!selectedCodexModel) throw new BridgeHttpError(409, '所选 Codex 模型已不可用，请刷新模型列表后重试')
+    }
 
     const workDir = await this.workDirectory(request.workId, request.workName, request.line)
     const repoRoot = await this.workspace.resolveRepo('')
@@ -478,12 +581,13 @@ export class LocalBridgeService {
       updated_at: new Date().toISOString(),
     }, null, 2), 'utf8')
 
-    const command = invocation(agent, fullPrompt)
+    const command = invocation(agent, fullPrompt, selectedCodexModel)
     const baselineFiles = await this.snapshotArtifactFiles(workDir)
     const child = spawn(agent.path, command.args, {
       cwd: workDir,
       env: agentEnvironment(),
       stdio: ['pipe', 'pipe', 'pipe'],
+      detached: process.platform !== 'win32',
     })
     const job: BridgeJob = {
       id: randomUUID(),
@@ -532,7 +636,6 @@ export class LocalBridgeService {
       message: job.message,
       agentId: job.agentId,
       output: job.output,
-      workDir: job.workDir,
       artifacts: job.artifacts.map(({ path: _path, ...artifact }) => artifact),
       startedAt: job.startedAt,
       ...(job.finishedAt ? { finishedAt: job.finishedAt } : {}),
@@ -586,13 +689,19 @@ export class LocalBridgeService {
     }
     const url = new URL(req.url ?? '/', `http://${BRIDGE_HOST}:${LOCAL_BRIDGE_PORT}`)
     if (req.method === 'GET' && url.pathname === '/v1/status') {
-      const agents = (await detectAgents()).filter((agent) => agent.found && SUPPORTED_AGENTS.has(agent.id))
+      const agents = (await detectAgents()).filter((agent) => (
+        agent.found
+        && agent.id === 'codex'
+        && agent.auth === 'chatgpt'
+      ))
+      const codexModels = agents.length ? await detectCodexModels() : []
       this.json(res, 200, {
         service: 'anime-armory-local-bridge',
-        version: 3,
+        version: 5,
         requiresPairing: true,
-        capabilities: { canvasGeneration: true, localAgentJobs: agents.length > 0 },
+        capabilities: { canvasGeneration: true, localAgentJobs: agents.length > 0 && codexModels.length > 0 },
         agents: agents.map(({ id, name }) => ({ id, name })),
+        codexModels,
       }, origin)
       return
     }
@@ -601,7 +710,7 @@ export class LocalBridgeService {
       return
     }
     if (req.method === 'POST' && url.pathname === '/v1/agent/pair') {
-      this.json(res, 200, await this.pairAgent(origin), origin)
+      this.json(res, 200, await this.pairAgent(origin, parseAgentPairRequest(await readJson(req))), origin)
       return
     }
     if (req.method === 'GET' && url.pathname === '/v1/canvas/models') {
@@ -616,30 +725,36 @@ export class LocalBridgeService {
       return
     }
     if (req.method === 'GET' && url.pathname.toLowerCase() === '/v1/agents') {
-      this.authorize(req, origin, this.agentSessions)
+      const { session } = this.authorizeAgent(req, origin)
       const agents = await detectAgents()
-      this.json(res, 200, { agents: agents.filter((agent) => agent.found && SUPPORTED_AGENTS.has(agent.id)) }, origin)
+      this.json(res, 200, { agents: agents.filter((agent) => agent.id === session.agentId && agent.ready) }, origin)
       return
     }
     if (req.method === 'POST' && url.pathname === '/v1/work-files') {
-      this.authorize(req, origin, this.agentSessions)
-      this.json(res, 201, await this.saveFile(req, this.parseFileHeaders(req)), origin)
+      const { session } = this.authorizeAgent(req, origin)
+      this.json(res, 201, await this.saveFile(req, this.parseFileHeaders(req), session), origin)
       return
     }
     if (req.method === 'POST' && url.pathname === '/v1/agent/jobs') {
-      this.authorize(req, origin, this.agentSessions)
-      const job = await this.startJob(parseJobRequest(await readJson(req)))
+      const { session } = this.authorizeAgent(req, origin)
+      const request = parseJobRequest(await readJson(req))
+      this.assertAgentWorkScope(session, request.workId, request.line)
+      if (request.agentId && request.agentId !== session.agentId) throw new BridgeHttpError(403, 'Agent 不属于当前授权')
+      request.agentId = session.agentId
+      request.workName = session.workName ?? request.workName
+      const job = await this.startJob(request)
       this.json(res, 202, this.publicJob(job), origin)
       return
     }
     const artifactMatch = url.pathname.match(/^\/v1\/agent\/jobs\/([0-9a-f-]+)\/artifacts\/([0-9a-f-]+)$/i)
     if (req.method === 'GET' && artifactMatch?.[1] && artifactMatch[2]) {
-      this.authorize(req, origin, this.agentSessions)
+      const { session } = this.authorizeAgent(req, origin)
       const job = this.jobs.get(uuid(artifactMatch[1], 'jobId'))
       const artifact = job?.artifacts.find((item) => item.id === uuid(artifactMatch[2], 'artifactId'))
       if (!job || !artifact) throw new BridgeHttpError(404, '本地产物不存在')
-      const resolved = path.resolve(artifact.path)
-      if (!resolved.startsWith(`${path.resolve(job.workDir)}${path.sep}`)) throw new BridgeHttpError(403, '产物路径越界')
+      this.assertAgentWorkScope(session, job.workId)
+      const [resolved, realWorkDir] = await Promise.all([fsp.realpath(artifact.path), fsp.realpath(job.workDir)])
+      if (!resolved.startsWith(`${realWorkDir}${path.sep}`)) throw new BridgeHttpError(403, '产物路径越界')
       this.cors(res, origin)
       res.writeHead(200, {
         'content-type': artifact.mimeType,
@@ -652,22 +767,24 @@ export class LocalBridgeService {
     }
     const jobMatch = url.pathname.match(/^\/v1\/agent\/jobs\/([0-9a-f-]+)$/i)
     if (req.method === 'GET' && jobMatch?.[1]) {
-      this.authorize(req, origin, this.agentSessions)
+      const { session } = this.authorizeAgent(req, origin)
       const job = this.jobs.get(uuid(jobMatch[1], 'jobId'))
       if (!job) throw new BridgeHttpError(404, '本地任务不存在')
+      this.assertAgentWorkScope(session, job.workId)
       this.json(res, 200, this.publicJob(job), origin)
       return
     }
     const cancelMatch = url.pathname.match(/^\/v1\/agent\/jobs\/([0-9a-f-]+)\/cancel$/i)
     if (req.method === 'POST' && cancelMatch?.[1]) {
-      this.authorize(req, origin, this.agentSessions)
+      const { session } = this.authorizeAgent(req, origin)
       const job = this.jobs.get(uuid(cancelMatch[1], 'jobId'))
       if (!job) throw new BridgeHttpError(404, '本地任务不存在')
+      this.assertAgentWorkScope(session, job.workId)
       if (job.state === 'running') {
         job.state = 'cancelled'
         job.message = '任务已取消'
         job.finishedAt = new Date().toISOString()
-        job.process?.kill('SIGTERM')
+        this.stopJobProcess(job)
         delete job.process
       }
       this.json(res, 200, this.publicJob(job), origin)
@@ -706,7 +823,7 @@ export class LocalBridgeService {
   }
 
   stop(): void {
-    for (const job of this.jobs.values()) job.process?.kill('SIGTERM')
+    for (const job of this.jobs.values()) this.stopJobProcess(job)
     this.jobs.clear()
     this.sessions.clear()
     this.agentSessions.clear()

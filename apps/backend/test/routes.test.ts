@@ -5,6 +5,7 @@ import os from 'node:os'
 import path from 'node:path'
 import test from 'node:test'
 
+import { SupabaseAuthService } from '../src/auth.ts'
 import { closeTestServer, FakeProvider, listenTestServer, testConfig } from './helpers.ts'
 
 async function roots(): Promise<{ skills: string; runtime: string }> {
@@ -33,9 +34,21 @@ test('serves health, model, generation and skill registry envelopes', async (con
 
   const authSession = await (await fetch(`${baseUrl}/api/v1/auth/session`)).json() as {
     configured: boolean
+    availability: boolean
+    upstream: { status: string }
     session: unknown
   }
-  assert.deepEqual(authSession, { configured: false, session: null })
+  assert.deepEqual(authSession, {
+    configured: false,
+    availability: false,
+    upstream: {
+      available: false,
+      status: 'unconfigured',
+      code: 'auth_not_configured',
+      message: '登录服务尚未配置',
+    },
+    session: null,
+  })
 
   const models = await (await fetch(`${baseUrl}/api/v1/ai/models`)).json() as { models: unknown[] }
   assert.equal(models.models.length, 2)
@@ -53,6 +66,40 @@ test('serves health, model, generation and skill registry envelopes', async (con
   const skillsResponse = await fetch(`${baseUrl}/api/v1/skills`)
   const catalog = await skillsResponse.json() as { skills: Array<{ id: string }> }
   assert.deepEqual(catalog.skills.map((skill) => skill.id), ['n2d-fixture'])
+})
+
+test('reports configured but unreachable auth as unavailable in session and readiness', async (context) => {
+  const { skills, runtime } = await roots()
+  const config = testConfig(skills, runtime)
+  const auth = new SupabaseAuthService(
+    { supabaseUrl: 'https://missing.supabase.co', publishableKey: 'sb_publishable_test_key_1234567890' },
+    async () => { throw new TypeError('network unavailable') },
+  )
+  const { server, baseUrl } = await listenTestServer(config, new FakeProvider(), auth)
+  context.after(() => closeTestServer(server))
+
+  const session = await (await fetch(`${baseUrl}/api/v1/auth/session`)).json() as {
+    configured: boolean
+    availability: boolean
+    upstream: { status: string; code: string }
+    session: unknown
+  }
+  assert.equal(session.configured, true)
+  assert.equal(session.availability, false)
+  assert.equal(session.upstream.status, 'unavailable')
+  assert.equal(session.upstream.code, 'auth_upstream_unavailable')
+  assert.equal(session.session, null)
+
+  const readyResponse = await fetch(`${baseUrl}/api/v1/health/ready`)
+  assert.equal(readyResponse.status, 200)
+  const ready = await readyResponse.json() as {
+    capabilities: { auth: boolean }
+    auth: { configured: boolean; availability: boolean; upstream: { status: string } }
+  }
+  assert.equal(ready.capabilities.auth, false)
+  assert.equal(ready.auth.configured, true)
+  assert.equal(ready.auth.availability, false)
+  assert.equal(ready.auth.upstream.status, 'unavailable')
 })
 
 test('uses standard errors, explicit CORS, and UUID-only file storage', async (context) => {

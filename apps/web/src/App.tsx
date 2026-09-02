@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
-import { isAuthConfigured, isCloudConfigured, persistWorkToCloud } from "./lib/cloud";
-import { signInOrSignUpWithEmail, subscribeToAuthState, type AuthUser } from "./lib/auth";
+import { isCloudConfigured, persistWorkToCloud } from "./lib/cloud";
+import {
+  refreshAuthState,
+  signInOrSignUpWithEmail,
+  subscribeToAuthState,
+  type AuthSnapshot,
+  type AuthUser,
+} from "./lib/auth";
 import { registerLocalFiles, removeLocalFiles } from "./lib/localFiles";
 import { loadWork, removeWork, saveWork, workStorageKey } from "./lib/work";
 import { applyTheme, loadTheme, type ThemeMode } from "./lib/theme";
@@ -44,9 +50,17 @@ export function App() {
   const [theme, setTheme] = useState<ThemeMode>(loadTheme);
   const [pendingCreation, setPendingCreation] = useState<{ work: WebWork; attachments: PendingAttachment[] } | null>(null);
   const [creationLoginOpen, setCreationLoginOpen] = useState(false);
-  const [canvasAuth, setCanvasAuth] = useState<{ ready: boolean; configured: boolean; user: AuthUser | null }>({
+  const [canvasAuth, setCanvasAuth] = useState<{
+    ready: boolean;
+    configured: boolean;
+    availability: boolean;
+    upstream: AuthSnapshot["upstream"];
+    user: AuthUser | null;
+  }>({
     ready: false,
-    configured: isAuthConfigured(),
+    configured: false,
+    availability: false,
+    upstream: { available: false, status: "checking" },
     user: null,
   });
   const [canvasRoute, setCanvasRoute] = useState<CanvasRoute | null>(readCanvasRoute);
@@ -80,8 +94,8 @@ export function App() {
 
   useEffect(() => applyTheme(theme), [theme]);
 
-  useEffect(() => subscribeToAuthState(({ configured, user }) => {
-    setCanvasAuth({ ready: true, configured, user });
+  useEffect(() => subscribeToAuthState(({ configured, availability, upstream, user }) => {
+    setCanvasAuth({ ready: upstream.status !== "checking", configured, availability, upstream, user });
   }), []);
 
   useEffect(() => {
@@ -201,7 +215,10 @@ export function App() {
         <AuthDialog
           open
           configured={canvasAuth.configured}
+          availability={canvasAuth.availability}
+          upstream={canvasAuth.upstream}
           onClose={openHome}
+          onRetry={refreshAuthState}
           onContinue={async (email, password) => {
             await authenticate(email, password);
             return { message: "登录成功" };
@@ -229,10 +246,13 @@ export function App() {
       <AuthDialog
         open={creationLoginOpen}
         configured={canvasAuth.configured}
+        availability={canvasAuth.availability}
+        upstream={canvasAuth.upstream}
         onClose={() => {
           setCreationLoginOpen(false);
           setPendingCreation(null);
         }}
+        onRetry={refreshAuthState}
         onContinue={authenticatePendingCreation}
       />
     </>

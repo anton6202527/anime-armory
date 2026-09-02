@@ -1,0 +1,24 @@
+{
+  "kind": "n2d_builtin_imagegen_receipt",
+  "version": 1,
+  "episode": "第1集",
+  "shot": "Clip_04_end",
+  "target": "出图/第1集/图片/Clip04_end.png",
+  "model": "GPT Image 2",
+  "channel": "Codex built-in imagegen",
+  "task_type": "relay_edit",
+  "mode": "tailframe",
+  "prompt_path": "生产数据/imagegen_prompts/第1集/Clip_04_end_20260902.txt",
+  "prompt_sha256": "a2dbb73c964c543b06624ca446bf6d59459b07e6166cda5251f91f9e69e9097f",
+  "reference_input_paths": [
+    "生产数据/reference_enhanced/第1集/EP01_CLIP04_a1__5774994f9984_941x1672_to_1024x1819.png",
+    "出图/共享/图片/定妆_CHAR_WUDA__日常卖饼态_脸部特写_脸锚裁切.png",
+    "出图/共享/图片/定妆_CHAR_PANJINLIAN__25岁武大家常态_脸部特写_脸锚裁切.png",
+    "生产数据/reference_enhanced/第1集/定妆_场景_阳谷街面与武大家楼窗__1f5805cad324_941x1672_to_1024x1819.png",
+    "生产数据/reference_enhanced/第1集/定妆_场景_武大家楼屋雪夜__ff9b146e47b8_941x1672_to_1024x1819.png"
+  ],
+  "provider_output": "/Users/wesley/.codex/generated_images/01a05ab2-7f1c-7542-ab94-98640dc2a838/exec-20140c27-5a98-414f-8e64-d6ec947bff23.png",
+  "provider_receipt_id": "exec-20140c27-5a98-414f-8e64-d6ec947bff23",
+  "artifact_sha256": "f54a08f246e3dc695e22950fd0672853d9723253ec157cb1ec119e62bb3d7be1",
+  "generated_at": "2026-09-02T04:25:31Z"
+}

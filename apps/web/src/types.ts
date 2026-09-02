@@ -2,6 +2,8 @@ export type CreationLine = "novel" | "n2d" | "comic" | "ad" | "mv" | "song";
 
 export type CreationModality = "text" | "image" | "video" | "audio";
 
+export type WorkExecutor = "backend" | "local-codex";
+
 export interface WorkCreationConfig {
   skillId?: string;
   skillDefinition?: {
@@ -12,6 +14,8 @@ export interface WorkCreationConfig {
     useCases: string[];
   };
   generationMode: "manual" | "auto";
+  /** Selects the trusted runtime that executes a complete Skill task. */
+  executor?: WorkExecutor;
   model: {
     modality: CreationModality;
     modelId: string;

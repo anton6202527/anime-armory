@@ -36,6 +36,23 @@
     },
     {
       "char": "CHAR_WUDA__日常卖饼态",
+      "confirmed_at": "2026-09-02T04:17:04+00:00",
+      "floor": 0.9907,
+      "human_signoff": false,
+      "original_verdict": "block",
+      "png": "图片/Clip04_end.png",
+      "png_sha256": "f54a08f246e3dc695e22950fd0672853d9723253ec157cb1ec119e62bb3d7be1",
+      "reason": "已实际查看当前 SHA=f54a08f246e3dc695e22950fd0672853d9723253ec157cb1ec119e62bb3d7be1 原始像素：潘金莲深青蓝窄袖上衣与枣红裙、武大棕头巾和褐色旧衣均与定妆连续；自动调色板低分由雪街冷光、远景尺度和背身构图造成，不是换装。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.3591,
+      "shot": "Clip_04",
+      "source": "image_qc:executor_visual_outfit_confirm",
+      "verdict": "ok"
+    },
+    {
+      "char": "CHAR_WUDA__日常卖饼态",
       "confirmed_at": "2026-08-18T09:43:52+00:00",
       "floor": 0.9907,
       "human_signoff": false,
@@ -121,6 +138,6 @@
     }
   ],
   "kind": "n2d_outfit_confirmations",
-  "updated_at": "2026-09-01T02:06:18+00:00",
+  "updated_at": "2026-09-02T04:17:04+00:00",
   "version": 1
 }

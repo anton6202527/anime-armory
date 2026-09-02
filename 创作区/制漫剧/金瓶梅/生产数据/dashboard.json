@@ -7,35 +7,35 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 70 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 18 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 70
+      "value": 18
     },
     {
       "episode": "第1集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第1集 QA 阻断 70 项",
+      "message": "第1集 QA 阻断 18 项",
       "scope": "第1集",
       "threshold": 0,
-      "value": 70
+      "value": 18
     }
   ],
   "episodes": [
     {
-      "blockers_per_attempt": 0.1923,
+      "blockers_per_attempt": 0.049,
       "completion_rate": null,
-      "consistency_blockers": 1,
+      "consistency_blockers": 11,
       "consistency_ledger": {
         "counts": {
-          "block": 4,
+          "block": 5,
           "high": 0,
-          "medium": 35
+          "medium": 34
         },
         "delivery_surface": {
           "blocking_counts": {
-            "block": 4,
+            "block": 5,
             "high": 0
           },
           "required_domains": [
@@ -56,19 +56,28 @@
           {
             "contract": "ok",
             "detect": "block",
-            "id": "LOC_JINGYANGGANG",
-            "kind": "scene",
-            "name": "景阳冈夜间空地",
+            "id": "CHAR_WUSONG",
+            "kind": "character",
+            "name": "武松",
             "overall": "block",
             "prevent": "medium"
           },
           {
             "contract": "ok",
-            "detect": "warn",
-            "id": "CHAR_WUSONG",
+            "detect": "block",
+            "id": "CHAR_WUDA",
             "kind": "character",
-            "name": "武松",
-            "overall": "medium",
+            "name": "武大",
+            "overall": "block",
+            "prevent": "medium"
+          },
+          {
+            "contract": "ok",
+            "detect": "block",
+            "id": "CHAR_PANJINLIAN",
+            "kind": "character",
+            "name": "潘金莲",
+            "overall": "block",
             "prevent": "medium"
           },
           {
@@ -92,24 +101,6 @@
           {
             "contract": "ok",
             "detect": "warn",
-            "id": "CHAR_WUDA",
-            "kind": "character",
-            "name": "武大",
-            "overall": "medium",
-            "prevent": "medium"
-          },
-          {
-            "contract": "ok",
-            "detect": "warn",
-            "id": "CHAR_PANJINLIAN",
-            "kind": "character",
-            "name": "潘金莲",
-            "overall": "medium",
-            "prevent": "medium"
-          },
-          {
-            "contract": "ok",
-            "detect": "warn",
             "id": "CHAR_MAGISTRATE",
             "kind": "character",
             "name": "知县",
@@ -124,87 +115,90 @@
             "name": "西门庆",
             "overall": "warn",
             "prevent": "ok"
+          },
+          {
+            "contract": "ok",
+            "detect": "warn",
+            "id": "LOC_JINGYANGGANG",
+            "kind": "scene",
+            "name": "景阳冈夜间空地",
+            "overall": "medium",
+            "prevent": "medium"
           }
         ]
       },
-      "consistency_warnings": 95,
+      "consistency_warnings": 123,
       "cost_by_provider": {},
       "cost_per_finished_min": {},
       "cost_totals": {},
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "9h40m11s",
-      "duration_sec": 34811.066,
-      "elapsed_per_finished_min_sec": 14332.423,
+      "duration_hms": "9h44m13s",
+      "duration_sec": 35052.618,
+      "elapsed_per_finished_min_sec": 14431.875,
       "episode": "第1集",
-      "event_count": 741,
+      "event_count": 695,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 364,
-      "generation_fails": 56,
-      "generation_pass_rate": 0.8462,
-      "generation_passes": 308,
+      "generation_attempts": 367,
+      "generation_fails": 57,
+      "generation_pass_rate": 0.8447,
+      "generation_passes": 310,
       "image_qc_passive": {},
       "missing_deliverables": [],
-      "one_pass_count": 175,
-      "one_pass_rate": 0.4808,
+      "one_pass_count": 177,
+      "one_pass_rate": 0.4823,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图",
-      "qa_blockers": 70,
-      "qa_blockers_historical": 120,
+      "qa_blockers": 18,
+      "qa_blockers_historical": 58,
       "qa_gate_passes": 2,
       "qa_gate_runs": 3,
       "qa_infos": 214,
-      "qa_warnings": 204,
-      "qa_warnings_historical": 204,
+      "qa_warnings": 217,
+      "qa_warnings_historical": 217,
       "recent_blockers": [
         {
-          "dim": "出图落档QC",
-          "loc": "创作区/制漫剧/金瓶梅/生产数据/image_qc/第1集/image_qc_第1集.json",
-          "msg": "输入首帧 image_qc 仍有 67 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+          "dim": "生成配方证据",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl",
+          "msg": "出图/第1集/图片/Clip05_end.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
           "stage": "image"
         },
         {
-          "dim": "糊/低质(N4)",
-          "loc": "出图/第1集/图片",
-          "msg": "一致性审计发现问题",
+          "dim": "生成配方证据",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl",
+          "msg": "出图/第1集/图片/Clip05_first_a3.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
           "stage": "image"
         },
         {
-          "dim": "image_artifact_presence",
-          "loc": "图片/Clip04_end.png",
-          "msg": "出图目标尚未生成：图片/Clip04_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "dim": "生成配方证据",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl",
+          "msg": "出图/第1集/图片/Clip06_first.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
           "stage": "image"
         },
         {
-          "dim": "image_artifact_presence",
-          "loc": "图片/Clip05_end.png",
-          "msg": "出图目标尚未生成：图片/Clip05_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "dim": "生成配方证据",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl",
+          "msg": "出图/第1集/图片/EP01_CLIP05_a1.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
           "stage": "image"
         },
         {
-          "dim": "image_artifact_presence",
-          "loc": "图片/Clip05_first_a3.png",
-          "msg": "出图目标尚未生成：图片/Clip05_first_a3.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "dim": "生成配方证据",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl",
+          "msg": "出图/第1集/图片/EP01_CLIP05_a2.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
           "stage": "image"
         },
         {
-          "dim": "image_artifact_presence",
-          "loc": "图片/Clip06_first.png",
-          "msg": "出图目标尚未生成：图片/Clip06_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "dim": "生成配方证据",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl",
+          "msg": "出图/第1集/图片/EP01_CLIP06_a1.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
           "stage": "image"
         },
         {
-          "dim": "image_artifact_presence",
-          "loc": "图片/Clip07_end.png",
-          "msg": "出图目标尚未生成：图片/Clip07_end.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
-          "stage": "image"
-        },
-        {
-          "dim": "image_artifact_presence",
-          "loc": "图片/Clip07_first.png",
-          "msg": "出图目标尚未生成：图片/Clip07_first.png；当前无法执行脸/身份像素质检。这是产物缺件，不是崩脸判定。",
+          "dim": "生成配方证据",
+          "loc": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl",
+          "msg": "出图/第1集/图片/EP01_CLIP06_a2.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
           "stage": "image"
         }
       ],
@@ -214,7 +208,7 @@
         "prompt_conflict": 3
       },
       "redraw_count": 4,
-      "redraw_rate": 0.011,
+      "redraw_rate": 0.0109,
       "redraw_reasons": {
         "001-image-rerun Codex image_generation 真实重出 Clip_04_a1，禁止本地贴脸修复": 1,
         "用户确认后的单张恢复重试；内置 image_gen 真实生成，按 timed sub-shot 仅保留潘金莲窗后心声镜": 1,
@@ -229,17 +223,17 @@
       "retention_3s": null,
       "runtime_hms": "2m26s",
       "runtime_sec": 145.73,
-      "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/脚本/第1集/storyboard.json",
+      "runtime_source": "创作区/制漫剧/金瓶梅/脚本/第1集/storyboard.json",
       "stages": {
         "image": {
-          "duration_sec": 34811.066,
-          "generation_attempts": 364,
-          "generation_fails": 56,
-          "generation_passes": 308,
+          "duration_sec": 35052.618,
+          "generation_attempts": 367,
+          "generation_fails": 57,
+          "generation_passes": 310,
           "missing_deliverables": 0,
-          "qa_blockers": 69,
+          "qa_blockers": 7,
           "qa_infos": 155,
-          "qa_warnings": 120,
+          "qa_warnings": 133,
           "redraw_count": 4
         },
         "image_preflight": {
@@ -265,20 +259,20 @@
           "redraw_count": 0
         },
         "review": {
-          "consistency_blockers": 1,
-          "consistency_warnings": 95,
+          "consistency_blockers": 11,
+          "consistency_warnings": 123,
           "duration_sec": 0.0,
           "generation_attempts": 0,
           "generation_fails": 0,
           "generation_passes": 0,
           "missing_deliverables": 0,
-          "qa_blockers": 1,
+          "qa_blockers": 11,
           "qa_infos": 0,
           "qa_warnings": 0,
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 0.5604
+      "warnings_per_attempt": 0.5913
     },
     {
       "blockers_per_attempt": null,
@@ -776,8 +770,8 @@
       "warnings_per_attempt": null
     }
   ],
-  "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl",
-  "generated_at": "2026-09-01T04:04:03+00:00",
+  "event_file": "创作区/制漫剧/金瓶梅/生产数据/production_events.jsonl",
+  "generated_at": "2026-09-02T04:45:54+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1253,54 +1247,54 @@
   "kind": "n2d_production_dashboard",
   "release_metrics_file": "",
   "retention_trend": {},
-  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/金瓶梅",
+  "root": "创作区/制漫剧/金瓶梅",
   "totals": {
-    "blockers_per_attempt": 0.1923,
-    "consistency_blockers": 1,
+    "blockers_per_attempt": 0.049,
+    "consistency_blockers": 11,
     "consistency_ledger_counts": {
-      "block": 4,
+      "block": 5,
       "high": 0,
-      "medium": 35
+      "medium": 34
     },
-    "consistency_warnings": 95,
+    "consistency_warnings": 123,
     "cost_per_finished_min": {},
     "cost_totals": {},
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "9h40m11s",
-    "duration_sec": 34811.066,
-    "elapsed_per_finished_min_sec": 14332.423,
+    "duration_hms": "9h44m13s",
+    "duration_sec": 35052.618,
+    "elapsed_per_finished_min_sec": 14431.875,
     "episode_count": 10,
-    "event_count": 741,
+    "event_count": 695,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
     "flow_speed": {
       "first_episode_gate": "",
       "gates_passed": 2,
-      "gates_passed_per_day": 0.095,
+      "gates_passed_per_day": 0.091,
       "measurement_start": "2026-08-11T04:52:04+00:00",
       "time_to_first_episode_hms": "—",
       "time_to_first_episode_hours": null,
       "time_to_first_episode_sec": null
     },
-    "generation_attempts": 364,
-    "generation_fails": 56,
-    "generation_pass_rate": 0.8462,
-    "generation_passes": 308,
-    "one_pass_count": 175,
-    "one_pass_rate": 0.4808,
-    "qa_blockers": 70,
-    "qa_blockers_historical": 120,
+    "generation_attempts": 367,
+    "generation_fails": 57,
+    "generation_pass_rate": 0.8447,
+    "generation_passes": 310,
+    "one_pass_count": 177,
+    "one_pass_rate": 0.4823,
+    "qa_blockers": 18,
+    "qa_blockers_historical": 58,
     "qa_infos": 214,
-    "qa_warnings": 204,
-    "qa_warnings_historical": 204,
+    "qa_warnings": 217,
+    "qa_warnings_historical": 217,
     "recoup_ratio": {},
     "redraw_categories": {
       "face_consistency": 1,
       "prompt_conflict": 3
     },
     "redraw_count": 4,
-    "redraw_rate": 0.011,
+    "redraw_rate": 0.0109,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -1308,7 +1302,7 @@
     "release_spend_totals": {},
     "runtime_hms": "2m26s",
     "runtime_sec": 145.73,
-    "warnings_per_attempt": 0.5604
+    "warnings_per_attempt": 0.5913
   },
   "version": 1
 }

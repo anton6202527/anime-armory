@@ -903,12 +903,32 @@
     {
       "from": "clip:Clip_04",
       "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip04_end.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
       "to": "image:出图/第1集/图片/Clip04_first.png"
     },
     {
       "from": "clip:Clip_05",
       "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip05_end.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
       "to": "image:出图/第1集/图片/Clip05_first.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip05_first_a3.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip06_first.png"
     },
     {
       "from": "clip:Clip_01",
@@ -949,6 +969,26 @@
       "from": "clip:Clip_04",
       "relation": "renders_image",
       "to": "image:出图/第1集/图片/EP01_CLIP04_a1.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/EP01_CLIP05_a1.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/EP01_CLIP05_a2.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/EP01_CLIP06_a1.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/EP01_CLIP06_a2.png"
     },
     {
       "from": "episode:第1集",
@@ -1341,16 +1381,40 @@
       "path": "出图/第1集/图片/Clip03_first.png"
     },
     {
+      "id": "image:出图/第1集/图片/Clip04_end.png",
+      "kind": "image",
+      "label": "Clip04_end.png",
+      "path": "出图/第1集/图片/Clip04_end.png"
+    },
+    {
       "id": "image:出图/第1集/图片/Clip04_first.png",
       "kind": "image",
       "label": "Clip04_first.png",
       "path": "出图/第1集/图片/Clip04_first.png"
     },
     {
+      "id": "image:出图/第1集/图片/Clip05_end.png",
+      "kind": "image",
+      "label": "Clip05_end.png",
+      "path": "出图/第1集/图片/Clip05_end.png"
+    },
+    {
       "id": "image:出图/第1集/图片/Clip05_first.png",
       "kind": "image",
       "label": "Clip05_first.png",
       "path": "出图/第1集/图片/Clip05_first.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip05_first_a3.png",
+      "kind": "image",
+      "label": "Clip05_first_a3.png",
+      "path": "出图/第1集/图片/Clip05_first_a3.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip06_first.png",
+      "kind": "image",
+      "label": "Clip06_first.png",
+      "path": "出图/第1集/图片/Clip06_first.png"
     },
     {
       "id": "image:出图/第1集/图片/EP01_CLIP01_a1.png",
@@ -1399,14 +1463,38 @@
       "kind": "image",
       "label": "EP01_CLIP04_a1.png",
       "path": "出图/第1集/图片/EP01_CLIP04_a1.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/EP01_CLIP05_a1.png",
+      "kind": "image",
+      "label": "EP01_CLIP05_a1.png",
+      "path": "出图/第1集/图片/EP01_CLIP05_a1.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/EP01_CLIP05_a2.png",
+      "kind": "image",
+      "label": "EP01_CLIP05_a2.png",
+      "path": "出图/第1集/图片/EP01_CLIP05_a2.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/EP01_CLIP06_a1.png",
+      "kind": "image",
+      "label": "EP01_CLIP06_a1.png",
+      "path": "出图/第1集/图片/EP01_CLIP06_a1.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/EP01_CLIP06_a2.png",
+      "kind": "image",
+      "label": "EP01_CLIP06_a2.png",
+      "path": "出图/第1集/图片/EP01_CLIP06_a2.png"
     }
   ],
   "root": "创作区/制漫剧/金瓶梅",
   "summary": {
     "clips": 15,
-    "edges": 194,
-    "images": 15,
-    "nodes": 66,
+    "edges": 202,
+    "images": 23,
+    "nodes": 74,
     "videos": 0
   },
   "version": 1

@@ -21,6 +21,7 @@ export class ApiError extends Error {
     readonly status: number,
     readonly code: ApiErrorCode,
     readonly payload?: unknown,
+    readonly requestId?: string,
   ) {
     super(message);
   }
@@ -83,7 +84,7 @@ function errorPayload(bytes: Uint8Array, contentType: string): unknown {
   return text.trim().slice(0, 1_000);
 }
 
-function serverError(status: number, payload: unknown): ApiError {
+function serverError(status: number, payload: unknown, responseRequestId?: string): ApiError {
   const record = payload && typeof payload === "object" && !Array.isArray(payload)
     ? payload as Record<string, unknown>
     : null;
@@ -102,7 +103,12 @@ function serverError(status: number, payload: unknown): ApiError {
       : typeof payload === "string" && payload
         ? payload
         : `后端请求失败（${status}）`;
-  return new ApiError(message, status, code, payload);
+  const requestId = typeof nested?.requestId === "string"
+    ? nested.requestId
+    : typeof record?.requestId === "string"
+      ? record.requestId
+      : responseRequestId;
+  return new ApiError(message, status, code, payload, requestId);
 }
 
 async function readResponseBytes(response: Response, maxBytes: number): Promise<Uint8Array> {
@@ -167,7 +173,9 @@ async function requestBytes(path: string, options: ApiRequestInit, defaultLimit:
     });
     const contentType = response.headers.get("content-type")?.toLocaleLowerCase() ?? "";
     const bytes = await readResponseBytes(response, response.ok ? maxResponseBytes : ERROR_LIMIT_BYTES);
-    if (!response.ok) throw serverError(response.status, errorPayload(bytes, contentType));
+    if (!response.ok) {
+      throw serverError(response.status, errorPayload(bytes, contentType), response.headers.get("x-request-id") ?? undefined);
+    }
     return { bytes, contentType, status: response.status };
   } catch (error) {
     if (error instanceof ApiError) throw error;

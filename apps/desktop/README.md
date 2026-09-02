@@ -22,17 +22,17 @@ npm run dist         # electron-builder 产出安装包(release/)
 新作品工作区默认为 `~/LabuTV`（若机器上已有旧版 `~/AnimeArmory` 且尚无 `~/LabuTV`，会继续沿用旧目录，避免迁移时丢失作品）。可经菜单“切换工作区…”更换，与技能仓库互斥隔离。
 自动化调试可用 `ANIME_ARMORY_WORKSPACE` 指向临时工作区。
 
-### Web 本地模型桥接
+### Web 本地桥接（显式选择的本机例外）
 
-Electron 启动后会在 `127.0.0.1:43117` 提供仅回环可见的 Web 桥接。浏览器第一次调用本机共享模型时，桌面端会显示原生确认弹窗；允许后签发 12 小时内存会话令牌。该配对会话只开放受控的模型发现与文本/图片生成接口，不开放本地 Agent、Shell、文件上传或调用方指定的文件系统路径。
+Web 常规任务仍走 `/api/v1` BFF；Electron 在 `127.0.0.1:43117` 提供的仅回环桥接不是默认模型 provider。它有两个隔离授权域：兼容文本/图片模型使用 `/v1/pair`，用户显式选择的本机 Codex Agent 使用 `/v1/agent/pair`，两类 token 不互通。
 
-本地开发默认只允许 Web 端的 `localhost:4174` 与 `127.0.0.1:4174`。正式 Web 域名需通过逗号分隔的 `ANIME_ARMORY_WEB_ORIGINS` 显式加入允许列表。Web 端 Agent 任务继续走云端 API 或演示模式，不复用这个持有模型密钥的本地桥接。
+本地开发默认只允许 Web 端的 `localhost:4174` 与 `127.0.0.1:4174`。正式 Web 域名需通过逗号分隔的 `ANIME_ARMORY_WEB_ORIGINS` 精确加入允许列表，禁止 `*`。本机 Codex 只在用户点击该执行方式后参与任务：桌面端先确认 Origin、作品和读写范围，再签发 2 小时、仅内存、绑定单个作品的授权。
 
 画布内的文本/图片即时生成也走同一个已配对桥接，浏览器不会直接访问模型服务。桌面主进程通过 OpenAI-compatible `cli-proxy-api` 调用 `/v1/models`、`/v1/responses` 与 `/v1/images/generations`，仅在上游明确不支持 Responses 时回退 `/v1/chat/completions`，并只向 Web 暴露发现到的 GPT / Gemini 文本与图片模型。运行桌面端前配置：
 
-完整 Skill 任务使用独立的本地 Agent 授权。网页第一次提交时，桌面端会明确提示当前 Origin、作品目录读写范围和将调用的本机 Agent；同意后才开放素材上传、任务提交、状态查询及本次任务产物下载，授权与模型调用配对 token 相互隔离。网页不能提供 Shell 命令、工作目录或任意文件路径。任务完成后，桥接只扫描当前作品目录内本次新增/更新的文字、图片、音频和视频产物，并把受限产物清单返回画布。
+完整 Skill/文本 Agent 任务可使用独立的本机 Codex 授权。桌面端只接受结构化作品、Prompt、附件和从当前 Codex 账号实时目录发现并复核的真实模型 slug；网页不能提供 Shell 命令、工作目录或任意文件路径。桥接调用已安装且已使用 ChatGPT 登录的 Codex CLI，不向网页暴露登录凭据/API Key；可用模型和额度以当前账号为准。任务完成后只扫描当前作品目录内本次新增或更新的产物。本机 Codex 是 Agent executor，不承担图片/视频即时生成的 provider 语义。
 
-仅自动化测试可在启动桌面端前设置 `ANIME_ARMORY_ALLOW_LOCAL_AGENT=1` 跳过原生授权弹窗；普通启动不得设置此变量。
+仅在 `NODE_ENV=test` 的自动化测试中可设置 `ANIME_ARMORY_ALLOW_LOCAL_AGENT=1` 跳过原生授权弹窗；普通启动即使设置该变量也不会绕过确认。
 
 ```bash
 export CLI_PROXY_API_URL=http://127.0.0.1:8317
@@ -41,6 +41,8 @@ npm run dev
 ```
 
 也兼容 `CUSTOM_OPENAI_BASE_URL` / `CUSTOM_OPENAI_API_KEY`；`CLI_PROXY_*` 同时存在时优先。URL 可省略，默认值如上。仅在 macOS 非打包开发环境且未设置任一 API Key 时，桌面端会只读解析 `/opt/homebrew/etc/cliproxyapi.conf` 中 `api-keys` 的第一项；正式包不会读取该开发配置。密钥只存在桌面主进程内存中，不能放进 `VITE_*` 变量。
+
+本机 Codex 模式不读取 `CLI_PROXY_API_KEY`，只使用 Codex CLI 自身的 ChatGPT 登录状态；`CLI_PROXY_*` 仅服务兼容文本/图片桥接。
 
 ### 画布生产工作台
 
@@ -90,7 +92,7 @@ src/
 │       ├── watch      chokidar,限定生产子树,300ms 防抖 fs-changed
 │       ├── media      localhost HTTP Range 媒体服务器(视频拖动必需)
 │       ├── agents     登录 shell 探测 claude/codex/opencode/gemini/kimi
-│       ├── localBridge 受控的 Web 配对与画布模型路由（不开放 Agent/Shell/文件）
+│       ├── localBridge 受控 Web 配对、兼容模型路由与显式本机 Codex 任务（不开放任意 Shell/路径）
 │       ├── cliProxy   cli-proxy-api 模型发现、文本/图片生成与安全输出归一化
 │       ├── pipeline   skills/n2d/run.py next --json 桥(30s 超时)
 │       └── demos      演示包下载/sha256 校验/解压安装

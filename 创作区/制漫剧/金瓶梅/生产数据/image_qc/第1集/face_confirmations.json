@@ -55,17 +55,17 @@
     },
     {
       "char": "CHAR_WUDA__日常卖饼态",
-      "confirmed_at": "2026-09-01T02:06:17+00:00",
+      "confirmed_at": "2026-09-02T04:17:04+00:00",
       "floor": 0.5052,
       "human_signoff": false,
       "original_verdict": "block",
       "png": "图片/Clip04_end.png",
-      "png_sha256": "846c6308f9f8bfb2fc5885d9ff950d74b52a303faa78868a8949ced21c1813b5",
-      "reason": "已实际查看当前原始像素：本帧焦点为楼窗内潘金莲，武大仅作为街面远景背身挑担离去，脸部不可辨是镜头设计，不是崩脸；身形、头巾、双筐担结构与上一镜连续。",
+      "png_sha256": "f54a08f246e3dc695e22950fd0672853d9723253ec157cb1ec119e62bb3d7be1",
+      "reason": "已实际查看当前 SHA=f54a08f246e3dc695e22950fd0672853d9723253ec157cb1ec119e62bb3d7be1 原始像素：潘金莲为清晰主主体，鹅蛋脸、细弯眉、杏眼、低髻木簪与源帧同一身份；武大处于街下远景背身，脸部本就不具备 embedding 核验尺度，棕头巾、自然矮身量、褐衣和炊饼担身份线索明确。低分来自远景小脸/背身与 clip 级双角色清单，不是换脸或串脸。",
       "review_kind": "executor_visual",
       "reviewer": "Codex视觉执行者",
       "reviewer_role": "ai_visual_executor",
-      "score": 0.2053,
+      "score": 0.2005,
       "shot": "Clip_04",
       "source": "image_qc:executor_visual_face_confirm",
       "verdict": "ok"
@@ -197,6 +197,6 @@
     }
   ],
   "kind": "n2d_face_confirmations",
-  "updated_at": "2026-09-01T02:08:12+00:00",
+  "updated_at": "2026-09-02T04:17:04+00:00",
   "version": 1
 }

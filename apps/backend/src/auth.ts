@@ -37,9 +37,25 @@ export interface AuthResult {
   cookies?: string[]
 }
 
+export type AuthUpstreamStatus = 'available' | 'unconfigured' | 'unhealthy' | 'timeout' | 'unavailable'
+
+export interface AuthAvailability {
+  available: boolean
+  status: AuthUpstreamStatus
+  code?: string
+  message?: string
+}
+
+export interface AuthServiceOptions {
+  healthTimeoutMs?: number
+  requestTimeoutMs?: number
+}
+
 const ACCESS_COOKIE = 'labutv_access_token'
 const REFRESH_COOKIE = 'labutv_refresh_token'
 const COOKIE_PATH = '/api/v1'
+const DEFAULT_HEALTH_TIMEOUT_MS = 1_500
+const DEFAULT_REQUEST_TIMEOUT_MS = 8_000
 
 function cookieValue(header: string | undefined, name: string): string | null {
   for (const entry of header?.split(';') ?? []) {
@@ -95,10 +111,17 @@ function errorCode(body: SupabaseErrorBody): string {
 }
 
 export class SupabaseAuthService {
+  private readonly healthTimeoutMs: number
+  private readonly requestTimeoutMs: number
+
   constructor(
     private readonly configuration: AuthConfiguration | undefined,
     private readonly request: typeof fetch = fetch,
-  ) {}
+    options: AuthServiceOptions = {},
+  ) {
+    this.healthTimeoutMs = Math.max(1, options.healthTimeoutMs ?? DEFAULT_HEALTH_TIMEOUT_MS)
+    this.requestTimeoutMs = Math.max(1, options.requestTimeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS)
+  }
 
   get configured(): boolean {
     return this.configuration !== undefined
@@ -108,9 +131,24 @@ export class SupabaseAuthService {
     pathname: string,
     init: RequestInit,
     signal: AbortSignal,
+    timeoutMs = this.requestTimeoutMs,
   ): Promise<{ response: Response; body: SupabaseTokenResponse & SupabaseErrorBody }> {
     if (!this.configuration) {
       throw new ApiError(503, 'auth_not_configured', '登录服务尚未配置，请在后端环境中填写 SUPABASE_URL 与 SUPABASE_PUBLISHABLE_KEY')
+    }
+    if (signal.aborted) throw new ApiError(499, 'request_cancelled', '请求已取消')
+    const timeoutSignal = AbortSignal.timeout(timeoutMs)
+    const upstreamSignal = AbortSignal.any([signal, timeoutSignal])
+    const upstreamError = (): ApiError => {
+      if (signal.aborted) return new ApiError(499, 'request_cancelled', '请求已取消')
+      if (timeoutSignal.aborted) {
+        return new ApiError(504, 'auth_upstream_timeout', 'Supabase 登录服务响应超时，请检查项目状态或稍后重试')
+      }
+      return new ApiError(
+        502,
+        'auth_upstream_unavailable',
+        '无法连接 Supabase 登录服务，请检查项目是否可用、本机网络与 SUPABASE_URL',
+      )
     }
     let response: Response
     try {
@@ -121,15 +159,57 @@ export class SupabaseAuthService {
           'content-type': 'application/json',
           ...init.headers,
         },
-        signal,
+        signal: upstreamSignal,
       })
-    } catch (error) {
-      if (signal.aborted) throw new ApiError(499, 'request_cancelled', '请求已取消')
-      void error
-      throw new ApiError(502, 'auth_upstream_unavailable', '无法连接 Supabase 登录服务')
+    } catch {
+      throw upstreamError()
     }
-    const body = await response.json().catch(() => ({})) as SupabaseTokenResponse & SupabaseErrorBody
+    let body: SupabaseTokenResponse & SupabaseErrorBody
+    try {
+      body = await response.json() as SupabaseTokenResponse & SupabaseErrorBody
+    } catch {
+      if (upstreamSignal.aborted) throw upstreamError()
+      body = {}
+    }
     return { response, body }
+  }
+
+  async availability(signal: AbortSignal): Promise<AuthAvailability> {
+    if (!this.configuration) {
+      return {
+        available: false,
+        status: 'unconfigured',
+        code: 'auth_not_configured',
+        message: '登录服务尚未配置',
+      }
+    }
+    try {
+      let probe = await this.supabase('/health', { method: 'GET' }, signal, this.healthTimeoutMs)
+      if (probe.response.status === 404 || probe.response.status === 405) {
+        probe = await this.supabase('/settings', { method: 'GET' }, signal, this.healthTimeoutMs)
+      }
+      if (probe.response.ok) return { available: true, status: 'available' }
+      return {
+        available: false,
+        status: 'unhealthy',
+        code: 'auth_upstream_unhealthy',
+        message: 'Supabase 登录服务当前不可用，请检查项目状态与发布密钥',
+      }
+    } catch (error) {
+      if (error instanceof ApiError && error.code === 'request_cancelled') throw error
+      if (error instanceof ApiError && error.code === 'auth_upstream_timeout') {
+        return { available: false, status: 'timeout', code: error.code, message: error.message }
+      }
+      const unavailable = error instanceof ApiError
+        ? error
+        : new ApiError(502, 'auth_upstream_unavailable', '无法连接 Supabase 登录服务，请检查项目状态与本机网络')
+      return {
+        available: false,
+        status: 'unavailable',
+        code: unavailable.code,
+        message: unavailable.message,
+      }
+    }
   }
 
   private async passwordGrant(email: string, password: string, signal: AbortSignal) {

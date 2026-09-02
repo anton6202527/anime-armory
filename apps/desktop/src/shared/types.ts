@@ -166,6 +166,17 @@ export interface AgentInfo {
   path: string;
   image: "yes" | "maybe" | "no"; // image-generation (生图) capability
   note: string;
+  /** Non-secret authentication summary used by trusted local UI/bridge readiness checks. */
+  auth?: "chatgpt" | "api-key" | "signed-out" | "unknown";
+  ready?: boolean;
+}
+
+/** Safe projection of the live Codex account model catalog. */
+export interface CodexModelInfo {
+  id: string;
+  name: string;
+  description: string;
+  priority: number;
 }
 
 // QA flag, normalized from review_ui qa_flags / gate findings.

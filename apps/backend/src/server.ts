@@ -249,9 +249,17 @@ export function createBackendServer(dependencies: ServerDependencies = {}): Serv
           return
         }
         if (request.method === 'GET' && pathname === '/api/v1/auth/session') {
-          const result = await auth.session(request.headers.cookie, context.signal)
+          const availability = await auth.availability(context.signal)
+          const result = availability.available
+            ? await auth.session(request.headers.cookie, context.signal)
+            : { session: null }
           if (result.cookies?.length) response.setHeader('set-cookie', result.cookies)
-          sendJson(response, 200, { configured: auth.configured, session: result.session }, context)
+          sendJson(response, 200, {
+            configured: auth.configured,
+            availability: availability.available,
+            upstream: availability,
+            session: result.session,
+          }, context)
           return
         }
         if (request.method === 'POST' && pathname === '/api/v1/auth/access') {
@@ -270,24 +278,34 @@ export function createBackendServer(dependencies: ServerDependencies = {}): Serv
           return
         }
         if (request.method === 'GET' && pathname === '/api/v1/health/ready') {
-          try {
-            const models = await provider.listModels(true, context.signal)
-            sendJson(response, 200, {
-              service: SERVICE_NAME,
-              version: SERVICE_VERSION,
-              status: 'ready',
-              provider: { id: 'cliproxy', status: 'ready', modelCount: models.length },
-              capabilities: { aiGeneration: true, skillRuns: true, skillRegistry: true, auth: auth.configured },
-            }, context)
-          } catch {
-            sendJson(response, 503, {
-              service: SERVICE_NAME,
-              version: SERVICE_VERSION,
-              status: 'degraded',
-              provider: { id: 'cliproxy', status: 'unavailable', modelCount: 0 },
-              capabilities: { aiGeneration: true, skillRuns: true, skillRegistry: true, auth: auth.configured },
-            }, context)
-          }
+          const [providerResult, authResult] = await Promise.allSettled([
+            provider.listModels(true, context.signal),
+            auth.availability(context.signal),
+          ])
+          if (authResult.status === 'rejected') throw authResult.reason
+          const providerReady = providerResult.status === 'fulfilled'
+          const availability = authResult.value
+          sendJson(response, providerReady ? 200 : 503, {
+            service: SERVICE_NAME,
+            version: SERVICE_VERSION,
+            status: providerReady ? 'ready' : 'degraded',
+            provider: {
+              id: 'cliproxy',
+              status: providerReady ? 'ready' : 'unavailable',
+              modelCount: providerReady ? providerResult.value.length : 0,
+            },
+            auth: {
+              configured: auth.configured,
+              availability: availability.available,
+              upstream: availability,
+            },
+            capabilities: {
+              aiGeneration: true,
+              skillRuns: true,
+              skillRegistry: true,
+              auth: availability.available,
+            },
+          }, context)
           return
         }
         if (request.method === 'GET' && pathname === '/api/v1/ai/models') {

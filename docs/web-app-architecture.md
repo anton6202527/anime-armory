@@ -6,9 +6,9 @@
 
 本轮已经落地可运行的本地 AI / Skill 纵切面：
 
-- Browser 的模型发现、文本/图片生成、Skill source、工作文件上传和 Skill run 只调用同源 `/api/v1`。
+- Browser 的常规模型发现、文本/图片生成、Skill source、工作文件上传和 Skill run 只调用同源 `/api/v1`。唯一受控例外是用户显式选择、并经桌面原生授权的本机 Codex Agent executor。
 - `apps/backend` 已提供 loopback REST 服务（默认 `127.0.0.1:43118`），统一校验请求、读取 allowlisted Skill、维护内存任务队列，并在服务端调用 `cliproxyapi`。
-- Web 已移除 `43117` Electron bridge、Vite 模型中间件和 Skill 源码 `import.meta.glob` 打包；四个独立画布 workflow 也不再用计时器伪造成功。它们的正式 ID 是 `app-script-workbench`、`app-character-turnaround`、`app-first-frame-video` 和 `app-audio-video`。
+- Web 已移除默认 `43117` 模型路径、Vite 模型中间件和 Skill 源码 `import.meta.glob` 打包；现在仅为本机 Codex 保留契约隔离的 loopback adapter。四个独立画布 workflow 也不再用计时器伪造成功。它们的正式 ID 是 `app-script-workbench`、`app-character-turnaround`、`app-first-frame-video` 和 `app-audio-video`。
 - 文本生成和一个真实的角色三视图 Skill run（现 `app-character-turnaround`）已完成端到端 smoke；后者实际经历 `queued -> succeeded` 并返回真实 text artifact。
 
 当前可直接联调的 MVP 路由是：`GET /api/v1/health/live|ready`、`GET /api/v1/ai/models`、`POST /api/v1/ai/generations`、`GET /api/v1/skills[/:id]`、`GET /api/v1/skills/:id/sources`、`GET /api/v1/skills/:id/source?path=...`、`PUT /api/v1/works/:workId/files/:fileId`、`POST /api/v1/skill-runs` 以及 `GET|DELETE /api/v1/skill-runs/:runId`。第 4 节描述的是生产目标合同，不能当成本地 MVP 已实现清单；本地请求示例见 `apps/backend/README.md`。
@@ -22,11 +22,12 @@
 
 ## 1. 目标与硬边界
 
-Web App 采用单一后端边界：Browser 只访问同源或部署时明确配置的 `/api/v1`。`apps/backend` 是 Browser 的 BFF（Backend for Frontend），同时承载 AI service、Skill 编排、工作文件控制面和任务状态。`cliproxyapi` 只作为后端的 AI upstream，不是面向 Browser 的产品 API。
+Web App 默认采用单一后端边界：Browser 只访问同源或部署时明确配置的 `/api/v1`。`apps/backend` 是 Browser 的 BFF（Backend for Frontend），同时承载 AI service、Skill 编排、工作文件控制面和任务状态。`cliproxyapi` 只作为后端的 AI upstream，不是面向 Browser 的产品 API。
 
 硬性约束如下：
 
 - Browser 不直连 `cliproxyapi`、Supabase 数据 API、R2、模型厂商或本机 Agent/CLI。
+- 唯一例外是本机 Codex Agent：用户必须在模型选择器显式选择该 executor，Browser 只能连接受信 Desktop loopback bridge；bridge 校验精确 Origin、显示原生确认、签发短期内存 token，并固定 `agentId=codex`、作品范围和真实模型白名单。Browser 仍不能直连 CLI，也不能传命令、工作目录、任意路径或凭据。
 - Browser 不接收上游 URL、模型凭据、服务角色凭据、对象存储凭据或本地绝对路径。
 - Browser 不得在请求里指定任意 upstream、命令、脚本路径或工作目录。
 - 所有模型生成和 Skill 执行都先创建后端资源，再通过资源状态返回结果；页面只负责提交、轮询、取消和展示。
@@ -50,6 +51,8 @@ flowchart LR
     AIAdapter -->|server-only| CLIProxy[cliproxyapi\n127.0.0.1:8317]
     BFF -->|signed upload/download intent| ObjectStore[(Object storage)]
     Browser -. short-lived signed URL .-> ObjectStore
+    Browser -. explicit local Codex + native approval .-> LocalBridge[Desktop loopback bridge :43117]
+    LocalBridge --> CodexCLI[Signed-in Codex CLI]
     SkillRunner --> AIAdapter
 ```
 
@@ -60,6 +63,7 @@ flowchart LR
 | `apps/web` | `http://127.0.0.1:4174` | 页面、交互、轮询与结果展示；开发期把相对 `/api/v1` 反向代理到 BFF | 是 |
 | `apps/backend` | `http://127.0.0.1:43118` | BFF、鉴权、REST 资源、任务编排、Skill runner、AI adapter、审计和存储控制面 | 只访问 `/api/v1` |
 | `cliproxyapi` | `http://127.0.0.1:8317` | 本地开发期的 OpenAI-compatible AI upstream | 否，仅 BFF 可访问 |
+| LabuTV Desktop local bridge | `http://127.0.0.1:43117` | 显式本机 Codex Agent 的模型目录、作品授权与受控任务 | 仅用户选择后 |
 
 本地三个服务都应绑定 loopback。生产环境由 HTTPS 入口把 `/api/v1` 路由到 `apps/backend`，不向公网暴露 `43118` 或 `8317`。
 
@@ -84,6 +88,8 @@ Vite proxy -> http://127.0.0.1:43118/api/v1/*
 ```
 
 这样 Browser 始终使用相对 `/api/v1`，无需持有 CORS 例外或知道 AI upstream 地址。若直接配置 `http://127.0.0.1:43118/api/v1`，BFF 必须只允许明确列出的开发 Origin，并拒绝任意 Origin、凭据反射和非 loopback Host。
+
+本机 Codex 是独立 executor 例外，不改变 `VITE_API_BASE_URL`，也不能作为任意 upstream override。选择器把访问入口与真实模型分列：executor 为 `local-codex`，`modelId` 必须是 Desktop 从当前 ChatGPT 账号实时目录投影并在提交时再次校验的具体 slug。
 
 ## 4. REST 资源合同
 
@@ -232,6 +238,7 @@ Browser 轮询规则：
 - 工作文件、Skill source 和产物均以不透明 ID 引用。服务端解析后必须验证 canonical path 仍位于该 run/work 根目录内。
 - 上传内容在进入 runner 或 AI adapter 前做 MIME、大小、哈希和必要的恶意内容检查；不信任客户端文件名。
 - 日志默认脱敏 Prompt 中可能的个人信息，只保留完成诊断和审计所需的最小内容。
+- 本机 Agent token 与 BFF/兼容模型 session 隔离，只存在 Desktop 内存中，绑定精确 Origin、单个作品、固定 Codex agent 和 2 小时有效期。Desktop 计算工作目录、限制附件总量/并发/产物路径，spawn 参数固定且 Prompt 走 stdin；拒绝 API-key 登录冒充 ChatGPT 订阅。
 
 ## 8. 上传与下载的数据面例外
 
@@ -280,7 +287,7 @@ Browser 轮询规则：
 - provider 错误到稳定错误码的映射，以及生成产物的内容哈希和 provenance；
 - 按能力声明文本、图片、音频、视频或其它模态，未实现能力返回明确的 `capability_unavailable`。
 
-任何新增 provider 都在后端注册、配置和验证，不要求 Web 增加 provider credential，也不允许 Web 绕过 BFF 直接调用。
+任何新增模型 provider 都在后端注册、配置和验证，不要求 Web 增加 provider credential，也不允许 Web 绕过 BFF 直接调用。本机 Codex 是用户主动选择的 Agent executor 例外，不是 Browser 直连 provider，也不得承载图片/视频 API 语义。
 
 ## 11. 本地启动与验证
 
@@ -314,22 +321,23 @@ curl -fsS http://127.0.0.1:43118/api/v1/ai/models
 
 最小验收还应覆盖：
 
-1. Browser 中不存在对 `43117`、`8317`、Supabase 数据 API 或模型厂商的运行时直连；云能力在 BFF 资源落地前保持停用。
+1. 除命名明确的本机 Codex adapter 外，Browser 不访问 `43117`；任何路径都不得访问 `8317`、Supabase 数据 API 或模型厂商。打开模型选择器最多做只读 probe，首次提交必须经原生批准；拒绝、过期或桌面未启动时明确失败且不得静默切换 executor。
 2. 生产鉴权落地后，未登录访问受保护资源得到统一 `401` envelope；跨租户 ID 得到不泄露存在性的 `404/403`。
 3. 当前 Skill run 返回 `202` 并可轮询；持久队列落地后再验收 `Location`、刷新恢复和 AI generation 异步资源。
 4. upstream 停止时 `/health` 报 `degraded`，任务得到稳定、可重试的错误，不泄露 upstream body。
 5. Browser 请求体中的 upstream URL、绝对路径、任意命令和非 allowlist Skill action 被拒绝。
 6. 大文件只经短期签名 URL 直传，完成确认前不能作为 `workFileId` 使用。
 7. 页面和构建产物中不存在任何模型、服务角色或对象存储密钥。
+8. Browser 不能向本机 bridge 传命令、cwd 或任意路径；Desktop 只接受当前目录发现到的 Codex 模型 slug，图片/视频直接生成永不路由到 Codex CLI。
 
 ## 12. 迁移顺序
 
 1. 在 `apps/backend` 建立 `43118` BFF、统一 envelope 和 health（已完成本地版；产品鉴权待补）。
 2. 实现 `AiService` 与 `CliProxyDevAdapter`，先迁移 models 和 generations。
-3. 把 Web 现有本地模型桥改为相对 `/api/v1`，删除 Browser 对 `43117/8317` 的探测与直连分支。
+3. 把 Web 默认模型路径迁到相对 `/api/v1`，删除通用 `43117/8317` 探测与直连分支；只保留契约隔离、用户显式选择的本机 Codex adapter。
 4. 把 Skill catalog/source 从前端打包读取迁到 `skills` 与 `skill-sources` 资源。
-5. 把本地 Agent job 迁到 `skill-runs`，把附件上传迁到 `work-files`。
+5. 把默认 Agent job 迁到 `skill-runs`，把附件上传迁到 `work-files`；本机 Codex 只保留作品范围内的显式 executor 合同。
 6. 把账号、用户设置、用户 Skill、画布云同步和资产控制面从 Browser 直连 Supabase / Edge Function 迁到 BFF REST。
-7. 接入持久任务存储、对象存储数据面和生产 provider adapter，最后移除旧 `/v1/agent/jobs`、`/v1/canvas/*` 兼容入口。
+7. 接入持久任务存储、对象存储数据面和生产 provider adapter，最后移除通用 `/v1/canvas/*` 兼容入口；`/v1/agent/jobs` 只允许存在于命名明确的 Desktop 本机 Codex adapter。
 
-迁移期允许后端内部保留兼容 adapter，但 Browser 新代码只能依赖 `/api/v1` 资源合同。
+迁移期允许后端内部保留兼容 adapter。除隔离的本机 Codex adapter 外，Browser 新代码只能依赖 `/api/v1` 资源合同。

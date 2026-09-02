@@ -2,6 +2,7 @@ import type { AddressInfo } from 'node:net'
 import type { Server } from 'node:http'
 
 import type { AiProvider } from '../src/ai-provider.ts'
+import type { SupabaseAuthService } from '../src/auth.ts'
 import type { BackendConfig } from '../src/config.ts'
 import type { AiGenerationRequest, AiGenerationResponse, AiModel } from '../src/contracts.ts'
 import { createBackendServer } from '../src/server.ts'
@@ -52,11 +53,13 @@ export function testConfig(skillsRoot: string, runtimeRoot: string): BackendConf
 export async function listenTestServer(
   config: BackendConfig,
   provider: AiProvider,
+  auth?: SupabaseAuthService,
 ): Promise<{ server: Server; baseUrl: string }> {
   const server = createBackendServer({
     config,
     provider,
     registry: new SkillRegistry(config.skillsRoot),
+    ...(auth ? { auth } : {}),
   })
   await new Promise<void>((resolve, reject) => {
     server.once('error', reject)

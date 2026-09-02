@@ -94,7 +94,11 @@ import { BrandIcon } from "../../components/BrandIcon";
 import { ComposerAssetPicker } from "../../components/ComposerAssetPicker";
 import { LineIcon } from "../../components/LineIcon";
 import { SelectMenu } from "../../components/SelectMenu";
-import { RUNTIME_MODEL_MODALITIES, runtimeModelDefinitions } from "../../catalog/runtimeModels";
+import {
+  RUNTIME_MODEL_MODALITIES,
+  localCodexModelDefinitions,
+  runtimeModelDefinitions,
+} from "../../catalog/runtimeModels";
 import type { ModelDefinition, ModelModality } from "../../catalog/types";
 import { MembershipDialog } from "../account/MembershipDialog";
 import {
@@ -157,7 +161,7 @@ import {
 } from "./toolboxTemplates";
 import { CreateSkillDialog, type CreateSkillFormValues } from "../skill-home/CreateSkillDialog";
 import { SKILLS } from "../../catalog/skills";
-import { createAgentGateway, type AgentGateway } from "../../lib/agent";
+import { createAgentGateway, probeLocalCodex, type AgentGateway } from "../../lib/agent";
 import { discoverCanvasModels, generateCanvasContent, isCanvasGenerationError } from "../../lib/generation";
 import {
   buildDirectorSceneFromPrompt,
@@ -187,6 +191,7 @@ import type {
   PendingAttachment,
   WebWork,
   WorkCreationConfig,
+  WorkExecutor,
 } from "../../types";
 
 const DirectorStudio = lazy(() => import("./director/DirectorStudio"));
@@ -2158,7 +2163,14 @@ export function CanvasPage({
   const [membershipOpen, setMembershipOpen] = useState(false);
   const [modelModality, setModelModality] = useState<ModelModality>(creationConfig.model.modality);
   const [runtimeModels, setRuntimeModels] = useState<ModelDefinition[]>([]);
+  const [localCodexModels, setLocalCodexModels] = useState<ModelDefinition[]>([]);
   const [runtimeModelsState, setRuntimeModelsState] = useState<"idle" | "loading" | "ready" | "unavailable">("idle");
+  const [localCodexState, setLocalCodexState] = useState<"idle" | "loading" | "ready" | "unavailable">(
+    (creationConfig.executor ?? "backend") === "local-codex" ? "loading" : "idle",
+  );
+  const [localCodexProbeRequested, setLocalCodexProbeRequested] = useState(
+    (creationConfig.executor ?? "backend") === "local-codex",
+  );
   const [runtimeModelsRefresh, setRuntimeModelsRefresh] = useState(0);
   const [overviewTab, setOverviewTab] = useState<"canvas" | "assets">("canvas");
   const [overviewQuery, setOverviewQuery] = useState("");
@@ -2454,15 +2466,49 @@ export function CanvasPage({
 
   const suggestedSkills = useMemo(() => suggestedSkillsFor(work), [work]);
   const editingNode = editingNodeId ? nodes.find((node) => node.id === editingNodeId) ?? null : null;
+  const selectedExecutor = creationConfig.executor ?? "backend";
   const selectableModelGroups = useMemo<Record<ModelModality, ModelDefinition[]>>(() => ({
-    text: runtimeModels.filter((model) => model.modality === "text"),
-    image: runtimeModels.filter((model) => model.modality === "image"),
+    text: selectedExecutor === "local-codex"
+      ? localCodexModels
+      : runtimeModels.filter((model) => model.modality === "text"),
+    image: selectedExecutor === "local-codex" ? [] : runtimeModels.filter((model) => model.modality === "image"),
     video: [],
     audio: [],
-  }), [runtimeModels]);
-  const selectedModel = runtimeModels.find((model) => (
+  }), [localCodexModels, runtimeModels, selectedExecutor]);
+  const selectedModel = Object.values(selectableModelGroups).flat().find((model) => (
     model.id === creationConfig.model.modelId || model.modelId === creationConfig.model.modelId
   ));
+  function chooseModelExecutor(next: WorkExecutor) {
+    if (next === "local-codex") {
+      setLocalCodexProbeRequested(true);
+      setModelModality("text");
+      setCreationConfig((current) => {
+        const selected = localCodexModels.find((model) => model.id === current.model.modelId) ?? localCodexModels[0];
+        return {
+          ...current,
+          executor: next,
+          model: selected ? { modality: "text", modelId: selected.modelId ?? selected.id } : { modality: "text", modelId: "" },
+        };
+      });
+      return;
+    }
+    const candidates = runtimeModels.filter((model) => model.modality === modelModality);
+    const nextModality = candidates.length
+      ? modelModality
+      : runtimeModels.some((model) => model.modality === "text") ? "text" : "image";
+    setModelModality(nextModality);
+    setCreationConfig((current) => {
+      const models = runtimeModels.filter((model) => model.modality === nextModality);
+      const selected = models.find((model) => model.id === current.model.modelId) ?? models[0];
+      return {
+        ...current,
+        executor: next,
+        model: selected
+          ? { modality: selected.modality, modelId: selected.modelId ?? selected.id, ...(selected.providerSpec ? { providerSpec: selected.providerSpec } : {}) }
+          : { modality: nextModality, modelId: "" },
+      };
+    });
+  }
   const overviewNodes = useMemo(() => {
     const query = overviewQuery.trim().toLocaleLowerCase();
     return nodes
@@ -2562,8 +2608,7 @@ export function CanvasPage({
     () => attachments.filter((attachment) => composerAttachmentIds.includes(attachment.id)),
     [attachments, composerAttachmentIds],
   );
-  const composerReady = runtimeModelsState === "ready"
-    && Boolean(selectedModel)
+  const composerReady = Boolean(selectedModel)
     && Boolean(prompt.trim() || composerAttachments.length || activeSkill || selectedModel);
   const showAgentStarter = isNewConversation || !activeJob;
   const addActivity = useCallback((label: string) => {
@@ -2591,6 +2636,7 @@ export function CanvasPage({
     const nextConfig = defaultCreationConfig(storedDocument?.work ?? work);
     setCreationConfig(nextConfig);
     setModelModality(nextConfig.model.modality);
+    if ((nextConfig.executor ?? "backend") === "local-codex") setLocalCodexProbeRequested(true);
   }, [cancelAllGenerationRequests, graph, setEdges, setNodes, storedDocument, work.id, work.name, work.prompt]);
 
   useEffect(() => setSyncState(work.cloudState), [work.cloudState]);
@@ -2670,7 +2716,7 @@ export function CanvasPage({
     let disposed = false;
     let timer = 0;
     const refresh = async () => {
-      const next = await createAgentGateway();
+      const next = await createAgentGateway(creationConfig.executor ?? "backend");
       if (disposed) return;
       setGateway(next);
       timer = window.setTimeout(() => void refresh(), 12_000);
@@ -2680,43 +2726,60 @@ export function CanvasPage({
       disposed = true;
       window.clearTimeout(timer);
     };
-  }, []);
+  }, [creationConfig.executor]);
 
   useEffect(() => {
     const controller = new AbortController();
     setRuntimeModelsState("loading");
+    if (localCodexProbeRequested) setLocalCodexState("loading");
     setRuntimeModels([]);
-    void discoverCanvasModels(controller.signal)
-      .then((models) => {
+    if (localCodexProbeRequested) setLocalCodexModels([]);
+    void Promise.allSettled([
+      discoverCanvasModels(controller.signal),
+      localCodexProbeRequested ? probeLocalCodex(controller.signal) : Promise.resolve(null),
+    ]).then(([backendResult, localResult]) => {
         if (controller.signal.aborted) return;
-        const discovered = runtimeModelDefinitions(models);
+        const discovered = backendResult.status === "fulfilled"
+          ? runtimeModelDefinitions(backendResult.value)
+          : [];
+        const localDiscovered = localCodexProbeRequested && localResult.status === "fulfilled" && localResult.value
+          ? localCodexModelDefinitions(localResult.value.models)
+          : [];
+        const localReady = localDiscovered.length > 0;
         setRuntimeModels(discovered);
+        if (localCodexProbeRequested) setLocalCodexModels(localDiscovered);
+        setRuntimeModelsState(backendResult.status === "fulfilled" ? "ready" : "unavailable");
+        if (localCodexProbeRequested) setLocalCodexState(localReady ? "ready" : "unavailable");
         setCreationConfig((current) => {
-          const exact = discovered.find((model) => model.id === current.model.modelId || model.modelId === current.model.modelId);
+          const currentExecutor = current.executor ?? "backend";
+          const source = currentExecutor === "local-codex" ? localDiscovered : discovered;
+          const exact = source.find((model) => model.id === current.model.modelId || model.modelId === current.model.modelId);
           const fallback = exact
-            ?? discovered.find((model) => model.modality === current.model.modality)
-            ?? discovered.find((model) => model.modality === "text")
-            ?? discovered.find((model) => model.modality === "image");
+            ?? source.find((model) => model.modality === current.model.modality)
+            ?? source.find((model) => model.modality === "text")
+            ?? source.find((model) => model.modality === "image")
+            ?? (!current.executor
+              ? discovered.find((model) => model.modality === "text") ?? localDiscovered[0] ?? discovered.find((model) => model.modality === "image")
+              : undefined);
           if (!fallback) return current;
           const modelId = fallback.modelId ?? fallback.id;
-          if (current.model.modality === fallback.modality && current.model.modelId === modelId && !current.model.providerSpec) {
+          const executor: WorkExecutor = source.includes(fallback)
+            ? currentExecutor
+            : localDiscovered.includes(fallback) ? "local-codex" : "backend";
+          if (current.model.modality === fallback.modality && current.model.modelId === modelId
+            && !current.model.providerSpec && (current.executor ?? "backend") === executor) {
             return current;
           }
-          return { ...current, model: { modality: fallback.modality, modelId } };
+          return { ...current, executor, model: { modality: fallback.modality, modelId } };
         });
-        setModelModality((current) => discovered.some((model) => model.modality === current)
-          ? current
-          : discovered.some((model) => model.modality === "text") ? "text" : "image");
-        setRuntimeModelsState("ready");
-      })
-      .catch(() => {
-        if (controller.signal.aborted) return;
-        setRuntimeModels([]);
-        setModelModality("text");
-        setRuntimeModelsState("unavailable");
+        setModelModality((current) => creationConfig.executor === "local-codex"
+          ? "text"
+          : discovered.some((model) => model.modality === current)
+            ? current
+            : discovered.some((model) => model.modality === "text") || localReady ? "text" : "image");
       });
     return () => controller.abort();
-  }, [runtimeModelsRefresh]);
+  }, [localCodexProbeRequested, runtimeModelsRefresh]);
 
   useEffect(() => {
     if (!notice) return undefined;
@@ -3551,8 +3614,8 @@ export function CanvasPage({
     context: Record<string, unknown>,
   ): Promise<{ text: string; model: string }> {
     const model = await resolveSharedCanvasModel("text", creationConfig.model.modelId, signal);
-    let submissionGateway = gateway ?? await createAgentGateway();
-    if (submissionGateway.mode === "demo") submissionGateway = await createAgentGateway();
+    let submissionGateway = gateway?.mode === "backend" ? gateway : await createAgentGateway("backend");
+    if (submissionGateway.mode === "demo") submissionGateway = await createAgentGateway("backend");
     if (submissionGateway.mode === "demo") throw new Error("后端 AI / Skill 服务尚未就绪");
     if (!mountedRef.current || signal.aborted) throw new DOMException("Skill 运行已取消", "AbortError");
     setGateway(submissionGateway);
@@ -3563,6 +3626,7 @@ export function CanvasPage({
       creationConfig: {
         ...creationConfig,
         skillId,
+        executor: "backend",
         model: { modality: "text", modelId: model },
       },
       attachments: [],
@@ -4748,10 +4812,13 @@ export function CanvasPage({
     const [sourceAttachmentId] = await importAssetFiles([request.sourceFile], false, { awaitCloud: false });
     if (!sourceAttachmentId) throw new Error("输入文件未能保存到当前作品");
 
-    let submissionGateway = gateway ?? await createAgentGateway();
+    const standaloneGatewayMode = creationConfig.executor === "local-codex" ? "local" : "backend";
+    let submissionGateway = gateway?.mode === standaloneGatewayMode
+      ? gateway
+      : await createAgentGateway(creationConfig.executor ?? "backend");
     if (!mountedRef.current) throw new Error("画布已关闭");
     if (submissionGateway.mode === "demo") {
-      submissionGateway = await createAgentGateway();
+      submissionGateway = await createAgentGateway(creationConfig.executor ?? "backend");
       if (!mountedRef.current) throw new Error("画布已关闭");
     }
     setGateway(submissionGateway);
@@ -5525,14 +5592,18 @@ export function CanvasPage({
       || (composerAttachments.length ? "请根据已选素材和当前画布继续创作。" : "")
       || (selectedModel ? `请使用 ${selectedModel.name} 开始创作。` : "");
     if (!gateway || !cleanPrompt || submitting) return;
-    if (runtimeModelsState !== "ready" || !selectedModel) {
-      setNotice(runtimeModelsState === "unavailable" ? "后端模型服务不可用，请稍后重试" : "正在读取后端可用模型，请稍候");
+    const sourceState = selectedExecutor === "local-codex" ? localCodexState : runtimeModelsState;
+    if (!selectedModel || sourceState !== "ready") {
+      setNotice(selectedExecutor === "local-codex"
+        ? "本机 Codex 不可用，请启动桌面端并确认 Codex 已使用 ChatGPT 登录"
+        : runtimeModelsState === "unavailable" ? "后端模型服务不可用，请稍后重试" : "正在读取后端可用模型，请稍候");
       setComposerMenu("model");
       return;
     }
+    const expectedGatewayMode = selectedExecutor === "local-codex" ? "local" : "backend";
     let submissionGateway = gateway;
-    if (submissionGateway.mode === "demo") {
-      submissionGateway = await createAgentGateway();
+    if (submissionGateway.mode !== expectedGatewayMode) {
+      submissionGateway = await createAgentGateway(selectedExecutor);
       if (!mountedRef.current) return;
       setGateway(submissionGateway);
     }
@@ -6223,37 +6294,55 @@ export function CanvasPage({
               <button className={composerMenu === "model" ? "composer-menu-button icon-only active" : "composer-menu-button icon-only"} type="button" title="选择模型" aria-label="选择模型" aria-expanded={composerMenu === "model"} onClick={() => {
                 const opening = composerMenu !== "model";
                 setComposerMenu(opening ? "model" : null);
-                if (opening && runtimeModelsState === "unavailable") setRuntimeModelsRefresh((current) => current + 1);
+                if (opening && !localCodexProbeRequested) setLocalCodexProbeRequested(true);
+                if (opening && (runtimeModelsState === "unavailable" || localCodexState === "unavailable")) setRuntimeModelsRefresh((current) => current + 1);
               }}>
                 <Box size={18} strokeWidth={1.6} />
               </button>
               {composerMenu === "model" && (
                 <div className="floating-panel model-picker" role="dialog" aria-label="选择模型">
                   <div className="floating-panel-title"><strong>选择模型</strong></div>
+                  <div className="model-executor-tabs" aria-label="模型调用方式">
+                    <button type="button" className={selectedExecutor === "backend" ? "active" : ""} aria-pressed={selectedExecutor === "backend"} onClick={() => chooseModelExecutor("backend")}>后端服务</button>
+                    <button type="button" className={selectedExecutor === "local-codex" ? "active" : ""} aria-pressed={selectedExecutor === "local-codex"} onClick={() => chooseModelExecutor("local-codex")}>
+                      本机 Codex（订阅）
+                      <i className={`state-${localCodexState}`} />
+                    </button>
+                  </div>
                   <div className="segmented-tabs" role="tablist">
                     {RUNTIME_MODEL_MODALITIES.map((item) => (
-                      <button key={item} className={modelModality === item ? "active" : ""} type="button" role="tab" aria-selected={modelModality === item} onClick={() => setModelModality(item)}>{CANVAS_MODALITY_LABELS[item]}</button>
+                      <button key={item} className={modelModality === item ? "active" : ""} type="button" role="tab" aria-selected={modelModality === item} onClick={() => { if (item !== "text" && selectedExecutor === "local-codex") chooseModelExecutor("backend"); setModelModality(item); }}>{CANVAS_MODALITY_LABELS[item]}</button>
                     ))}
                   </div>
                   <div className="model-section-label">{CANVAS_MODALITY_LABELS[modelModality]}</div>
                   {(modelModality === "text" || modelModality === "image") && (
-                    <div className={`model-runtime-status state-${runtimeModelsState}`}>
+                    <div className={`model-runtime-status state-${selectedExecutor === "local-codex" ? localCodexState : runtimeModelsState}`}>
                       <i />
-                      {runtimeModelsState === "loading"
-                        ? "正在读取后端开放模型…"
-                        : runtimeModelsState === "ready"
-                          ? `已连接 ${runtimeModels.filter((model) => model.modality === modelModality).length} 个可调用模型`
-                          : runtimeModelsState === "unavailable"
-                            ? "后端模型服务不可用，当前没有可选模型"
-                            : "连接后端后会显示实际开放模型"}
+                      {selectedExecutor === "local-codex"
+                        ? localCodexState === "loading"
+                          ? "正在读取本机 Codex 模型…"
+                          : localCodexState === "ready"
+                            ? `当前 ChatGPT 账号已发现 ${localCodexModels.length} 个可选 Codex 模型`
+                            : "未检测到桌面端，或 Codex 尚未使用 ChatGPT 登录"
+                        : runtimeModelsState === "loading"
+                          ? "正在读取后端开放模型…"
+                          : runtimeModelsState === "ready"
+                            ? `后端已连接 ${runtimeModels.filter((model) => model.modality === modelModality).length} 个可调用模型`
+                            : runtimeModelsState === "unavailable"
+                              ? "后端模型服务当前不可用"
+                              : "连接后端后会显示实际开放模型"}
                     </div>
                   )}
-                  <p className="model-runtime-note">Skill 编排当前使用 GPT 文本/视觉；图片模型仅用于画布直接生图。</p>
+                  <p className="model-runtime-note">本机 Codex 是执行方式：使用桌面端已登录的 ChatGPT 账号运行完整 Skill/文本 Agent，额度以该账号为准；首次提交会弹出桌面授权。图片与视频直接生成仍走后端。</p>
                   <div className="model-list">
                     {selectableModelGroups[modelModality].map((model) => (
-                      <div key={model.id} className="model-row">
+                      <div key={`${selectedExecutor}:${model.id}`} className="model-row">
                         <button className="model-row-main" type="button" onClick={() => {
-                          setCreationConfig((current) => ({ ...current, model: { modality: model.modality, modelId: model.modelId ?? model.id, ...(model.providerSpec ? { providerSpec: model.providerSpec } : {}) } }));
+                          setCreationConfig((current) => ({
+                            ...current,
+                            executor: selectedExecutor,
+                            model: { modality: model.modality, modelId: model.modelId ?? model.id, ...(model.providerSpec ? { providerSpec: model.providerSpec } : {}) },
+                          }));
                           setModelModality(model.modality);
                           setComposerMenu(null);
                           setNotice(`已选择 ${model.name}`);
@@ -6261,15 +6350,22 @@ export function CanvasPage({
                         }}>
                           <span className={`model-mark provider-${model.provider.toLocaleLowerCase().replace(/\W+/g, "-")}`}>{model.name.slice(0, 1)}</span>
                           <span className="model-copy">
-                            <span className="model-name"><b>{model.name}</b><em className="model-connected-badge">已连接</em></span>
+                            <span className="model-name">
+                              <b>{model.name}</b>
+                              <em className={selectedExecutor === "local-codex" ? `model-local-badge state-${localCodexState}` : "model-connected-badge"}>
+                                {selectedExecutor === "local-codex"
+                                  ? localCodexState === "ready" ? "本机可用" : localCodexState === "loading" ? "检测中" : "需桌面端"
+                                  : "已连接"}
+                              </em>
+                            </span>
                             <small>{model.description}</small>
                           </span>
                           <Plus size={16} />
                         </button>
                       </div>
                     ))}
-                    {runtimeModelsState === "ready" && !selectableModelGroups[modelModality].length && (
-                      <p className="model-runtime-empty">后端当前未开放{CANVAS_MODALITY_LABELS[modelModality]}模型。</p>
+                    {(selectedExecutor === "local-codex" ? localCodexState : runtimeModelsState) !== "loading" && !selectableModelGroups[modelModality].length && (
+                      <p className="model-runtime-empty">当前调用方式暂无可用{CANVAS_MODALITY_LABELS[modelModality]}模型。</p>
                     )}
                   </div>
                 </div>

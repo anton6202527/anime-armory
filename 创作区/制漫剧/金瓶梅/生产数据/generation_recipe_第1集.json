@@ -1,6 +1,6 @@
 {
   "episode": "第1集",
-  "generated_at": "2026-09-01T03:53:01+00:00",
+  "generated_at": "2026-09-02T04:45:53+00:00",
   "kind": "n2d_generation_recipe_ledger",
   "root": "创作区/制漫剧/金瓶梅",
   "rows": [
@@ -3663,11 +3663,41 @@
       "settings_sha256": "c65cadb643f06794e2818e6dd8abed2333231aa56e635079644c2269cef756a6",
       "stage": "image",
       "status": "pass"
+    },
+    {
+      "adapter_version": "image_gen.imagegen@2026-09-02",
+      "artifact_sha256": "f54a08f246e3dc695e22950fd0672853d9723253ec157cb1ec119e62bb3d7be1",
+      "asset": "出图/第1集/图片/Clip04_end.png",
+      "asset_registry_sha256": "",
+      "backend": "Codex",
+      "backend_version": "Codex built-in imagegen 2026-09-02",
+      "declared_recipe_hash": true,
+      "event": "generation",
+      "identity_registry_sha256": "",
+      "input_fingerprint": "",
+      "mode": "tailframe",
+      "model_version": "GPT Image 2",
+      "prompt_sha256": "a2dbb73c964c543b06624ca446bf6d59459b07e6166cda5251f91f9e69e9097f",
+      "provider": "Codex",
+      "qc_version": "",
+      "recipe_hash": "803949ecc2f4d96c46ffef02282ebae5fcbe8af7d305213916e0351934cb94a4",
+      "redraw_reason": "",
+      "reference_bundle_sha256": "ca036a68c577089224c4dc80177df9b23c8c3db509684fd5ded23ba27160460c",
+      "reference_manifest": "",
+      "retry_attempt": "",
+      "route_hash": "0699d96ddb6e8174522e13c10f2edcfb4feeb3c46d060b4b76d51ac5fe4ceb5e",
+      "seed": "",
+      "seed_effective": "false",
+      "seed_strategy": "",
+      "seed_support": "unsupported_no_seed_api",
+      "settings_sha256": "",
+      "stage": "image",
+      "status": "pass"
     }
   ],
   "summary": {
-    "count": 122,
-    "declared_hash": 122
+    "count": 123,
+    "declared_hash": 123
   },
   "version": 1
 }

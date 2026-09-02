@@ -1,4 +1,11 @@
-import { apiJson } from "./api";
+import { apiJson, isApiError } from "./api";
+import {
+  normalizeAuthSessionEnvelope,
+  type AuthSessionEnvelope,
+  type AuthUpstreamState,
+} from "./authState";
+
+export type { AuthUpstreamState, AuthUpstreamStatus } from "./authState";
 
 export interface AuthUser {
   id: string;
@@ -56,7 +63,9 @@ export interface EmailAccessResult {
 
 export interface AuthSnapshot {
   configured: boolean;
-  event: AuthChangeEvent | "UNCONFIGURED";
+  availability: boolean;
+  upstream: AuthUpstreamState;
+  event: AuthChangeEvent | "UNCONFIGURED" | "UNAVAILABLE";
   session: AuthSession | null;
   user: AuthUser | null;
 }
@@ -93,22 +102,58 @@ interface AuthAccessResponse {
   confirmationRequired: boolean;
 }
 
-interface AuthSessionResponse {
-  configured: boolean;
-  session: AuthSession | null;
-}
+type AuthSessionResponse = AuthSessionEnvelope<AuthSession>;
 
 let lastSnapshot: AuthSnapshot = {
-  configured: true,
+  configured: false,
+  availability: false,
+  upstream: { available: false, status: "checking" },
   event: "INITIAL_SESSION",
   session: null,
   user: null,
 };
 const listeners = new Set<(snapshot: AuthSnapshot) => void>();
+let refreshInFlight: Promise<AuthSnapshot> | null = null;
 
 function publish(snapshot: AuthSnapshot) {
   lastSnapshot = snapshot;
   for (const listener of listeners) listener(snapshot);
+}
+
+function unavailableUpstream(error: unknown): AuthUpstreamState {
+  if (!isApiError(error)) {
+    return { available: false, status: "backend-unavailable", code: "unknown_error", message: "无法确认登录服务状态" };
+  }
+  const status = error.code === "auth_not_configured"
+    ? "unconfigured"
+    : error.code === "auth_upstream_timeout" || error.code === "request_timeout"
+      ? "timeout"
+      : error.code === "auth_upstream_unhealthy"
+        ? "unhealthy"
+        : error.code === "network_error"
+          ? "backend-unavailable"
+          : "unavailable";
+  return {
+    available: false,
+    status,
+    code: String(error.code),
+    message: error.message,
+    ...(error.requestId ? { requestId: error.requestId } : {}),
+  };
+}
+
+function publishUnavailable(error: unknown): AuthSnapshot {
+  const upstream = unavailableUpstream(error);
+  const snapshot: AuthSnapshot = {
+    configured: upstream.status === "unconfigured" ? false : lastSnapshot.configured,
+    availability: false,
+    upstream,
+    event: upstream.status === "unconfigured" ? "UNCONFIGURED" : "UNAVAILABLE",
+    session: null,
+    user: null,
+  };
+  publish(snapshot);
+  return snapshot;
 }
 
 function normalizeInput(inputOrEmail: EmailSignUpInput | string, password?: string): EmailSignUpInput {
@@ -126,15 +171,36 @@ function normalizeInput(inputOrEmail: EmailSignUpInput | string, password?: stri
 }
 
 async function access(input: EmailSignUpInput): Promise<EmailAccessResult> {
-  const result = await apiJson<AuthAccessResponse>("/v1/auth/access", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ email: input.email, password: input.password }),
-  });
-  if (result.session) {
-    publish({ configured: true, event: "SIGNED_IN", session: result.session, user: result.session.user });
+  try {
+    const result = await apiJson<AuthAccessResponse>("/v1/auth/access", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ email: input.email, password: input.password }),
+    });
+    if (result.session) {
+      publish({
+        configured: true,
+        availability: true,
+        upstream: { available: true, status: "available" },
+        event: "SIGNED_IN",
+        session: result.session,
+        user: result.session.user,
+      });
+    }
+    return result;
+  } catch (error) {
+    if (isApiError(error) && (
+      error.code === "auth_not_configured"
+      || error.code === "auth_upstream_unavailable"
+      || error.code === "auth_upstream_unhealthy"
+      || error.code === "auth_upstream_timeout"
+      || error.code === "network_error"
+      || error.code === "request_timeout"
+    )) {
+      publishUnavailable(error);
+    }
+    throw error;
   }
-  return result;
 }
 
 export function signUpWithEmail(email: string, password: string): Promise<EmailSignUpResult>;
@@ -168,12 +234,18 @@ export async function signInOrSignUpWithEmail(input: EmailSignUpInput): Promise<
 
 export async function signOut(): Promise<void> {
   await apiJson<{ signedOut: true }>("/v1/auth/sign-out", { method: "POST" });
-  publish({ configured: true, event: "SIGNED_OUT", session: null, user: null });
+  publish({
+    configured: true,
+    availability: true,
+    upstream: { available: true, status: "available" },
+    event: "SIGNED_OUT",
+    session: null,
+    user: null,
+  });
 }
 
 export async function getCurrentSession(): Promise<AuthSession | null> {
-  const result = await apiJson<AuthSessionResponse>("/v1/auth/session");
-  return result.session;
+  return (await refreshAuthState()).session;
 }
 
 export async function getCurrentUser(): Promise<AuthUser | null> {
@@ -181,25 +253,33 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
 }
 
 export function subscribeToAuthState(listener: (snapshot: AuthSnapshot) => void): () => void {
-  let disposed = false;
   listeners.add(listener);
   listener(lastSnapshot);
-  void apiJson<AuthSessionResponse>("/v1/auth/session")
-    .then(({ configured, session }) => {
-      if (!disposed) publish({
-        configured,
-        event: configured ? "INITIAL_SESSION" : "UNCONFIGURED",
-        session,
-        user: session?.user ?? null,
-      });
-    })
-    .catch(() => {
-      if (!disposed) publish({ configured: false, event: "UNCONFIGURED", session: null, user: null });
-    });
+  void refreshAuthState();
   return () => {
-    disposed = true;
     listeners.delete(listener);
   };
+}
+
+export function refreshAuthState(): Promise<AuthSnapshot> {
+  if (refreshInFlight) return refreshInFlight;
+  refreshInFlight = apiJson<unknown>("/v1/auth/session")
+    .then((raw) => {
+      const { configured, availability, upstream, session } = normalizeAuthSessionEnvelope<AuthSession>(raw);
+      const snapshot: AuthSnapshot = {
+        configured,
+        availability,
+        upstream,
+        event: !configured ? "UNCONFIGURED" : availability ? "INITIAL_SESSION" : "UNAVAILABLE",
+        session,
+        user: session?.user ?? null,
+      };
+      publish(snapshot);
+      return snapshot;
+    })
+    .catch((error) => publishUnavailable(error))
+    .finally(() => { refreshInFlight = null; });
+  return refreshInFlight;
 }
 
 export function subscribeAuth(listener: (user: AuthUser | null) => void): () => void {

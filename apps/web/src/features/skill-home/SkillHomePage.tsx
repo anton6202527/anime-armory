@@ -30,7 +30,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { BrandIcon } from "../../components/BrandIcon";
 import { ComposerAssetPicker } from "../../components/ComposerAssetPicker";
 import { LineIcon } from "../../components/LineIcon";
-import { RUNTIME_MODEL_MODALITIES, runtimeModelDefinitions } from "../../catalog/runtimeModels";
+import {
+  RUNTIME_MODEL_MODALITIES,
+  localCodexModelDefinitions,
+  runtimeModelDefinitions,
+} from "../../catalog/runtimeModels";
 import {
   listSkillSourceGroups,
   loadSkillSourceFile,
@@ -39,13 +43,22 @@ import {
 } from "../../catalog/skillSources";
 import { SKILLS } from "../../catalog/skills";
 import type { ModelDefinition, ModelModality, SkillCategory, SkillDefinition } from "../../catalog/types";
-import { getMySettings, signInOrSignUpWithEmail, signOut, subscribeAuth, updateMySettings, type AuthUser } from "../../lib/auth";
-import { isAuthConfigured } from "../../lib/cloud";
+import {
+  getMySettings,
+  refreshAuthState,
+  signInOrSignUpWithEmail,
+  signOut,
+  subscribeToAuthState,
+  updateMySettings,
+  type AuthSnapshot,
+  type AuthUser,
+} from "../../lib/auth";
+import { probeLocalCodex } from "../../lib/agent";
 import { discoverCanvasModels } from "../../lib/generation";
 import type { ThemeMode } from "../../lib/theme";
 import { createUserSkill, deleteUserSkill, listUserSkills, type UserSkillRecord } from "../../lib/userSkills";
 import { createWebWork, saveWork } from "../../lib/work";
-import type { CreationLine, PendingAttachment, WebWork } from "../../types";
+import type { CreationLine, PendingAttachment, WebWork, WorkExecutor } from "../../types";
 import { AuthDialog } from "../account/AuthDialog";
 import { MembershipDialog } from "../account/MembershipDialog";
 import { CreateSkillDialog, type CreateSkillFormValues } from "./CreateSkillDialog";
@@ -151,7 +164,6 @@ export function SkillHomePage({
   theme: ThemeMode;
   onThemeChange: (theme: ThemeMode) => void;
 }) {
-  const authConfigured = isAuthConfigured();
   const promptRef = useRef<HTMLTextAreaElement>(null);
   const [prompt, setPrompt] = useState("");
   const [localAssets, setLocalAssets] = useState<PendingAttachment[]>([]);
@@ -165,7 +177,11 @@ export function SkillHomePage({
     audio: "",
   }));
   const [runtimeModels, setRuntimeModels] = useState<ModelDefinition[]>([]);
+  const [localCodexModels, setLocalCodexModels] = useState<ModelDefinition[]>([]);
   const [runtimeModelsState, setRuntimeModelsState] = useState<"loading" | "ready" | "unavailable">("loading");
+  const [localCodexState, setLocalCodexState] = useState<"idle" | "loading" | "ready" | "unavailable">("idle");
+  const [localCodexProbeRequested, setLocalCodexProbeRequested] = useState(false);
+  const [selectedExecutor, setSelectedExecutor] = useState<WorkExecutor>("backend");
   const [runtimeModelsRefresh, setRuntimeModelsRefresh] = useState(0);
   const [selectedSkillId, setSelectedSkillId] = useState(SKILLS[0]?.id ?? "");
   const [generationMode, setGenerationMode] = useState<"manual" | "auto">("auto");
@@ -190,6 +206,11 @@ export function SkillHomePage({
   const [toast, setToast] = useState("");
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [authReady, setAuthReady] = useState(false);
+  const [authState, setAuthState] = useState<Pick<AuthSnapshot, "configured" | "availability" | "upstream">>({
+    configured: false,
+    availability: false,
+    upstream: { available: false, status: "checking" },
+  });
   const [authOpen, setAuthOpen] = useState(false);
   const [membershipOpen, setMembershipOpen] = useState(false);
   const [pageAfterAuth, setPageAfterAuth] = useState<"favorite" | "mine" | null>(null);
@@ -210,12 +231,17 @@ export function SkillHomePage({
     [allSkills, selectedSkillId],
   );
   const selectedModel = useMemo(
-    () => runtimeModels.find((model) => model.modality === modality && model.id === selectedModels[modality]),
-    [modality, runtimeModels, selectedModels],
+    () => (selectedExecutor === "local-codex" ? localCodexModels : runtimeModels)
+      .find((model) => model.modality === modality && model.id === selectedModels[modality]),
+    [localCodexModels, modality, runtimeModels, selectedExecutor, selectedModels],
   );
+  const authEntryLabel = authState.upstream.status === "checking"
+    ? "检查登录服务"
+    : authState.availability ? "注册/登录" : "登录服务异常";
   const visibleRuntimeModels = useMemo(
-    () => runtimeModels.filter((model) => model.modality === modality),
-    [modality, runtimeModels],
+    () => (selectedExecutor === "local-codex" ? localCodexModels : runtimeModels)
+      .filter((model) => model.modality === modality),
+    [localCodexModels, modality, runtimeModels, selectedExecutor],
   );
   const detailPreview = useMemo(() => detailSkill ? getSkillPreview(detailSkill) : undefined, [detailSkill]);
   const activeSourceGroup = useMemo(
@@ -267,38 +293,55 @@ export function SkillHomePage({
   useEffect(() => {
     const controller = new AbortController();
     setRuntimeModelsState("loading");
+    if (localCodexProbeRequested) setLocalCodexState("loading");
     setRuntimeModels([]);
-    void discoverCanvasModels(controller.signal)
-      .then((models) => {
+    if (localCodexProbeRequested) setLocalCodexModels([]);
+    void Promise.allSettled([
+      discoverCanvasModels(controller.signal),
+      localCodexProbeRequested ? probeLocalCodex(controller.signal) : Promise.resolve(null),
+    ]).then(([backendResult, localResult]) => {
         if (controller.signal.aborted) return;
-        const discovered = runtimeModelDefinitions(models);
+        const discovered = backendResult.status === "fulfilled"
+          ? runtimeModelDefinitions(backendResult.value)
+          : [];
+        const localDiscovered = localCodexProbeRequested && localResult.status === "fulfilled" && localResult.value
+          ? localCodexModelDefinitions(localResult.value.models)
+          : [];
+        const localReady = localDiscovered.length > 0;
         setRuntimeModels(discovered);
+        if (localCodexProbeRequested) setLocalCodexModels(localDiscovered);
+        setRuntimeModelsState(backendResult.status === "fulfilled" ? "ready" : "unavailable");
+        if (localCodexProbeRequested) setLocalCodexState(localReady ? "ready" : "unavailable");
         setSelectedModels((current) => ({
-          text: discovered.some((model) => model.modality === "text" && model.id === current.text)
+          text: (selectedExecutor === "local-codex" ? localDiscovered : discovered)
+            .some((model) => model.modality === "text" && model.id === current.text)
             ? current.text
-            : discovered.find((model) => model.modality === "text")?.id ?? "",
+            : (selectedExecutor === "local-codex" ? localDiscovered : discovered)
+                .find((model) => model.modality === "text")?.id
+              ?? current.text,
           image: discovered.some((model) => model.modality === "image" && model.id === current.image)
             ? current.image
             : discovered.find((model) => model.modality === "image")?.id ?? "",
           video: "",
           audio: "",
         }));
+        setSelectedExecutor((current) => current === "local-codex"
+          ? current
+          : discovered.some((model) => model.modality === "text")
+            ? "backend"
+            : localReady ? "local-codex" : "backend");
         setModality((current) => discovered.some((model) => model.modality === current)
           ? current
-          : discovered.some((model) => model.modality === "text") ? "text" : "image");
-        setRuntimeModelsState("ready");
-      })
-      .catch(() => {
-        if (controller.signal.aborted) return;
-        setRuntimeModels([]);
-        setSelectedModels({ text: "", image: "", video: "", audio: "" });
-        setModality("text");
-        setRuntimeModelsState("unavailable");
+          : discovered.some((model) => model.modality === "image") && !localReady ? "image" : "text");
       });
     return () => controller.abort();
-  }, [runtimeModelsRefresh]);
+  }, [localCodexProbeRequested, runtimeModelsRefresh, selectedExecutor]);
 
-  useEffect(() => subscribeAuth((user) => { setAuthUser(user); setAuthReady(true); }), []);
+  useEffect(() => subscribeToAuthState((snapshot) => {
+    setAuthUser(snapshot.user);
+    setAuthState(snapshot);
+    setAuthReady(snapshot.upstream.status !== "checking");
+  }), []);
 
   useEffect(() => {
     if (!authUser || !pageAfterAuth) return;
@@ -439,9 +482,33 @@ export function SkillHomePage({
   function toggleModelMenu() {
     const opening = openMenu !== "model";
     setOpenMenu(opening ? "model" : null);
-    if (opening && runtimeModelsState === "unavailable") {
+    if (opening && !localCodexProbeRequested) setLocalCodexProbeRequested(true);
+    if (opening && (runtimeModelsState === "unavailable" || localCodexState === "unavailable")) {
       setRuntimeModelsRefresh((current) => current + 1);
     }
+  }
+
+  function chooseExecutor(next: WorkExecutor) {
+    if (next === "local-codex") setLocalCodexProbeRequested(true);
+    setSelectedExecutor(next);
+    if (next === "local-codex") {
+      setModality("text");
+      setSelectedModels((current) => localCodexModels.some((model) => model.id === current.text)
+        ? current
+        : { ...current, text: localCodexModels[0]?.id ?? "" });
+      return;
+    }
+    const choices = runtimeModels.filter((model) => model.modality === modality);
+    const nextModality = choices.length
+      ? modality
+      : runtimeModels.some((model) => model.modality === "text") ? "text" : "image";
+    setModality(nextModality);
+    setSelectedModels((current) => {
+      const models = runtimeModels.filter((model) => model.modality === nextModality);
+      return models.some((model) => model.id === current[nextModality])
+        ? current
+        : { ...current, [nextModality]: models[0]?.id ?? "" };
+    });
   }
 
   function uploadComposerAssets(files: File[]) {
@@ -456,8 +523,11 @@ export function SkillHomePage({
     if (!ready) return;
     const effectiveSkill = selectedSkill ?? allSkills[0] ?? SKILLS[0];
     if (!effectiveSkill) return;
-    if (runtimeModelsState !== "ready" || !selectedModel) {
-      setToast(runtimeModelsState === "unavailable" ? "后端模型服务不可用，请稍后重试" : "正在读取后端可用模型，请稍候");
+    const sourceState = selectedExecutor === "local-codex" ? localCodexState : runtimeModelsState;
+    if (!selectedModel || sourceState !== "ready") {
+      setToast(selectedExecutor === "local-codex"
+        ? "本机 Codex 不可用，请启动桌面端并确认 Codex 已使用 ChatGPT 登录"
+        : runtimeModelsState === "unavailable" ? "后端模型服务不可用，请稍后重试" : "正在读取后端可用模型，请稍候");
       setOpenMenu("model");
       return;
     }
@@ -467,6 +537,7 @@ export function SkillHomePage({
       skillId: effectiveSkill.id,
       ...(customRecord ? { skillDefinition: { title: effectiveSkill.title, description: effectiveSkill.description, guide: effectiveSkill.guide, steps: effectiveSkill.steps, useCases: effectiveSkill.useCases } } : {}),
       generationMode,
+      executor: selectedExecutor,
       model: {
         modality: effectiveModel.modality,
         modelId: effectiveModel.modelId ?? effectiveModel.id,
@@ -480,10 +551,6 @@ export function SkillHomePage({
   function openAuth() {
     setOpenMenu(null);
     setAccountOpen(false);
-    if (!authConfigured) {
-      setToast("账号能力正在迁移到后端 REST API，本地模式暂不可用");
-      return;
-    }
     setAuthOpen(true);
   }
 
@@ -592,9 +659,7 @@ export function SkillHomePage({
             onMouseEnter={() => { if (authUser) setAccountOpen(true); }}
             onMouseLeave={() => { if (authUser) setAccountOpen(false); }}
           >
-            {!authReady ? (
-              <button className="auth-entry loading" type="button" aria-label="正在读取账号"><LoaderCircle className="spinning" size={17} /></button>
-            ) : authUser ? (
+            {authUser ? (
               <button
                 className={accountOpen ? "avatar-button active" : "avatar-button"}
                 type="button"
@@ -605,7 +670,9 @@ export function SkillHomePage({
                 {(authUser.email?.[0] ?? "创").toLocaleUpperCase()}
               </button>
             ) : (
-              <button className="auth-entry" type="button" disabled={!authConfigured} onClick={openAuth}>{authConfigured ? "注册/登录" : "账号待接入"}</button>
+              <button className={!authReady ? "auth-entry loading" : "auth-entry"} type="button" onClick={openAuth}>
+                {!authReady && <LoaderCircle className="spinning" size={15} />}{authEntryLabel}
+              </button>
             )}
 
             {accountOpen && authUser && (
@@ -704,31 +771,49 @@ export function SkillHomePage({
                 {openMenu === "model" && (
                   <div className="floating-panel model-picker" role="dialog" aria-label="选择模型">
                     <div className="floating-panel-title"><strong>选择模型</strong></div>
+                    <div className="model-executor-tabs" aria-label="模型调用方式">
+                      <button type="button" className={selectedExecutor === "backend" ? "active" : ""} aria-pressed={selectedExecutor === "backend"} onClick={() => chooseExecutor("backend")}>后端服务</button>
+                      <button type="button" className={selectedExecutor === "local-codex" ? "active" : ""} aria-pressed={selectedExecutor === "local-codex"} onClick={() => chooseExecutor("local-codex")}>
+                        本机 Codex（订阅）
+                        <i className={`state-${localCodexState}`} />
+                      </button>
+                    </div>
                     <div className="segmented-tabs" role="tablist">
                       {RUNTIME_MODEL_MODALITIES.map((item) => (
-                        <button key={item} className={modality === item ? "active" : ""} type="button" role="tab" aria-selected={modality === item} onClick={() => setModality(item)}>{MODALITY_LABELS[item]}</button>
+                        <button key={item} className={modality === item ? "active" : ""} type="button" role="tab" aria-selected={modality === item} onClick={() => { if (item !== "text" && selectedExecutor === "local-codex") chooseExecutor("backend"); setModality(item); }}>{MODALITY_LABELS[item]}</button>
                       ))}
                     </div>
                     <div className="model-section-label">{MODALITY_LABELS[modality]}</div>
-                    <div className={`model-runtime-status state-${runtimeModelsState}`}>
+                    <div className={`model-runtime-status state-${selectedExecutor === "local-codex" ? localCodexState : runtimeModelsState}`}>
                       <i />
-                      {runtimeModelsState === "loading"
-                        ? "正在读取后端开放模型…"
-                        : runtimeModelsState === "unavailable"
-                          ? "后端模型服务不可用，当前没有可选模型"
-                          : visibleRuntimeModels.length
-                            ? `后端已开放 ${visibleRuntimeModels.length} 个可调用模型`
-                            : `后端当前未开放${MODALITY_LABELS[modality]}模型`}
+                      {selectedExecutor === "local-codex"
+                        ? localCodexState === "loading"
+                          ? "正在读取本机 Codex 模型…"
+                          : localCodexState === "ready"
+                            ? `当前 ChatGPT 账号已发现 ${localCodexModels.length} 个可选 Codex 模型`
+                            : "未检测到桌面端，或 Codex 尚未使用 ChatGPT 登录"
+                        : runtimeModelsState === "loading"
+                          ? "正在读取后端开放模型…"
+                          : runtimeModelsState === "unavailable"
+                            ? "后端模型服务当前不可用"
+                            : runtimeModels.filter((model) => model.modality === modality).length
+                              ? `后端已开放 ${runtimeModels.filter((model) => model.modality === modality).length} 个可调用模型`
+                              : `后端当前未开放${MODALITY_LABELS[modality]}模型`}
                     </div>
-                    <p className="model-runtime-note">Skill 编排当前使用 GPT 文本/视觉；图片模型仅用于画布直接生图。</p>
+                    <p className="model-runtime-note">本机 Codex 是执行方式：使用桌面端已登录的 ChatGPT 账号运行完整 Skill/文本 Agent，额度以该账号为准；首次提交会弹出桌面授权。图片与视频直接生成仍走后端。</p>
                     <div className="model-list">
                       {visibleRuntimeModels.map((model) => (
-                        <div key={model.id} className="model-row">
+                        <div key={`${selectedExecutor}:${model.id}`} className="model-row">
                           <button className="model-row-main" type="button" onClick={() => { setSelectedModels((current) => ({ ...current, [model.modality]: model.id })); setModality(model.modality); setOpenMenu(null); }}>
                             <span className={`model-mark provider-${model.provider.toLocaleLowerCase().replace(/\W+/g, "-")}`}>{modelMark(model)}</span>
                             <span className="model-copy">
                               <span className="model-name">
                                 <b>{model.name}</b>
+                                {selectedExecutor === "local-codex" && (
+                                  <em className={`model-local-badge state-${localCodexState}`}>
+                                    {localCodexState === "ready" ? "本机可用" : localCodexState === "loading" ? "检测中" : "需桌面端"}
+                                  </em>
+                                )}
                               </span>
                               <small>{model.description}</small>
                             </span>
@@ -736,7 +821,7 @@ export function SkillHomePage({
                           </button>
                         </div>
                       ))}
-                      {runtimeModelsState === "ready" && !visibleRuntimeModels.length && (
+                      {(selectedExecutor === "local-codex" ? localCodexState : runtimeModelsState) !== "loading" && !visibleRuntimeModels.length && (
                         <p className="model-runtime-empty">暂无可用{MODALITY_LABELS[modality]}模型。</p>
                       )}
                     </div>
@@ -847,9 +932,9 @@ export function SkillHomePage({
           {pageTab === "mine" && !authUser ? (
             <div className="mine-gate">
               <span><UserRound size={24} /></span>
-              <strong>{authConfigured ? "登录后管理你的 Skill" : "账号 REST 能力待接入"}</strong>
-              <p>{authConfigured ? "输入邮箱和密码，首次登录会自动创建账号。" : "本地模式已禁止浏览器直连账号服务；后端资源落地后恢复。"}</p>
-              <div><button type="button" disabled={!authConfigured} onClick={openAuth}>{authConfigured ? "登录" : "暂不可用"}</button></div>
+              <strong>{authState.availability ? "登录后管理你的 Skill" : "登录服务当前不可用"}</strong>
+              <p>{authState.availability ? "输入邮箱和密码，首次登录会自动创建账号。" : "打开登录窗口可查看服务状态、诊断信息并重试连接。"}</p>
+              <div><button type="button" onClick={openAuth}>{authState.availability ? "登录" : "查看状态"}</button></div>
             </div>
           ) : userSkillsLoading && pageTab === "mine" ? (
             <div className="empty-skills"><LoaderCircle className="spinning" size={28} /><strong>正在加载我的 Skill</strong><span>从云端同步你的个人工作流</span></div>
@@ -1030,8 +1115,11 @@ export function SkillHomePage({
 
       <AuthDialog
         open={authOpen}
-        configured={authConfigured}
+        configured={authState.configured}
+        availability={authState.availability}
+        upstream={authState.upstream}
         onClose={() => setAuthOpen(false)}
+        onRetry={refreshAuthState}
         onContinue={async (email, password) => {
           const result = await signInOrSignUpWithEmail({ email, password, emailRedirectTo: window.location.origin });
           if (!result.session) throw new Error("登录服务配置尚未生效，请稍后重试。");
